@@ -5,7 +5,7 @@
 import type { MarvinConfig } from './config';
 import { validateConfig } from './config';
 import { MarvinHttpClient } from './http';
-import { MarvinCache } from '../utils/cache';
+import { MarvinCache } from '../core';
 import { Workspace } from '../workspaces/workspace';
 import type {
   MarvinSite,

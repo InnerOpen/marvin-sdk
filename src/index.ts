@@ -26,6 +26,26 @@ export { MarvinClient } from './client/marvin';
 export { createConfigFromEnv } from './client/config';
 export type { MarvinConfig } from './client/config';
 
+// Core utilities (for advanced usage and building custom API clients)
+export type { HttpClientConfig, AuthStrategy, PaginatedResponse, PaginationMeta, PaginationParams } from './core';
+export {
+  HttpClient,
+  BearerTokenAuth,
+  SessionAuth,
+  NoAuth,
+  MarvinError,
+  MarvinApiError,
+  MarvinAuthError,
+  MarvinConfigError,
+  MarvinValidationError,
+  MarvinCache,
+  createPaginatedResponse,
+  extractData,
+  isPaginatedResponse,
+  pageToOffset,
+  offsetToPage,
+} from './core';
+
 // Types
 export type {
   MarvinSite,

@@ -1,49 +1,25 @@
 /**
- * HTTP Client for Marvin API
+ * HTTP Client for Marvin Publishing API
+ *
+ * Wrapper around core HttpClient for Publishing API specifics
  */
 
 import type { MarvinConfig } from './config';
+import { HttpClient, BearerTokenAuth } from '../core';
 
-export class MarvinHttpClient {
-  constructor(private config: MarvinConfig) {}
-
-  async fetch<T>(endpoint: string): Promise<T> {
-    const url = `${this.config.apiUrl}${endpoint}`;
-
-    try {
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${this.config.siteClientToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Marvin API error: ${response.status} ${response.statusText} at ${endpoint}\n${errorText}`
-        );
-      }
-
-      return (await response.json()) as T;
-    } catch (error) {
-      if (error instanceof Error) {
-        // Don't leak the token in error messages
-        const safeMessage = error.message.replace(
-          this.config.siteClientToken,
-          '[REDACTED]'
-        );
-        throw new Error(safeMessage);
-      }
-      throw error;
-    }
+export class MarvinHttpClient extends HttpClient {
+  constructor(config: MarvinConfig) {
+    super({
+      baseUrl: config.apiUrl,
+      auth: new BearerTokenAuth(config.siteClientToken),
+      credentials: 'same-origin',
+    });
   }
 
-  buildQueryString(params: Record<string, string | number | undefined>): string {
-    const filtered = Object.entries(params)
-      .filter(([_, value]) => value !== undefined)
-      .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`);
-
-    return filtered.length > 0 ? `?${filtered.join('&')}` : '';
+  /**
+   * Fetch endpoint (backward compatibility)
+   */
+  async fetch<T>(endpoint: string): Promise<T> {
+    return this.get<T>(endpoint);
   }
 }
