@@ -68,5 +68,9 @@ export type { UserProfile, ApiToken, ApiTokenCreate, ApiTokenWithToken, Password
 export { EventsModule } from './events';
 export type { EventOption } from './events';
 
+// Auth (authenticated session management)
+export { AuthModule } from './auth';
+export type { AuthToken } from './auth';
+
 // Admin modules
 export * from './admin';

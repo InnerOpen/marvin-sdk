@@ -22,6 +22,16 @@ export interface ResetPasswordRequest {
   newPassword: string;
 }
 
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface AuthToken {
+  accessToken: string;
+  tokenType: string;
+}
+
 export class AuthClient extends HttpClient {
   constructor(apiUrl: string) {
     super({ baseUrl: apiUrl, auth: new NoAuth() });
@@ -46,6 +56,32 @@ export class AuthClient extends HttpClient {
    */
   async resetPassword(data: ResetPasswordRequest): Promise<{ message: string }> {
     return this.post<{ message: string }>('/api/users/reset-password', data);
+  }
+
+  /**
+   * Login with username and password
+   * Returns access token for authenticated requests
+   */
+  async login(data: LoginRequest): Promise<AuthToken> {
+    const formData = new URLSearchParams();
+    formData.append('username', data.username);
+    formData.append('password', data.password);
+
+    const response = await this.request<{ access_token: string; token_type: string }>(
+      'POST',
+      '/api/auth/token',
+      {
+        body: formData.toString(),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
+
+    return {
+      accessToken: response.access_token,
+      tokenType: response.token_type,
+    };
   }
 }
 
