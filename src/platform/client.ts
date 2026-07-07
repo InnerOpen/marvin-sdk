@@ -13,6 +13,7 @@ import { AssetsModule } from './assets';
 import { APIClientsModule } from './apiClients';
 import { EntryTypesModule } from './entryTypes';
 import { WorkspaceMembersModule } from './workspaceMembers';
+import { WorkspacesModule } from './workspaces';
 
 export interface PlatformClientConfig {
   apiUrl: string;
@@ -28,6 +29,7 @@ export class PlatformClient extends HttpClient {
   public apiClients: APIClientsModule;
   public entryTypes: EntryTypesModule;
   public workspaceMembers: WorkspaceMembersModule;
+  public workspaces: WorkspacesModule;
 
   constructor(config: PlatformClientConfig) {
     const httpConfig: HttpClientConfig = {
@@ -46,6 +48,7 @@ export class PlatformClient extends HttpClient {
     this.apiClients = new APIClientsModule(this);
     this.entryTypes = new EntryTypesModule(this);
     this.workspaceMembers = new WorkspaceMembersModule(this);
+    this.workspaces = new WorkspacesModule(this);
   }
 }
 

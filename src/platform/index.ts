@@ -51,3 +51,5 @@ export { AssetsModule } from './assets';
 export { APIClientsModule } from './apiClients';
 export { EntryTypesModule } from './entryTypes';
 export { WorkspaceMembersModule } from './workspaceMembers';
+export { WorkspacesModule } from './workspaces';
+export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest } from './workspaces';
