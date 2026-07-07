@@ -37,4 +37,17 @@ export type {
 
   // Entry Types
   PlatformEntryType,
+
+  // Workspace Members
+  PlatformWorkspaceMember,
+  PlatformWorkspaceMemberCreate,
+  PlatformWorkspaceMemberUpdate,
 } from './types';
+
+export { EntriesModule } from './entries';
+export { CollectionsModule } from './collections';
+export { ResourcesModule } from './resources';
+export { AssetsModule } from './assets';
+export { APIClientsModule } from './apiClients';
+export { EntryTypesModule } from './entryTypes';
+export { WorkspaceMembersModule } from './workspaceMembers';

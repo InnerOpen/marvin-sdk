@@ -4,7 +4,7 @@
  * Tests Platform API functionality against local Marvin instance
  */
 
-import { createPlatformClient } from './src/platform';
+import { createPlatformClient } from './dist/platform.js';
 
 async function testPlatformAPI() {
   console.log('🧪 Testing Platform API\n');

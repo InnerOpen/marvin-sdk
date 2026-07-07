@@ -59,4 +59,11 @@ export class APIClientsModule {
       {}
     );
   }
+
+  /**
+   * Preview API client token (show token prefix and metadata without revealing full token)
+   */
+  async preview(id: string): Promise<PlatformAPIClient> {
+    return this.http.get<PlatformAPIClient>(`/api/platform/api-clients/${id}/preview`);
+  }
 }
