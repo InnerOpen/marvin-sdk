@@ -29,5 +29,5 @@ coverage/
 *.tmp
 .cache/
 
-# Generated OpenAPI types
-src/generated/schema.ts
+# Generated OpenAPI types are now committed to repo
+# src/generated/schema.ts
