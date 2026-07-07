@@ -15,6 +15,9 @@ import { EntryTypesModule } from './entryTypes';
 import { WorkspaceMembersModule } from './workspaceMembers';
 import { WorkspacesModule } from './workspaces';
 import { InvitesModule } from './invites';
+import { NotificationsModule } from './notifications';
+import { WebhooksModule } from './webhooks';
+import { AdminUsersModule, AdminSystemModule, AdminMaintenanceModule } from './admin';
 
 export interface PlatformClientConfig {
   apiUrl: string;
@@ -32,6 +35,13 @@ export class PlatformClient extends HttpClient {
   public workspaceMembers: WorkspaceMembersModule;
   public workspaces: WorkspacesModule;
   public invites: InvitesModule;
+  public notifications: NotificationsModule;
+  public webhooks: WebhooksModule;
+
+  // Admin modules
+  public adminUsers: AdminUsersModule;
+  public adminSystem: AdminSystemModule;
+  public adminMaintenance: AdminMaintenanceModule;
 
   constructor(config: PlatformClientConfig) {
     const httpConfig: HttpClientConfig = {
@@ -52,6 +62,13 @@ export class PlatformClient extends HttpClient {
     this.workspaceMembers = new WorkspaceMembersModule(this);
     this.workspaces = new WorkspacesModule(this);
     this.invites = new InvitesModule(this);
+    this.notifications = new NotificationsModule(this);
+    this.webhooks = new WebhooksModule(this);
+
+    // Admin modules
+    this.adminUsers = new AdminUsersModule(this);
+    this.adminSystem = new AdminSystemModule(this);
+    this.adminMaintenance = new AdminMaintenanceModule(this);
   }
 }
 

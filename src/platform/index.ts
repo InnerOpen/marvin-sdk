@@ -52,6 +52,13 @@ export { APIClientsModule } from './apiClients';
 export { EntryTypesModule } from './entryTypes';
 export { WorkspaceMembersModule } from './workspaceMembers';
 export { WorkspacesModule } from './workspaces';
-export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest, WorkspaceCreate, WorkspaceUpdate } from './workspaces';
+export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest, WorkspaceCreate, WorkspaceUpdate, WorkspacePreferences, WorkspacePreferencesUpdate } from './workspaces';
 export { InvitesModule } from './invites';
 export type { InviteTokenCreate, InviteTokenSummary, InviteTokenPagination, EmailInvitationRequest } from './invites';
+export { NotificationsModule } from './notifications';
+export type { Notification, NotificationCreate, NotificationUpdate } from './notifications';
+export { WebhooksModule } from './webhooks';
+export type { Webhook, WebhookCreate, WebhookUpdate, WebhookPagination, WebhookMethod } from './webhooks';
+
+// Admin modules
+export * from './admin';

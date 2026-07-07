@@ -34,6 +34,14 @@ export interface WorkspaceUpdate {
   description?: string | null;
 }
 
+export interface WorkspacePreferences {
+  [key: string]: any;
+}
+
+export interface WorkspacePreferencesUpdate {
+  [key: string]: any;
+}
+
 export class WorkspacesModule {
   constructor(private http: HttpClient) {}
 
@@ -90,5 +98,19 @@ export class WorkspacesModule {
   async delete(id: string, force: boolean = false): Promise<void> {
     const url = `/api/admin/groups/${id}${force ? '?force=true' : ''}`;
     await this.http.delete<void>(url);
+  }
+
+  /**
+   * Get workspace preferences
+   */
+  async getPreferences(workspaceId: string): Promise<WorkspacePreferences> {
+    return this.http.get<WorkspacePreferences>(`/api/groups/${workspaceId}/preferences`);
+  }
+
+  /**
+   * Update workspace preferences
+   */
+  async updatePreferences(workspaceId: string, data: WorkspacePreferencesUpdate): Promise<WorkspacePreferences> {
+    return this.http.put<WorkspacePreferences>(`/api/groups/${workspaceId}/preferences`, data);
   }
 }
