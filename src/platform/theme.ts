@@ -7,7 +7,17 @@
 import type { HttpClient } from '../core';
 
 export interface AppTheme {
-  // Light theme colors
+  // Light theme - Background & Surface
+  lightBg: string;
+  lightPanel: string;
+  lightPanelSecondary: string;
+
+  // Light theme - Text & Borders
+  lightText: string;
+  lightTextMuted: string;
+  lightBorder: string;
+
+  // Light theme - Accent Colors
   lightPrimary: string;
   lightAccent: string;
   lightSecondary: string;
@@ -16,7 +26,17 @@ export interface AppTheme {
   lightWarning: string;
   lightError: string;
 
-  // Dark theme colors
+  // Dark theme - Background & Surface
+  darkBg: string;
+  darkPanel: string;
+  darkPanelSecondary: string;
+
+  // Dark theme - Text & Borders
+  darkText: string;
+  darkTextMuted: string;
+  darkBorder: string;
+
+  // Dark theme - Accent Colors
   darkPrimary: string;
   darkAccent: string;
   darkSecondary: string;
