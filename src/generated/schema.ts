@@ -1099,7 +1099,7 @@ export interface paths {
          *     SUPER_ADMIN users can activate any workspace.
          *
          *     Args:
-         *         request: The workspace activation request.
+         *         request: The workspace activation request (accepts slug or UUID).
          *
          *     Returns:
          *         The newly activated workspace.
@@ -5095,11 +5095,8 @@ export interface components {
          * @description Request to change active workspace.
          */
         WorkspaceActivationRequest: {
-            /**
-             * Workspaceid
-             * Format: uuid4
-             */
-            workspaceId: string;
+            /** Workspace */
+            workspace: string;
         };
         /**
          * WorkspaceInfo
