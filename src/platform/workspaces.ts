@@ -20,7 +20,7 @@ export interface WorkspaceWithMembership {
 }
 
 export interface WorkspaceActivationRequest {
-  workspace_id: string;
+  workspace: string;
 }
 
 export class WorkspacesModule {
@@ -41,26 +41,12 @@ export class WorkspacesModule {
   }
 
   /**
-   * Set active workspace by ID
+   * Set active workspace by slug or ID
+   * Backend accepts both, so no lookup needed
    */
-  async setActive(workspaceId: string): Promise<Workspace> {
+  async setActive(workspace: string): Promise<Workspace> {
     return this.http.put<Workspace>('/api/self/workspaces/current', {
-      workspace_id: workspaceId,
+      workspace,
     });
-  }
-
-  /**
-   * Set active workspace by slug (convenience method)
-   * Internally looks up the workspace by slug and calls setActive with the ID
-   */
-  async setActiveBySlug(slug: string): Promise<Workspace> {
-    const workspaces = await this.list();
-    const workspace = workspaces.find(w => w.workspace.slug === slug);
-
-    if (!workspace) {
-      throw new Error(`Workspace with slug "${slug}" not found`);
-    }
-
-    return this.setActive(workspace.workspace.id);
   }
 }
