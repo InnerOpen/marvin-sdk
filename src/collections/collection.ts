@@ -29,10 +29,8 @@ export class Collection {
    * Get all entries in this collection
    */
   async entries(): Promise<MarvinEntry[]> {
-    // TODO: Implement this endpoint in Marvin backend
-    // Expected: GET /api/publish/{workspaceSlug}/collections/{slug}/entries
-    const endpoint = `/api/publish/${this.workspaceSlug}/collections/${this.data.slug}/entries`;
-    return this.http.fetch<MarvinEntry[]>(endpoint);
+    // The collection data already includes entries from the GET endpoint
+    return this.data.entries || [];
   }
 
   /**
