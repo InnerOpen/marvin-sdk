@@ -32,7 +32,7 @@ jobs:
       - name: Run type check
         run: npm run typecheck
 
-      - name: Publish to npm
-        run: npm publish --access public
+      - name: Publish to npm (@next tag)
+        run: npm publish --access public --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
