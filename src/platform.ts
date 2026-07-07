@@ -4,4 +4,4 @@
  * Import via: import { createPlatformClient } from '@inneropen/marvin-sdk/platform'
  */
 
-export * from './platform';
+export * from './platform/index';
