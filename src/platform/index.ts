@@ -60,5 +60,13 @@ export type { Notification, NotificationCreate, NotificationUpdate } from './not
 export { WebhooksModule } from './webhooks';
 export type { Webhook, WebhookCreate, WebhookUpdate, WebhookPagination, WebhookMethod } from './webhooks';
 
+// User self-service
+export { UserModule } from './user';
+export type { UserProfile, ApiToken, ApiTokenCreate, ApiTokenWithToken, PasswordChange } from './user';
+
+// Events
+export { EventsModule } from './events';
+export type { EventOption } from './events';
+
 // Admin modules
 export * from './admin';

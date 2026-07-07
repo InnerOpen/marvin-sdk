@@ -18,6 +18,8 @@ import { InvitesModule } from './invites';
 import { NotificationsModule } from './notifications';
 import { WebhooksModule } from './webhooks';
 import { AdminUsersModule, AdminSystemModule, AdminMaintenanceModule } from './admin';
+import { UserModule } from './user';
+import { EventsModule } from './events';
 
 export interface PlatformClientConfig {
   apiUrl: string;
@@ -37,6 +39,8 @@ export class PlatformClient extends HttpClient {
   public invites: InvitesModule;
   public notifications: NotificationsModule;
   public webhooks: WebhooksModule;
+  public user: UserModule;
+  public events: EventsModule;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -64,6 +68,8 @@ export class PlatformClient extends HttpClient {
     this.invites = new InvitesModule(this);
     this.notifications = new NotificationsModule(this);
     this.webhooks = new WebhooksModule(this);
+    this.user = new UserModule(this);
+    this.events = new EventsModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);

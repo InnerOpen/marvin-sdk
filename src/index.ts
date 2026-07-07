@@ -66,6 +66,10 @@ export { Entry } from './entries/entry';
 export { Collection } from './collections/collection';
 export { Resource } from './resources/resource';
 
+// Auth & Registration (public, no auth required)
+export { AuthClient, createAuthClient } from './auth';
+export type { UserRegistration, ForgotPasswordRequest, ResetPasswordRequest } from './auth';
+
 /**
  * Create a Marvin client instance from environment variables
  *
