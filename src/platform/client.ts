@@ -21,6 +21,7 @@ import { AdminUsersModule, AdminSystemModule, AdminMaintenanceModule } from './a
 import { UserModule } from './user';
 import { EventsModule } from './events';
 import { AuthModule } from './auth';
+import { ThemeModule } from './theme';
 
 export interface PlatformClientConfig {
   apiUrl: string;
@@ -43,6 +44,7 @@ export class PlatformClient extends HttpClient {
   public user: UserModule;
   public events: EventsModule;
   public session: AuthModule;
+  public theme: ThemeModule;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -73,6 +75,7 @@ export class PlatformClient extends HttpClient {
     this.user = new UserModule(this);
     this.events = new EventsModule(this);
     this.session = new AuthModule(this);
+    this.theme = new ThemeModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);

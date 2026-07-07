@@ -72,5 +72,9 @@ export type { EventOption } from './events';
 export { AuthModule } from './auth';
 export type { AuthToken } from './auth';
 
+// Theme
+export { ThemeModule } from './theme';
+export type { AppTheme } from './theme';
+
 // Admin modules
 export * from './admin';
