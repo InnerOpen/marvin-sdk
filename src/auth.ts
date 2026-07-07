@@ -4,7 +4,7 @@
  * Public authentication endpoints (no auth required)
  */
 
-import { HttpClient } from './core';
+import { HttpClient, NoAuth } from './core';
 
 export interface UserRegistration {
   username: string;
@@ -24,7 +24,7 @@ export interface ResetPasswordRequest {
 
 export class AuthClient extends HttpClient {
   constructor(apiUrl: string) {
-    super({ baseUrl: apiUrl });
+    super({ baseUrl: apiUrl, auth: new NoAuth() });
   }
 
   /**
