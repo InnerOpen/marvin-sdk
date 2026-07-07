@@ -33,6 +33,6 @@ export class ThemeModule {
    * Get application theme colors
    */
   async getTheme(): Promise<AppTheme> {
-    return this.http.get<AppTheme>('/api/about/theme');
+    return this.http.get<AppTheme>('/api/app/about/theme');
   }
 }
