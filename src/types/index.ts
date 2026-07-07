@@ -59,6 +59,8 @@ export interface MarvinCollection {
   smartRules?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
+  entryCount?: number;
+  entries?: MarvinEntry[];
 }
 
 export interface MarvinResource {
