@@ -16,10 +16,11 @@ export class CollectionsModule {
    * Get all collections
    */
   async list(): Promise<MarvinCollection[]> {
-    // TODO: Implement this endpoint in Marvin backend
-    // Expected: GET /api/publish/{workspaceSlug}/collections
     const endpoint = `/api/publish/${this.workspaceSlug}/collections`;
-    return this.http.fetch<MarvinCollection[]>(endpoint);
+    const response = await this.http.fetch<{ data: MarvinCollection[] }>(endpoint);
+
+    // Extract data from paginated response
+    return response.data || [];
   }
 
   /**

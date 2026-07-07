@@ -24,18 +24,19 @@ export class EntriesModule {
    * Get all published entries
    */
   async list(options: GetEntriesOptions = {}): Promise<MarvinEntry[]> {
-    // TODO: Implement this endpoint in Marvin backend
-    // Expected: GET /api/publish/{workspaceSlug}/entries
     const queryString = this.http.buildQueryString({
       entry_type: options.entryType,
       collection: options.collection,
       limit: options.limit,
       offset: options.offset,
-      status: options.status || 'published',
+      // Don't send status - backend always returns published
     });
 
     const endpoint = `/api/publish/${this.workspaceSlug}/entries${queryString}`;
-    return this.http.fetch<MarvinEntry[]>(endpoint);
+    const response = await this.http.fetch<{ data: MarvinEntry[] }>(endpoint);
+
+    // Extract data from paginated response
+    return response.data || [];
   }
 
   /**

@@ -1,6 +1,6 @@
 {
   "name": "@inneropen/marvin-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Official TypeScript SDK for Marvin CMS",
   "type": "module",
   "main": "./dist/index.cjs",

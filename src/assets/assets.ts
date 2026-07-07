@@ -28,7 +28,10 @@ export class AssetsModule {
     });
 
     const endpoint = `/api/publish/${this.workspaceSlug}/assets${queryString}`;
-    return this.http.fetch<MarvinAsset[]>(endpoint);
+    const response = await this.http.fetch<{ data: MarvinAsset[] }>(endpoint);
+
+    // Extract data from paginated response
+    return response.data || [];
   }
 
   /**
