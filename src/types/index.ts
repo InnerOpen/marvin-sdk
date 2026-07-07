@@ -32,19 +32,48 @@ export interface MarvinEntryType {
 
 export interface MarvinAsset {
   id: string;
-  name: string;
   slug: string;
-  url: string;
+  name: string;
+  originalFilename: string;
+  filename: string;
+  extension: string;
   mimeType: string;
-  fileSize?: number;
+  assetType: 'image' | 'document' | 'video' | 'audio' | 'archive' | 'svg' | 'other';
+  fileSize: number;
+  checksum: string;
+  width?: number;
+  height?: number;
+  orientation?: number;
+  storageProvider: string;
+  storageKey: string;
+  publicUrl?: string;
+  altText?: string;
+  description?: string;
+  metadata?: Record<string, unknown>;
+  uploadedBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PublishedAsset {
+  slug: string;
+  name: string;
+  mimeType: string;
+  assetType: string;
+  fileSize: number;
   width?: number;
   height?: number;
   altText?: string;
   description?: string;
-  focalPoint?: string;
+  publicUrl: string;
+}
+
+export interface AssetUploadRequest {
+  slug: string;
+  name: string;
+  altText?: string;
+  description?: string;
   metadata?: Record<string, unknown>;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface MarvinCollection {

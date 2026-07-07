@@ -1,7 +1,7 @@
 /**
  * Assets Module - Platform API
  *
- * CRUD operations for assets
+ * CRUD operations and file upload for assets
  */
 
 import type { HttpClient } from '../core';
@@ -9,6 +9,7 @@ import type {
   PlatformAsset,
   PlatformAssetCreate,
   PlatformAssetUpdate,
+  PlatformAssetUpload,
 } from './types';
 
 export class AssetsModule {
@@ -29,21 +30,53 @@ export class AssetsModule {
   }
 
   /**
-   * Create a new asset
+   * Upload a new asset file
+   *
+   * @param file - The file to upload (File or Blob)
+   * @param metadata - Asset metadata (slug, name, altText, description, metadata)
+   * @returns The created asset with extracted metadata
+   */
+  async upload(
+    file: File | Blob,
+    metadata: PlatformAssetUpload
+  ): Promise<PlatformAsset> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('slug', metadata.slug);
+    formData.append('name', metadata.name);
+
+    if (metadata.altText) {
+      formData.append('alt_text', metadata.altText);
+    }
+
+    if (metadata.description) {
+      formData.append('description', metadata.description);
+    }
+
+    if (metadata.metadata) {
+      formData.append('metadata', JSON.stringify(metadata.metadata));
+    }
+
+    // Use FormData with POST - HttpClient should handle this properly
+    return this.http.post<PlatformAsset>('/api/platform/assets/upload', formData);
+  }
+
+  /**
+   * Create a new asset (legacy metadata-only method)
    */
   async create(data: PlatformAssetCreate): Promise<PlatformAsset> {
     return this.http.post<PlatformAsset>('/api/platform/assets', data);
   }
 
   /**
-   * Update an asset
+   * Update an asset (editable fields only: slug, name, altText, description, metadata)
    */
   async update(id: string, data: PlatformAssetUpdate): Promise<PlatformAsset> {
     return this.http.patch<PlatformAsset>(`/api/platform/assets/${id}`, data);
   }
 
   /**
-   * Delete an asset
+   * Delete an asset (removes file from storage and database)
    */
   async delete(id: string): Promise<void> {
     return this.http.delete(`/api/platform/assets/${id}`);

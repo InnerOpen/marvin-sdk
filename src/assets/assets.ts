@@ -35,6 +35,14 @@ export class AssetsModule {
   }
 
   /**
+   * Get a single published asset by slug or ID
+   */
+  async get(slugOrId: string): Promise<MarvinAsset> {
+    const endpoint = `/api/publish/${this.workspaceSlug}/assets/${slugOrId}`;
+    return this.http.fetch<MarvinAsset>(endpoint);
+  }
+
+  /**
    * Convenience: Get all images
    */
   async images(options?: Omit<GetAssetsOptions, 'type'>): Promise<MarvinAsset[]> {

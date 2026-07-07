@@ -38,6 +38,12 @@ export interface PasswordChange {
   newPassword: string;
 }
 
+export interface UserProfileUpdate {
+  username?: string;
+  email?: string;
+  fullName?: string | null;
+}
+
 export class UserModule {
   constructor(private http: HttpClient) {}
 
@@ -46,6 +52,13 @@ export class UserModule {
    */
   async getProfile(): Promise<UserProfile> {
     return this.http.get<UserProfile>('/api/self');
+  }
+
+  /**
+   * Update current user profile
+   */
+  async updateProfile(data: UserProfileUpdate): Promise<void> {
+    await this.http.put<void>('/api/self', data);
   }
 
   /**

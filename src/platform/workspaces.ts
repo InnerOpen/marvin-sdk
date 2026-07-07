@@ -111,6 +111,6 @@ export class WorkspacesModule {
    * Update workspace preferences
    */
   async updatePreferences(workspaceId: string, data: WorkspacePreferencesUpdate): Promise<WorkspacePreferences> {
-    return this.http.put<WorkspacePreferences>(`/api/groups/${workspaceId}/preferences`, data);
+    return this.http.patch<WorkspacePreferences>(`/api/groups/${workspaceId}/preferences`, data);
   }
 }

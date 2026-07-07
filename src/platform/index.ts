@@ -27,7 +27,7 @@ export type {
   // Assets
   PlatformAsset,
   PlatformAssetCreate,
-  PlatformAssetUpdate,
+  // PlatformAssetUpdate, // Not yet in generated schema
 
   // API Clients
   PlatformAPIClient,
@@ -62,7 +62,7 @@ export type { Webhook, WebhookCreate, WebhookUpdate, WebhookPagination, WebhookM
 
 // User self-service
 export { UserModule } from './user';
-export type { UserProfile, ApiToken, ApiTokenCreate, ApiTokenWithToken, PasswordChange } from './user';
+export type { UserProfile, UserProfileUpdate, ApiToken, ApiTokenCreate, ApiTokenWithToken, PasswordChange } from './user';
 
 // Events
 export { EventsModule } from './events';
