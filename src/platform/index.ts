@@ -52,4 +52,6 @@ export { APIClientsModule } from './apiClients';
 export { EntryTypesModule } from './entryTypes';
 export { WorkspaceMembersModule } from './workspaceMembers';
 export { WorkspacesModule } from './workspaces';
-export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest } from './workspaces';
+export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest, WorkspaceCreate, WorkspaceUpdate } from './workspaces';
+export { InvitesModule } from './invites';
+export type { InviteTokenCreate, InviteTokenSummary, InviteTokenPagination, EmailInvitationRequest } from './invites';

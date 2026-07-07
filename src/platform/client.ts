@@ -14,6 +14,7 @@ import { APIClientsModule } from './apiClients';
 import { EntryTypesModule } from './entryTypes';
 import { WorkspaceMembersModule } from './workspaceMembers';
 import { WorkspacesModule } from './workspaces';
+import { InvitesModule } from './invites';
 
 export interface PlatformClientConfig {
   apiUrl: string;
@@ -30,6 +31,7 @@ export class PlatformClient extends HttpClient {
   public entryTypes: EntryTypesModule;
   public workspaceMembers: WorkspaceMembersModule;
   public workspaces: WorkspacesModule;
+  public invites: InvitesModule;
 
   constructor(config: PlatformClientConfig) {
     const httpConfig: HttpClientConfig = {
@@ -49,6 +51,7 @@ export class PlatformClient extends HttpClient {
     this.entryTypes = new EntryTypesModule(this);
     this.workspaceMembers = new WorkspaceMembersModule(this);
     this.workspaces = new WorkspacesModule(this);
+    this.invites = new InvitesModule(this);
   }
 }
 
