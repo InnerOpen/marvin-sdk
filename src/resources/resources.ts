@@ -22,8 +22,6 @@ export class ResourcesModule {
    * Get all published resources
    */
   async list(options: GetResourcesOptions = {}): Promise<MarvinResource[]> {
-    // TODO: Implement this endpoint in Marvin backend
-    // Expected: GET /api/publish/{workspaceSlug}/resources
     const queryString = this.http.buildQueryString({
       resource_type: options.resourceType,
       limit: options.limit,
@@ -31,7 +29,10 @@ export class ResourcesModule {
     });
 
     const endpoint = `/api/publish/${this.workspaceSlug}/resources${queryString}`;
-    return this.http.fetch<MarvinResource[]>(endpoint);
+    const response = await this.http.fetch<{ data: MarvinResource[] }>(endpoint);
+
+    // Extract data from paginated response
+    return response.data || [];
   }
 
   /**
