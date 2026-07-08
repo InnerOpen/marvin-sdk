@@ -41,9 +41,13 @@ export class HttpClient {
   /**
    * Build headers for request
    */
-  private buildHeaders(additionalHeaders?: Record<string, string>): Headers {
+  private buildHeaders(additionalHeaders?: Record<string, string>, isFormData = false): Headers {
+    const baseHeaders = isFormData
+      ? {} // Don't set Content-Type for FormData - browser will add multipart boundary
+      : { 'Content-Type': 'application/json' };
+
     const headers = new Headers({
-      'Content-Type': 'application/json',
+      ...baseHeaders,
       ...this.defaultHeaders,
       ...additionalHeaders,
     });
@@ -78,7 +82,8 @@ export class HttpClient {
     }
   ): Promise<T> {
     const url = this.buildUrl(endpoint) + (options?.params ? this.buildQueryString(options.params) : '');
-    const headers = this.buildHeaders(options?.headers);
+    const isFormData = options?.body instanceof FormData;
+    const headers = this.buildHeaders(options?.headers, isFormData);
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
@@ -87,7 +92,7 @@ export class HttpClient {
       const response = await fetch(url, {
         method,
         headers,
-        body: options?.body ? JSON.stringify(options.body) : undefined,
+        body: isFormData ? options.body : (options?.body ? JSON.stringify(options.body) : undefined),
         credentials: this.credentials,
         signal: controller.signal,
       });
