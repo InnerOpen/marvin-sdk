@@ -1,3 +1,16 @@
+# [1.11.0-next.1](https://github.com/inneropen/marvin-sdk/compare/v1.10.6...v1.11.0-next.1) (2026-07-08)
+
+
+### Bug Fixes
+
+* Add npm-production environment to release workflow ([183a27d](https://github.com/inneropen/marvin-sdk/commit/183a27d8f031f510be2710bad86ebad9f4f65232))
+* Update Node.js version to 22.14 in release workflow ([48aa4c1](https://github.com/inneropen/marvin-sdk/commit/48aa4c1b6d9bc981a65788642a6da0bc06ac1e3a))
+
+
+### Features
+
+* Add semantic-release automation ([744b57e](https://github.com/inneropen/marvin-sdk/commit/744b57e75bad1fa606bb2ca0b97b5dfce1e23e2c))
+
 # Changelog
 
 ## [1.3.0] - 2026-07-07
