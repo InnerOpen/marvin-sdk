@@ -41,6 +41,10 @@ export type {
   PlatformWorkspaceMember,
   PlatformWorkspaceMemberCreate,
   PlatformWorkspaceMemberUpdate,
+
+  // Event Log
+  EventLogEntry,
+  EventLogSummary,
 } from './types';
 
 export { EntriesModule } from './entries';
@@ -66,6 +70,10 @@ export type { UserProfile, UserProfileUpdate, ApiToken, ApiTokenCreate, ApiToken
 // Events
 export { EventsModule } from './events';
 export type { EventOption } from './events';
+
+// Event Log (audit trail)
+export { EventLogModule } from './eventLog';
+export type { EventLogQueryParams } from './eventLog';
 
 // Auth (authenticated session management)
 export { AuthModule } from './auth';

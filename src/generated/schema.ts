@@ -2571,6 +2571,136 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Events
+         * @description List events for the current workspace with optional filtering.
+         *
+         *     Any workspace member can view events for their workspace.
+         *
+         *     Query Parameters:
+         *         event_type: Filter by event type (e.g., "entry.published")
+         *         entity_type: Filter by entity type (e.g., "entry", "asset")
+         *         entity_id: Filter by specific entity UUID
+         *         user_id: Filter by user who triggered the event
+         *         start_date: Filter events after this datetime (UTC)
+         *         end_date: Filter events before this datetime (UTC)
+         *         limit: Maximum number of events to return (default 50, max 100)
+         *         offset: Number of events to skip for pagination
+         *
+         *     Returns:
+         *         List of event log summaries ordered by occurred_at descending
+         */
+        get: operations["list_events_api_platform_events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/events/{event_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Event
+         * @description Get a single event by its event_id.
+         *
+         *     Any workspace member can view events for their workspace.
+         *
+         *     Args:
+         *         event_id: The event_id (not the database ID) to retrieve
+         *
+         *     Returns:
+         *         Complete event log entry with full payload
+         *
+         *     Raises:
+         *         HTTPException: 404 if event not found or not in current workspace
+         */
+        get: operations["get_event_api_platform_events__event_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/events/entity/{entity_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Entity History
+         * @description Get complete event history for a specific entity (entry, asset, etc.).
+         *
+         *     Any workspace member can view entity history for their workspace.
+         *
+         *     Args:
+         *         entity_id: The UUID of the entity
+         *         entity_type: Optional entity type filter (e.g., "entry", "asset")
+         *         limit: Maximum number of events to return (default 50, max 100)
+         *         offset: Number of events to skip for pagination
+         *
+         *     Returns:
+         *         List of events for this entity ordered by occurred_at descending
+         */
+        get: operations["get_entity_history_api_platform_events_entity__entity_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/events/user/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get User Activity
+         * @description Get activity history for a specific user in the current workspace.
+         *
+         *     Any workspace member can view user activity for their workspace.
+         *
+         *     Args:
+         *         user_id: The UUID of the user
+         *         event_type: Optional event type filter (e.g., "entry.published")
+         *         start_date: Filter events after this datetime (UTC)
+         *         end_date: Filter events before this datetime (UTC)
+         *         limit: Maximum number of events to return (default 50, max 100)
+         *         offset: Number of events to skip for pagination
+         *
+         *     Returns:
+         *         List of events triggered by this user ordered by occurred_at descending
+         */
+        get: operations["get_user_activity_api_platform_events_user__user_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/publish/{workspace_slug}": {
         parameters: {
             query?: never;
@@ -2585,6 +2715,7 @@ export interface paths {
          *     Returns basic workspace metadata for site consumption.
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:published_entries (minimal permission to access publishing API)
          */
         get: operations["get_workspace_info_api_publish__workspace_slug__get"];
         put?: never;
@@ -2620,6 +2751,7 @@ export interface paths {
          *     **Use case**: Astro site initialization, meta tags, social links, contact forms.
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:published_entries (minimal permission to access publishing API)
          */
         get: operations["get_site_configuration_api_publish__workspace_slug__site_get"];
         put?: never;
@@ -2658,6 +2790,7 @@ export interface paths {
          *     - `?updated_since=2026-07-01T00:00:00Z` - Incremental builds
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:published_entries OR read:all_entries
          */
         get: operations["list_published_entries_api_publish__workspace_slug__entries_get"];
         put?: never;
@@ -2685,6 +2818,7 @@ export interface paths {
          *     - Only returns entry if `status = 'published'`
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:published_entries OR read:all_entries
          *
          *     **Raises:**
          *     - 404: Entry not found or not published
@@ -2714,6 +2848,7 @@ export interface paths {
          *     **Use case**: Building navigation menus, collection indexes.
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:collections
          */
         get: operations["list_published_collections_api_publish__workspace_slug__collections_get"];
         put?: never;
@@ -2741,6 +2876,7 @@ export interface paths {
          *     - Only includes entries with `status = 'published'`
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:collections
          *
          *     **Raises:**
          *     - 404: Collection not found
@@ -2777,6 +2913,7 @@ export interface paths {
          *     - Build asset galleries, media libraries
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:assets
          */
         get: operations["list_published_assets_api_publish__workspace_slug__assets_get"];
         put?: never;
@@ -2805,6 +2942,7 @@ export interface paths {
          *     dimensions and alt text.
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:assets
          *
          *     **Raises:**
          *     - 404: Asset not found
@@ -2838,6 +2976,7 @@ export interface paths {
          *     **Use case**: Browsers fetching images, PDFs, videos via their public URL.
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:assets
          *
          *     **Raises:**
          *     - 404: Asset not found
@@ -2874,6 +3013,7 @@ export interface paths {
          *     - Build resource directories, material libraries
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:resources
          */
         get: operations["list_published_resources_api_publish__workspace_slug__resources_get"];
         put?: never;
@@ -2900,6 +3040,7 @@ export interface paths {
          *     **Use case**: Resource detail pages, material information displays.
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:resources
          *
          *     **Raises:**
          *     - 404: Resource not found
@@ -2932,6 +3073,7 @@ export interface paths {
          *     **Use case**: "View projects using this fabric" links on resource pages.
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:resources
          *
          *     **Raises:**
          *     - 404: Resource not found
@@ -3806,7 +3948,95 @@ export interface components {
          *     Helps listeners understand the nature of `EventDocumentDataBase` content.
          * @enum {string}
          */
-        EventDocumentType: "generic" | "user" | "workspace" | "entry" | "collection" | "asset" | "webhook" | "member" | "invitation" | "api_token" | "deployment";
+        EventDocumentType: "generic" | "user" | "workspace" | "entry" | "collection" | "asset" | "webhook" | "member" | "invitation" | "api_token" | "api_client" | "entry_type" | "resource" | "deployment";
+        /**
+         * EventLogRead
+         * @description Schema for reading an event log entry.
+         */
+        EventLogRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Eventid
+             * Format: uuid4
+             */
+            eventId: string;
+            /** Eventtype */
+            eventType: string;
+            /**
+             * Occurredat
+             * Format: date-time
+             */
+            occurredAt: string;
+            /**
+             * Workspaceid
+             * Format: uuid4
+             */
+            workspaceId: string;
+            /** Userid */
+            userId?: string | null;
+            /** Entityid */
+            entityId?: string | null;
+            /** Entitytype */
+            entityType?: string | null;
+            /** Integrationid */
+            integrationId: string;
+            /** Operation */
+            operation?: string | null;
+            /** Eventdata */
+            eventData: {
+                [key: string]: unknown;
+            };
+            /** Messagetitle */
+            messageTitle: string;
+            /** Messagebody */
+            messageBody?: string | null;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Updateat */
+            updateAt?: string | null;
+        };
+        /**
+         * EventLogSummary
+         * @description Summary schema for an event log entry (lighter payload).
+         */
+        EventLogSummary: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Eventid
+             * Format: uuid4
+             */
+            eventId: string;
+            /** Eventtype */
+            eventType: string;
+            /**
+             * Occurredat
+             * Format: date-time
+             */
+            occurredAt: string;
+            /**
+             * Workspaceid
+             * Format: uuid4
+             */
+            workspaceId: string;
+            /** Userid */
+            userId?: string | null;
+            /** Entityid */
+            entityId?: string | null;
+            /** Entitytype */
+            entityType?: string | null;
+            /** Messagetitle */
+            messageTitle: string;
+            /** Messagebody */
+            messageBody?: string | null;
+        };
         /**
          * EventNotifierOptionsPagination
          * @description Schema for paginated responses containing a list of event notifier option summaries.
@@ -8995,6 +9225,156 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_events_api_platform_events_get: {
+        parameters: {
+            query?: {
+                event_type?: string | null;
+                entity_type?: string | null;
+                entity_id?: string | null;
+                user_id?: string | null;
+                start_date?: string | null;
+                end_date?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Workspace ID */
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventLogSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_event_api_platform_events__event_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+                /** @description Workspace ID */
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventLogRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_entity_history_api_platform_events_entity__entity_id__get: {
+        parameters: {
+            query?: {
+                entity_type?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                entity_id: string;
+                /** @description Workspace ID */
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventLogSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_user_activity_api_platform_events_user__user_id__get: {
+        parameters: {
+            query?: {
+                event_type?: string | null;
+                start_date?: string | null;
+                end_date?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                user_id: string;
+                /** @description Workspace ID */
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventLogSummary"][];
                 };
             };
             /** @description Validation Error */

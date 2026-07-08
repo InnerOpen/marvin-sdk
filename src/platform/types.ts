@@ -61,3 +61,9 @@ export type PlatformAPIClientWithToken = components['schemas']['APIClientWithTok
 export type PlatformWorkspaceMember = components['schemas']['WorkspaceMembershipRead'];
 export type PlatformWorkspaceMemberCreate = components['schemas']['WorkspaceMemberCreate'];
 export type PlatformWorkspaceMemberUpdate = components['schemas']['WorkspaceMemberUpdate'];
+
+/**
+ * Event Log (Platform API - audit trail and event history)
+ */
+export type EventLogEntry = components['schemas']['EventLogRead'];
+export type EventLogSummary = components['schemas']['EventLogSummary'];

@@ -20,6 +20,7 @@ import { WebhooksModule } from './webhooks';
 import { AdminUsersModule, AdminSystemModule, AdminMaintenanceModule } from './admin';
 import { UserModule } from './user';
 import { EventsModule } from './events';
+import { EventLogModule } from './eventLog';
 import { AuthModule } from './auth';
 import { ThemeModule } from './theme';
 
@@ -43,6 +44,7 @@ export class PlatformClient extends HttpClient {
   public webhooks: WebhooksModule;
   public user: UserModule;
   public events: EventsModule;
+  public eventLog: EventLogModule;
   public session: AuthModule;
   public theme: ThemeModule;
 
@@ -74,6 +76,7 @@ export class PlatformClient extends HttpClient {
     this.webhooks = new WebhooksModule(this);
     this.user = new UserModule(this);
     this.events = new EventsModule(this);
+    this.eventLog = new EventLogModule(this);
     this.session = new AuthModule(this);
     this.theme = new ThemeModule(this);
 
