@@ -62,13 +62,6 @@ export class AssetsModule {
   }
 
   /**
-   * Create a new asset (legacy metadata-only method)
-   */
-  async create(data: PlatformAssetCreate): Promise<PlatformAsset> {
-    return this.http.post<PlatformAsset>('/api/platform/assets', data);
-  }
-
-  /**
    * Update an asset (editable fields only: slug, name, altText, description, metadata)
    */
   async update(id: string, data: PlatformAssetUpdate): Promise<PlatformAsset> {
