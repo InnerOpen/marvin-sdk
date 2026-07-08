@@ -57,6 +57,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/app/about/clear-cache": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Clear Settings Cache
+         * @description Clear the LRU cache for app settings (useful for development).
+         */
+        post: operations["clear_settings_cache_api_app_about_clear_cache_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/app/about/theme": {
         parameters: {
             query?: never;
@@ -71,7 +91,7 @@ export interface paths {
          *     The theme settings are fetched from the application configuration.
          *     This endpoint also sets cache control headers to allow client-side caching
          *     of the theme information for a specified duration.
-         *     Accessible to any authenticated user.
+         *     Public endpoint - no authentication required.
          *
          *     Args:
          *         resp (Response): The FastAPI Response object, used to set custom headers.
@@ -1099,7 +1119,7 @@ export interface paths {
          *     SUPER_ADMIN users can activate any workspace.
          *
          *     Args:
-         *         request: The workspace activation request.
+         *         request: The workspace activation request (accepts slug or UUID).
          *
          *     Returns:
          *         The newly activated workspace.
@@ -2322,6 +2342,39 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/assets/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload Asset
+         * @description Upload a new asset file.
+         *
+         *     Accepts multipart/form-data with:
+         *     - file: The binary file
+         *     - slug: URL-friendly identifier
+         *     - name: Display name
+         *     - alt_text: Accessibility text (optional)
+         *     - description: Description (optional)
+         *     - metadata: JSON string of custom metadata (optional)
+         *
+         *     Server automatically extracts:
+         *     - MIME type, file size, checksum
+         *     - Image dimensions (width, height, orientation)
+         *     - Asset type classification
+         */
+        post: operations["upload_asset_api_platform_assets_upload_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/assets/{item_id}": {
         parameters: {
             query?: never;
@@ -2335,14 +2388,16 @@ export interface paths {
         post?: never;
         /**
          * Delete Asset
-         * @description Delete asset metadata. Note: Physical file deletion is deferred to Phase 7.
+         * @description Delete asset from storage and database.
          */
         delete: operations["delete_asset_api_platform_assets__item_id__delete"];
         options?: never;
         head?: never;
         /**
          * Update Asset Metadata
-         * @description Update asset metadata (dimensions, alt text, description, etc).
+         * @description Update asset metadata (slug, name, alt text, description, metadata).
+         *
+         *     Note: Technical metadata (MIME type, dimensions, checksum, etc) cannot be changed.
          */
         patch: operations["update_asset_api_platform_assets__item_id__patch"];
         trace?: never;
@@ -2999,84 +3054,67 @@ export interface components {
         };
         /**
          * AppTheme
-         * @description Schema defining the color palette for the application's light and dark themes.
-         *     Provides default hex color values for various UI elements, intended for client-side use.
+         * @description Schema defining the complete color system for the application's light and dark themes.
+         *     Includes background, surface, text, border, and accent colors.
+         *     Actual color values are defined in core/settings/theme.py
          */
         AppTheme: {
-            /**
-             * Lightprimary
-             * @default #E58325
-             */
+            /** Lightbg */
+            lightBg: string;
+            /** Lightpanel */
+            lightPanel: string;
+            /** Lightpanelsecondary */
+            lightPanelSecondary: string;
+            /** Lighttext */
+            lightText: string;
+            /** Lighttextmuted */
+            lightTextMuted: string;
+            /** Lightborder */
+            lightBorder: string;
+            /** Lightprimary */
             lightPrimary: string;
-            /**
-             * Lightaccent
-             * @default #007A99
-             */
+            /** Lightaccent */
             lightAccent: string;
-            /**
-             * Lightsecondary
-             * @default #973542
-             */
+            /** Lightsecondary */
             lightSecondary: string;
-            /**
-             * Lightsuccess
-             * @default #43A047
-             */
+            /** Lightsuccess */
             lightSuccess: string;
-            /**
-             * Lightinfo
-             * @default #1976D2
-             */
+            /** Lightinfo */
             lightInfo: string;
-            /**
-             * Lightwarning
-             * @default #FF6D00
-             */
+            /** Lightwarning */
             lightWarning: string;
-            /**
-             * Lighterror
-             * @default #EF5350
-             */
+            /** Lighterror */
             lightError: string;
-            /**
-             * Darkprimary
-             * @default #E58325
-             */
+            /** Darkbg */
+            darkBg: string;
+            /** Darkpanel */
+            darkPanel: string;
+            /** Darkpanelsecondary */
+            darkPanelSecondary: string;
+            /** Darktext */
+            darkText: string;
+            /** Darktextmuted */
+            darkTextMuted: string;
+            /** Darkborder */
+            darkBorder: string;
+            /** Darkprimary */
             darkPrimary: string;
-            /**
-             * Darkaccent
-             * @default #007A99
-             */
+            /** Darkaccent */
             darkAccent: string;
-            /**
-             * Darksecondary
-             * @default #973542
-             */
+            /** Darksecondary */
             darkSecondary: string;
-            /**
-             * Darksuccess
-             * @default #43A047
-             */
+            /** Darksuccess */
             darkSuccess: string;
-            /**
-             * Darkinfo
-             * @default #1976D2
-             */
+            /** Darkinfo */
             darkInfo: string;
-            /**
-             * Darkwarning
-             * @default #FF6D00
-             */
+            /** Darkwarning */
             darkWarning: string;
-            /**
-             * Darkerror
-             * @default #EF5350
-             */
+            /** Darkerror */
             darkError: string;
         };
         /**
          * AssetCreate
-         * @description Schema for creating a new asset.
+         * @description Legacy schema for backwards compatibility - prefer AssetCreateInternal.
          */
         AssetCreate: {
             /** Slug */
@@ -3120,12 +3158,33 @@ export interface components {
             mimeType: string;
             /** Alttext */
             altText?: string | null;
+            /** Originalfilename */
+            originalFilename: string;
+            /** Filename */
+            filename: string;
+            /** Extension */
+            extension: string;
             /** Filesize */
             fileSize: number;
+            /**
+             * Assettype
+             * @enum {string}
+             */
+            assetType: "image" | "document" | "video" | "audio" | "archive" | "svg" | "other";
+            /** Checksum */
+            checksum: string;
             /** Width */
             width?: number | null;
             /** Height */
             height?: number | null;
+            /** Orientation */
+            orientation?: number | null;
+            /** Storageprovider */
+            storageProvider: string;
+            /** Storagekey */
+            storageKey: string;
+            /** Publicurl */
+            publicUrl?: string | null;
             /** Description */
             description?: string | null;
             /** Metadata */
@@ -3137,6 +3196,24 @@ export interface components {
              * Format: uuid4
              */
             uploadedBy: string;
+        };
+        /**
+         * AssetUpdate
+         * @description Schema for updating editable asset fields.
+         */
+        AssetUpdate: {
+            /** Slug */
+            slug?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Alttext */
+            altText?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * AuthMethod
@@ -3166,6 +3243,24 @@ export interface components {
              * @default false
              */
             remember_me: boolean;
+        };
+        /** Body_upload_asset_api_platform_assets_upload_post */
+        Body_upload_asset_api_platform_assets_upload_post: {
+            /**
+             * File
+             * Format: binary
+             */
+            file: string;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Alt Text */
+            alt_text?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Metadata */
+            metadata?: string | null;
         };
         /**
          * ChangePassword
@@ -3392,12 +3487,33 @@ export interface components {
             mimeType: string;
             /** Alttext */
             altText?: string | null;
+            /** Originalfilename */
+            originalFilename: string;
+            /** Filename */
+            filename: string;
+            /** Extension */
+            extension: string;
             /** Filesize */
             fileSize: number;
+            /**
+             * Assettype
+             * @enum {string}
+             */
+            assetType: "image" | "document" | "video" | "audio" | "archive" | "svg" | "other";
+            /** Checksum */
+            checksum: string;
             /** Width */
             width?: number | null;
             /** Height */
             height?: number | null;
+            /** Orientation */
+            orientation?: number | null;
+            /** Storageprovider */
+            storageProvider: string;
+            /** Storagekey */
+            storageKey: string;
+            /** Publicurl */
+            publicUrl?: string | null;
             /** Description */
             description?: string | null;
             /** Metadata */
@@ -4237,6 +4353,7 @@ export interface components {
          * @description Schema for published assets in the publishing API.
          *
          *     Provides asset metadata for external sites to build proper media tags.
+         *     Read-only, does not expose internal fields like storage_key or uploaded_by.
          */
         PublishedAssetRead: {
             /** Slug */
@@ -4245,14 +4362,20 @@ export interface components {
             name: string;
             /** Mimetype */
             mimeType: string;
+            /** Assettype */
+            assetType: string;
+            /** Filesize */
+            fileSize: number;
             /** Width */
             width?: number | null;
             /** Height */
             height?: number | null;
             /** Alttext */
             altText?: string | null;
-            /** Fileurl */
-            fileUrl: string;
+            /** Description */
+            description?: string | null;
+            /** Publicurl */
+            publicUrl: string;
         };
         /**
          * PublishedAssetsResponse
@@ -5095,11 +5218,8 @@ export interface components {
          * @description Request to change active workspace.
          */
         WorkspaceActivationRequest: {
-            /**
-             * Workspaceid
-             * Format: uuid4
-             */
-            workspaceId: string;
+            /** Workspace */
+            workspace: string;
         };
         /**
          * WorkspaceInfo
@@ -5246,6 +5366,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+        };
+    };
+    clear_settings_cache_api_app_about_clear_cache_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };
@@ -8351,6 +8493,39 @@ export interface operations {
             };
         };
     };
+    upload_asset_api_platform_assets_upload_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_asset_api_platform_assets_upload_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssetRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_asset_api_platform_assets__item_id__get: {
         parameters: {
             query?: never;
@@ -8422,7 +8597,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssetCreate"];
+                "application/json": components["schemas"]["AssetUpdate"];
             };
         };
         responses: {

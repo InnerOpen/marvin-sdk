@@ -9,6 +9,7 @@ import type {
   PlatformCollection,
   PlatformCollectionCreate,
   PlatformCollectionUpdate,
+  PlatformEntry,
 } from './types';
 
 export class CollectionsModule {
@@ -47,5 +48,12 @@ export class CollectionsModule {
    */
   async delete(id: string): Promise<void> {
     return this.http.delete(`/api/platform/collections/${id}`);
+  }
+
+  /**
+   * Get entries in a collection
+   */
+  async getEntries(id: string): Promise<PlatformEntry[]> {
+    return this.http.get<PlatformEntry[]>(`/api/platform/collections/${id}/entries`);
   }
 }

@@ -34,12 +34,19 @@ export type PlatformResourceCreate = components['schemas']['ResourceCreate'];
 export type PlatformResourceUpdate = components['schemas']['ResourceUpdate'];
 
 /**
- * Asset (Platform API - full CRUD)
+ * Asset (Platform API - full CRUD with file upload)
  */
 export type PlatformAsset = components['schemas']['AssetRead'];
 export type PlatformAssetCreate = components['schemas']['AssetCreate'];
-// Note: Backend doesn't have AssetUpdate schema - use Partial<AssetCreate> for updates
-export type PlatformAssetUpdate = Partial<PlatformAssetCreate>;
+export type PlatformAssetUpdate = components['schemas']['AssetUpdate'];
+// AssetUploadRequest not in OpenAPI (used as Form parameters)
+export type PlatformAssetUpload = {
+  slug: string;
+  name: string;
+  altText?: string;
+  description?: string;
+  metadata?: Record<string, unknown>;
+};
 
 /**
  * API Client (Platform API - manage publishing tokens)

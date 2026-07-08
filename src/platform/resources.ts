@@ -9,6 +9,7 @@ import type {
   PlatformResource,
   PlatformResourceCreate,
   PlatformResourceUpdate,
+  PlatformEntry,
 } from './types';
 
 export class ResourcesModule {
@@ -47,5 +48,12 @@ export class ResourcesModule {
    */
   async delete(id: string): Promise<void> {
     return this.http.delete(`/api/platform/resources/${id}`);
+  }
+
+  /**
+   * Get entries that reference this resource
+   */
+  async getEntries(id: string): Promise<PlatformEntry[]> {
+    return this.http.get<PlatformEntry[]>(`/api/platform/resources/${id}/entries`);
   }
 }
