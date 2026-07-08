@@ -14,7 +14,12 @@ export type InviteTokenPagination = components['schemas']['InviteTokenPagination
 
 export interface EmailInvitationRequest {
   email: string;
-  usesLeft?: number;
+  token: string;
+}
+
+export interface EmailInvitationResponse {
+  success: boolean;
+  error?: string;
 }
 
 export class InvitesModule {
@@ -36,9 +41,24 @@ export class InvitesModule {
   }
 
   /**
-   * Send an email invitation
+   * Send an email invitation with an existing token
    */
-  async sendEmail(data: EmailInvitationRequest): Promise<void> {
-    await this.http.post<void>('/api/groups/invitations/email', data);
+  async sendEmail(data: EmailInvitationRequest): Promise<EmailInvitationResponse> {
+    return this.http.post<EmailInvitationResponse>('/api/groups/invitations/email', data);
+  }
+
+  /**
+   * Delete/revoke an invite token
+   */
+  async delete(tokenId: string): Promise<void> {
+    await this.http.delete(`/api/groups/invitations/${tokenId}`);
+  }
+
+  /**
+   * Generate invitation URL from a token
+   */
+  getInvitationUrl(token: string, baseUrl?: string): string {
+    const base = baseUrl || this.http.config.baseUrl || 'http://localhost:8080';
+    return `${base}/register?token=${token}`;
   }
 }
