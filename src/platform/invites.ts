@@ -56,9 +56,34 @@ export class InvitesModule {
 
   /**
    * Generate invitation URL from a token
+   * Uses MARVIN_FRONTEND_URL for the base URL, falls back to MARVIN_API_URL with common port mappings
    */
   getInvitationUrl(token: string, baseUrl?: string): string {
-    const base = baseUrl || process.env.MARVIN_API_URL || 'http://localhost:8080';
+    let base = baseUrl;
+
+    if (!base) {
+      // Prefer frontend URL env var
+      base = process.env.MARVIN_FRONTEND_URL;
+
+      // Fall back to API URL with port mapping
+      if (!base && process.env.MARVIN_API_URL) {
+        const apiUrl = process.env.MARVIN_API_URL;
+        // Map common backend ports to frontend ports
+        if (apiUrl.includes(':8080')) {
+          base = apiUrl.replace(':8080', ':4321');
+        } else if (apiUrl.includes(':3000')) {
+          base = apiUrl.replace(':3000', ':4321');
+        } else {
+          base = apiUrl;
+        }
+      }
+
+      // Final fallback
+      if (!base) {
+        base = 'http://localhost:4321';
+      }
+    }
+
     return `${base}/register?token=${token}`;
   }
 }
