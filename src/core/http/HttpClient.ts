@@ -42,12 +42,15 @@ export class HttpClient {
    * Build headers for request
    */
   private buildHeaders(additionalHeaders?: Record<string, string>, isFormData = false): Headers {
-    const baseHeaders = isFormData
-      ? {} // Don't set Content-Type for FormData - browser will add multipart boundary
-      : { 'Content-Type': 'application/json' };
+    const headerInit: Record<string, string> = {};
+
+    // Don't set Content-Type for FormData - browser will add multipart boundary
+    if (!isFormData) {
+      headerInit['Content-Type'] = 'application/json';
+    }
 
     const headers = new Headers({
-      ...baseHeaders,
+      ...headerInit,
       ...this.defaultHeaders,
       ...additionalHeaders,
     });
@@ -92,7 +95,9 @@ export class HttpClient {
       const response = await fetch(url, {
         method,
         headers,
-        body: isFormData ? options.body : (options?.body ? JSON.stringify(options.body) : undefined),
+        body: isFormData
+          ? (options.body as FormData)
+          : (options?.body ? JSON.stringify(options.body) : undefined),
         credentials: this.credentials,
         signal: controller.signal,
       });
