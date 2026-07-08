@@ -9,8 +9,14 @@ import { HttpClient, NoAuth } from './core';
 export interface UserRegistration {
   username: string;
   email: string;
+  full_name: string;
   password: string;
-  fullName?: string;
+  password_confirm: string;
+  group_token?: string | null;
+  group?: string | null;
+  advanced?: boolean;
+  private?: boolean;
+  seed_data?: boolean;
 }
 
 export interface ForgotPasswordRequest {
@@ -39,23 +45,24 @@ export class AuthClient extends HttpClient {
 
   /**
    * Register a new user
+   * Returns the created user object
    */
-  async register(data: UserRegistration): Promise<{ message: string; userId: string }> {
-    return this.post<{ message: string; userId: string }>('/api/users/register', data);
+  async register(data: UserRegistration): Promise<any> {
+    return this.post<any>('/users/register', data);
   }
 
   /**
    * Request password reset (sends email with token)
    */
   async forgotPassword(data: ForgotPasswordRequest): Promise<{ message: string }> {
-    return this.post<{ message: string }>('/api/users/forgot-password', data);
+    return this.post<{ message: string }>('/users/forgot-password', data);
   }
 
   /**
    * Reset password with token from email
    */
   async resetPassword(data: ResetPasswordRequest): Promise<{ message: string }> {
-    return this.post<{ message: string }>('/api/users/reset-password', data);
+    return this.post<{ message: string }>('/users/reset-password', data);
   }
 
   /**
