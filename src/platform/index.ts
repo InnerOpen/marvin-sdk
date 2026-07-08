@@ -26,8 +26,7 @@ export type {
 
   // Assets
   PlatformAsset,
-  PlatformAssetCreate,
-  // PlatformAssetUpdate, // Not yet in generated schema
+  PlatformAssetUpdate,
 
   // API Clients
   PlatformAPIClient,

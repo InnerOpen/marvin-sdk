@@ -37,7 +37,6 @@ export type PlatformResourceUpdate = components['schemas']['ResourceUpdate'];
  * Asset (Platform API - full CRUD with file upload)
  */
 export type PlatformAsset = components['schemas']['AssetRead'];
-export type PlatformAssetCreate = components['schemas']['AssetCreate'];
 export type PlatformAssetUpdate = components['schemas']['AssetUpdate'];
 // AssetUploadRequest not in OpenAPI (used as Form parameters)
 export type PlatformAssetUpload = {

@@ -378,6 +378,36 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/invitations/{token_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete an Invite Token
+         * @description Deletes (revokes) an invitation token.
+         *
+         *     This allows administrators to manually revoke invitation tokens before they
+         *     are exhausted or expire. The token_id can be either the UUID or the token string.
+         *
+         *     Args:
+         *         token_id: The UUID or token string of the invitation to delete
+         *
+         *     Raises:
+         *         HTTPException (404 Not Found): If the token does not exist
+         *         HTTPException (403 Forbidden): If the user lacks permission to delete tokens
+         */
+        delete: operations["delete_invite_token_api_groups_invitations__token_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/webhooks": {
         parameters: {
             query?: never;
@@ -498,7 +528,7 @@ export interface paths {
          *         item_id (UUID4): The ID of the webhook to delete.
          *
          *     Returns:
-         *         None: HTTP 204 No Content on successful deletion.
+         *         dict: Status message on successful deletion.
          */
         delete: operations["delete_one_api_groups_webhooks__item_id__delete"];
         options?: never;
@@ -629,7 +659,7 @@ export interface paths {
          *         item_id (UUID4): The ID of the group event notifier to delete.
          *
          *     Returns:
-         *         None: HTTP 204 No Content on successful deletion.
+         *         dict: Status message on successful deletion.
          *
          *     Raises:
          *         HTTPException (404 Not Found): If the notifier is not found.
@@ -660,7 +690,7 @@ export interface paths {
          *         item_id (UUID4): The ID of the group event notifier to test.
          *
          *     Returns:
-         *         None: HTTP 204 No Content on successful dispatch of the test.
+         *         dict: Status message on successful dispatch of the test.
          *
          *     Raises:
          *         HTTPException (404 Not Found): If the notifier is not found.
@@ -1507,7 +1537,7 @@ export interface paths {
          *         item_id (UUID4): The ID of the user to delete.
          *
          *     Returns:
-         *         None: HTTP 204 No Content on successful deletion.
+         *         dict: Status message on successful deletion.
          */
         delete: operations["delete_one_api_admin_users__item_id__delete"];
         options?: never;
@@ -2327,15 +2357,7 @@ export interface paths {
         /** List Assets */
         get: operations["list_assets_api_platform_assets_get"];
         put?: never;
-        /**
-         * Create Asset Metadata
-         * @description Create asset metadata entry.
-         *
-         *     Note: This endpoint only creates the metadata record. File upload functionality
-         *     (multipart form-data) is planned for Phase 7. For testing, provide a file_path
-         *     that points to an existing file or use a placeholder path.
-         */
-        post: operations["create_asset_api_platform_assets_post"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2400,6 +2422,29 @@ export interface paths {
          *     Note: Technical metadata (MIME type, dimensions, checksum, etc) cannot be changed.
          */
         patch: operations["update_asset_api_platform_assets__item_id__patch"];
+        trace?: never;
+    };
+    "/api/platform/assets/{item_id}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Serve Asset File
+         * @description Serve the actual asset file content directly.
+         *
+         *     For local storage, serves the file from disk.
+         *     For S3 storage, redirects to the public URL or signed URL.
+         */
+        get: operations["serve_asset_file_api_platform_assets__item_id__file_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/platform/workspaces/{workspace_id}/members": {
@@ -2775,6 +2820,37 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/publish/{workspace_slug}/assets/{asset_slug}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Serve Asset File
+         * @description Serve the actual asset file content.
+         *
+         *     This endpoint proxies through to the storage provider to serve the asset file.
+         *     For local storage, it redirects to the static file path.
+         *     For S3 storage, it could generate a signed URL or proxy the content.
+         *
+         *     **Use case**: Browsers fetching images, PDFs, videos via their public URL.
+         *
+         *     **Authentication**: Requires API client token (marvin_sk_*)
+         *
+         *     **Raises:**
+         *     - 404: Asset not found
+         */
+        get: operations["serve_asset_file_api_publish__workspace_slug__assets__asset_slug__file_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/publish/{workspace_slug}/resources": {
         parameters: {
             query?: never;
@@ -3113,34 +3189,6 @@ export interface components {
             darkError: string;
         };
         /**
-         * AssetCreate
-         * @description Legacy schema for backwards compatibility - prefer AssetCreateInternal.
-         */
-        AssetCreate: {
-            /** Slug */
-            slug: string;
-            /** Name */
-            name: string;
-            /** Filepath */
-            filePath: string;
-            /** Filesize */
-            fileSize: number;
-            /** Mimetype */
-            mimeType: string;
-            /** Width */
-            width?: number | null;
-            /** Height */
-            height?: number | null;
-            /** Alttext */
-            altText?: string | null;
-            /** Description */
-            description?: string | null;
-            /** Metadata */
-            metadata?: {
-                [key: string]: unknown;
-            } | null;
-        };
-        /**
          * AssetRead
          * @description Full schema for reading an asset.
          */
@@ -3206,8 +3254,8 @@ export interface components {
             slug?: string | null;
             /** Name */
             name?: string | null;
-            /** Alttext */
-            altText?: string | null;
+            /** Alt Text */
+            alt_text?: string | null;
             /** Description */
             description?: string | null;
             /** Metadata */
@@ -3326,6 +3374,12 @@ export interface components {
             smartRules?: {
                 [key: string]: unknown;
             } | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            /** Entryids */
+            entryIds?: string[] | null;
         };
         /**
          * CollectionRead
@@ -3364,6 +3418,10 @@ export interface components {
             smartRules?: {
                 [key: string]: unknown;
             } | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * CollectionUpdate
@@ -3388,6 +3446,12 @@ export interface components {
             smartRules?: {
                 [key: string]: unknown;
             } | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            /** Entryids */
+            entryIds?: string[] | null;
         };
         /**
          * DebugResponse
@@ -3557,6 +3621,12 @@ export interface components {
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
+            /** Collectionids */
+            collectionIds?: string[] | null;
+            /** Assetids */
+            assetIds?: string[] | null;
+            /** Resourceids */
+            resourceIds?: string[] | null;
         };
         /**
          * EntryRead
@@ -3703,8 +3773,8 @@ export interface components {
          * @description Schema for patching an entry.
          */
         EntryUpdate: {
-            /** Entrytypeid */
-            entryTypeId?: string | null;
+            /** Entry Type Id */
+            entry_type_id?: string | null;
             /** Title */
             title?: string | null;
             /** Slug */
@@ -3713,16 +3783,22 @@ export interface components {
             summary?: string | null;
             /** Description */
             description?: string | null;
-            /** Contentmarkdown */
-            contentMarkdown?: string | null;
+            /** Content Markdown */
+            content_markdown?: string | null;
             /** Status */
             status?: string | null;
-            /** Publishedat */
-            publishedAt?: string | null;
-            /** Metadatajson */
-            metadataJson?: {
+            /** Published At */
+            published_at?: string | null;
+            /** Metadata Json */
+            metadata_json?: {
                 [key: string]: unknown;
             } | null;
+            /** Collection Ids */
+            collection_ids?: string[] | null;
+            /** Asset Ids */
+            asset_ids?: string[] | null;
+            /** Resource Ids */
+            resource_ids?: string[] | null;
         };
         /**
          * EventDocumentType
@@ -4122,11 +4198,13 @@ export interface components {
         /**
          * InviteTokenCreate
          * @description Schema for creating a new group invitation token.
-         *     Specifies the initial number of uses and the group it belongs to.
+         *     Specifies the initial number of uses, role, and the group it belongs to.
          */
         InviteTokenCreate: {
             /** Usesleft */
             usesLeft: number;
+            /** @default EDITOR */
+            workspaceRole: components["schemas"]["WorkspaceRole"];
         };
         /**
          * InviteTokenPagination
@@ -4162,13 +4240,21 @@ export interface components {
         };
         /**
          * InviteTokenSummary
-         * @description Schema for a summary representation of a invite token .
+         * @description Schema for a summary representation of a invite token.
          */
         InviteTokenSummary: {
             /** Usesleft */
             usesLeft: number;
+            workspaceRole: components["schemas"]["WorkspaceRole"];
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
             /** Token */
             token: string;
+            /** Createdat */
+            createdAt?: string | null;
         };
         /**
          * LongLiveTokenCreate
@@ -4376,6 +4462,15 @@ export interface components {
             description?: string | null;
             /** Publicurl */
             publicUrl: string;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Entries
+             * @default []
+             */
+            entries: string[];
         };
         /**
          * PublishedAssetsResponse
@@ -4399,6 +4494,19 @@ export interface components {
             name: string;
             /** Description */
             description?: string | null;
+            /**
+             * Issmart
+             * @default false
+             */
+            isSmart: boolean;
+            /** Smartrules */
+            smartRules?: {
+                [key: string]: unknown;
+            } | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
             /** Entrycount */
             entryCount: number;
             /** Entries */
@@ -4415,6 +4523,19 @@ export interface components {
             name: string;
             /** Description */
             description?: string | null;
+            /**
+             * Issmart
+             * @default false
+             */
+            isSmart: boolean;
+            /** Smartrules */
+            smartRules?: {
+                [key: string]: unknown;
+            } | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
             /** Entrycount */
             entryCount: number;
             /** Sortorder */
@@ -4465,6 +4586,16 @@ export interface components {
              * @default []
              */
             collections: string[];
+            /**
+             * Assets
+             * @default []
+             */
+            assets: string[];
+            /**
+             * Resources
+             * @default []
+             */
+            resources: string[];
         };
         /**
          * PublishedEntryRead
@@ -4494,7 +4625,7 @@ export interface components {
              * Collections
              * @default []
              */
-            collections: string[];
+            collections: components["schemas"]["PublishedCollectionSummary"][];
             /**
              * Resources
              * @default []
@@ -4525,6 +4656,10 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
             /** Role */
             role?: string | null;
             /** Quantity */
@@ -4561,6 +4696,11 @@ export interface components {
             metadata?: {
                 [key: string]: unknown;
             } | null;
+            /**
+             * Entries
+             * @default []
+             */
+            entries: string[];
         };
         /**
          * PublishedResourcesResponse
@@ -4671,11 +4811,11 @@ export interface components {
          */
         ResourceUpdate: {
             /** Slug */
-            slug: string;
+            slug?: string | null;
             /** Name */
-            name: string;
+            name?: string | null;
             /** Resourcetype */
-            resourceType: string;
+            resourceType?: string | null;
             /** Description */
             description?: string | null;
             /** Url */
@@ -4686,11 +4826,6 @@ export interface components {
             metadata?: {
                 [key: string]: unknown;
             } | null;
-            /**
-             * Id
-             * Format: uuid4
-             */
-            id: string;
         };
         /**
          * SiteConfiguration
@@ -5656,6 +5791,35 @@ export interface operations {
             };
         };
     };
+    delete_invite_token_api_groups_invitations__token_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_all_api_groups_webhooks_get: {
         parameters: {
             query?: {
@@ -5826,11 +5990,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -6024,11 +6192,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -6053,11 +6225,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -6992,11 +7168,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -7192,11 +7372,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -7521,11 +7705,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -7634,11 +7822,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -7782,11 +7974,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -7912,11 +8108,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -8025,11 +8225,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -8175,11 +8379,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -8388,11 +8596,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -8456,39 +8668,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AssetRead"][];
-                };
-            };
-        };
-    };
-    create_asset_api_platform_assets_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AssetCreate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AssetRead"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -8569,11 +8748,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -8608,6 +8791,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AssetRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    serve_asset_file_api_platform_assets__item_id__file_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
@@ -8773,11 +8987,15 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -9053,6 +9271,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PublishedAssetRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    serve_asset_file_api_publish__workspace_slug__assets__asset_slug__file_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                asset_slug: string;
+                workspace_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

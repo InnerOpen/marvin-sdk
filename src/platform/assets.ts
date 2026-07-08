@@ -7,7 +7,6 @@
 import type { HttpClient } from '../core';
 import type {
   PlatformAsset,
-  PlatformAssetCreate,
   PlatformAssetUpdate,
   PlatformAssetUpload,
 } from './types';
