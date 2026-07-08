@@ -58,7 +58,7 @@ export class InvitesModule {
    * Generate invitation URL from a token
    */
   getInvitationUrl(token: string, baseUrl?: string): string {
-    const base = baseUrl || this.http.config.baseUrl || 'http://localhost:8080';
+    const base = baseUrl || process.env.MARVIN_API_URL || 'http://localhost:8080';
     return `${base}/register?token=${token}`;
   }
 }
