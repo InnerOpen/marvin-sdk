@@ -1,3 +1,10 @@
+# [1.11.0-next.2](https://github.com/inneropen/marvin-sdk/compare/v1.11.0-next.1...v1.11.0-next.2) (2026-07-08)
+
+
+### Features
+
+* Add event log module to Platform SDK ([afde468](https://github.com/inneropen/marvin-sdk/commit/afde46841038a68f0cca6d7373050cf0f6078c65))
+
 # [1.11.0-next.1](https://github.com/inneropen/marvin-sdk/compare/v1.10.6...v1.11.0-next.1) (2026-07-08)
 
 
