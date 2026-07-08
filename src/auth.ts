@@ -48,21 +48,21 @@ export class AuthClient extends HttpClient {
    * Returns the created user object
    */
   async register(data: UserRegistration): Promise<any> {
-    return this.post<any>('/users/register', data);
+    return this.post<any>('/api/users/register', data);
   }
 
   /**
    * Request password reset (sends email with token)
    */
   async forgotPassword(data: ForgotPasswordRequest): Promise<{ message: string }> {
-    return this.post<{ message: string }>('/users/forgot-password', data);
+    return this.post<{ message: string }>('/api/users/forgot-password', data);
   }
 
   /**
    * Reset password with token from email
    */
   async resetPassword(data: ResetPasswordRequest): Promise<{ message: string }> {
-    return this.post<{ message: string }>('/users/reset-password', data);
+    return this.post<{ message: string }>('/api/users/reset-password', data);
   }
 
   /**
