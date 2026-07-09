@@ -56,4 +56,14 @@ export class CollectionsModule {
   async getEntries(id: string): Promise<PlatformEntry[]> {
     return this.http.get<PlatformEntry[]>(`/api/platform/collections/${id}/entries`);
   }
+
+  /**
+   * Reorder entries in a collection
+   */
+  async reorderEntries(
+    id: string,
+    entries: Array<{ entryId: string; sortOrder: number }>
+  ): Promise<void> {
+    return this.http.patch(`/api/platform/collections/${id}/entries/order`, { entries });
+  }
 }
