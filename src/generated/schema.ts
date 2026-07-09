@@ -4981,35 +4981,21 @@ export interface components {
         /**
          * PublishedCollectionSummary
          * @description Summary schema for published collections (for listing).
+         *
+         *     Minimal collection info for entry contexts - only includes
+         *     essential fields for display and ordering.
          */
         PublishedCollectionSummary: {
             /** Slug */
             slug: string;
             /** Name */
             name: string;
-            /** Description */
-            description?: string | null;
-            /**
-             * Issmart
-             * @default false
-             */
-            isSmart: boolean;
-            /** Smartrules */
-            smartRules?: {
-                [key: string]: unknown;
-            } | null;
             /** Metadata */
             metadata?: {
                 [key: string]: unknown;
             } | null;
-            /** Entrycount */
-            entryCount: number;
             /** Sortorder */
             sortOrder: number;
-            /** Icon */
-            icon?: string | null;
-            /** Color */
-            color?: string | null;
         };
         /**
          * PublishedCollectionsResponse
