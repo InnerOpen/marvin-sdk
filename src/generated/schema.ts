@@ -2741,6 +2741,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/scheduled-tasks/task-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Task Types
+         * @description List all available task types that can be scheduled.
+         *
+         *     Args:
+         *         detailed: If True, return full metadata including config schemas
+         */
+        get: operations["list_task_types_api_platform_scheduled_tasks_task_types_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/scheduled-tasks": {
         parameters: {
             query?: never;
@@ -3867,6 +3890,9 @@ export interface components {
         /**
          * EntryCreate
          * @description Schema for creating an entry.
+         *
+         *     BREAKING CHANGE: content_markdown removed, replaced with data_json.
+         *     Entry content is now schema-driven based on entry_type.schema_json.
          */
         EntryCreate: {
             /**
@@ -3882,8 +3908,13 @@ export interface components {
             summary?: string | null;
             /** Description */
             description?: string | null;
-            /** Contentmarkdown */
-            contentMarkdown?: string | null;
+            /**
+             * Datajson
+             * @description Schema-driven content data (validated against entry_type.schema_json)
+             */
+            dataJson?: {
+                [key: string]: unknown;
+            };
             /**
              * Status
              * @default inbox
@@ -3895,7 +3926,10 @@ export interface components {
             publishAt?: string | null;
             /** Expireat */
             expireAt?: string | null;
-            /** Metadatajson */
+            /**
+             * Metadatajson
+             * @description Custom non-schema metadata (API keys, external IDs, etc.)
+             */
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
@@ -3922,6 +3956,9 @@ export interface components {
         /**
          * EntryRead
          * @description Schema for reading an entry.
+         *
+         *     BREAKING CHANGE: content_markdown removed, replaced with data_json.
+         *     Entry content is now schema-driven based on entry_type.schema_json.
          */
         EntryRead: {
             /**
@@ -3947,8 +3984,13 @@ export interface components {
             summary?: string | null;
             /** Description */
             description?: string | null;
-            /** Contentmarkdown */
-            contentMarkdown?: string | null;
+            /**
+             * Datajson
+             * @description Schema-driven content data
+             */
+            dataJson?: {
+                [key: string]: unknown;
+            };
             /** Status */
             status: string;
             /** Publishedat */
@@ -3957,7 +3999,10 @@ export interface components {
             publishAt?: string | null;
             /** Expireat */
             expireAt?: string | null;
-            /** Metadatajson */
+            /**
+             * Metadatajson
+             * @description Custom non-schema metadata
+             */
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
@@ -4010,10 +4055,20 @@ export interface components {
              * @default false
              */
             isSystem: boolean;
+            /**
+             * Schema Json
+             * @description Entry type schema definition (EntryTypeSchemaDefinition)
+             */
+            schema_json?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * EntryTypeRead
          * @description Schema for reading an entry type.
+         *
+         *     System entry types have group_id=None and are globally available to all workspaces.
+         *     Workspace-scoped entry types have a specific group_id.
          */
         EntryTypeRead: {
             /**
@@ -4021,11 +4076,8 @@ export interface components {
              * Format: uuid4
              */
             id: string;
-            /**
-             * Groupid
-             * Format: uuid4
-             */
-            groupId: string;
+            /** Groupid */
+            groupId: string | null;
             /** Name */
             name: string;
             /** Slug */
@@ -4040,6 +4092,13 @@ export interface components {
             sortOrder: number;
             /** Issystem */
             isSystem: boolean;
+            /**
+             * Schemajson
+             * @description Entry type schema definition (EntryTypeSchemaDefinition)
+             */
+            schemaJson?: {
+                [key: string]: unknown;
+            } | null;
             /** Createdat */
             createdAt?: string | null;
             /** Updateat */
@@ -4064,10 +4123,20 @@ export interface components {
             sortOrder?: number | null;
             /** Issystem */
             isSystem?: boolean | null;
+            /**
+             * Schema Json
+             * @description Entry type schema definition (EntryTypeSchemaDefinition)
+             */
+            schema_json?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * EntryUpdate
          * @description Schema for patching an entry.
+         *
+         *     BREAKING CHANGE: content_markdown removed, replaced with data_json.
+         *     Entry content is now schema-driven based on entry_type.schema_json.
          */
         EntryUpdate: {
             /** Entry Type Id */
@@ -4080,18 +4149,26 @@ export interface components {
             summary?: string | null;
             /** Description */
             description?: string | null;
-            /** Content Markdown */
-            content_markdown?: string | null;
+            /**
+             * Datajson
+             * @description Schema-driven content data (validated against entry_type.schema_json)
+             */
+            dataJson?: {
+                [key: string]: unknown;
+            } | null;
             /** Status */
             status?: string | null;
-            /** Published At */
-            published_at?: string | null;
-            /** Publish At */
-            publish_at?: string | null;
-            /** Expire At */
-            expire_at?: string | null;
-            /** Metadata Json */
-            metadata_json?: {
+            /** Publishedat */
+            publishedAt?: string | null;
+            /** Publishat */
+            publishAt?: string | null;
+            /** Expireat */
+            expireAt?: string | null;
+            /**
+             * Metadatajson
+             * @description Custom non-schema metadata (API keys, external IDs, etc.)
+             */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /** Collection Ids */
@@ -4970,6 +5047,8 @@ export interface components {
             summary?: string | null;
             /** Publishedat */
             publishedAt?: string | null;
+            /** Status */
+            status: string;
             /**
              * Collections
              * @default []
@@ -4994,6 +5073,9 @@ export interface components {
          *
          *     Only includes public-facing fields. Excludes all admin metadata,
          *     internal fields, and user information.
+         *
+         *     BREAKING CHANGE: content_markdown removed, replaced with data.
+         *     Entry content is now schema-driven based on entry_type.schema_json.
          */
         PublishedEntryRead: {
             /** Slug */
@@ -5004,8 +5086,10 @@ export interface components {
             entryType: string;
             /** Summary */
             summary?: string | null;
-            /** Contentmarkdown */
-            contentMarkdown?: string | null;
+            /** Data */
+            data: {
+                [key: string]: unknown;
+            };
             /** Publishedat */
             publishedAt?: string | null;
             /** Metadata */
@@ -9776,6 +9860,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EventLogSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_task_types_api_platform_scheduled_tasks_task_types_get: {
+        parameters: {
+            query?: {
+                detailed?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
