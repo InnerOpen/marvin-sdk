@@ -12,6 +12,7 @@ export interface EntryTypeCreate {
   icon?: string;
   color?: string;
   sortOrder?: number;
+  schemaJson?: Record<string, unknown>;
 }
 
 export interface EntryTypeUpdate {
@@ -21,6 +22,7 @@ export interface EntryTypeUpdate {
   icon?: string;
   color?: string;
   sortOrder?: number;
+  schemaJson?: Record<string, unknown>;
 }
 
 export class EntryTypesModule {
