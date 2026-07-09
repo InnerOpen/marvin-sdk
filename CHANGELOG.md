@@ -1,3 +1,11 @@
+# [2.0.0-next.5](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.4...v2.0.0-next.5) (2026-07-09)
+
+
+### Features
+
+* Regenerate SDK with publishing schema updates ([4d25f34](https://github.com/inneropen/marvin-sdk/commit/4d25f34f1333a7381f75f44f2940dd784594bdbb))
+* Update PublishedCollectionSummary schema ([2e594b2](https://github.com/inneropen/marvin-sdk/commit/2e594b2a5065cdc592a8847542fedb80b05641c2))
+
 # [2.0.0-next.4](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.3...v2.0.0-next.4) (2026-07-09)
 
 
