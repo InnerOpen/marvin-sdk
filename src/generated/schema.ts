@@ -3891,6 +3891,10 @@ export interface components {
             status: string;
             /** Publishedat */
             publishedAt?: string | null;
+            /** Publishat */
+            publishAt?: string | null;
+            /** Expireat */
+            expireAt?: string | null;
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
@@ -3949,6 +3953,10 @@ export interface components {
             status: string;
             /** Publishedat */
             publishedAt?: string | null;
+            /** Publishat */
+            publishAt?: string | null;
+            /** Expireat */
+            expireAt?: string | null;
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
@@ -4078,6 +4086,10 @@ export interface components {
             status?: string | null;
             /** Published At */
             published_at?: string | null;
+            /** Publish At */
+            publish_at?: string | null;
+            /** Expire At */
+            expire_at?: string | null;
             /** Metadata Json */
             metadata_json?: {
                 [key: string]: unknown;
