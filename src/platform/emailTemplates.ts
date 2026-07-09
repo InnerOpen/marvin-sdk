@@ -1,89 +1,81 @@
 /**
- * Email Templates SDK - Workspace email template management
+ * Email Templates Module - Platform API
+ *
+ * Manage workspace email templates
  */
 
-import { z } from 'zod';
-import type { PlatformClient } from './client';
+import type { HttpClient } from '../core';
 
-// Schemas
-export const EmailTemplateSummarySchema = z.object({
-  id: z.string().uuid(),
-  template_type: z.string(),
-  group_id: z.string().uuid().nullable(),
-  name: z.string(),
-  description: z.string().optional(),
-  enabled: z.boolean(),
-  created_at: z.string(),
-  update_at: z.string(),
-});
+// Type definitions
+export interface EmailTemplateSummary {
+  id: string;
+  template_type: string;
+  group_id: string | null;
+  name: string;
+  description?: string;
+  enabled: boolean;
+  created_at: string;
+  update_at: string;
+}
 
-export const EmailTemplateReadSchema = EmailTemplateSummarySchema.extend({
-  subject: z.string(),
-  header_text: z.string().optional(),
-  message_top: z.string().optional(),
-  message_bottom: z.string().optional(),
-  button_text: z.string().optional(),
-  custom_html: z.string().optional(),
-  available_variables: z.record(z.string()).optional(),
-});
+export interface EmailTemplateRead extends EmailTemplateSummary {
+  subject: string;
+  header_text?: string;
+  message_top?: string;
+  message_bottom?: string;
+  button_text?: string;
+  custom_html?: string;
+  available_variables?: Record<string, string>;
+}
 
-export const EmailTemplateCreateSchema = z.object({
-  template_type: z.string(),
-  group_id: z.string().uuid().optional(),
-  name: z.string(),
-  description: z.string().optional(),
-  subject: z.string(),
-  header_text: z.string().optional(),
-  message_top: z.string().optional(),
-  message_bottom: z.string().optional(),
-  button_text: z.string().optional(),
-  custom_html: z.string().optional(),
-  available_variables: z.record(z.string()).optional(),
-  enabled: z.boolean().optional(),
-});
+export interface EmailTemplateCreate {
+  template_type: string;
+  group_id?: string;
+  name: string;
+  description?: string;
+  subject: string;
+  header_text?: string;
+  message_top?: string;
+  message_bottom?: string;
+  button_text?: string;
+  custom_html?: string;
+  available_variables?: Record<string, string>;
+  enabled?: boolean;
+}
 
-export const EmailTemplateUpdateSchema = z.object({
-  name: z.string().optional(),
-  description: z.string().optional(),
-  subject: z.string().optional(),
-  header_text: z.string().optional(),
-  message_top: z.string().optional(),
-  message_bottom: z.string().optional(),
-  button_text: z.string().optional(),
-  custom_html: z.string().optional(),
-  available_variables: z.record(z.string()).optional(),
-  enabled: z.boolean().optional(),
-});
+export interface EmailTemplateUpdate {
+  name?: string;
+  description?: string;
+  subject?: string;
+  header_text?: string;
+  message_top?: string;
+  message_bottom?: string;
+  button_text?: string;
+  custom_html?: string;
+  available_variables?: Record<string, string>;
+  enabled?: boolean;
+}
 
-export const TestEmailRequestSchema = z.object({
-  recipient_email: z.string().email(),
-});
+export interface TestEmailRequest {
+  recipient_email: string;
+}
 
-export const TestEmailResponseSchema = z.object({
-  message: z.string(),
-});
-
-// Types
-export type EmailTemplateSummary = z.infer<typeof EmailTemplateSummarySchema>;
-export type EmailTemplateRead = z.infer<typeof EmailTemplateReadSchema>;
-export type EmailTemplateCreate = z.infer<typeof EmailTemplateCreateSchema>;
-export type EmailTemplateUpdate = z.infer<typeof EmailTemplateUpdateSchema>;
-export type TestEmailRequest = z.infer<typeof TestEmailRequestSchema>;
-export type TestEmailResponse = z.infer<typeof TestEmailResponseSchema>;
+export interface TestEmailResponse {
+  message: string;
+}
 
 /**
  * Email Templates API client for workspace-scoped templates
  */
 export class EmailTemplatesClient {
-  constructor(private readonly client: PlatformClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   /**
    * List all email templates for the workspace
    * @param groupId - Workspace ID
    */
   async list(groupId: string): Promise<EmailTemplateSummary[]> {
-    const response = await this.client.get(`/groups/${groupId}/email-templates`);
-    return z.array(EmailTemplateSummarySchema).parse(response);
+    return this.http.get<EmailTemplateSummary[]>(`/groups/${groupId}/email-templates`);
   }
 
   /**
@@ -92,8 +84,7 @@ export class EmailTemplatesClient {
    * @param templateId - Template ID
    */
   async get(groupId: string, templateId: string): Promise<EmailTemplateRead> {
-    const response = await this.client.get(`/groups/${groupId}/email-templates/${templateId}`);
-    return EmailTemplateReadSchema.parse(response);
+    return this.http.get<EmailTemplateRead>(`/groups/${groupId}/email-templates/${templateId}`);
   }
 
   /**
@@ -102,8 +93,7 @@ export class EmailTemplatesClient {
    * @param data - Template data
    */
   async create(groupId: string, data: EmailTemplateCreate): Promise<EmailTemplateRead> {
-    const response = await this.client.post(`/groups/${groupId}/email-templates`, data);
-    return EmailTemplateReadSchema.parse(response);
+    return this.http.post<EmailTemplateRead>(`/groups/${groupId}/email-templates`, data);
   }
 
   /**
@@ -113,8 +103,7 @@ export class EmailTemplatesClient {
    * @param data - Updated template data
    */
   async update(groupId: string, templateId: string, data: EmailTemplateUpdate): Promise<EmailTemplateRead> {
-    const response = await this.client.patch(`/groups/${groupId}/email-templates/${templateId}`, data);
-    return EmailTemplateReadSchema.parse(response);
+    return this.http.patch<EmailTemplateRead>(`/groups/${groupId}/email-templates/${templateId}`, data);
   }
 
   /**
@@ -123,7 +112,7 @@ export class EmailTemplatesClient {
    * @param templateId - Template ID
    */
   async delete(groupId: string, templateId: string): Promise<void> {
-    await this.client.delete(`/groups/${groupId}/email-templates/${templateId}`);
+    await this.http.delete(`/groups/${groupId}/email-templates/${templateId}`);
   }
 
   /**
@@ -133,9 +122,8 @@ export class EmailTemplatesClient {
    * @param recipientEmail - Test recipient email address
    */
   async sendTest(groupId: string, templateId: string, recipientEmail: string): Promise<TestEmailResponse> {
-    const response = await this.client.post(`/groups/${groupId}/email-templates/${templateId}/test`, {
+    return this.http.post<TestEmailResponse>(`/groups/${groupId}/email-templates/${templateId}/test`, {
       recipient_email: recipientEmail,
     });
-    return TestEmailResponseSchema.parse(response);
   }
 }
