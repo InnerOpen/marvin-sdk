@@ -1,3 +1,27 @@
+# [2.0.0-next.1](https://github.com/inneropen/marvin-sdk/compare/v1.11.0-next.3...v2.0.0-next.1) (2026-07-09)
+
+
+* feat!: Implement schema-driven entry types (v2.0.0) ([a424b23](https://github.com/inneropen/marvin-sdk/commit/a424b2389164d3fae220d72cb5519059a462e518))
+
+
+### Bug Fixes
+
+* Add schemaJson to EntryType create/update interfaces ([7f3c95a](https://github.com/inneropen/marvin-sdk/commit/7f3c95af403d9928217e39da2bbe5b8e178fc4b1))
+
+
+### BREAKING CHANGES
+
+* Replace contentMarkdown with schema-driven dataJson
+
+- Add schemaJson to EntryType interface
+- Add dataJson to Entry interface
+- Deprecate contentMarkdown (remove in v3.0.0)
+- Add field<T>(key) helper for type-safe field access
+- Add comprehensive migration guide (MIGRATION-v2.md)
+- Update CHANGELOG for v2.0.0 release
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+
 # Changelog
 
 All notable changes to the Marvin SDK will be documented in this file.
