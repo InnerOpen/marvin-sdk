@@ -1,3 +1,15 @@
+# [2.0.0-next.6](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.5...v2.0.0-next.6) (2026-07-09)
+
+
+### Bug Fixes
+
+* Remove Zod dependency from email templates module ([81fd2f6](https://github.com/inneropen/marvin-sdk/commit/81fd2f6843c3880db282c7b97c7154aaa2f284ab))
+
+
+### Features
+
+* Add email templates support to Marvin SDK ([0e9f272](https://github.com/inneropen/marvin-sdk/commit/0e9f27207fa2266e040ce33caa9b0ba8a2d8e0ea))
+
 # [2.0.0-next.5](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.4...v2.0.0-next.5) (2026-07-09)
 
 
