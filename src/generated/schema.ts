@@ -820,8 +820,8 @@ export interface paths {
          *     changing their own permissions via this user-facing endpoint.
          *
          *     Args:
-         *         new_data (UserUpdate): Pydantic schema containing the fields to update.
-         *                                This should be a partial update schema.
+         *         new_data (UserProfileUpdate): Pydantic schema containing the fields to update.
+         *                                       Only username, email, and full_name can be updated.
          *
          *     Returns:
          *         SuccessResponse: A confirmation message if the user profile was updated successfully.
@@ -2197,6 +2197,46 @@ export interface paths {
         patch: operations["update_collection_api_platform_collections__item_id__patch"];
         trace?: never;
     };
+    "/api/platform/collections/{item_id}/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Collection Entries
+         * @description Get all entries in a collection, ordered by sort_order.
+         */
+        get: operations["get_collection_entries_api_platform_collections__item_id__entries_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/collections/{item_id}/entries/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Reorder Collection Entries
+         * @description Bulk update sort_order for entries in a collection.
+         */
+        patch: operations["reorder_collection_entries_api_platform_collections__item_id__entries_order_patch"];
+        trace?: never;
+    };
     "/api/platform/api-clients": {
         parameters: {
             query?: never;
@@ -2693,6 +2733,98 @@ export interface paths {
          *         List of events triggered by this user ordered by occurred_at descending
          */
         get: operations["get_user_activity_api_platform_events_user__user_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/scheduled-tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Tasks
+         * @description List all scheduled tasks for the current workspace.
+         */
+        get: operations["list_tasks_api_platform_scheduled_tasks_get"];
+        put?: never;
+        /**
+         * Create Task
+         * @description Create a new scheduled task.
+         */
+        post: operations["create_task_api_platform_scheduled_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/scheduled-tasks/{id_or_slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Task
+         * @description Get a scheduled task by ID or slug.
+         */
+        get: operations["get_task_api_platform_scheduled_tasks__id_or_slug__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Task
+         * @description Delete a scheduled task.
+         */
+        delete: operations["delete_task_api_platform_scheduled_tasks__id_or_slug__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Task
+         * @description Update a scheduled task.
+         */
+        patch: operations["update_task_api_platform_scheduled_tasks__id_or_slug__patch"];
+        trace?: never;
+    };
+    "/api/platform/scheduled-tasks/{id_or_slug}/execute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Execute Task
+         * @description Manually trigger task execution.
+         */
+        post: operations["execute_task_api_platform_scheduled_tasks__id_or_slug__execute_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/scheduled-tasks/{id_or_slug}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Task History
+         * @description Get execution history for a task.
+         */
+        get: operations["get_task_history_api_platform_scheduled_tasks__id_or_slug__history_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3771,6 +3903,19 @@ export interface components {
             resourceIds?: string[] | null;
         };
         /**
+         * EntryOrderItem
+         * @description Schema for a single entry order update.
+         */
+        EntryOrderItem: {
+            /**
+             * Entryid
+             * Format: uuid4
+             */
+            entryId: string;
+            /** Sortorder */
+            sortOrder: number;
+        };
+        /**
          * EntryRead
          * @description Schema for reading an entry.
          */
@@ -3829,6 +3974,8 @@ export interface components {
              * @default []
              */
             collections: string[];
+            /** Order */
+            order?: number | null;
         };
         /**
          * EntryTypeCreate
@@ -4942,6 +5089,14 @@ export interface components {
             meta: components["schemas"]["PaginationMeta"];
         };
         /**
+         * ReorderEntriesRequest
+         * @description Schema for bulk reordering entries in a collection.
+         */
+        ReorderEntriesRequest: {
+            /** Entries */
+            entries: components["schemas"]["EntryOrderItem"][];
+        };
+        /**
          * ResetPassword
          * @description Schema for the actual password reset operation.
          *     Requires the reset token, the user's email (for verification, though token
@@ -5054,6 +5209,154 @@ export interface components {
             externalId?: string | null;
             /** Metadata */
             metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * ScheduledTaskCreate
+         * @description Schema for creating a new scheduled task.
+         */
+        ScheduledTaskCreate: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+            /** Description */
+            description?: string | null;
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /**
+             * Scheduletype
+             * @enum {string}
+             */
+            scheduleType: "cron" | "interval" | "once";
+            /** Scheduleconfig */
+            scheduleConfig: {
+                [key: string]: unknown;
+            };
+            /** Tasktype */
+            taskType: string;
+            /** Taskconfig */
+            taskConfig?: {
+                [key: string]: unknown;
+            };
+            /** Retrypolicy */
+            retryPolicy?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * ScheduledTaskExecutionLogRead
+         * @description Schema for reading a scheduled task execution log entry.
+         */
+        ScheduledTaskExecutionLogRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Taskid
+             * Format: uuid4
+             */
+            taskId: string;
+            /** Groupid */
+            groupId?: string | null;
+            /**
+             * Executedat
+             * Format: date-time
+             */
+            executedAt: string;
+            /** Status */
+            status: string;
+            /** Durationms */
+            durationMs?: number | null;
+            /** Errormessage */
+            errorMessage?: string | null;
+            /** Errortraceback */
+            errorTraceback?: string | null;
+            /** Retryattempt */
+            retryAttempt: number;
+        };
+        /**
+         * ScheduledTaskRead
+         * @description Full schema for reading a scheduled task.
+         */
+        ScheduledTaskRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description?: string | null;
+            /** Enabled */
+            enabled: boolean;
+            /** Scheduletype */
+            scheduleType: string;
+            /** Tasktype */
+            taskType: string;
+            /** Lastrunat */
+            lastRunAt?: string | null;
+            /** Nextrunat */
+            nextRunAt?: string | null;
+            /** Laststatus */
+            lastStatus?: string | null;
+            /** Failurecount */
+            failureCount: number;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Updateat */
+            updateAt?: string | null;
+            /** Groupid */
+            groupId?: string | null;
+            /** Scheduleconfig */
+            scheduleConfig: {
+                [key: string]: unknown;
+            };
+            /** Taskconfig */
+            taskConfig: {
+                [key: string]: unknown;
+            };
+            /** Retrypolicy */
+            retryPolicy?: {
+                [key: string]: unknown;
+            } | null;
+            /** Lastdurationms */
+            lastDurationMs?: number | null;
+        };
+        /**
+         * ScheduledTaskUpdate
+         * @description Schema for updating a scheduled task.
+         */
+        ScheduledTaskUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Scheduletype */
+            scheduleType?: ("cron" | "interval" | "once") | null;
+            /** Scheduleconfig */
+            scheduleConfig?: {
+                [key: string]: unknown;
+            } | null;
+            /** Tasktype */
+            taskType?: string | null;
+            /** Taskconfig */
+            taskConfig?: {
+                [key: string]: unknown;
+            } | null;
+            /** Retrypolicy */
+            retryPolicy?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -5261,6 +5564,20 @@ export interface components {
             next?: string | null;
             /** Previous */
             previous?: string | null;
+        };
+        /**
+         * UserProfileUpdate
+         * @description Schema for updating a user's profile information (without password).
+         *     All fields are optional for partial updates.
+         *     Used by the /api/self endpoint for users updating their own profile.
+         */
+        UserProfileUpdate: {
+            /** Username */
+            username?: string | null;
+            /** Email */
+            email?: string | null;
+            /** Fullname */
+            fullName?: string | null;
         };
         /**
          * UserRead
@@ -6604,7 +6921,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UserUpdate"];
+                "application/json": components["schemas"]["UserProfileUpdate"];
             };
         };
         responses: {
@@ -8511,6 +8828,74 @@ export interface operations {
             };
         };
     };
+    get_collection_entries_api_platform_collections__item_id__entries_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reorder_collection_entries_api_platform_collections__item_id__entries_order_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReorderEntriesRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_api_clients_api_platform_api_clients_get: {
         parameters: {
             query?: never;
@@ -9375,6 +9760,218 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EventLogSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_tasks_api_platform_scheduled_tasks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRead"][];
+                };
+            };
+        };
+    };
+    create_task_api_platform_scheduled_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScheduledTaskCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_task_api_platform_scheduled_tasks__id_or_slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_task_api_platform_scheduled_tasks__id_or_slug__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_task_api_platform_scheduled_tasks__id_or_slug__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScheduledTaskUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    execute_task_api_platform_scheduled_tasks__id_or_slug__execute_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_task_history_api_platform_scheduled_tasks__id_or_slug__history_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                id_or_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskExecutionLogRead"][];
                 };
             };
             /** @description Validation Error */
