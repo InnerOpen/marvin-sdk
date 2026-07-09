@@ -4928,15 +4928,10 @@ export interface components {
             description?: string | null;
             /** Publicurl */
             publicUrl: string;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
-            /**
-             * Entries
-             * @default []
-             */
-            entries: string[];
         };
         /**
          * PublishedAssetsResponse
@@ -4969,8 +4964,8 @@ export interface components {
             smartRules?: {
                 [key: string]: unknown;
             } | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /** Entrycount */
@@ -4990,8 +4985,8 @@ export interface components {
             slug: string;
             /** Name */
             name: string;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /** Sortorder */
@@ -5041,17 +5036,17 @@ export interface components {
              */
             collections: string[];
             /**
-             * Assets
+             * Assetslugs
              * @default []
              */
-            assets: string[];
+            assetSlugs: string[];
+            /**
+             * Resourceslugs
+             * @default []
+             */
+            resourceSlugs: string[];
             /** Order */
             order?: number | null;
-            /**
-             * Resources
-             * @default []
-             */
-            resources: string[];
         };
         /**
          * PublishedEntryRead
@@ -5078,8 +5073,8 @@ export interface components {
             };
             /** Publishedat */
             publishedAt?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -5119,8 +5114,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /** Role */
@@ -5155,8 +5150,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -5482,8 +5477,8 @@ export interface components {
             social?: {
                 [key: string]: unknown;
             } | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
