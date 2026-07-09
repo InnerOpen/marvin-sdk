@@ -1,3 +1,10 @@
+# [1.11.0-next.3](https://github.com/inneropen/marvin-sdk/compare/v1.11.0-next.2...v1.11.0-next.3) (2026-07-09)
+
+
+### Features
+
+* Add reorderEntries method to collections module ([b0e76bc](https://github.com/inneropen/marvin-sdk/commit/b0e76bc1b88244113f733fa2e08bef32860c93fe))
+
 # [1.11.0-next.2](https://github.com/inneropen/marvin-sdk/compare/v1.11.0-next.1...v1.11.0-next.2) (2026-07-08)
 
 
