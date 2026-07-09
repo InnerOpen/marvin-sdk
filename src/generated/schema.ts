@@ -4968,6 +4968,8 @@ export interface components {
              * @default []
              */
             assets: string[];
+            /** Order */
+            order?: number | null;
             /**
              * Resources
              * @default []
@@ -5013,6 +5015,8 @@ export interface components {
              * @default []
              */
             assets: components["schemas"]["PublishedAssetRead"][];
+            /** Order */
+            order?: number | null;
         };
         /**
          * PublishedResourceRead
