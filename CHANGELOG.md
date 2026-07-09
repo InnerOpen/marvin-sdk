@@ -1,3 +1,10 @@
+# [2.0.0-next.2](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.1...v2.0.0-next.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* Revert version to let semantic-release handle versioning ([cdfe4fd](https://github.com/inneropen/marvin-sdk/commit/cdfe4fd6be92fffa5375dd09e124cfcebec70b44))
+
 # [2.0.0-next.1](https://github.com/inneropen/marvin-sdk/compare/v1.11.0-next.3...v2.0.0-next.1) (2026-07-09)
 
 
