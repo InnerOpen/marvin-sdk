@@ -63,6 +63,10 @@ export type { Notification, NotificationCreate, NotificationUpdate } from './not
 export { WebhooksModule } from './webhooks';
 export type { Webhook, WebhookCreate, WebhookUpdate, WebhookPagination, WebhookMethod } from './webhooks';
 
+// Email Templates
+export { EmailTemplatesClient } from './emailTemplates';
+export type { EmailTemplateSummary, EmailTemplateRead, EmailTemplateCreate, EmailTemplateUpdate, TestEmailRequest, TestEmailResponse } from './emailTemplates';
+
 // User self-service
 export { UserModule } from './user';
 export type { UserProfile, UserProfileUpdate, ApiToken, ApiTokenCreate, ApiTokenWithToken, PasswordChange } from './user';

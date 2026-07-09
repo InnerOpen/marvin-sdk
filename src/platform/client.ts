@@ -23,6 +23,7 @@ import { EventsModule } from './events';
 import { EventLogModule } from './eventLog';
 import { AuthModule } from './auth';
 import { ThemeModule } from './theme';
+import { EmailTemplatesClient } from './emailTemplates';
 
 export interface PlatformClientConfig {
   apiUrl: string;
@@ -47,6 +48,7 @@ export class PlatformClient extends HttpClient {
   public eventLog: EventLogModule;
   public session: AuthModule;
   public theme: ThemeModule;
+  public emailTemplates: EmailTemplatesClient;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -79,6 +81,7 @@ export class PlatformClient extends HttpClient {
     this.eventLog = new EventLogModule(this);
     this.session = new AuthModule(this);
     this.theme = new ThemeModule(this);
+    this.emailTemplates = new EmailTemplatesClient(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);
