@@ -1,3 +1,10 @@
+# [2.0.0-next.4](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.3...v2.0.0-next.4) (2026-07-09)
+
+
+### Features
+
+* Regenerate SDK schema with dataJson field ([3f923e9](https://github.com/inneropen/marvin-sdk/commit/3f923e95fd2a7a685cd62df60001581990d28ef0))
+
 # [2.0.0-next.3](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.2...v2.0.0-next.3) (2026-07-09)
 
 
