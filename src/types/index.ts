@@ -28,6 +28,12 @@ export interface MarvinEntryType {
   description?: string;
   sortOrder: number;
   isSystem: boolean;
+  /**
+   * Schema definition for this entry type (schema-driven content model).
+   * Defines what fields exist, their types, and validation rules.
+   * @since 2.0.0
+   */
+  schemaJson?: Record<string, unknown>;
 }
 
 export interface MarvinAsset {
@@ -111,7 +117,20 @@ export interface MarvinEntry {
   slug: string;
   summary?: string;
   description?: string;
+  /**
+   * Schema-driven content data structured according to entry type's schemaJson.
+   * @since 2.0.0
+   */
+  dataJson?: Record<string, unknown>;
+  /**
+   * @deprecated Use dataJson instead. Will be removed in v3.0.0
+   * @since 1.x
+   */
   contentMarkdown?: string;
+  /**
+   * Custom non-schema metadata (API keys, external IDs, CMS-specific config).
+   * For content fields, use dataJson instead.
+   */
   metadata?: Record<string, unknown>;
   status: string;
   publishedAt?: string;

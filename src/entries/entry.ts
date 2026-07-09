@@ -18,7 +18,19 @@ export class Entry {
   get slug() { return this.data.slug; }
   get summary() { return this.data.summary; }
   get description() { return this.data.description; }
+
+  /**
+   * @deprecated Use field('body') or dataJson instead. Will be removed in v3.0.0
+   */
   get contentMarkdown() { return this.data.contentMarkdown; }
+
+  /**
+   * Schema-driven content data (replaces contentMarkdown in v2.0.0).
+   * Access specific fields using the field() helper method.
+   * @since 2.0.0
+   */
+  get dataJson() { return this.data.dataJson; }
+
   get metadata() { return this.data.metadata; }
   get status() { return this.data.status; }
   get publishedAt() { return this.data.publishedAt; }
@@ -39,6 +51,33 @@ export class Entry {
    */
   get collections(): MarvinCollection[] {
     return this.data.collections || [];
+  }
+
+  /**
+   * Get a specific field value from the entry's schema-driven content (dataJson).
+   *
+   * @param key - Field key as defined in the entry type's schema
+   * @returns The field value, or undefined if not present
+   * @since 2.0.0
+   *
+   * @example
+   * ```typescript
+   * const entry = await client.entries.get('my-entry');
+   * const body = entry.field('body');           // Get markdown body
+   * const difficulty = entry.field('difficulty'); // Get difficulty level
+   * const heroImage = entry.field('heroImage');  // Get hero image UUID
+   * ```
+   */
+  field<T = unknown>(key: string): T | undefined {
+    return this.data.dataJson?.[key] as T | undefined;
+  }
+
+  /**
+   * Get all fields from the entry's schema-driven content.
+   * @since 2.0.0
+   */
+  get fields(): Record<string, unknown> {
+    return this.data.dataJson || {};
   }
 
   /**
