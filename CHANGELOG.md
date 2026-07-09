@@ -1,3 +1,10 @@
+# [2.0.0-next.3](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.2...v2.0.0-next.3) (2026-07-09)
+
+
+### Features
+
+* Add publish_at and expire_at fields to entry schemas ([4f2da7a](https://github.com/inneropen/marvin-sdk/commit/4f2da7a9bb1909a6af33a4019db104865beb6d99))
+
 # [2.0.0-next.2](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.1...v2.0.0-next.2) (2026-07-09)
 
 
