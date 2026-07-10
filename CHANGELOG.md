@@ -1,3 +1,10 @@
+# [2.0.0-next.14](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.13...v2.0.0-next.14) (2026-07-10)
+
+
+### Features
+
+* Print full JSON response in debug mode instead of preview ([943bfa9](https://github.com/inneropen/marvin-sdk/commit/943bfa9c00f71fe1baa48ee70b30b291be23d290))
+
 # [2.0.0-next.13](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.12...v2.0.0-next.13) (2026-07-10)
 
 
