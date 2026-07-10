@@ -67,3 +67,15 @@ export type PlatformWorkspaceMemberUpdate = components['schemas']['WorkspaceMemb
  */
 export type EventLogEntry = components['schemas']['EventLogRead'];
 export type EventLogSummary = components['schemas']['EventLogSummary'];
+
+/**
+ * Forms (Platform API - full CRUD)
+ */
+export type PlatformForm = components['schemas']['FormRead'];
+export type PlatformFormCreate = components['schemas']['FormCreate'];
+export type PlatformFormUpdate = components['schemas']['FormUpdate'];
+
+/**
+ * Form Submissions (Platform API - read access)
+ */
+export type PlatformFormSubmission = components['schemas']['FormSubmissionRead'];
