@@ -5,6 +5,7 @@
 import type { MarvinHttpClient } from '../client/http';
 import type { MarvinEntry } from '../types';
 import { Entry } from './entry';
+import { MarvinNotFoundError } from '../core/errors';
 
 export interface GetEntriesOptions {
   entryType?: string;
@@ -41,13 +42,23 @@ export class EntriesModule {
 
   /**
    * Get a single entry by slug
+   * Returns null if entry is not found (404)
    */
-  async get(slug: string): Promise<Entry> {
-    // TODO: Implement this endpoint in Marvin backend
-    // Expected: GET /api/publish/{workspaceSlug}/entries/{slug}
-    const endpoint = `/api/publish/${this.workspaceSlug}/entries/${slug}`;
-    const data = await this.http.fetch<MarvinEntry>(endpoint);
-    return new Entry(data, this.http, this.workspaceSlug);
+  async get(slug: string): Promise<Entry | null> {
+    try {
+      // TODO: Implement this endpoint in Marvin backend
+      // Expected: GET /api/publish/{workspaceSlug}/entries/{slug}
+      const endpoint = `/api/publish/${this.workspaceSlug}/entries/${slug}`;
+      const data = await this.http.fetch<MarvinEntry>(endpoint);
+      return new Entry(data, this.http, this.workspaceSlug);
+    } catch (error) {
+      // Return null for not found - this is a normal condition
+      if (error instanceof MarvinNotFoundError) {
+        return null;
+      }
+      // Re-throw other errors (auth, network, server)
+      throw error;
+    }
   }
 
   /**

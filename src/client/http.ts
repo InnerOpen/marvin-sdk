@@ -13,6 +13,8 @@ export class MarvinHttpClient extends HttpClient {
       baseUrl: config.apiUrl,
       auth: new BearerTokenAuth(config.siteClientToken),
       credentials: 'same-origin',
+      debug: config.debug,
+      logger: config.logger,
     });
   }
 

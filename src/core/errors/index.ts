@@ -8,4 +8,7 @@ export {
   MarvinAuthError,
   MarvinConfigError,
   MarvinValidationError,
+  MarvinNotFoundError,
+  MarvinNetworkError,
+  MarvinServerError,
 } from './MarvinError';

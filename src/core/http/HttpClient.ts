@@ -3,7 +3,13 @@
  */
 
 import type { AuthStrategy } from '../auth';
-import { MarvinApiError } from '../errors';
+import {
+  MarvinApiError,
+  MarvinNotFoundError,
+  MarvinNetworkError,
+  MarvinServerError,
+  MarvinAuthError
+} from '../errors';
 
 export interface HttpClientConfig {
   baseUrl: string;
@@ -11,6 +17,12 @@ export interface HttpClientConfig {
   defaultHeaders?: Record<string, string>;
   credentials?: RequestCredentials;
   timeout?: number;
+  debug?: boolean;
+  logger?: {
+    log: (message: string, ...args: unknown[]) => void;
+    warn: (message: string, ...args: unknown[]) => void;
+    error: (message: string, ...args: unknown[]) => void;
+  };
 }
 
 export class HttpClient {
@@ -19,6 +31,12 @@ export class HttpClient {
   private defaultHeaders: Record<string, string>;
   private credentials: RequestCredentials;
   private timeout: number;
+  private debug: boolean;
+  private logger: {
+    log: (message: string, ...args: unknown[]) => void;
+    warn: (message: string, ...args: unknown[]) => void;
+    error: (message: string, ...args: unknown[]) => void;
+  };
 
   constructor(config: HttpClientConfig) {
     this.baseUrl = config.baseUrl;
@@ -26,6 +44,8 @@ export class HttpClient {
     this.defaultHeaders = config.defaultHeaders || {};
     this.credentials = config.credentials || 'same-origin';
     this.timeout = config.timeout || 30000; // 30 seconds default
+    this.debug = config.debug ?? false;
+    this.logger = config.logger ?? console;
   }
 
   /**
@@ -91,6 +111,12 @@ export class HttpClient {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
+    const startTime = Date.now();
+
+    if (this.debug) {
+      this.logger.log(`[Marvin] ${method} ${url}`);
+    }
+
     try {
       const response = await fetch(url, {
         method,
@@ -104,6 +130,14 @@ export class HttpClient {
 
       clearTimeout(timeoutId);
 
+      const duration = Date.now() - startTime;
+
+      if (this.debug) {
+        this.logger.log(
+          `[Marvin] ${response.status} ${response.statusText} (${duration}ms)`
+        );
+      }
+
       // Handle unauthorized
       if (response.status === 401 && this.auth.handleUnauthorized) {
         await this.auth.handleUnauthorized();
@@ -112,6 +146,38 @@ export class HttpClient {
 
       if (!response.ok) {
         const errorText = await response.text().catch(() => '');
+
+        if (this.debug) {
+          this.logger.error(
+            `[Marvin] Error response: ${response.status} ${response.statusText}`,
+            errorText ? `Body: ${errorText}` : ''
+          );
+        }
+
+        // Throw specific error types based on status code
+        if (response.status === 404) {
+          throw new MarvinNotFoundError(
+            `Resource not found: ${endpoint}`,
+            endpoint
+          );
+        }
+
+        if (response.status === 401 || response.status === 403) {
+          throw new MarvinAuthError(
+            `Authentication failed: ${response.statusText}`,
+            response.status
+          );
+        }
+
+        if (response.status >= 500) {
+          throw new MarvinServerError(
+            `Server error: ${response.status} ${response.statusText}`,
+            response.status,
+            endpoint
+          );
+        }
+
+        // Generic API error for other cases
         throw MarvinApiError.fromResponse(
           response.status,
           response.statusText,
@@ -130,19 +196,28 @@ export class HttpClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      if (error instanceof MarvinApiError) {
+      // Re-throw Marvin errors as-is
+      if (
+        error instanceof MarvinApiError ||
+        error instanceof MarvinNotFoundError ||
+        error instanceof MarvinAuthError ||
+        error instanceof MarvinServerError
+      ) {
         throw error;
       }
 
+      // Handle network/timeout errors
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          throw new MarvinApiError(
+          throw new MarvinNetworkError(
             `Request timeout after ${this.timeout}ms`,
-            408,
-            endpoint
+            error
           );
         }
-        throw new MarvinApiError(error.message, 0, endpoint);
+        throw new MarvinNetworkError(
+          `Network error: ${error.message}`,
+          error
+        );
       }
 
       throw error;

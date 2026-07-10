@@ -151,6 +151,27 @@ export class MarvinClient {
     return this.workspace.resources.get(slug);
   }
 
+  /**
+   * Try multiple collection slugs in fallback order
+   * Returns entries from the first collection that exists and has content
+   *
+   * @param slugs - Collection slugs to try in order
+   * @param options - Options for fallback behavior
+   * @returns Entries from the first matching collection, or empty array
+   *
+   * @example
+   * ```ts
+   * // Try bench-notes, then journal, then blog
+   * const entries = await client.collectionFallback(['bench-notes', 'journal', 'blog']);
+   * ```
+   */
+  async collectionFallback(
+    slugs: string[],
+    options?: { requireEntries?: boolean }
+  ): Promise<MarvinEntry[]> {
+    return this.workspace.collections.fallback(slugs, options);
+  }
+
   // ======================
   // Backwards-Compatible Publishing API
   // ======================
@@ -175,8 +196,11 @@ export class MarvinClient {
    * @deprecated Use workspace.entries.get() instead
    * Get a single published entry by slug
    */
-  async getEntry(slug: string): Promise<MarvinEntry> {
+  async getEntry(slug: string): Promise<MarvinEntry | null> {
     const entry = await this.workspace.entries.get(slug);
+    if (!entry) {
+      return null;
+    }
     return entry.toJSON();
   }
 
@@ -192,8 +216,11 @@ export class MarvinClient {
    * @deprecated Use workspace.collections.get() instead
    * Get a single collection by slug
    */
-  async getCollection(slug: string): Promise<MarvinCollection> {
+  async getCollection(slug: string): Promise<MarvinCollection | null> {
     const collection = await this.workspace.collections.get(slug);
+    if (!collection) {
+      return null;
+    }
     return collection.toJSON();
   }
 

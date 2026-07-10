@@ -74,3 +74,46 @@ export class MarvinValidationError extends MarvinError {
     Object.setPrototypeOf(this, MarvinValidationError.prototype);
   }
 }
+
+/**
+ * Resource not found errors (404)
+ */
+export class MarvinNotFoundError extends MarvinError {
+  constructor(
+    message: string,
+    public readonly endpoint: string
+  ) {
+    super(message, 'NOT_FOUND', 404);
+    this.name = 'MarvinNotFoundError';
+    Object.setPrototypeOf(this, MarvinNotFoundError.prototype);
+  }
+}
+
+/**
+ * Network/connectivity errors
+ */
+export class MarvinNetworkError extends MarvinError {
+  constructor(
+    message: string,
+    public readonly originalError?: Error
+  ) {
+    super(message, 'NETWORK_ERROR');
+    this.name = 'MarvinNetworkError';
+    Object.setPrototypeOf(this, MarvinNetworkError.prototype);
+  }
+}
+
+/**
+ * Server errors (5xx)
+ */
+export class MarvinServerError extends MarvinError {
+  constructor(
+    message: string,
+    statusCode: number,
+    public readonly endpoint: string
+  ) {
+    super(message, 'SERVER_ERROR', statusCode);
+    this.name = 'MarvinServerError';
+    Object.setPrototypeOf(this, MarvinServerError.prototype);
+  }
+}
