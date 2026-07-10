@@ -1,3 +1,10 @@
+# [2.0.0-next.8](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.7...v2.0.0-next.8) (2026-07-10)
+
+
+### Bug Fixes
+
+* Add /api prefix to email templates endpoints ([5a3abce](https://github.com/inneropen/marvin-sdk/commit/5a3abce61874840b63abf3b89c3b66de26950e35))
+
 # [2.0.0-next.7](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.6...v2.0.0-next.7) (2026-07-10)
 
 
