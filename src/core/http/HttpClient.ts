@@ -196,12 +196,7 @@ export class HttpClient {
 
       // Log response data in debug mode
       if (this.debug) {
-        const preview = typeof data === 'object' && data !== null
-          ? Array.isArray(data)
-            ? `Array(${data.length})`
-            : `Object with keys: ${Object.keys(data).join(', ')}`
-          : String(data);
-        this.logger.log(`[Marvin] Response: ${preview}`);
+        this.logger.log('[Marvin] Response:', JSON.stringify(data, null, 2));
       }
 
       return data;
