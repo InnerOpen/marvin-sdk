@@ -75,7 +75,7 @@ export class EmailTemplatesClient {
    * @param groupId - Workspace ID
    */
   async list(groupId: string): Promise<EmailTemplateSummary[]> {
-    return this.http.get<EmailTemplateSummary[]>(`/platform/workspaces/${groupId}/email-templates`);
+    return this.http.get<EmailTemplateSummary[]>(`/api/platform/workspaces/${groupId}/email-templates`);
   }
 
   /**
@@ -84,7 +84,7 @@ export class EmailTemplatesClient {
    * @param templateId - Template ID
    */
   async get(groupId: string, templateId: string): Promise<EmailTemplateRead> {
-    return this.http.get<EmailTemplateRead>(`/platform/workspaces/${groupId}/email-templates/${templateId}`);
+    return this.http.get<EmailTemplateRead>(`/api/platform/workspaces/${groupId}/email-templates/${templateId}`);
   }
 
   /**
@@ -93,7 +93,7 @@ export class EmailTemplatesClient {
    * @param data - Template data
    */
   async create(groupId: string, data: EmailTemplateCreate): Promise<EmailTemplateRead> {
-    return this.http.post<EmailTemplateRead>(`/platform/workspaces/${groupId}/email-templates`, data);
+    return this.http.post<EmailTemplateRead>(`/api/platform/workspaces/${groupId}/email-templates`, data);
   }
 
   /**
@@ -103,7 +103,7 @@ export class EmailTemplatesClient {
    * @param data - Updated template data
    */
   async update(groupId: string, templateId: string, data: EmailTemplateUpdate): Promise<EmailTemplateRead> {
-    return this.http.patch<EmailTemplateRead>(`/platform/workspaces/${groupId}/email-templates/${templateId}`, data);
+    return this.http.patch<EmailTemplateRead>(`/api/platform/workspaces/${groupId}/email-templates/${templateId}`, data);
   }
 
   /**
@@ -112,7 +112,7 @@ export class EmailTemplatesClient {
    * @param templateId - Template ID
    */
   async delete(groupId: string, templateId: string): Promise<void> {
-    await this.http.delete(`/platform/workspaces/${groupId}/email-templates/${templateId}`);
+    await this.http.delete(`/api/platform/workspaces/${groupId}/email-templates/${templateId}`);
   }
 
   /**
@@ -122,7 +122,7 @@ export class EmailTemplatesClient {
    * @param recipientEmail - Test recipient email address
    */
   async sendTest(groupId: string, templateId: string, recipientEmail: string): Promise<TestEmailResponse> {
-    return this.http.post<TestEmailResponse>(`/platform/workspaces/${groupId}/email-templates/${templateId}/test`, {
+    return this.http.post<TestEmailResponse>(`/api/platform/workspaces/${groupId}/email-templates/${templateId}/test`, {
       recipient_email: recipientEmail,
     });
   }
