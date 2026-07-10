@@ -1,3 +1,10 @@
+# [2.0.0-next.10](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.9...v2.0.0-next.10) (2026-07-10)
+
+
+### Bug Fixes
+
+* Map INNEROPEN_IO_TOKEN to GITHUB_TOKEN parameter ([7a35918](https://github.com/inneropen/marvin-sdk/commit/7a35918039a7a1cab1d8f7a7189c1a90e660ab1e))
+
 # [2.0.0-next.9](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.8...v2.0.0-next.9) (2026-07-10)
 
 
