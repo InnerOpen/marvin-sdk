@@ -1,3 +1,10 @@
+# [2.0.0-next.13](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.12...v2.0.0-next.13) (2026-07-10)
+
+
+### Features
+
+* Improve debug logging - show response data preview and mask tokens ([70c65bb](https://github.com/inneropen/marvin-sdk/commit/70c65bbea7b7ccf9542277e23611b390b8a441ae))
+
 # [2.0.0-next.12](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.11...v2.0.0-next.12) (2026-07-10)
 
 
