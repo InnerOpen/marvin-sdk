@@ -1,3 +1,10 @@
+# [2.0.0-next.12](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.11...v2.0.0-next.12) (2026-07-10)
+
+
+### Features
+
+* Improve error handling, add typed errors, and collection fallback helper ([8b6c41e](https://github.com/inneropen/marvin-sdk/commit/8b6c41ed451e84a159bb71b96edb45343d8fd7f1))
+
 # [2.0.0-next.11](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.10...v2.0.0-next.11) (2026-07-10)
 
 
