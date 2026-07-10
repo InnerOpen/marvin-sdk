@@ -753,6 +753,120 @@ export interface paths {
         patch: operations["update_preferences_api_groups__group_id__preferences_patch"];
         trace?: never;
     };
+    "/api/groups/{group_id}/email-templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Email Templates
+         * @description List all email templates for the workspace.
+         *
+         *     Returns both workspace-specific and system-wide templates.
+         *
+         *     Args:
+         *         group_id: Workspace ID
+         *
+         *     Returns:
+         *         List of email template summaries
+         */
+        get: operations["list_templates_api_groups__group_id__email_templates_get"];
+        put?: never;
+        /**
+         * Create Email Template
+         * @description Create a new email template for the workspace.
+         *
+         *     Args:
+         *         group_id: Workspace ID
+         *         data: Template data
+         *
+         *     Returns:
+         *         Created email template
+         */
+        post: operations["create_template_api_groups__group_id__email_templates_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/{group_id}/email-templates/{template_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Email Template
+         * @description Get a specific email template by ID.
+         *
+         *     Args:
+         *         group_id: Workspace ID
+         *         template_id: Template ID
+         *
+         *     Returns:
+         *         Email template details
+         */
+        get: operations["get_template_api_groups__group_id__email_templates__template_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Email Template
+         * @description Delete an email template.
+         *
+         *     Args:
+         *         group_id: Workspace ID
+         *         template_id: Template ID
+         */
+        delete: operations["delete_template_api_groups__group_id__email_templates__template_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Email Template
+         * @description Update an email template.
+         *
+         *     Args:
+         *         group_id: Workspace ID
+         *         template_id: Template ID
+         *         data: Updated template data
+         *
+         *     Returns:
+         *         Updated email template
+         */
+        patch: operations["update_template_api_groups__group_id__email_templates__template_id__patch"];
+        trace?: never;
+    };
+    "/api/groups/{group_id}/email-templates/{template_id}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send Test Email
+         * @description Send a test email using the specified template.
+         *
+         *     Args:
+         *         group_id: Workspace ID
+         *         template_id: Template ID
+         *         data: Test email request with recipient address
+         *
+         *     Returns:
+         *         Success message
+         */
+        post: operations["send_test_email_api_groups__group_id__email_templates__template_id__test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/users/register": {
         parameters: {
             query?: never;
@@ -1408,6 +1522,112 @@ export interface paths {
          *                       successfully and any error message if it failed.
          */
         post: operations["send_test_email_api_admin_email_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/email/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List System Email Templates
+         * @description List all system-wide email templates.
+         *
+         *     Returns templates where group_id is NULL (system templates).
+         *
+         *     Returns:
+         *         List of system email template summaries
+         */
+        get: operations["list_templates_api_admin_email_templates_get"];
+        put?: never;
+        /**
+         * Create System Email Template
+         * @description Create a new system-wide email template.
+         *
+         *     Args:
+         *         data: Template data
+         *
+         *     Returns:
+         *         Created email template
+         */
+        post: operations["create_template_api_admin_email_templates_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/email/templates/{template_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get System Email Template
+         * @description Get a specific system email template by ID.
+         *
+         *     Args:
+         *         template_id: Template ID
+         *
+         *     Returns:
+         *         Email template details
+         */
+        get: operations["get_template_api_admin_email_templates__template_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete System Email Template
+         * @description Delete a system email template.
+         *
+         *     Args:
+         *         template_id: Template ID
+         */
+        delete: operations["delete_template_api_admin_email_templates__template_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update System Email Template
+         * @description Update a system email template.
+         *
+         *     Args:
+         *         template_id: Template ID
+         *         data: Updated template data
+         *
+         *     Returns:
+         *         Updated email template
+         */
+        patch: operations["update_template_api_admin_email_templates__template_id__patch"];
+        trace?: never;
+    };
+    "/api/admin/email/templates/{template_id}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send Test Email with Template
+         * @description Send a test email using the specified system template.
+         *
+         *     Args:
+         *         template_id: Template ID
+         *         data: Test email request with recipient address
+         *
+         *     Returns:
+         *         Success message
+         */
+        post: operations["send_template_test_email_api_admin_email_templates__template_id__test_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2487,6 +2707,123 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/forms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Forms */
+        get: operations["list_forms_api_platform_forms_get"];
+        put?: never;
+        /** Create Form */
+        post: operations["create_form_api_platform_forms_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/forms/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Form */
+        get: operations["get_form_api_platform_forms__item_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete Form */
+        delete: operations["delete_form_api_platform_forms__item_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Form */
+        patch: operations["update_form_api_platform_forms__item_id__patch"];
+        trace?: never;
+    };
+    "/api/platform/forms/{form_id}/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Form Submissions */
+        get: operations["list_submissions_api_platform_forms__form_id__submissions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/workspace/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Export Workspace
+         * @description Export the current workspace to JSON format.
+         *
+         *     This endpoint exports the complete workspace structure including:
+         *     - Collections
+         *     - Entry types (workspace-scoped by default)
+         *     - Entries with their collection assignments
+         *
+         *     The exported JSON can be used as a seed file for workspace restoration
+         *     or migration to another instance.
+         *
+         *     Args:
+         *         include_system_types: Whether to include system entry types in export
+         *
+         *     Returns:
+         *         JSON response with workspace data
+         */
+        get: operations["export_workspace_api_platform_workspace_export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/workspace/export/pretty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Export Workspace (Pretty)
+         * @description Export workspace with pretty-printed JSON (for readability).
+         *
+         *     Same as /export but with indented JSON formatting for easier reading
+         *     and version control.
+         *
+         *     Args:
+         *         include_system_types: Whether to include system entry types
+         *
+         *     Returns:
+         *         Pretty-printed JSON response
+         */
+        get: operations["export_workspace_pretty_api_platform_workspace_export_pretty_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/workspaces/{workspace_id}/members": {
         parameters: {
             query?: never;
@@ -3242,6 +3579,53 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/publish/{workspace_slug}/forms/{form_slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Form Definition
+         * @description Get published form definition for rendering.
+         *
+         *     **Authentication**: Requires API client token
+         *     **Permissions**: read:published_entries
+         */
+        get: operations["get_form_api_publish__workspace_slug__forms__form_slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/publish/{workspace_slug}/forms/{form_slug}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Submit Form Data
+         * @description Submit data to a published form.
+         *
+         *     **Authentication**: Requires API client token
+         *     **Permissions**: write:form_submissions
+         *     **Security**: Rate limiting, CAPTCHA, honeypot
+         */
+        post: operations["submit_form_api_publish__workspace_slug__forms__form_slug__submit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3805,6 +4189,163 @@ export interface components {
             error?: string | null;
         };
         /**
+         * EmailTemplateCreate
+         * @description Schema for creating a new email template.
+         */
+        EmailTemplateCreate: {
+            /**
+             * Templatetype
+             * @description Type of email (invitation, password_reset, notification, test)
+             */
+            templateType: string;
+            /**
+             * Groupid
+             * @description Workspace ID - null for system-wide templates
+             */
+            groupId?: string | null;
+            /**
+             * Name
+             * @description Human-readable template name
+             */
+            name: string;
+            /**
+             * Description
+             * @description Description of when this template is used
+             */
+            description?: string | null;
+            /**
+             * Subject
+             * @description Email subject line - supports Jinja2 variables
+             */
+            subject: string;
+            /**
+             * Headertext
+             * @description Header text (structured mode with default.html)
+             */
+            headerText?: string | null;
+            /**
+             * Messagetop
+             * @description Top message (structured mode with default.html)
+             */
+            messageTop?: string | null;
+            /**
+             * Messagebottom
+             * @description Bottom message (structured mode with default.html)
+             */
+            messageBottom?: string | null;
+            /**
+             * Buttontext
+             * @description Button text (structured mode with default.html)
+             */
+            buttonText?: string | null;
+            /**
+             * Customhtml
+             * @description Full custom HTML - if set, overrides structured fields
+             */
+            customHtml?: string | null;
+            /**
+             * Availablevariables
+             * @description Documentation of available variables
+             */
+            availableVariables?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Enabled
+             * @description Whether this template is active
+             * @default true
+             */
+            enabled: boolean;
+        };
+        /**
+         * EmailTemplateRead
+         * @description Schema for reading an email template.
+         */
+        EmailTemplateRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Templatetype */
+            templateType: string;
+            /** Groupid */
+            groupId: string | null;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string | null;
+            /** Subject */
+            subject: string;
+            /** Headertext */
+            headerText: string | null;
+            /** Messagetop */
+            messageTop: string | null;
+            /** Messagebottom */
+            messageBottom: string | null;
+            /** Buttontext */
+            buttonText: string | null;
+            /** Customhtml */
+            customHtml: string | null;
+            /** Availablevariables */
+            availableVariables: {
+                [key: string]: unknown;
+            } | null;
+            /** Enabled */
+            enabled: boolean;
+            /** Createdat */
+            createdAt: string;
+            /** Updateat */
+            updateAt: string;
+        };
+        /**
+         * EmailTemplateSummary
+         * @description Summary schema for listing email templates.
+         */
+        EmailTemplateSummary: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Templatetype */
+            templateType: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string | null;
+            /** Enabled */
+            enabled: boolean;
+        };
+        /**
+         * EmailTemplateUpdate
+         * @description Schema for updating an email template.
+         */
+        EmailTemplateUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Subject */
+            subject?: string | null;
+            /** Headertext */
+            headerText?: string | null;
+            /** Messagetop */
+            messageTop?: string | null;
+            /** Messagebottom */
+            messageBottom?: string | null;
+            /** Buttontext */
+            buttonText?: string | null;
+            /** Customhtml */
+            customHtml?: string | null;
+            /** Availablevariables */
+            availableVariables?: {
+                [key: string]: unknown;
+            } | null;
+            /** Enabled */
+            enabled?: boolean | null;
+        };
+        /**
          * EmailTest
          * @description Schema for the request body when sending a test email.
          *     Specifies the recipient email address.
@@ -4184,7 +4725,7 @@ export interface components {
          *     Helps listeners understand the nature of `EventDocumentDataBase` content.
          * @enum {string}
          */
-        EventDocumentType: "generic" | "user" | "workspace" | "entry" | "collection" | "asset" | "webhook" | "member" | "invitation" | "api_token" | "api_client" | "entry_type" | "resource" | "deployment";
+        EventDocumentType: "generic" | "user" | "workspace" | "entry" | "form" | "form_submission" | "collection" | "asset" | "webhook" | "member" | "invitation" | "api_token" | "api_client" | "entry_type" | "resource" | "deployment";
         /**
          * EventLogRead
          * @description Schema for reading an event log entry.
@@ -4333,6 +4874,165 @@ export interface components {
         ForgotPassword: {
             /** Email */
             email: string;
+        };
+        /**
+         * FormCreate
+         * @description Schema for creating a form.
+         */
+        FormCreate: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+            /** Description */
+            description?: string | null;
+            /**
+             * Status
+             * @default draft
+             */
+            status: string;
+            /** Formschema */
+            formSchema?: {
+                [key: string]: unknown;
+            };
+            /** Settingsjson */
+            settingsJson?: {
+                [key: string]: unknown;
+            } | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * FormRead
+         * @description Schema for reading a form.
+         */
+        FormRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string | null;
+            /** Schemajson */
+            schemaJson: {
+                [key: string]: unknown;
+            };
+            /** Settingsjson */
+            settingsJson: {
+                [key: string]: unknown;
+            } | null;
+            /** Metadatajson */
+            metadataJson: {
+                [key: string]: unknown;
+            } | null;
+            /** Status */
+            status: string;
+            /** Submissionscount */
+            submissionsCount: number;
+            /** Lastsubmissionat */
+            lastSubmissionAt: string | null;
+            /** Createdat */
+            createdAt: string | null;
+            /** Updateat */
+            updateAt: string | null;
+        };
+        /**
+         * FormSubmissionRead
+         * @description Schema for reading a form submission.
+         */
+        FormSubmissionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Formid
+             * Format: uuid4
+             */
+            formId: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Datajson */
+            dataJson: {
+                [key: string]: unknown;
+            };
+            /** Metadatajson */
+            metadataJson: {
+                [key: string]: unknown;
+            } | null;
+            /** Status */
+            status: string;
+            /** Ipaddress */
+            ipAddress: string | null;
+            /** Useragent */
+            userAgent: string | null;
+            /** Referrer */
+            referrer: string | null;
+            /**
+             * Submittedat
+             * Format: date-time
+             */
+            submittedAt: string;
+            /** Processedat */
+            processedAt: string | null;
+        };
+        /**
+         * FormSubmissionResponse
+         * @description Response after form submission.
+         *
+         *     Indicates success/failure and optionally provides redirect URL.
+         */
+        FormSubmissionResponse: {
+            /** Success */
+            success: boolean;
+            /** Message */
+            message: string;
+            /** Submissionid */
+            submissionId?: string | null;
+            /** Redirecturl */
+            redirectUrl?: string | null;
+        };
+        /**
+         * FormUpdate
+         * @description Schema for updating a form.
+         */
+        FormUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Slug */
+            slug?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Status */
+            status?: string | null;
+            /** Formschema */
+            formSchema?: {
+                [key: string]: unknown;
+            } | null;
+            /** Settingsjson */
+            settingsJson?: {
+                [key: string]: unknown;
+            } | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * GroupAdminUpdate
@@ -5096,6 +5796,29 @@ export interface components {
             order?: number | null;
         };
         /**
+         * PublishedFormRead
+         * @description Schema for published forms in the publishing API.
+         *
+         *     Provides form definition for frontend to render the form.
+         *     Does not expose internal fields like submissions_count.
+         */
+        PublishedFormRead: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            /** Formschema */
+            formSchema: {
+                [key: string]: unknown;
+            };
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
          * PublishedResourceRead
          * @description Schema for published resources in entry context.
          *
@@ -5529,6 +6252,17 @@ export interface components {
             total_size: string;
             /** Data Dir Path */
             data_dir_path: string;
+        };
+        /**
+         * TestEmailRequest
+         * @description Request to send a test email.
+         */
+        TestEmailRequest: {
+            /**
+             * Recipient Email
+             * Format: email
+             */
+            recipient_email: string;
         };
         /**
          * TokenResponseDelete
@@ -6940,6 +7674,208 @@ export interface operations {
             };
         };
     };
+    list_templates_api_groups__group_id__email_templates_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailTemplateSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_template_api_groups__group_id__email_templates_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailTemplateCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailTemplateRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_template_api_groups__group_id__email_templates__template_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailTemplateRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_template_api_groups__group_id__email_templates__template_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_template_api_groups__group_id__email_templates__template_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailTemplateUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailTemplateRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    send_test_email_api_groups__group_id__email_templates__template_id__test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TestEmailRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     register_new_user_api_users_register_post: {
         parameters: {
             query?: never;
@@ -7604,6 +8540,191 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EmailSuccess"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_templates_api_admin_email_templates_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailTemplateSummary"][];
+                };
+            };
+        };
+    };
+    create_template_api_admin_email_templates_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailTemplateCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailTemplateRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_template_api_admin_email_templates__template_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailTemplateRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_template_api_admin_email_templates__template_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_template_api_admin_email_templates__template_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailTemplateUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailTemplateRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    send_template_test_email_api_admin_email_templates__template_id__test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TestEmailRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
@@ -9531,6 +10652,254 @@ export interface operations {
             };
         };
     };
+    list_forms_api_platform_forms_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormRead"][];
+                };
+            };
+        };
+    };
+    create_form_api_platform_forms_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FormCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_form_api_platform_forms__item_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_form_api_platform_forms__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_form_api_platform_forms__item_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FormUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_submissions_api_platform_forms__form_id__submissions_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                form_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormSubmissionRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_workspace_api_platform_workspace_export_get: {
+        parameters: {
+            query?: {
+                include_system_types?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_workspace_pretty_api_platform_workspace_export_pretty_get: {
+        parameters: {
+            query?: {
+                include_system_types?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_workspace_members_api_platform_workspaces__workspace_id__members_get: {
         parameters: {
             query?: never;
@@ -10494,6 +11863,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PublishedEntryListItem"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_form_api_publish__workspace_slug__forms__form_slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_slug: string;
+                form_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishedFormRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    submit_form_api_publish__workspace_slug__forms__form_slug__submit_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_slug: string;
+                form_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormSubmissionResponse"];
                 };
             };
             /** @description Validation Error */

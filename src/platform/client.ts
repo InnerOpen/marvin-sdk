@@ -24,6 +24,8 @@ import { EventLogModule } from './eventLog';
 import { AuthModule } from './auth';
 import { ThemeModule } from './theme';
 import { EmailTemplatesClient } from './emailTemplates';
+import { ScheduledTasksModule } from './scheduledTasks';
+import { FormsModule } from './forms';
 
 export interface PlatformClientConfig {
   apiUrl: string;
@@ -49,6 +51,8 @@ export class PlatformClient extends HttpClient {
   public session: AuthModule;
   public theme: ThemeModule;
   public emailTemplates: EmailTemplatesClient;
+  public scheduledTasks: ScheduledTasksModule;
+  public forms: FormsModule;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -82,6 +86,8 @@ export class PlatformClient extends HttpClient {
     this.session = new AuthModule(this);
     this.theme = new ThemeModule(this);
     this.emailTemplates = new EmailTemplatesClient(this);
+    this.scheduledTasks = new ScheduledTasksModule(this);
+    this.forms = new FormsModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);

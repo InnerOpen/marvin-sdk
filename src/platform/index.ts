@@ -45,6 +45,12 @@ export type {
   // Event Log
   EventLogEntry,
   EventLogSummary,
+
+  // Forms
+  PlatformForm,
+  PlatformFormCreate,
+  PlatformFormUpdate,
+  PlatformFormSubmission,
 } from './types';
 
 export { EntriesModule } from './entries';
@@ -66,6 +72,13 @@ export type { Webhook, WebhookCreate, WebhookUpdate, WebhookPagination, WebhookM
 // Email Templates
 export { EmailTemplatesClient } from './emailTemplates';
 export type { EmailTemplateSummary, EmailTemplateRead, EmailTemplateCreate, EmailTemplateUpdate, TestEmailRequest, TestEmailResponse } from './emailTemplates';
+
+// Scheduled Tasks
+export { ScheduledTasksModule } from './scheduledTasks';
+export type { ScheduledTask, ScheduledTaskCreate, ScheduledTaskUpdate, ScheduledTaskExecutionLog, TaskTypeInfo } from './scheduledTasks';
+
+// Forms
+export { FormsModule } from './forms';
 
 // User self-service
 export { UserModule } from './user';
