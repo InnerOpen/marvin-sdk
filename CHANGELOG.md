@@ -1,3 +1,15 @@
+# [2.0.0-next.7](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.6...v2.0.0-next.7) (2026-07-10)
+
+
+### Bug Fixes
+
+* Update email templates endpoints to /platform/workspaces/ ([d207b01](https://github.com/inneropen/marvin-sdk/commit/d207b014b1a135c57b8969ae8cd4c37165165e75))
+
+
+### Features
+
+* Add ScheduledTasksModule to Platform API ([7d0848c](https://github.com/inneropen/marvin-sdk/commit/7d0848c207df1a323944826f6ed84b7db9c41fc6))
+
 # [2.0.0-next.6](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.5...v2.0.0-next.6) (2026-07-09)
 
 
