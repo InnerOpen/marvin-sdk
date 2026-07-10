@@ -1,3 +1,10 @@
+# [2.0.0-next.9](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.8...v2.0.0-next.9) (2026-07-10)
+
+
+### Features
+
+* Add automatic publishing to inneropen.io ([21da607](https://github.com/inneropen/marvin-sdk/commit/21da6072c421d24fe733eec2816bd64189551b00))
+
 # [2.0.0-next.8](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.7...v2.0.0-next.8) (2026-07-10)
 
 
