@@ -192,7 +192,19 @@ export class HttpClient {
         return undefined as T;
       }
 
-      return (await response.json()) as T;
+      const data = (await response.json()) as T;
+
+      // Log response data in debug mode
+      if (this.debug) {
+        const preview = typeof data === 'object' && data !== null
+          ? Array.isArray(data)
+            ? `Array(${data.length})`
+            : `Object with keys: ${Object.keys(data).join(', ')}`
+          : String(data);
+        this.logger.log(`[Marvin] Response: ${preview}`);
+      }
+
+      return data;
     } catch (error) {
       clearTimeout(timeoutId);
 
