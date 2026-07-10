@@ -1,0 +1,122 @@
+site_name: Marvin SDK Documentation
+site_description: Official TypeScript SDK for Marvin CMS
+site_author: Marvin Project
+site_url: https://github.com/inneropen/marvin-sdk
+
+repo_name: inneropen/marvin-sdk
+repo_url: https://github.com/inneropen/marvin-sdk
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/inneropen/marvin-sdk
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - typedoc:
+      source: './src/**/*.ts'
+      output_dir: 'docs/api'
+      tsconfig: './tsconfig.json'
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quickstart.md
+      - Configuration: getting-started/configuration.md
+  - Core Concepts:
+      - Architecture: concepts/architecture.md
+      - Workspace: concepts/workspace.md
+      - Entries: concepts/entries.md
+      - Collections: concepts/collections.md
+      - Assets: concepts/assets.md
+      - Resources: concepts/resources.md
+  - API Reference:
+      - Client: api/client.md
+      - Workspace API: api/workspace.md
+      - Entries Module: api/entries.md
+      - Collections Module: api/collections.md
+      - Assets Module: api/assets.md
+      - Resources Module: api/resources.md
+      - Platform API: api/platform.md
+  - Guides:
+      - Astro Integration: guides/astro.md
+      - Next.js Integration: guides/nextjs.md
+      - Express Server: guides/express.md
+      - CLI Tools: guides/cli.md
+      - Caching Strategy: guides/caching.md
+  - Platform API:
+      - Overview: platform/overview.md
+      - Authentication: platform/auth.md
+      - Workspaces: platform/workspaces.md
+      - Email Templates: platform/email-templates.md
+      - Webhooks: platform/webhooks.md
+      - Admin API: platform/admin.md
+  - Migration:
+      - Migration Guide: migration/v2-migration.md
+      - Breaking Changes: migration/breaking-changes.md
+  - Reference:
+      - Security: reference/security.md
+      - TypeScript Types: reference/types.md
+      - Error Handling: reference/errors.md
+      - Troubleshooting: reference/troubleshooting.md
+  - Examples: examples.md
+  - Contributing: contributing.md

@@ -4,6 +4,7 @@ node_modules/
 
 # Build output
 dist/
+site/
 
 # Environment
 .env
@@ -28,6 +29,13 @@ coverage/
 # Temporary
 *.tmp
 .cache/
+
+# Python
+__pycache__/
+*.pyc
+.python-version
+venv/
+.venv/
 
 # Generated OpenAPI types are now committed to repo
 # src/generated/schema.ts
