@@ -1,3 +1,48 @@
+# [2.0.0](https://github.com/inneropen/marvin-sdk/compare/v1.10.6...v2.0.0) (2026-07-10)
+
+
+* feat!: Implement schema-driven entry types (v2.0.0) ([a424b23](https://github.com/inneropen/marvin-sdk/commit/a424b2389164d3fae220d72cb5519059a462e518))
+
+
+### Bug Fixes
+
+* Add /api prefix to email templates endpoints ([5a3abce](https://github.com/inneropen/marvin-sdk/commit/5a3abce61874840b63abf3b89c3b66de26950e35))
+* Add npm-production environment to release workflow ([183a27d](https://github.com/inneropen/marvin-sdk/commit/183a27d8f031f510be2710bad86ebad9f4f65232))
+* Add schemaJson to EntryType create/update interfaces ([7f3c95a](https://github.com/inneropen/marvin-sdk/commit/7f3c95af403d9928217e39da2bbe5b8e178fc4b1))
+* Map INNEROPEN_IO_TOKEN to GITHUB_TOKEN parameter ([7a35918](https://github.com/inneropen/marvin-sdk/commit/7a35918039a7a1cab1d8f7a7189c1a90e660ab1e))
+* Remove Zod dependency from email templates module ([81fd2f6](https://github.com/inneropen/marvin-sdk/commit/81fd2f6843c3880db282c7b97c7154aaa2f284ab))
+* Revert version to let semantic-release handle versioning ([cdfe4fd](https://github.com/inneropen/marvin-sdk/commit/cdfe4fd6be92fffa5375dd09e124cfcebec70b44))
+* Update email templates endpoints to /platform/workspaces/ ([d207b01](https://github.com/inneropen/marvin-sdk/commit/d207b014b1a135c57b8969ae8cd4c37165165e75))
+* Update Node.js version to 22.14 in release workflow ([48aa4c1](https://github.com/inneropen/marvin-sdk/commit/48aa4c1b6d9bc981a65788642a6da0bc06ac1e3a))
+
+
+### Features
+
+* Add automatic publishing to inneropen.io ([21da607](https://github.com/inneropen/marvin-sdk/commit/21da6072c421d24fe733eec2816bd64189551b00))
+* Add email templates support to Marvin SDK ([0e9f272](https://github.com/inneropen/marvin-sdk/commit/0e9f27207fa2266e040ce33caa9b0ba8a2d8e0ea))
+* Add event log module to Platform SDK ([afde468](https://github.com/inneropen/marvin-sdk/commit/afde46841038a68f0cca6d7373050cf0f6078c65))
+* Add publish_at and expire_at fields to entry schemas ([4f2da7a](https://github.com/inneropen/marvin-sdk/commit/4f2da7a9bb1909a6af33a4019db104865beb6d99))
+* Add reorderEntries method to collections module ([b0e76bc](https://github.com/inneropen/marvin-sdk/commit/b0e76bc1b88244113f733fa2e08bef32860c93fe))
+* Add ScheduledTasksModule to Platform API ([7d0848c](https://github.com/inneropen/marvin-sdk/commit/7d0848c207df1a323944826f6ed84b7db9c41fc6))
+* Add semantic-release automation ([744b57e](https://github.com/inneropen/marvin-sdk/commit/744b57e75bad1fa606bb2ca0b97b5dfce1e23e2c))
+* Regenerate SDK schema with dataJson field ([3f923e9](https://github.com/inneropen/marvin-sdk/commit/3f923e95fd2a7a685cd62df60001581990d28ef0))
+* Regenerate SDK with publishing schema updates ([4d25f34](https://github.com/inneropen/marvin-sdk/commit/4d25f34f1333a7381f75f44f2940dd784594bdbb))
+* Update PublishedCollectionSummary schema ([2e594b2](https://github.com/inneropen/marvin-sdk/commit/2e594b2a5065cdc592a8847542fedb80b05641c2))
+
+
+### BREAKING CHANGES
+
+* Replace contentMarkdown with schema-driven dataJson
+
+- Add schemaJson to EntryType interface
+- Add dataJson to Entry interface
+- Deprecate contentMarkdown (remove in v3.0.0)
+- Add field<T>(key) helper for type-safe field access
+- Add comprehensive migration guide (MIGRATION-v2.md)
+- Update CHANGELOG for v2.0.0 release
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+
 # [2.0.0-next.9](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.8...v2.0.0-next.9) (2026-07-10)
 
 
