@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/inneropen/marvin-sdk/compare/v2.0.0...v2.0.1) (2026-07-10)
+
+
+### Bug Fixes
+
+* Use PUBLISHING_TOKEN parameter name ([a14ff02](https://github.com/inneropen/marvin-sdk/commit/a14ff029afa1320ea88b9f0d3a8d74b0b732690b))
+
 # [2.0.0](https://github.com/inneropen/marvin-sdk/compare/v1.10.6...v2.0.0) (2026-07-10)
 
 
