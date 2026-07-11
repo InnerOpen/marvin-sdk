@@ -1,3 +1,43 @@
+# [2.0.0-next.15](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.14...v2.0.0-next.15) (2026-07-11)
+
+
+### Bug Fixes
+
+* Address all HIGH priority security vulnerabilities ([a06d34b](https://github.com/inneropen/marvin-sdk/commit/a06d34bd1c422befef705f2ddb7d8888e81f68d7))
+* Address all MEDIUM priority security and quality issues ([655cf80](https://github.com/inneropen/marvin-sdk/commit/655cf8020db3abc492b426bcc21c3a2309e5e090))
+
+
+### Features
+
+* Add dedicated /publish entry point and MARVIN_USER_TOKEN support ([97cfbdb](https://github.com/inneropen/marvin-sdk/commit/97cfbdb84f417fe0b2ca430b14548963b18970d3))
+* Add SDK security reviewer agent ([0406d78](https://github.com/inneropen/marvin-sdk/commit/0406d78fdc3d1f2323eea2bfc208bbb6fd66277d))
+
+
+### BREAKING CHANGES
+
+* /publish export now points to dedicated publishing API
+
+Changes:
+- Created src/publish.ts as dedicated read-only Publishing API entry point
+- Updated /publish export in package.json to use new entry point
+- Added MARVIN_USER_TOKEN environment variable support for Platform API
+- Made Platform API config optional with environment defaults
+- Created comprehensive AUTHENTICATION.md guide
+- Added authentication examples in examples/authentication-examples.ts
+- Updated README with clear entry point documentation
+
+Entry Points:
+- /publish → Read-only publishing (MARVIN_SITE_CLIENT_TOKEN)
+- /platform → Full CRUD admin (MARVIN_USER_TOKEN or session cookies)
+- Default → Auth API + publishing (backwards compatible)
+
+Migration:
+- Publishing API users: Change import to '@inneropen/marvin-sdk/publish'
+- Platform API users: Can now use createPlatformClient() with no args
+  (reads MARVIN_USER_TOKEN from environment)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+
 # [2.0.0-next.14](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.13...v2.0.0-next.14) (2026-07-10)
 
 
