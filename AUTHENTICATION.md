@@ -147,11 +147,80 @@ await auth.forgotPassword({ email: 'user@example.com' });
 
 ## Security Best Practices
 
+The SDK includes comprehensive security features to protect your tokens and data:
+
+### Automatic Token Sanitization
+
+**All tokens are automatically redacted in debug logs and error messages:**
+
+```typescript
+// Debug mode safely masks sensitive data
+const client = createMarvinClient({ debug: true });
+await client.login({ email, password });
+// Logs show: access_token: "[REDACTED]"
+```
+
+The SDK automatically sanitizes:
+- `token`, `access_token`, `refresh_token`
+- `password`, `secret`, `apiKey`
+- `authorization`, `csrf_token`
+- `session`, `cookie`
+
+This works recursively on nested objects and arrays.
+
+### CSRF Protection
+
+**Enable CSRF protection for browser-based admin UIs:**
+
+```typescript
+const platform = createPlatformClient({ credentials: 'include' });
+
+// After login, get CSRF token from server
+const csrfToken = getCsrfTokenFromServer();
+platform.session.setCsrfToken(csrfToken);
+
+// All subsequent requests include X-CSRF-Token header
+```
+
+### Input Validation
+
+**All user input is validated to prevent injection attacks:**
+
+- Path parameters validated (prevents `../` attacks)
+- Email addresses validated (RFC 5322 compliant)
+- Webhook URLs validated (SSRF prevention)
+- File uploads validated (size, type, filename)
+- Form data validated (XSS prevention)
+
+### Network Security
+
+**Automatic retry and timeout protection:**
+
+```typescript
+const platform = createPlatformClient({
+  retry: {
+    maxRetries: 3,           // Automatic retry on failure
+    initialDelay: 1000,      // Exponential backoff
+    maxDelay: 10000
+  },
+  timeout: 30000             // Max 120s (enforced)
+});
+```
+
+### Best Practices Checklist
+
 1. **Never commit tokens** - Use environment variables
 2. **Site client tokens** - Safe for frontend (read-only)
 3. **User tokens** - Keep secret, server-side only
 4. **Session cookies** - Browser-only, not for server-to-server
 5. **Token rotation** - Regenerate user tokens periodically
+6. **HTTPS only** - Always use HTTPS in production
+7. **Debug mode** - Disable in production (tokens auto-sanitized, but still be cautious)
+8. **CSRF tokens** - Enable for browser-based UIs
+9. **Input validation** - Validate on your side too (defense in depth)
+10. **Keep updated** - Use latest SDK version for security fixes
+
+**[Complete Security Documentation →](./SECURITY_FIXES_SUMMARY.md)**
 
 ## Example: Complete Auth Flow
 
