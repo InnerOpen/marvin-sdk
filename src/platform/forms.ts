@@ -4,7 +4,7 @@
  * CRUD operations for forms and submissions
  */
 
-import type { HttpClient } from '../core';
+import { HttpClient, MarvinValidationError } from '../core';
 import type {
   PlatformForm,
   PlatformFormCreate,
@@ -14,6 +14,40 @@ import type {
 
 export class FormsModule {
   constructor(private http: HttpClient) {}
+
+  /**
+   * Validate form submission data
+   * - Prevents XSS by checking for script tags
+   * - Validates data is a proper object
+   * - Checks for reasonable size limits
+   */
+  private validateFormData(data: Record<string, unknown>): void {
+    if (!data || typeof data !== 'object') {
+      throw new MarvinValidationError('Form data must be a valid object');
+    }
+
+    // Check for reasonable payload size (1MB limit)
+    const jsonString = JSON.stringify(data);
+    const sizeInBytes = new Blob([jsonString]).size;
+    if (sizeInBytes > 1024 * 1024) {
+      throw new MarvinValidationError('Form data exceeds maximum size of 1MB');
+    }
+
+    // Basic XSS prevention - check for script tags in string values
+    const checkForScripts = (value: unknown): void => {
+      if (typeof value === 'string') {
+        if (/<script[\s\S]*?>[\s\S]*?<\/script>/gi.test(value)) {
+          throw new MarvinValidationError('Form data contains potentially malicious content');
+        }
+      } else if (Array.isArray(value)) {
+        value.forEach(checkForScripts);
+      } else if (value && typeof value === 'object') {
+        Object.values(value).forEach(checkForScripts);
+      }
+    };
+
+    Object.values(data).forEach(checkForScripts);
+  }
 
   /**
    * List all forms
@@ -26,7 +60,8 @@ export class FormsModule {
    * Get a single form by ID
    */
   async get(id: string): Promise<PlatformForm> {
-    return this.http.get<PlatformForm>(`/api/platform/forms/${id}`);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.get<PlatformForm>(`/api/platform/forms/${validId}`);
   }
 
   /**
@@ -40,7 +75,8 @@ export class FormsModule {
    * Update a form
    */
   async update(id: string, data: PlatformFormUpdate): Promise<PlatformForm> {
-    return this.http.patch<PlatformForm>(`/api/platform/forms/${id}`, data);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.patch<PlatformForm>(`/api/platform/forms/${validId}`, data);
   }
 
   /**
@@ -66,9 +102,16 @@ export class FormsModule {
 
   /**
    * Submit data to a published form (Publishing API - public access)
+   * Validates data before submission to prevent XSS and malicious content
    */
   async submitForm(slug: string, data: Record<string, unknown>): Promise<PlatformFormSubmission> {
-    return this.http.post<PlatformFormSubmission>(`/api/publish/forms/${slug}/submit`, {
+    // Validate slug
+    const validSlug = this.http.validatePathParam(slug, 'form slug');
+
+    // Validate form data
+    this.validateFormData(data);
+
+    return this.http.post<PlatformFormSubmission>(`/api/publish/forms/${validSlug}/submit`, {
       dataJson: data,
     });
   }

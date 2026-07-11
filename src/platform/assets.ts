@@ -25,7 +25,8 @@ export class AssetsModule {
    * Get a single asset by ID
    */
   async get(id: string): Promise<PlatformAsset> {
-    return this.http.get<PlatformAsset>(`/api/platform/assets/${id}`);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.get<PlatformAsset>(`/api/platform/assets/${validId}`);
   }
 
   /**
@@ -64,7 +65,8 @@ export class AssetsModule {
    * Update an asset (editable fields only: slug, name, altText, description, metadata)
    */
   async update(id: string, data: PlatformAssetUpdate): Promise<PlatformAsset> {
-    return this.http.patch<PlatformAsset>(`/api/platform/assets/${id}`, data);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.patch<PlatformAsset>(`/api/platform/assets/${validId}`, data);
   }
 
   /**

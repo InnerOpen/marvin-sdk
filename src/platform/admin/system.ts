@@ -10,11 +10,27 @@ import type { components } from '../../generated/schema';
 // Type aliases from OpenAPI schema
 export type AdminAboutInfo = components['schemas']['AdminAboutInfo'];
 
+/**
+ * Email settings returned from API (read-only)
+ * Password is never returned for security reasons
+ */
 export interface EmailSettings {
   host?: string;
   port?: number;
   username?: string;
-  password?: string;
+  from?: string;
+  useTls?: boolean;
+}
+
+/**
+ * Email settings for updates (write-only)
+ * Password can be provided to update settings
+ */
+export interface EmailSettingsUpdate {
+  host?: string;
+  port?: number;
+  username?: string;
+  password?: string;  // Only accepted on update, never returned
   from?: string;
   useTls?: boolean;
 }
@@ -26,6 +42,19 @@ export interface SystemStatistics {
   collections?: number;
   resources?: number;
   assets?: number;
+}
+
+export interface StartupInfo {
+  version: string;
+  api_port: number;
+  api_docs: boolean;
+  database_url: string;
+  database_provider: string;
+  default_group?: string;
+  allow_signup: boolean;
+  theme?: string;
+  custom_middleware?: string[];
+  [key: string]: unknown; // Allow additional dynamic properties
 }
 
 export class AdminSystemModule {
@@ -48,8 +77,8 @@ export class AdminSystemModule {
   /**
    * Get startup information
    */
-  async getStartupInfo(): Promise<any> {
-    return this.http.get<any>('/api/admin/about/startup-info');
+  async getStartupInfo(): Promise<StartupInfo> {
+    return this.http.get<StartupInfo>('/api/admin/about/startup-info');
   }
 
   /**
@@ -68,8 +97,9 @@ export class AdminSystemModule {
 
   /**
    * Update email settings
+   * Note: Password field is write-only and will not be returned in response
    */
-  async updateEmailSettings(data: EmailSettings): Promise<EmailSettings> {
+  async updateEmailSettings(data: EmailSettingsUpdate): Promise<EmailSettings> {
     return this.http.put<EmailSettings>('/api/admin/email', data);
   }
 }

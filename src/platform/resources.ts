@@ -26,7 +26,8 @@ export class ResourcesModule {
    * Get a single resource by ID
    */
   async get(id: string): Promise<PlatformResource> {
-    return this.http.get<PlatformResource>(`/api/platform/resources/${id}`);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.get<PlatformResource>(`/api/platform/resources/${validId}`);
   }
 
   /**
@@ -40,7 +41,8 @@ export class ResourcesModule {
    * Update a resource
    */
   async update(id: string, data: PlatformResourceUpdate): Promise<PlatformResource> {
-    return this.http.patch<PlatformResource>(`/api/platform/resources/${id}`, data);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.patch<PlatformResource>(`/api/platform/resources/${validId}`, data);
   }
 
   /**

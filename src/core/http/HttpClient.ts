@@ -8,8 +8,20 @@ import {
   MarvinNotFoundError,
   MarvinNetworkError,
   MarvinServerError,
-  MarvinAuthError
+  MarvinAuthError,
+  MarvinValidationError
 } from '../errors';
+
+export interface RetryConfig {
+  /** Maximum number of retry attempts (default: 3) */
+  maxRetries: number;
+  /** Initial delay in ms before first retry (default: 1000) */
+  initialDelay: number;
+  /** Maximum delay in ms between retries (default: 10000) */
+  maxDelay: number;
+  /** HTTP status codes that should trigger a retry (default: [408, 429, 500, 502, 503, 504]) */
+  retryableStatuses: number[];
+}
 
 export interface HttpClientConfig {
   baseUrl: string;
@@ -18,6 +30,7 @@ export interface HttpClientConfig {
   credentials?: RequestCredentials;
   timeout?: number;
   debug?: boolean;
+  retry?: Partial<RetryConfig>;
   logger?: {
     log: (message: string, ...args: unknown[]) => void;
     warn: (message: string, ...args: unknown[]) => void;
@@ -32,6 +45,7 @@ export class HttpClient {
   private credentials: RequestCredentials;
   private timeout: number;
   private debug: boolean;
+  private retryConfig: RetryConfig;
   private logger: {
     log: (message: string, ...args: unknown[]) => void;
     warn: (message: string, ...args: unknown[]) => void;
@@ -43,9 +57,55 @@ export class HttpClient {
     this.auth = config.auth;
     this.defaultHeaders = config.defaultHeaders || {};
     this.credentials = config.credentials || 'same-origin';
-    this.timeout = config.timeout || 30000; // 30 seconds default
+
+    // Enforce maximum timeout to prevent resource exhaustion
+    const MAX_TIMEOUT = 120000; // 2 minutes
+    this.timeout = Math.min(config.timeout || 30000, MAX_TIMEOUT);
+
     this.debug = config.debug ?? false;
     this.logger = config.logger ?? console;
+
+    // Default retry configuration
+    this.retryConfig = {
+      maxRetries: config.retry?.maxRetries ?? 3,
+      initialDelay: config.retry?.initialDelay ?? 1000,
+      maxDelay: config.retry?.maxDelay ?? 10000,
+      retryableStatuses: config.retry?.retryableStatuses ?? [408, 429, 500, 502, 503, 504],
+    };
+  }
+
+  /**
+   * Validate path parameter to prevent path traversal attacks
+   */
+  validatePathParam(param: string | number, paramName: string = 'parameter'): string {
+    // Allow numbers (converted to string)
+    if (typeof param === 'number') {
+      return String(param);
+    }
+
+    // Validate string parameters
+    if (!param || typeof param !== 'string') {
+      throw new MarvinValidationError(`Invalid ${paramName}: must be a non-empty string or number`);
+    }
+
+    // Prevent path traversal attacks
+    if (param.includes('..') || param.includes('/') || param.includes('\\')) {
+      throw new MarvinValidationError(
+        `Invalid ${paramName}: cannot contain path traversal characters (.. / \\)`
+      );
+    }
+
+    // Prevent null bytes
+    if (param.includes('\0')) {
+      throw new MarvinValidationError(`Invalid ${paramName}: cannot contain null bytes`);
+    }
+
+    // Reasonable length check (prevent DoS via extremely long IDs)
+    if (param.length > 255) {
+      throw new MarvinValidationError(`Invalid ${paramName}: exceeds maximum length of 255 characters`);
+    }
+
+    return param;
   }
 
   /**
@@ -93,7 +153,78 @@ export class HttpClient {
   }
 
   /**
-   * Perform HTTP request
+   * Sanitize data for logging by redacting sensitive fields
+   */
+  private sanitizeForLogging(data: unknown): unknown {
+    if (!data || typeof data !== 'object') {
+      return data;
+    }
+
+    // List of sensitive field names to redact
+    const sensitiveFields = [
+      'token',
+      'access_token',
+      'refresh_token',
+      'password',
+      'secret',
+      'apiKey',
+      'api_key',
+      'bearer',
+      'authorization',
+      'csrf_token',
+      'session',
+      'cookie',
+    ];
+
+    const sanitize = (obj: Record<string, unknown>): Record<string, unknown> => {
+      const sanitized: Record<string, unknown> = {};
+
+      for (const [key, value] of Object.entries(obj)) {
+        const keyLower = key.toLowerCase();
+        const isSensitive = sensitiveFields.some(field => keyLower.includes(field));
+
+        if (isSensitive) {
+          sanitized[key] = '[REDACTED]';
+        } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+          sanitized[key] = sanitize(value as Record<string, unknown>);
+        } else if (Array.isArray(value)) {
+          sanitized[key] = value.map(item =>
+            item && typeof item === 'object' ? sanitize(item as Record<string, unknown>) : item
+          );
+        } else {
+          sanitized[key] = value;
+        }
+      }
+
+      return sanitized;
+    };
+
+    if (Array.isArray(data)) {
+      return data.map(item =>
+        item && typeof item === 'object' ? sanitize(item as Record<string, unknown>) : item
+      );
+    }
+
+    return sanitize(data as Record<string, unknown>);
+  }
+
+  /**
+   * Calculate delay for retry with exponential backoff
+   */
+  private calculateRetryDelay(attempt: number): number {
+    const delay = this.retryConfig.initialDelay * Math.pow(2, attempt);
+    return Math.min(delay, this.retryConfig.maxDelay);
+  }
+
+  /**
+   * Sleep for specified milliseconds
+   */
+  private sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Perform HTTP request with automatic retry on transient failures
    */
   async request<T>(
     method: string,
@@ -102,7 +233,8 @@ export class HttpClient {
       body?: unknown;
       headers?: Record<string, string>;
       params?: Record<string, string | number | boolean | undefined>;
-    }
+    },
+    retryAttempt = 0
   ): Promise<T> {
     const url = this.buildUrl(endpoint) + (options?.params ? this.buildQueryString(options.params) : '');
     const isFormData = options?.body instanceof FormData;
@@ -154,6 +286,21 @@ export class HttpClient {
           );
         }
 
+        // Check if this error is retryable
+        const isRetryable = this.retryConfig.retryableStatuses.includes(response.status);
+        const canRetry = retryAttempt < this.retryConfig.maxRetries;
+
+        if (isRetryable && canRetry) {
+          const delay = this.calculateRetryDelay(retryAttempt);
+          if (this.debug) {
+            this.logger.warn(
+              `[Marvin] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (status: ${response.status})`
+            );
+          }
+          await this.sleep(delay);
+          return this.request<T>(method, endpoint, options, retryAttempt + 1);
+        }
+
         // Throw specific error types based on status code
         if (response.status === 404) {
           throw new MarvinNotFoundError(
@@ -194,16 +341,17 @@ export class HttpClient {
 
       const data = (await response.json()) as T;
 
-      // Log response data in debug mode
+      // Log response data in debug mode (sanitized)
       if (this.debug) {
-        this.logger.log('[Marvin] Response:', JSON.stringify(data, null, 2));
+        const sanitized = this.sanitizeForLogging(data);
+        this.logger.log('[Marvin] Response:', JSON.stringify(sanitized, null, 2));
       }
 
       return data;
     } catch (error) {
       clearTimeout(timeoutId);
 
-      // Re-throw Marvin errors as-is
+      // Re-throw Marvin errors as-is (they've already been through retry logic)
       if (
         error instanceof MarvinApiError ||
         error instanceof MarvinNotFoundError ||
@@ -213,8 +361,22 @@ export class HttpClient {
         throw error;
       }
 
-      // Handle network/timeout errors
+      // Handle network/timeout errors with retry
       if (error instanceof Error) {
+        const canRetry = retryAttempt < this.retryConfig.maxRetries;
+
+        if (canRetry && error.name !== 'AbortError') {
+          // Retry on network errors, but not on timeout
+          const delay = this.calculateRetryDelay(retryAttempt);
+          if (this.debug) {
+            this.logger.warn(
+              `[Marvin] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (network error)`
+            );
+          }
+          await this.sleep(delay);
+          return this.request<T>(method, endpoint, options, retryAttempt + 1);
+        }
+
         if (error.name === 'AbortError') {
           throw new MarvinNetworkError(
             `Request timeout after ${this.timeout}ms`,

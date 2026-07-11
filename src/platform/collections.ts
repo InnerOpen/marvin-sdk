@@ -26,7 +26,8 @@ export class CollectionsModule {
    * Get a single collection by ID
    */
   async get(id: string): Promise<PlatformCollection> {
-    return this.http.get<PlatformCollection>(`/api/platform/collections/${id}`);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.get<PlatformCollection>(`/api/platform/collections/${validId}`);
   }
 
   /**
@@ -40,21 +41,24 @@ export class CollectionsModule {
    * Update a collection
    */
   async update(id: string, data: PlatformCollectionUpdate): Promise<PlatformCollection> {
-    return this.http.patch<PlatformCollection>(`/api/platform/collections/${id}`, data);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.patch<PlatformCollection>(`/api/platform/collections/${validId}`, data);
   }
 
   /**
    * Delete a collection
    */
   async delete(id: string): Promise<void> {
-    return this.http.delete(`/api/platform/collections/${id}`);
+    const validId = this.http.validatePathParam(id, 'collection ID');
+    return this.http.delete(`/api/platform/collections/${validId}`);
   }
 
   /**
    * Get entries in a collection
    */
   async getEntries(id: string): Promise<PlatformEntry[]> {
-    return this.http.get<PlatformEntry[]>(`/api/platform/collections/${id}/entries`);
+    const validId = this.http.validatePathParam(id, 'collection ID');
+    return this.http.get<PlatformEntry[]>(`/api/platform/collections/${validId}/entries`);
   }
 
   /**
@@ -64,6 +68,7 @@ export class CollectionsModule {
     id: string,
     entries: Array<{ entryId: string; sortOrder: number }>
   ): Promise<void> {
-    return this.http.patch(`/api/platform/collections/${id}/entries/order`, { entries });
+    const validId = this.http.validatePathParam(id, 'collection ID');
+    return this.http.patch(`/api/platform/collections/${validId}/entries/order`, { entries });
   }
 }

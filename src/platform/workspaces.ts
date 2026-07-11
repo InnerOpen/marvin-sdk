@@ -34,12 +34,22 @@ export interface WorkspaceUpdate {
   description?: string | null;
 }
 
+/**
+ * Workspace preferences - dynamic key-value store
+ * Common keys include: theme, locale, notifications, etc.
+ */
 export interface WorkspacePreferences {
-  [key: string]: any;
+  theme?: string;
+  locale?: string;
+  notifications?: boolean;
+  [key: string]: unknown; // Allow additional dynamic preferences
 }
 
 export interface WorkspacePreferencesUpdate {
-  [key: string]: any;
+  theme?: string;
+  locale?: string;
+  notifications?: boolean;
+  [key: string]: unknown; // Allow additional dynamic preferences
 }
 
 export class WorkspacesModule {

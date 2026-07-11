@@ -38,6 +38,19 @@ export interface AuthToken {
   tokenType: string;
 }
 
+export interface UserRegistrationResponse {
+  id: string;
+  username: string;
+  email: string;
+  full_name: string;
+  group?: string;
+  advanced?: boolean;
+  private?: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export class AuthClient extends HttpClient {
   constructor(apiUrl: string) {
     super({ baseUrl: apiUrl, auth: new NoAuth() });
@@ -47,8 +60,8 @@ export class AuthClient extends HttpClient {
    * Register a new user
    * Returns the created user object
    */
-  async register(data: UserRegistration): Promise<any> {
-    return this.post<any>('/api/users/register', data);
+  async register(data: UserRegistration): Promise<UserRegistrationResponse> {
+    return this.post<UserRegistrationResponse>('/api/users/register', data);
   }
 
   /**

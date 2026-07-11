@@ -42,12 +42,30 @@ export class BearerTokenAuth implements AuthStrategy {
 /**
  * Session-based authentication (Platform/Admin APIs in browser)
  * Relies on HTTP-only cookies set by the server
+ * Optionally supports CSRF token protection
  */
 export class SessionAuth implements AuthStrategy {
+  private csrfToken?: string;
+
   constructor(
     private sessionToken?: string,
     private onUnauthorized?: () => Promise<void>
   ) {}
+
+  /**
+   * Set CSRF token for cross-site request forgery protection
+   * The token should be obtained from the server after login
+   */
+  setCsrfToken(token: string): void {
+    this.csrfToken = token;
+  }
+
+  /**
+   * Get current CSRF token
+   */
+  getCsrfToken(): string | undefined {
+    return this.csrfToken;
+  }
 
   injectAuth(headers: Headers): void {
     // If we have an explicit session token, use it as Bearer
@@ -55,6 +73,11 @@ export class SessionAuth implements AuthStrategy {
       headers.set('Authorization', `Bearer ${this.sessionToken}`);
     }
     // Otherwise, rely on cookies (credentials: 'include' must be set on fetch)
+
+    // Add CSRF token if available
+    if (this.csrfToken) {
+      headers.set('X-CSRF-Token', this.csrfToken);
+    }
   }
 
   async handleUnauthorized(): Promise<void> {
@@ -64,9 +87,11 @@ export class SessionAuth implements AuthStrategy {
   }
 
   getDescription(): string {
-    return this.sessionToken
+    const auth = this.sessionToken
       ? 'Session authentication (explicit token)'
       : 'Session authentication (cookies)';
+    const csrf = this.csrfToken ? ' with CSRF protection' : '';
+    return auth + csrf;
   }
 }
 

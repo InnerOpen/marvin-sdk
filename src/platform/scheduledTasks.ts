@@ -34,7 +34,8 @@ export class ScheduledTasksModule {
    * Get a scheduled task by ID or slug
    */
   async get(idOrSlug: string): Promise<ScheduledTask> {
-    return this.http.get<ScheduledTask>(`/api/platform/scheduled-tasks/${idOrSlug}`);
+    const validIdOrSlug = this.http.validatePathParam(idOrSlug, 'idOrSlug');
+    return this.http.get<ScheduledTask>(`/api/platform/scheduled-tasks/${validIdOrSlug}`);
   }
 
   /**
@@ -48,7 +49,8 @@ export class ScheduledTasksModule {
    * Update a scheduled task
    */
   async update(idOrSlug: string, data: ScheduledTaskUpdate): Promise<ScheduledTask> {
-    return this.http.patch<ScheduledTask>(`/api/platform/scheduled-tasks/${idOrSlug}`, data);
+    const validIdOrSlug = this.http.validatePathParam(idOrSlug, 'idOrSlug');
+    return this.http.patch<ScheduledTask>(`/api/platform/scheduled-tasks/${validIdOrSlug}`, data);
   }
 
   /**
