@@ -1,3 +1,10 @@
+# [2.0.0-next.17](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.16...v2.0.0-next.17) (2026-07-11)
+
+
+### Bug Fixes
+
+* **docs:** Fix MkDocs build errors in strict mode ([dd32cf6](https://github.com/inneropen/marvin-sdk/commit/dd32cf6229c981cb30b11508b9bff75530cac939)), closes [#assets--images](https://github.com/inneropen/marvin-sdk/issues/assets--images) [#assets-images](https://github.com/inneropen/marvin-sdk/issues/assets-images) [#metadata--seo](https://github.com/inneropen/marvin-sdk/issues/metadata--seo) [#metadata-seo](https://github.com/inneropen/marvin-sdk/issues/metadata-seo)
+
 # [2.0.0-next.16](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.15...v2.0.0-next.16) (2026-07-11)
 
 
