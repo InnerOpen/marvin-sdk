@@ -28,9 +28,20 @@ import { ScheduledTasksModule } from './scheduledTasks';
 import { FormsModule } from './forms';
 
 export interface PlatformClientConfig {
-  apiUrl: string;
+  apiUrl?: string;
   userToken?: string;
   credentials?: RequestCredentials;
+}
+
+/**
+ * Create Platform API config from environment
+ */
+export function createPlatformConfigFromEnv(overrides?: Partial<PlatformClientConfig>): PlatformClientConfig {
+  return {
+    apiUrl: overrides?.apiUrl || process.env.MARVIN_API_URL || 'http://localhost:8080',
+    userToken: overrides?.userToken || process.env.MARVIN_USER_TOKEN,
+    credentials: overrides?.credentials || 'include',
+  };
 }
 
 export class PlatformClient extends HttpClient {
@@ -61,7 +72,7 @@ export class PlatformClient extends HttpClient {
 
   constructor(config: PlatformClientConfig) {
     const httpConfig: HttpClientConfig = {
-      baseUrl: config.apiUrl,
+      baseUrl: config.apiUrl || 'http://localhost:8080',
       auth: new SessionAuth(config.userToken),
       credentials: config.credentials || 'include',
     };
@@ -98,7 +109,24 @@ export class PlatformClient extends HttpClient {
 
 /**
  * Create a Platform API client
+ *
+ * @example
+ * ```ts
+ * // From environment (MARVIN_API_URL, MARVIN_USER_TOKEN)
+ * const platform = createPlatformClient();
+ *
+ * // With explicit user token (for programmatic admin)
+ * const platform = createPlatformClient({
+ *   userToken: 'user-token-here'
+ * });
+ *
+ * // Browser with session cookies (admin UI)
+ * const platform = createPlatformClient({
+ *   credentials: 'include'
+ * });
+ * ```
  */
-export function createPlatformClient(config: PlatformClientConfig): PlatformClient {
-  return new PlatformClient(config);
+export function createPlatformClient(config?: Partial<PlatformClientConfig>): PlatformClient {
+  const finalConfig = createPlatformConfigFromEnv(config);
+  return new PlatformClient(finalConfig);
 }

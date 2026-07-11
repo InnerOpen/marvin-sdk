@@ -24,37 +24,57 @@ The SDK provides:
 ## Installation
 
 ```bash
-# Copy into your project
-cp -r /path/to/marvin/packages/marvin-sdk src/lib/marvin
+npm install @inneropen/marvin-sdk
 ```
 
-Or symlink for development:
+## Entry Points
 
-```bash
-ln -s /path/to/marvin/packages/marvin-sdk src/lib/marvin
+The SDK provides three distinct entry points for different use cases:
+
+### 📖 Publishing API (`/publish`)
+Read-only access to published content (frontends, websites)
+```typescript
+import { createMarvinClient } from '@inneropen/marvin-sdk/publish';
 ```
+**Auth:** Site client tokens (`MARVIN_SITE_CLIENT_TOKEN`)
 
-## Quick Start
+### ⚙️ Platform API (`/platform`)
+Full CRUD admin operations (backend, CLI, automation)
+```typescript
+import { createPlatformClient } from '@inneropen/marvin-sdk/platform';
+```
+**Auth:** User tokens (`MARVIN_USER_TOKEN`) or session cookies
+
+### 🔐 Auth API (Default export)
+Public registration, login, password reset
+```typescript
+import { createAuthClient } from '@inneropen/marvin-sdk';
+```
+**Auth:** None required (public endpoints)
+
+📚 **[See complete authentication guide →](./AUTHENTICATION.md)**
+
+## Quick Start - Publishing API
 
 ### 1. Configure Environment
 
 ```env
 MARVIN_API_URL=https://marvin.example.com
-MARVIN_SITE_CLIENT_TOKEN=your-token-here
+MARVIN_SITE_CLIENT_TOKEN=your-site-client-token
 MARVIN_WORKSPACE_SLUG=your-workspace
 ```
 
 ### 2. Create Client
 
-```ts
-import { createMarvinClient } from './marvin-sdk';
+```typescript
+import { createMarvinClient } from '@inneropen/marvin-sdk/publish';
 
 const marvin = createMarvinClient();
 ```
 
 ### 3. Fetch Content
 
-```ts
+```typescript
 // Get workspace
 const workspace = await marvin.getWorkspace();
 console.log(workspace.site?.title);
@@ -69,6 +89,35 @@ console.log(entry.title, entry.contentMarkdown);
 // Get collection entries
 const projects = await marvin.collection('projects');
 const projectEntries = await projects.entries();
+```
+
+## Quick Start - Platform API
+
+### Programmatic Admin Access
+
+```typescript
+import { createPlatformClient } from '@inneropen/marvin-sdk/platform';
+
+// From environment (MARVIN_USER_TOKEN)
+const platform = createPlatformClient();
+
+// Or explicit token
+const platform = createPlatformClient({
+  userToken: 'your-user-token'
+});
+
+// Full CRUD operations
+await platform.entries.create({
+  title: 'New Post',
+  content: 'Content here...',
+  collection_id: collectionId
+});
+
+await platform.entries.update(entryId, {
+  title: 'Updated Title'
+});
+
+await platform.entries.delete(entryId);
 ```
 
 ## Architecture
