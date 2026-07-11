@@ -1,3 +1,10 @@
+# [2.0.0-next.18](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.17...v2.0.0-next.18) (2026-07-11)
+
+
+### Features
+
+* Add workspace export method ([dc36087](https://github.com/inneropen/marvin-sdk/commit/dc36087a5e559627c37ce6a6917c8499c5807dfd))
+
 # [2.0.0-next.17](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.16...v2.0.0-next.17) (2026-07-11)
 
 
