@@ -111,6 +111,16 @@ export class WorkspacesModule {
   }
 
   /**
+   * Export workspace data as JSON (collections, entry types, entries, site config)
+   */
+  async export(options?: { includeSystemTypes?: boolean; pretty?: boolean }): Promise<Record<string, unknown>> {
+    const pretty = options?.pretty ?? true;
+    const endpoint = pretty ? '/api/platform/workspace/export/pretty' : '/api/platform/workspace/export';
+    const params = options?.includeSystemTypes ? { include_system_types: true } : undefined;
+    return this.http.get<Record<string, unknown>>(endpoint, params);
+  }
+
+  /**
    * Get workspace preferences
    */
   async getPreferences(workspaceId: string): Promise<WorkspacePreferences> {
