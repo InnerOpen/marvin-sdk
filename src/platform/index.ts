@@ -94,7 +94,7 @@ export type { EventLogQueryParams } from './eventLog';
 
 // Auth (authenticated session management)
 export { AuthModule } from './auth';
-export type { AuthToken } from './auth';
+// AuthToken is exported from main types module
 
 // Theme
 export { ThemeModule } from './theme';

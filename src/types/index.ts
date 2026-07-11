@@ -179,3 +179,12 @@ export interface GetResourcesOptions {
   limit?: number;
   offset?: number;
 }
+
+/**
+ * Authentication token response
+ * Used by auth.login() and auth.refresh()
+ */
+export interface AuthToken {
+  accessToken: string;
+  tokenType: string;
+}

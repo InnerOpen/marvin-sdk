@@ -4,7 +4,8 @@
  * Public authentication endpoints (no auth required)
  */
 
-import { HttpClient, NoAuth } from './core';
+import { HttpClient, NoAuth, validateEmail } from './core';
+import type { AuthToken as AuthTokenType } from './types';
 
 export interface UserRegistration {
   username: string;
@@ -33,10 +34,8 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface AuthToken {
-  accessToken: string;
-  tokenType: string;
-}
+// Re-export AuthToken from shared types
+export type AuthToken = AuthTokenType;
 
 export interface UserRegistrationResponse {
   id: string;
@@ -61,6 +60,8 @@ export class AuthClient extends HttpClient {
    * Returns the created user object
    */
   async register(data: UserRegistration): Promise<UserRegistrationResponse> {
+    // Validate email format
+    validateEmail(data.email, 'Email');
     return this.post<UserRegistrationResponse>('/api/users/register', data);
   }
 
@@ -68,6 +69,8 @@ export class AuthClient extends HttpClient {
    * Request password reset (sends email with token)
    */
   async forgotPassword(data: ForgotPasswordRequest): Promise<{ message: string }> {
+    // Validate email format
+    validateEmail(data.email, 'Email');
     return this.post<{ message: string }>('/api/users/forgot-password', data);
   }
 

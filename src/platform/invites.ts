@@ -56,12 +56,25 @@ export class InvitesModule {
 
   /**
    * Generate invitation URL from a token
-   * Uses MARVIN_FRONTEND_URL for the base URL, falls back to MARVIN_API_URL with common port mappings
+   *
+   * @param token - Invitation token
+   * @param baseUrl - Base URL for the frontend (required in browser environments)
+   * @returns Full invitation URL
+   *
+   * @example
+   * ```typescript
+   * // Node.js (can use env vars)
+   * const url = invites.getInvitationUrl(token);
+   *
+   * // Browser (must provide baseUrl)
+   * const url = invites.getInvitationUrl(token, 'https://app.example.com');
+   * ```
    */
   getInvitationUrl(token: string, baseUrl?: string): string {
     let base = baseUrl;
 
-    if (!base) {
+    // Only attempt to read env vars in Node.js environment
+    if (!base && typeof process !== 'undefined' && process.env) {
       // Prefer frontend URL env var
       base = process.env.MARVIN_FRONTEND_URL;
 
@@ -77,13 +90,21 @@ export class InvitesModule {
           base = apiUrl;
         }
       }
+    }
 
-      // Final fallback
-      if (!base) {
-        base = 'http://localhost:4321';
+    // In browser or if no env vars, require explicit baseUrl
+    if (!base) {
+      // Try to infer from window.location in browser
+      if (typeof window !== 'undefined' && window.location) {
+        base = window.location.origin;
+      } else {
+        throw new Error(
+          'baseUrl is required when not in Node.js environment. ' +
+          'Pass the frontend URL as second argument: getInvitationUrl(token, "https://app.example.com")'
+        );
       }
     }
 
-    return `${base}/register?token=${token}`;
+    return `${base}/register?token=${encodeURIComponent(token)}`;
   }
 }
