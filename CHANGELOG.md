@@ -1,3 +1,10 @@
+# [2.0.0-next.16](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.15...v2.0.0-next.16) (2026-07-11)
+
+
+### Bug Fixes
+
+* Disable typedoc plugin in mkdocs.yml ([bb2971f](https://github.com/inneropen/marvin-sdk/commit/bb2971f6cdc1266b62640ee5387a1846dba9cbd4))
+
 # [2.0.1] - 2026-07-11
 
 ## 🔒 Security Release - Enterprise-Grade Quality
