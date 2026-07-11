@@ -12,8 +12,8 @@ Real-world examples for using the Marvin publishing client in an Astro site.
 6. [Dynamic Routes](#dynamic-routes)
 7. [Collections](#collections)
 8. [Resources](#resources)
-9. [Assets & Images](#assets--images)
-10. [Metadata & SEO](#metadata--seo)
+9. [Assets & Images](#assets-images)
+10. [Metadata & SEO](#metadata-seo)
 
 ---
 

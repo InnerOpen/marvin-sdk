@@ -12,7 +12,7 @@ This guide covers security best practices when using the Marvin SDK in your appl
 - ✅ 7 MEDIUM priority security issues resolved
 - ✅ 5 LOW priority code quality improvements implemented
 
-**[View Complete Security Audit →](../../COMPLETE_SECURITY_AUDIT.md)**
+**View Complete Security Audit** - See GitHub repository
 
 ## Built-In Security Features
 
@@ -48,7 +48,7 @@ The SDK includes comprehensive security protections:
 !!! success "Enterprise-Ready"
     The SDK has been audited and hardened for production use in enterprise environments.
 
-**[View Security Fixes Summary →](../../SECURITY_FIXES_SUMMARY.md)**
+**View Security Fixes Summary** - See GitHub repository
 
 ## Authentication Tokens
 
@@ -516,19 +516,19 @@ If you discover a security vulnerability:
 3. Include detailed reproduction steps
 4. Allow coordinated disclosure timeline
 
-See [SECURITY.md](../../SECURITY.md) for our complete security policy.
+See SECURITY.md in the GitHub repository for our complete security policy.
 
 ## Security Resources
 
-- 🔒 [Complete Security Audit](../../COMPLETE_SECURITY_AUDIT.md) - Full audit report
-- 📋 [Security Fixes Summary](../../SECURITY_FIXES_SUMMARY.md) - Migration guide
-- 🔐 [Security Policy](../../SECURITY.md) - Vulnerability reporting
-- 🧪 [Testing Guide](../../TESTING.md) - Security test examples
-- ⚠️ [Error Handling Guide](../../ERROR_HANDLING_GUIDE.md) - Error patterns
+- 🔒 Complete Security Audit - See GitHub repository
+- 📋 Security Fixes Summary - See GitHub repository
+- 🔐 Security Policy - See GitHub repository
+- 🧪 Testing Guide - See GitHub repository
+- ⚠️ Error Handling Guide - See GitHub repository
 
 ## Next Steps
 
 - [Error Handling](errors.md) - Handle errors securely
 - [Troubleshooting](troubleshooting.md) - Debug common issues
 - [TypeScript Types](types.md) - Type-safe development
-- [Authentication Guide](../../AUTHENTICATION.md) - Complete auth documentation
+- Authentication Guide - See GitHub repository

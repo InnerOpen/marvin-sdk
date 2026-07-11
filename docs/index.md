@@ -5,7 +5,7 @@
 The official TypeScript SDK for Marvin CMS. A modern, workspace-first SDK for building applications that integrate with Marvin.
 
 !!! success "Security Status: Enterprise-Grade"
-    **Latest version v2.0.1** achieves zero known security vulnerabilities after comprehensive audit. [View Security Audit →](../COMPLETE_SECURITY_AUDIT.md)
+    **Latest version v2.0.1** achieves zero known security vulnerabilities after comprehensive audit.
 
 ## Why This SDK?
 
@@ -132,18 +132,18 @@ const projectEntries = await projects.entries();
 
 ## Documentation
 
-- 🔒 [Security Audit Report](../COMPLETE_SECURITY_AUDIT.md) - Complete security fixes
-- 📋 [Security Fixes Summary](../SECURITY_FIXES_SUMMARY.md) - Migration guide
-- 🔐 [Authentication Guide](../AUTHENTICATION.md) - Auth best practices
-- ⚠️ [Error Handling Guide](../ERROR_HANDLING_GUIDE.md) - Error patterns
-- 🧪 [Testing Guide](../TESTING.md) - Security test examples
+- 🔒 Security Audit Report - See GitHub repository
+- 📋 Security Fixes Summary - See GitHub repository  
+- 🔐 Authentication Guide - See GitHub repository
+- ⚠️ Error Handling Guide - See GitHub repository
+- 🧪 Testing Guide - See GitHub repository
 
 ## Support
 
 - 📖 [Full Documentation](https://github.com/inneropen/marvin-sdk)
 - 🚀 [Quick Start Guide](getting-started/quickstart.md)
 - 🐛 [Report Issues](https://github.com/inneropen/marvin-sdk/issues)
-- 🔒 [Security Policy](../SECURITY.md) - Vulnerability reporting
+- 🔒 Security Policy - See GitHub repository
 
 ## License
 

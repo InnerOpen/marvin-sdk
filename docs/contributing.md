@@ -197,7 +197,7 @@ Releases are automated using semantic-release:
 4. Creates Git tag
 5. Publishes to npm
 
-See [NPM_RELEASE_PROCESS.md](NPM_RELEASE_PROCESS.md) for details.
+See NPM_RELEASE_PROCESS.md in the GitHub repository for details.
 
 ## Questions?
 
