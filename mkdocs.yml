@@ -71,10 +71,12 @@ markdown_extensions:
 
 plugins:
   - search
-  - typedoc:
-      source: './src/**/*.ts'
-      output_dir: 'docs/api'
-      tsconfig: './tsconfig.json'
+  # Typedoc plugin disabled - requires mkdocs-typedoc-plugin
+  # Enable when API docs generation is needed
+  # - typedoc:
+  #     source: './src/**/*.ts'
+  #     output_dir: 'docs/api'
+  #     tsconfig: './tsconfig.json'
 
 nav:
   - Home: index.md
