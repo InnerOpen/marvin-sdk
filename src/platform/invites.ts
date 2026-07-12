@@ -7,6 +7,13 @@
 import type { HttpClient } from '../core';
 import type { components } from '../generated/schema';
 
+function getEnv(key: string): string | undefined {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key];
+  }
+  return undefined;
+}
+
 // Type aliases from OpenAPI schema
 export type InviteTokenCreate = components['schemas']['InviteTokenCreate'];
 export type InviteTokenSummary = components['schemas']['InviteTokenSummary'];
@@ -73,21 +80,19 @@ export class InvitesModule {
   getInvitationUrl(token: string, baseUrl?: string): string {
     let base = baseUrl;
 
-    // Only attempt to read env vars in Node.js environment
-    if (!base && typeof process !== 'undefined' && process.env) {
-      // Prefer frontend URL env var
-      base = process.env.MARVIN_FRONTEND_URL;
+    if (!base) {
+      base = getEnv('MARVIN_FRONTEND_URL');
 
-      // Fall back to API URL with port mapping
-      if (!base && process.env.MARVIN_API_URL) {
-        const apiUrl = process.env.MARVIN_API_URL;
-        // Map common backend ports to frontend ports
-        if (apiUrl.includes(':8080')) {
-          base = apiUrl.replace(':8080', ':4321');
-        } else if (apiUrl.includes(':3000')) {
-          base = apiUrl.replace(':3000', ':4321');
-        } else {
-          base = apiUrl;
+      if (!base) {
+        const apiUrl = getEnv('MARVIN_API_URL');
+        if (apiUrl) {
+          if (apiUrl.includes(':8080')) {
+            base = apiUrl.replace(':8080', ':4321');
+          } else if (apiUrl.includes(':3000')) {
+            base = apiUrl.replace(':3000', ':4321');
+          } else {
+            base = apiUrl;
+          }
         }
       }
     }
