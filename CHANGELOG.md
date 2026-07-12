@@ -1,3 +1,10 @@
+# [2.0.0-next.19](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.18...v2.0.0-next.19) (2026-07-12)
+
+
+### Features
+
+* Add entryTypes module to publishing client ([468fab1](https://github.com/inneropen/marvin-sdk/commit/468fab1102632cfb1670176fe8eeb0f2eaf8a6fd))
+
 # [2.0.0-next.18](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.17...v2.0.0-next.18) (2026-07-11)
 
 
