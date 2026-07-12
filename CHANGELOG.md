@@ -1,3 +1,10 @@
+# [2.0.0-next.20](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.19...v2.0.0-next.20) (2026-07-12)
+
+
+### Features
+
+* Rename entryTypes → renderers in publishing client, add isRendered flag ([b0f5ca2](https://github.com/inneropen/marvin-sdk/commit/b0f5ca2ba6a2c19d9a5bd24142c63f2c304bd67d))
+
 # [2.0.0-next.19](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.18...v2.0.0-next.19) (2026-07-12)
 
 
