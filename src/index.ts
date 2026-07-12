@@ -58,6 +58,7 @@ export type {
   MarvinAsset,
   MarvinResource,
   MarvinPublishResponse,
+  PublishedEntryType,
   GetEntriesOptions,
   GetAssetsOptions,
   GetResourcesOptions,

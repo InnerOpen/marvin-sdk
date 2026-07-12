@@ -105,6 +105,13 @@ export class MarvinClient {
     return this.workspace.resources;
   }
 
+  /**
+   * Get entry types module
+   */
+  get entryTypes() {
+    return this.workspace.entryTypes;
+  }
+
   // ======================
   // Convenience Methods
   // ======================
