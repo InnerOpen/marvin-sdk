@@ -106,10 +106,10 @@ export class MarvinClient {
   }
 
   /**
-   * Get entry types module
+   * Get renderers module
    */
-  get entryTypes() {
-    return this.workspace.entryTypes;
+  get renderers() {
+    return this.workspace.renderers;
   }
 
   // ======================

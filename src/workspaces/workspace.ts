@@ -8,7 +8,7 @@ import { EntriesModule } from '../entries/entries';
 import { CollectionsModule } from '../collections/collections';
 import { AssetsModule } from '../assets/assets';
 import { ResourcesModule } from '../resources/resources';
-import { EntryTypesModule } from '../entry-types/entry-types';
+import { RenderersModule } from '../renderers/renderers';
 
 export class Workspace {
   private _site: MarvinSite | null = null;
@@ -18,7 +18,7 @@ export class Workspace {
   public collections: CollectionsModule;
   public assets: AssetsModule;
   public resources: ResourcesModule;
-  public entryTypes: EntryTypesModule;
+  public renderers: RenderersModule;
 
   constructor(
     private http: MarvinHttpClient,
@@ -29,7 +29,7 @@ export class Workspace {
     this.collections = new CollectionsModule(http, slug);
     this.assets = new AssetsModule(http, slug);
     this.resources = new ResourcesModule(http, slug);
-    this.entryTypes = new EntryTypesModule(http, slug);
+    this.renderers = new RenderersModule(http, slug);
   }
 
   /**

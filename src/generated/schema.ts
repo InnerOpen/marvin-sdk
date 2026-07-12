@@ -753,7 +753,7 @@ export interface paths {
         patch: operations["update_preferences_api_groups__group_id__preferences_patch"];
         trace?: never;
     };
-    "/api/groups/{group_id}/email-templates": {
+    "/api/platform/workspaces/{group_id}/email-templates": {
         parameters: {
             query?: never;
             header?: never;
@@ -772,7 +772,7 @@ export interface paths {
          *     Returns:
          *         List of email template summaries
          */
-        get: operations["list_templates_api_groups__group_id__email_templates_get"];
+        get: operations["list_templates_api_platform_workspaces__group_id__email_templates_get"];
         put?: never;
         /**
          * Create Email Template
@@ -785,14 +785,14 @@ export interface paths {
          *     Returns:
          *         Created email template
          */
-        post: operations["create_template_api_groups__group_id__email_templates_post"];
+        post: operations["create_template_api_platform_workspaces__group_id__email_templates_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/groups/{group_id}/email-templates/{template_id}": {
+    "/api/platform/workspaces/{group_id}/email-templates/{template_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -810,7 +810,7 @@ export interface paths {
          *     Returns:
          *         Email template details
          */
-        get: operations["get_template_api_groups__group_id__email_templates__template_id__get"];
+        get: operations["get_template_api_platform_workspaces__group_id__email_templates__template_id__get"];
         put?: never;
         post?: never;
         /**
@@ -821,7 +821,7 @@ export interface paths {
          *         group_id: Workspace ID
          *         template_id: Template ID
          */
-        delete: operations["delete_template_api_groups__group_id__email_templates__template_id__delete"];
+        delete: operations["delete_template_api_platform_workspaces__group_id__email_templates__template_id__delete"];
         options?: never;
         head?: never;
         /**
@@ -836,10 +836,10 @@ export interface paths {
          *     Returns:
          *         Updated email template
          */
-        patch: operations["update_template_api_groups__group_id__email_templates__template_id__patch"];
+        patch: operations["update_template_api_platform_workspaces__group_id__email_templates__template_id__patch"];
         trace?: never;
     };
-    "/api/groups/{group_id}/email-templates/{template_id}/test": {
+    "/api/platform/workspaces/{group_id}/email-templates/{template_id}/test": {
         parameters: {
             query?: never;
             header?: never;
@@ -860,7 +860,7 @@ export interface paths {
          *     Returns:
          *         Success message
          */
-        post: operations["send_test_email_api_groups__group_id__email_templates__template_id__test_post"];
+        post: operations["send_test_email_api_platform_workspaces__group_id__email_templates__template_id__test_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1443,41 +1443,6 @@ export interface paths {
         get: operations["check_app_config_api_admin_about_check_get"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/debug/openai": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Debug OpenAI Integration
-         * @description Tests the OpenAI integration by sending a predefined prompt.
-         *
-         *     Optionally, an image can be uploaded to test image-related OpenAI services,
-         *     if they are enabled.
-         *
-         *     NOTE: This endpoint currently relies on `OpenAIService` and `OpenAILocalImage`
-         *     which are commented out in the import section of this file. For this endpoint
-         *     to function, those imports need to be active and the services available.
-         *
-         *     Args:
-         *         image (UploadFile | None, optional): An optional image file to include
-         *             in the test request to OpenAI. Defaults to None.
-         *
-         *     Returns:
-         *         DebugResponse: A Pydantic model indicating the success or failure of the
-         *                        OpenAI test, along with a response message or error details.
-         */
-        post: operations["debug_openai_api_admin_debug_openai_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3254,6 +3219,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/publish/{workspace_slug}/entry-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Entry Types
+         * @description List all entry types in the workspace with rendering and capabilities info.
+         *
+         *     Returns a lean response with only renderer-relevant fields, suitable for
+         *     build-time validation of renderer registries.
+         *
+         *     **Authentication**: Requires API client token (marvin_sk_*)
+         *     **Permissions**: read:published_entries OR read:all_entries
+         */
+        get: operations["list_entry_types_api_publish__workspace_slug__entry_types_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/publish/{workspace_slug}/entries": {
         parameters: {
             query?: never;
@@ -3950,11 +3941,6 @@ export interface components {
          * @enum {string}
          */
         AuthMethod: "MARVIN" | "LDAP" | "OIDC";
-        /** Body_debug_openai_api_admin_debug_openai_post */
-        Body_debug_openai_api_admin_debug_openai_post: {
-            /** Image */
-            image?: string | null;
-        };
         /** Body_get_token_api_auth_token_post */
         Body_get_token_api_auth_token_post: {
             /**
@@ -4135,19 +4121,6 @@ export interface components {
             entryIds?: string[] | null;
         };
         /**
-         * DebugResponse
-         * @description Schema for a standardized response from debugging endpoints.
-         *
-         *     Indicates the success status of a debug operation and provides an optional
-         *     response message or data string.
-         */
-        DebugResponse: {
-            /** Success */
-            success: boolean;
-            /** Response */
-            response?: string | null;
-        };
-        /**
          * EmailInitationResponse
          * @description Schema for the response after attempting to send an email invitation.
          *     Indicates success or failure and provides an error message if applicable.
@@ -4293,9 +4266,15 @@ export interface components {
             } | null;
             /** Enabled */
             enabled: boolean;
-            /** Createdat */
+            /**
+             * Createdat
+             * Format: date-time
+             */
             createdAt: string;
-            /** Updateat */
+            /**
+             * Updateat
+             * Format: date-time
+             */
             updateAt: string;
         };
         /**
@@ -4572,6 +4551,27 @@ export interface components {
             order?: number | null;
         };
         /**
+         * EntryTypeCapabilities
+         * @description Capabilities for a published entry type.
+         */
+        EntryTypeCapabilities: {
+            /**
+             * Publishable
+             * @default true
+             */
+            publishable: boolean;
+            /**
+             * Submittable
+             * @default false
+             */
+            submittable: boolean;
+            /**
+             * Routable
+             * @default true
+             */
+            routable: boolean;
+        };
+        /**
          * EntryTypeCreate
          * @description Schema for creating an entry type.
          */
@@ -4597,10 +4597,29 @@ export interface components {
              */
             isSystem: boolean;
             /**
+             * Isrendered
+             * @default false
+             */
+            isRendered: boolean;
+            /**
              * Schema Json
              * @description Entry type schema definition (EntryTypeSchemaDefinition)
              */
             schema_json?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Rendering Json
+             * @description Rendering configuration (RenderingDefinition)
+             */
+            rendering_json?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Capabilities Json
+             * @description Behavioral capabilities (CapabilitiesDefinition)
+             */
+            capabilities_json?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -4634,16 +4653,53 @@ export interface components {
             /** Issystem */
             isSystem: boolean;
             /**
+             * Isrendered
+             * @default false
+             */
+            isRendered: boolean;
+            /**
              * Schemajson
              * @description Entry type schema definition (EntryTypeSchemaDefinition)
              */
             schemaJson?: {
                 [key: string]: unknown;
             } | null;
+            /**
+             * Renderingjson
+             * @description Rendering configuration (RenderingDefinition)
+             */
+            renderingJson?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Capabilitiesjson
+             * @description Behavioral capabilities (CapabilitiesDefinition)
+             */
+            capabilitiesJson?: {
+                [key: string]: unknown;
+            } | null;
             /** Createdat */
             createdAt?: string | null;
             /** Updateat */
             updateAt?: string | null;
+            /** Warnings */
+            warnings?: string[] | null;
+        };
+        /**
+         * EntryTypeRendering
+         * @description Rendering configuration for a published entry type.
+         */
+        EntryTypeRendering: {
+            /** Renderer */
+            renderer?: string | null;
+            /** Package */
+            package?: string | null;
+            /** Version */
+            version?: string | null;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * EntryTypeUpdate
@@ -4664,11 +4720,27 @@ export interface components {
             sortOrder?: number | null;
             /** Issystem */
             isSystem?: boolean | null;
+            /** Isrendered */
+            isRendered?: boolean | null;
             /**
              * Schema Json
              * @description Entry type schema definition (EntryTypeSchemaDefinition)
              */
             schema_json?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Rendering Json
+             * @description Rendering configuration (RenderingDefinition)
+             */
+            rendering_json?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Capabilities Json
+             * @description Behavioral capabilities (CapabilitiesDefinition)
+             */
+            capabilities_json?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -5724,6 +5796,7 @@ export interface components {
             title: string;
             /** Entrytype */
             entryType: string;
+            entryTypeInfo?: components["schemas"]["PublishedEntryTypeInfo"] | null;
             /** Summary */
             summary?: string | null;
             /** Publishedat */
@@ -5765,6 +5838,7 @@ export interface components {
             title: string;
             /** Entrytype */
             entryType: string;
+            entryTypeInfo?: components["schemas"]["PublishedEntryTypeInfo"] | null;
             /** Summary */
             summary?: string | null;
             /** Data */
@@ -5794,6 +5868,56 @@ export interface components {
             assets: components["schemas"]["PublishedAssetRead"][];
             /** Order */
             order?: number | null;
+        };
+        /**
+         * PublishedEntryTypeInfo
+         * @description Flattened entry type rendering and capabilities info for published entries.
+         */
+        PublishedEntryTypeInfo: {
+            /** Slug */
+            slug: string;
+            /** Renderer */
+            renderer?: string | null;
+            /** Package */
+            package?: string | null;
+            /** Version */
+            version?: string | null;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Publishable
+             * @default true
+             */
+            publishable: boolean;
+            /**
+             * Submittable
+             * @default false
+             */
+            submittable: boolean;
+            /**
+             * Routable
+             * @default true
+             */
+            routable: boolean;
+        };
+        /**
+         * PublishedEntryTypeRead
+         * @description Schema for entry types in the publishing API.
+         */
+        PublishedEntryTypeRead: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Isrendered
+             * @default false
+             */
+            isRendered: boolean;
+            rendering?: components["schemas"]["EntryTypeRendering"] | null;
+            capabilities?: components["schemas"]["EntryTypeCapabilities"] | null;
         };
         /**
          * PublishedFormRead
@@ -7674,7 +7798,7 @@ export interface operations {
             };
         };
     };
-    list_templates_api_groups__group_id__email_templates_get: {
+    list_templates_api_platform_workspaces__group_id__email_templates_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -7705,7 +7829,7 @@ export interface operations {
             };
         };
     };
-    create_template_api_groups__group_id__email_templates_post: {
+    create_template_api_platform_workspaces__group_id__email_templates_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -7740,7 +7864,7 @@ export interface operations {
             };
         };
     };
-    get_template_api_groups__group_id__email_templates__template_id__get: {
+    get_template_api_platform_workspaces__group_id__email_templates__template_id__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -7772,7 +7896,7 @@ export interface operations {
             };
         };
     };
-    delete_template_api_groups__group_id__email_templates__template_id__delete: {
+    delete_template_api_platform_workspaces__group_id__email_templates__template_id__delete: {
         parameters: {
             query?: never;
             header?: never;
@@ -7802,7 +7926,7 @@ export interface operations {
             };
         };
     };
-    update_template_api_groups__group_id__email_templates__template_id__patch: {
+    update_template_api_platform_workspaces__group_id__email_templates__template_id__patch: {
         parameters: {
             query?: never;
             header?: never;
@@ -7838,7 +7962,7 @@ export interface operations {
             };
         };
     };
-    send_test_email_api_groups__group_id__email_templates__template_id__test_post: {
+    send_test_email_api_platform_workspaces__group_id__email_templates__template_id__test_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -8461,39 +8585,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CheckAppConfig"];
-                };
-            };
-        };
-    };
-    debug_openai_api_admin_debug_openai_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "multipart/form-data": components["schemas"]["Body_debug_openai_api_admin_debug_openai_post"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DebugResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -11515,6 +11606,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkspaceSiteInfo"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_entry_types_api_publish__workspace_slug__entry_types_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishedEntryTypeRead"][];
                 };
             };
             /** @description Validation Error */

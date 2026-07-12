@@ -199,6 +199,7 @@ export interface GetAssetsOptions {
 export interface PublishedEntryType {
   slug: string;
   name: string;
+  isRendered: boolean;
   rendering?: {
     renderer?: string;
     package?: string;
