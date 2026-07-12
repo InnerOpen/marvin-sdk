@@ -160,10 +160,11 @@ Everything starts with the **Workspace**:
 const workspace = await marvin.getWorkspace();
 
 // Access workspace modules
-workspace.entries   // Entries module
+workspace.entries     // Entries module
 workspace.collections // Collections module
-workspace.assets    // Assets module
-workspace.site      // Site configuration (cached)
+workspace.assets      // Assets module
+workspace.renderers   // Renderers module (entry type rendering metadata)
+workspace.site        // Site configuration (cached)
 ```
 
 ### Modular Structure
@@ -177,6 +178,7 @@ The SDK is organized into focused modules:
 ├── entries/      → Entries module
 ├── collections/  → Collections module
 ├── assets/       → Assets module
+├── renderers/    → Renderers module (entry type rendering metadata)
 ├── auth/         → Authentication (future)
 ├── types/        → TypeScript types
 └── utils/        → Cache & utilities
@@ -686,6 +688,43 @@ Methods:
 - `resource.entries()` - Get entries that reference this resource
 - `resource.toJSON()` - Get raw resource data
 
+### Renderers Module
+
+#### `renderers.list()`
+
+Get all entry types with their rendering and capability metadata.
+
+**Returns:** `PublishedEntryType[]`
+
+```ts
+interface PublishedEntryType {
+  slug: string;
+  name: string;
+  isRendered: boolean;
+  rendering?: {
+    renderer?: string;
+    package?: string;
+    version?: string;
+    config?: Record<string, unknown>;
+  };
+  capabilities?: {
+    publishable?: boolean;
+    submittable?: boolean;
+    routable?: boolean;
+  };
+}
+```
+
+**Example:**
+
+```ts
+const workspace = await marvin.getWorkspace();
+const renderers = await workspace.renderers.list();
+
+const rendered = renderers.filter(r => r.isRendered);
+console.log(`${rendered.length} entry types have renderers`);
+```
+
 ## Backend API Endpoints
 
 The SDK uses these Marvin publishing API endpoints:
@@ -704,6 +743,7 @@ The SDK uses these Marvin publishing API endpoints:
 | `/api/publish/{workspace}/resources` | GET | List resources | ✅ Implemented |
 | `/api/publish/{workspace}/resources/{slug}` | GET | Get resource | ✅ Implemented |
 | `/api/publish/{workspace}/resources/{slug}/entries` | GET | Resource entries | ✅ Implemented |
+| `/api/publish/{workspace}/entry-types` | GET | List entry types (renderers) | ✅ Implemented |
 
 **Query Parameters:**
 
