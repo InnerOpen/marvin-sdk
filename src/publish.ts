@@ -62,6 +62,7 @@ export { Resource } from './resources/resource';
 export type {
   MarvinSite,
   MarvinEntry,
+  MarvinEntryListItem,
   MarvinEntryType,
   MarvinCollection,
   MarvinAsset,

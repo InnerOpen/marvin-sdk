@@ -5,44 +5,14 @@
  */
 
 import type { HttpClient } from '../core';
+import type { components } from '../generated/schema';
 
-export interface UserProfile {
-  id: string;
-  username: string;
-  email: string;
-  fullName?: string | null;
-  admin: boolean;
-}
-
-export interface ApiToken {
-  id: string;
-  name: string;
-  description?: string | null;
-  lastUsedAt?: string | null;
-  createdAt: string;
-  expiresAt?: string | null;
-}
-
-export interface ApiTokenCreate {
-  name: string;
-  description?: string | null;
-  expiresAt?: string | null;
-}
-
-export interface ApiTokenWithToken extends ApiToken {
-  token: string;
-}
-
-export interface PasswordChange {
-  currentPassword: string;
-  newPassword: string;
-}
-
-export interface UserProfileUpdate {
-  username?: string;
-  email?: string;
-  fullName?: string | null;
-}
+export type UserProfile = components['schemas']['UserRead'];
+export type UserProfileUpdate = components['schemas']['UserUpdate'];
+export type ApiToken = components['schemas']['LongLiveTokenRead'];
+export type ApiTokenCreate = components['schemas']['LongLiveTokenCreate'];
+export type ApiTokenWithToken = components['schemas']['LongLiveTokenWithToken'];
+export type PasswordChange = components['schemas']['ChangePassword'];
 
 export class UserModule {
   constructor(private http: HttpClient) {}

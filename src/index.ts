@@ -53,6 +53,7 @@ export {
 export type {
   MarvinSite,
   MarvinEntry,
+  MarvinEntryListItem,
   MarvinEntryType,
   MarvinCollection,
   MarvinAsset,

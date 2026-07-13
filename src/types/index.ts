@@ -5,18 +5,20 @@
  */
 
 export interface MarvinSite {
-  id: string;
-  name: string;
-  slug: string;
-  title?: string;
-  tagline?: string;
-  description?: string;
-  canonicalUrl?: string;
-  logo?: string;
-  favicon?: string;
-  locale?: string;
-  timezone?: string;
-  metadata?: Record<string, unknown>;
+  workspace: { slug: string; name: string };
+  site: {
+    title?: string | null;
+    tagline?: string | null;
+    description?: string | null;
+    canonicalUrl?: string | null;
+    logo?: string | null;
+    favicon?: string | null;
+    locale: string;
+    timezone: string;
+    contactEmail?: string | null;
+    social?: Record<string, unknown> | null;
+    metadataJson?: Record<string, unknown> | null;
+  };
 }
 
 export interface MarvinEntryType {
@@ -39,41 +41,17 @@ export interface MarvinEntryType {
 }
 
 export interface MarvinAsset {
-  id: string;
-  slug: string;
-  name: string;
-  originalFilename: string;
-  filename: string;
-  extension: string;
-  mimeType: string;
-  assetType: 'image' | 'document' | 'video' | 'audio' | 'archive' | 'svg' | 'other';
-  fileSize: number;
-  checksum: string;
-  width?: number;
-  height?: number;
-  orientation?: number;
-  storageProvider: string;
-  storageKey: string;
-  publicUrl?: string;
-  altText?: string;
-  description?: string;
-  metadata?: Record<string, unknown>;
-  uploadedBy: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface PublishedAsset {
   slug: string;
   name: string;
   mimeType: string;
   assetType: string;
   fileSize: number;
-  width?: number;
-  height?: number;
-  altText?: string;
-  description?: string;
+  width?: number | null;
+  height?: number | null;
+  altText?: string | null;
+  description?: string | null;
   publicUrl: string;
+  metadataJson?: Record<string, unknown> | null;
 }
 
 export interface AssetUploadRequest {
@@ -85,32 +63,25 @@ export interface AssetUploadRequest {
 }
 
 export interface MarvinCollection {
-  id: string;
-  name: string;
   slug: string;
-  description?: string;
-  icon?: string;
-  color?: string;
-  sortOrder: number;
+  name: string;
+  description?: string | null;
   isSmart: boolean;
-  smartRules?: Record<string, unknown>;
-  createdAt: string;
-  updatedAt: string;
-  entryCount?: number;
-  entries?: MarvinEntry[];
+  smartRules?: Record<string, unknown> | null;
+  metadataJson?: Record<string, unknown> | null;
+  entryCount: number;
+  entries: MarvinEntryListItem[];
 }
 
 export interface MarvinResource {
-  id: string;
-  name: string;
   slug: string;
-  resourceType?: string;
-  description?: string;
-  externalId?: string;
-  url?: string;
-  metadata?: Record<string, unknown>;
-  createdAt: string;
-  updatedAt: string;
+  name: string;
+  resourceType: string;
+  description?: string | null;
+  url?: string | null;
+  externalId?: string | null;
+  metadataJson?: Record<string, unknown> | null;
+  entries: string[];
 }
 
 export interface PublishedCollectionSummary {
@@ -146,6 +117,29 @@ export interface PublishedAssetRead {
   description?: string | null;
   publicUrl: string;
   metadataJson?: Record<string, unknown> | null;
+}
+
+export interface MarvinEntryListItem {
+  slug: string;
+  title: string;
+  entryType: string;
+  entryTypeInfo?: {
+    slug: string;
+    renderer?: string | null;
+    package?: string | null;
+    version?: string | null;
+    config?: Record<string, unknown> | null;
+    publishable: boolean;
+    submittable: boolean;
+    routable: boolean;
+  } | null;
+  summary?: string | null;
+  publishedAt?: string | null;
+  status: string;
+  collections: string[];
+  assetSlugs: string[];
+  resourceSlugs: string[];
+  order?: number | null;
 }
 
 export interface MarvinEntry {
@@ -224,10 +218,6 @@ export interface GetResourcesOptions {
   offset?: number;
 }
 
-/**
- * Authentication token response
- * Used by auth.login() and auth.refresh()
- */
 export interface AuthToken {
   accessToken: string;
   tokenType: string;

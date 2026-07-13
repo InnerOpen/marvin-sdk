@@ -2,15 +2,10 @@
  * Entry - Rich object representing a single entry
  */
 
-import type { MarvinHttpClient } from '../client/http';
 import type { MarvinEntry, PublishedCollectionSummary, PublishedResourceRead, PublishedAssetRead } from '../types';
 
 export class Entry {
-  constructor(
-    private raw: MarvinEntry,
-    private http: MarvinHttpClient,
-    private workspaceSlug: string
-  ) {}
+  constructor(private raw: MarvinEntry) {}
 
   get title() { return this.raw.title; }
   get slug() { return this.raw.slug; }
@@ -40,10 +35,6 @@ export class Entry {
 
   get fields(): Record<string, unknown> {
     return this.raw.data;
-  }
-
-  async relatedEntries(): Promise<MarvinEntry[]> {
-    throw new Error('Related entries not yet implemented');
   }
 
   toJSON(): MarvinEntry {

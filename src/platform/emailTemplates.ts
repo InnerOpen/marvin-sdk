@@ -5,64 +5,13 @@
  */
 
 import type { HttpClient } from '../core';
+import type { components } from '../generated/schema';
 
-// Type definitions
-export interface EmailTemplateSummary {
-  id: string;
-  template_type: string;
-  group_id: string | null;
-  name: string;
-  description?: string;
-  enabled: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface EmailTemplateRead extends EmailTemplateSummary {
-  subject: string;
-  header_text?: string;
-  message_top?: string;
-  message_bottom?: string;
-  button_text?: string;
-  custom_html?: string;
-  available_variables?: Record<string, string>;
-}
-
-export interface EmailTemplateCreate {
-  template_type: string;
-  group_id?: string;
-  name: string;
-  description?: string;
-  subject: string;
-  header_text?: string;
-  message_top?: string;
-  message_bottom?: string;
-  button_text?: string;
-  custom_html?: string;
-  available_variables?: Record<string, string>;
-  enabled?: boolean;
-}
-
-export interface EmailTemplateUpdate {
-  name?: string;
-  description?: string;
-  subject?: string;
-  header_text?: string;
-  message_top?: string;
-  message_bottom?: string;
-  button_text?: string;
-  custom_html?: string;
-  available_variables?: Record<string, string>;
-  enabled?: boolean;
-}
-
-export interface TestEmailRequest {
-  recipient_email: string;
-}
-
-export interface TestEmailResponse {
-  message: string;
-}
+export type EmailTemplateSummary = components['schemas']['EmailTemplateSummary'];
+export type EmailTemplateRead = components['schemas']['EmailTemplateRead'];
+export type EmailTemplateCreate = components['schemas']['EmailTemplateCreate'];
+export type EmailTemplateUpdate = components['schemas']['EmailTemplateUpdate'];
+export type TestEmailRequest = components['schemas']['EmailTest'];
 
 /**
  * Email Templates API client for workspace-scoped templates
@@ -72,7 +21,6 @@ export class EmailTemplatesClient {
 
   /**
    * List all email templates for the workspace
-   * @param groupId - Workspace ID
    */
   async list(groupId: string): Promise<EmailTemplateSummary[]> {
     return this.http.get<EmailTemplateSummary[]>(`/api/platform/workspaces/${groupId}/email-templates`);
@@ -80,8 +28,6 @@ export class EmailTemplatesClient {
 
   /**
    * Get a specific email template
-   * @param groupId - Workspace ID
-   * @param templateId - Template ID
    */
   async get(groupId: string, templateId: string): Promise<EmailTemplateRead> {
     return this.http.get<EmailTemplateRead>(`/api/platform/workspaces/${groupId}/email-templates/${templateId}`);
@@ -89,8 +35,6 @@ export class EmailTemplatesClient {
 
   /**
    * Create a new email template
-   * @param groupId - Workspace ID
-   * @param data - Template data
    */
   async create(groupId: string, data: EmailTemplateCreate): Promise<EmailTemplateRead> {
     return this.http.post<EmailTemplateRead>(`/api/platform/workspaces/${groupId}/email-templates`, data);
@@ -98,9 +42,6 @@ export class EmailTemplatesClient {
 
   /**
    * Update an email template
-   * @param groupId - Workspace ID
-   * @param templateId - Template ID
-   * @param data - Updated template data
    */
   async update(groupId: string, templateId: string, data: EmailTemplateUpdate): Promise<EmailTemplateRead> {
     return this.http.patch<EmailTemplateRead>(`/api/platform/workspaces/${groupId}/email-templates/${templateId}`, data);
@@ -108,8 +49,6 @@ export class EmailTemplatesClient {
 
   /**
    * Delete an email template
-   * @param groupId - Workspace ID
-   * @param templateId - Template ID
    */
   async delete(groupId: string, templateId: string): Promise<void> {
     await this.http.delete(`/api/platform/workspaces/${groupId}/email-templates/${templateId}`);
@@ -117,13 +56,10 @@ export class EmailTemplatesClient {
 
   /**
    * Send a test email using a template
-   * @param groupId - Workspace ID
-   * @param templateId - Template ID
-   * @param recipientEmail - Test recipient email address
    */
-  async sendTest(groupId: string, templateId: string, recipientEmail: string): Promise<TestEmailResponse> {
-    return this.http.post<TestEmailResponse>(`/api/platform/workspaces/${groupId}/email-templates/${templateId}/test`, {
-      recipient_email: recipientEmail,
+  async sendTest(groupId: string, templateId: string, recipientEmail: string): Promise<{ message: string }> {
+    return this.http.post<{ message: string }>(`/api/platform/workspaces/${groupId}/email-templates/${templateId}/test`, {
+      email: recipientEmail,
     });
   }
 }

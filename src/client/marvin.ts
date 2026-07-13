@@ -10,8 +10,10 @@ import { Workspace } from '../workspaces/workspace';
 import type {
   MarvinSite,
   MarvinEntry,
-  MarvinCollection,
+  MarvinEntryListItem,
   MarvinAsset,
+  MarvinResource,
+  PublishedCollectionSummary,
 } from '../types';
 import type { GetEntriesOptions } from '../entries/entries';
 import type { GetAssetsOptions } from '../assets/assets';
@@ -22,7 +24,7 @@ export class MarvinClient {
   private workspace: Workspace;
   private initialized = false;
 
-  constructor(private config: MarvinConfig) {
+  constructor(config: MarvinConfig) {
     validateConfig(config);
     this.http = new MarvinHttpClient(config);
     this.cache = new MarvinCache(config.cacheDuration);
@@ -44,7 +46,6 @@ export class MarvinClient {
       await this.workspace.loadSite();
       this.initialized = true;
     } catch (error) {
-      // Gracefully handle initialization errors
       console.warn('Marvin SDK initialization warning:', error);
     }
   }
@@ -161,21 +162,11 @@ export class MarvinClient {
   /**
    * Try multiple collection slugs in fallback order
    * Returns entries from the first collection that exists and has content
-   *
-   * @param slugs - Collection slugs to try in order
-   * @param options - Options for fallback behavior
-   * @returns Entries from the first matching collection, or empty array
-   *
-   * @example
-   * ```ts
-   * // Try bench-notes, then journal, then blog
-   * const entries = await client.collectionFallback(['bench-notes', 'journal', 'blog']);
-   * ```
    */
   async collectionFallback(
     slugs: string[],
     options?: { requireEntries?: boolean }
-  ): Promise<MarvinEntry[]> {
+  ): Promise<MarvinEntryListItem[]> {
     return this.workspace.collections.fallback(slugs, options);
   }
 
@@ -185,7 +176,6 @@ export class MarvinClient {
 
   /**
    * @deprecated Use workspace.site or marvin.site instead
-   * Get site configuration
    */
   async getSite(): Promise<MarvinSite> {
     return this.workspace.loadSite();
@@ -193,15 +183,13 @@ export class MarvinClient {
 
   /**
    * @deprecated Use workspace.entries.list() instead
-   * Get all published entries
    */
-  async getEntries(options?: GetEntriesOptions): Promise<MarvinEntry[]> {
+  async getEntries(options?: GetEntriesOptions): Promise<MarvinEntryListItem[]> {
     return this.workspace.entries.list(options);
   }
 
   /**
    * @deprecated Use workspace.entries.get() instead
-   * Get a single published entry by slug
    */
   async getEntry(slug: string): Promise<MarvinEntry | null> {
     const entry = await this.workspace.entries.get(slug);
@@ -213,17 +201,15 @@ export class MarvinClient {
 
   /**
    * @deprecated Use workspace.collections.list() instead
-   * Get all collections
    */
-  async getCollections(): Promise<MarvinCollection[]> {
+  async getCollections(): Promise<PublishedCollectionSummary[]> {
     return this.workspace.collections.list();
   }
 
   /**
    * @deprecated Use workspace.collections.get() instead
-   * Get a single collection by slug
    */
-  async getCollection(slug: string): Promise<MarvinCollection | null> {
+  async getCollection(slug: string): Promise<import('../types').MarvinCollection | null> {
     const collection = await this.workspace.collections.get(slug);
     if (!collection) {
       return null;
@@ -233,15 +219,13 @@ export class MarvinClient {
 
   /**
    * @deprecated Use workspace.collections.entries() instead
-   * Get all entries in a collection
    */
-  async getCollectionEntries(slug: string): Promise<MarvinEntry[]> {
+  async getCollectionEntries(slug: string): Promise<MarvinEntryListItem[]> {
     return this.workspace.collections.entries(slug);
   }
 
   /**
    * @deprecated Use workspace.assets.list() instead
-   * Get all published assets
    */
   async getAssets(options?: GetAssetsOptions): Promise<MarvinAsset[]> {
     return this.workspace.assets.list(options);
@@ -249,26 +233,23 @@ export class MarvinClient {
 
   /**
    * @deprecated Use workspace.resources.list() instead
-   * Get all published resources
    */
-  async getResources(options?: import('../types').GetResourcesOptions): Promise<import('../types').MarvinResource[]> {
+  async getResources(options?: import('../types').GetResourcesOptions): Promise<MarvinResource[]> {
     return this.workspace.resources.list(options);
   }
 
   /**
    * @deprecated Use workspace.resources.get() instead
-   * Get a single resource by slug
    */
-  async getResource(slug: string): Promise<import('../types').MarvinResource> {
+  async getResource(slug: string): Promise<MarvinResource> {
     const resource = await this.workspace.resources.get(slug);
     return resource.toJSON();
   }
 
   /**
    * @deprecated Use workspace.resources.entries() instead
-   * Get entries that reference a resource
    */
-  async getResourceEntries(slug: string): Promise<MarvinEntry[]> {
+  async getResourceEntries(slug: string): Promise<string[]> {
     return this.workspace.resources.entries(slug);
   }
 }
