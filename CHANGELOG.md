@@ -1,3 +1,10 @@
+# [2.0.0-next.24](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.23...v2.0.0-next.24) (2026-07-13)
+
+
+### Bug Fixes
+
+* Rewrite all drifted types to match generated OpenAPI schema ([8d73839](https://github.com/inneropen/marvin-sdk/commit/8d73839d33ef9b4a4212d24af21a2ea35c633472))
+
 # [2.0.0-next.23](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.22...v2.0.0-next.23) (2026-07-13)
 
 
