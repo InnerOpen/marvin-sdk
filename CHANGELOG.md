@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/inneropen/marvin-sdk/compare/v3.0.1...v3.1.0) (2026-07-13)
+
+
+### Features
+
+* Add rich relationship types and Entry helpers ([36bfad5](https://github.com/inneropen/marvin-sdk/commit/36bfad56cd67f0579cdc169f78b768dcb71299cb))
+
 ## [3.0.1](https://github.com/inneropen/marvin-sdk/compare/v3.0.0...v3.0.1) (2026-07-13)
 
 
