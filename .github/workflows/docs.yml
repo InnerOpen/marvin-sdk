@@ -2,43 +2,59 @@ name: Deploy Documentation
 
 on:
   push:
-    branches:
-      - main
+    branches: [main, develop]
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
-      - '.github/workflows/docs.yml'
-  workflow_dispatch:
+      - 'README.md'
+      - 'SECURITY.md'
+      - 'AUTHENTICATION.md'
+      - 'CONTRIBUTING.md'
+  workflow_dispatch: # Allow manual trigger
 
 permissions:
-  contents: write
+  contents: write # Needed to push to gh-pages branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Fetch all history for git info
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: 3.x
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
         with:
-          node-version: '18'
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-mkdocs
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-      - name: Build SDK
+      - name: Install MkDocs and Material theme
         run: |
-          npm ci
-          npm run build
+          pip install mkdocs-material
+          pip install mkdocs-minify-plugin
+          pip install mkdocs-redirects
 
-      - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy documentation
+        run: mkdocs gh-deploy --force --clean --verbose
+
+      - name: Summary
+        run: |
+          echo "✅ Documentation deployed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📚 View at: https://inneropen.github.io/marvin-sdk/" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Branch: \`gh-pages\`" >> $GITHUB_STEP_SUMMARY

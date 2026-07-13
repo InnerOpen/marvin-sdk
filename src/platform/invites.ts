@@ -7,6 +7,13 @@
 import type { HttpClient } from '../core';
 import type { components } from '../generated/schema';
 
+function getEnv(key: string): string | undefined {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key];
+  }
+  return undefined;
+}
+
 // Type aliases from OpenAPI schema
 export type InviteTokenCreate = components['schemas']['InviteTokenCreate'];
 export type InviteTokenSummary = components['schemas']['InviteTokenSummary'];
@@ -56,34 +63,53 @@ export class InvitesModule {
 
   /**
    * Generate invitation URL from a token
-   * Uses MARVIN_FRONTEND_URL for the base URL, falls back to MARVIN_API_URL with common port mappings
+   *
+   * @param token - Invitation token
+   * @param baseUrl - Base URL for the frontend (required in browser environments)
+   * @returns Full invitation URL
+   *
+   * @example
+   * ```typescript
+   * // Node.js (can use env vars)
+   * const url = invites.getInvitationUrl(token);
+   *
+   * // Browser (must provide baseUrl)
+   * const url = invites.getInvitationUrl(token, 'https://app.example.com');
+   * ```
    */
   getInvitationUrl(token: string, baseUrl?: string): string {
     let base = baseUrl;
 
     if (!base) {
-      // Prefer frontend URL env var
-      base = process.env.MARVIN_FRONTEND_URL;
+      base = getEnv('MARVIN_FRONTEND_URL');
 
-      // Fall back to API URL with port mapping
-      if (!base && process.env.MARVIN_API_URL) {
-        const apiUrl = process.env.MARVIN_API_URL;
-        // Map common backend ports to frontend ports
-        if (apiUrl.includes(':8080')) {
-          base = apiUrl.replace(':8080', ':4321');
-        } else if (apiUrl.includes(':3000')) {
-          base = apiUrl.replace(':3000', ':4321');
-        } else {
-          base = apiUrl;
-        }
-      }
-
-      // Final fallback
       if (!base) {
-        base = 'http://localhost:4321';
+        const apiUrl = getEnv('MARVIN_API_URL');
+        if (apiUrl) {
+          if (apiUrl.includes(':8080')) {
+            base = apiUrl.replace(':8080', ':4321');
+          } else if (apiUrl.includes(':3000')) {
+            base = apiUrl.replace(':3000', ':4321');
+          } else {
+            base = apiUrl;
+          }
+        }
       }
     }
 
-    return `${base}/register?token=${token}`;
+    // In browser or if no env vars, require explicit baseUrl
+    if (!base) {
+      // Try to infer from window.location in browser
+      if (typeof window !== 'undefined' && window.location) {
+        base = window.location.origin;
+      } else {
+        throw new Error(
+          'baseUrl is required when not in Node.js environment. ' +
+          'Pass the frontend URL as second argument: getInvitationUrl(token, "https://app.example.com")'
+        );
+      }
+    }
+
+    return `${base}/register?token=${encodeURIComponent(token)}`;
   }
 }

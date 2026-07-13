@@ -19,6 +19,9 @@ export {
   MarvinAuthError,
   MarvinConfigError,
   MarvinValidationError,
+  MarvinNotFoundError,
+  MarvinNetworkError,
+  MarvinServerError,
 } from './errors';
 
 // Pagination
@@ -33,3 +36,12 @@ export {
 
 // Cache
 export { MarvinCache } from './cache';
+
+// Validation
+export {
+  validateEmail,
+  validateUrl,
+  validateRequired,
+  validateStringLength,
+  validateNumberRange,
+} from './validation';

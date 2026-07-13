@@ -15,7 +15,7 @@ export interface EmailTemplateSummary {
   description?: string;
   enabled: boolean;
   created_at: string;
-  update_at: string;
+  updated_at: string;
 }
 
 export interface EmailTemplateRead extends EmailTemplateSummary {

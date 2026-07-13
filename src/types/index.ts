@@ -34,6 +34,17 @@ export interface MarvinEntryType {
    * @since 2.0.0
    */
   schemaJson?: Record<string, unknown>;
+  rendering?: {
+    renderer?: string;
+    package?: string;
+    version?: string;
+    config?: Record<string, unknown>;
+  };
+  capabilities?: {
+    publishable?: boolean;
+    submittable?: boolean;
+    routable?: boolean;
+  };
 }
 
 export interface MarvinAsset {
@@ -137,6 +148,17 @@ export interface MarvinEntry {
   createdAt: string;
   updatedAt: string;
 
+  entryTypeInfo?: {
+    slug: string;
+    renderer?: string;
+    package?: string;
+    version?: string;
+    config?: Record<string, unknown>;
+    publishable?: boolean;
+    submittable?: boolean;
+    routable?: boolean;
+  };
+
   // Relationships
   entryTypeId: string;
   entryType?: MarvinEntryType;
@@ -174,8 +196,34 @@ export interface GetAssetsOptions {
   offset?: number;
 }
 
+export interface PublishedEntryType {
+  slug: string;
+  name: string;
+  isRendered: boolean;
+  rendering?: {
+    renderer?: string;
+    package?: string;
+    version?: string;
+    config?: Record<string, unknown>;
+  };
+  capabilities?: {
+    publishable?: boolean;
+    submittable?: boolean;
+    routable?: boolean;
+  };
+}
+
 export interface GetResourcesOptions {
   resourceType?: string;
   limit?: number;
   offset?: number;
+}
+
+/**
+ * Authentication token response
+ * Used by auth.login() and auth.refresh()
+ */
+export interface AuthToken {
+  accessToken: string;
+  tokenType: string;
 }

@@ -34,12 +34,22 @@ export interface WorkspaceUpdate {
   description?: string | null;
 }
 
+/**
+ * Workspace preferences - dynamic key-value store
+ * Common keys include: theme, locale, notifications, etc.
+ */
 export interface WorkspacePreferences {
-  [key: string]: any;
+  theme?: string;
+  locale?: string;
+  notifications?: boolean;
+  [key: string]: unknown; // Allow additional dynamic preferences
 }
 
 export interface WorkspacePreferencesUpdate {
-  [key: string]: any;
+  theme?: string;
+  locale?: string;
+  notifications?: boolean;
+  [key: string]: unknown; // Allow additional dynamic preferences
 }
 
 export class WorkspacesModule {
@@ -98,6 +108,16 @@ export class WorkspacesModule {
   async delete(id: string, force: boolean = false): Promise<void> {
     const url = `/api/admin/groups/${id}${force ? '?force=true' : ''}`;
     await this.http.delete<void>(url);
+  }
+
+  /**
+   * Export workspace data as JSON (collections, entry types, entries, site config)
+   */
+  async export(options?: { includeSystemTypes?: boolean; pretty?: boolean }): Promise<Record<string, unknown>> {
+    const pretty = options?.pretty ?? true;
+    const endpoint = pretty ? '/api/platform/workspace/export/pretty' : '/api/platform/workspace/export';
+    const params = options?.includeSystemTypes ? { include_system_types: true } : undefined;
+    return this.http.get<Record<string, unknown>>(endpoint, params);
   }
 
   /**

@@ -26,7 +26,8 @@ export class EntriesModule {
    * Get a single entry by ID
    */
   async get(id: string): Promise<PlatformEntry> {
-    return this.http.get<PlatformEntry>(`/api/platform/entries/${id}`);
+    const validId = this.http.validatePathParam(id, 'entry ID');
+    return this.http.get<PlatformEntry>(`/api/platform/entries/${validId}`);
   }
 
   /**
@@ -40,29 +41,34 @@ export class EntriesModule {
    * Update an entry
    */
   async update(id: string, data: PlatformEntryUpdate): Promise<PlatformEntry> {
-    return this.http.patch<PlatformEntry>(`/api/platform/entries/${id}`, data);
+    const validId = this.http.validatePathParam(id, 'entry ID');
+    return this.http.patch<PlatformEntry>(`/api/platform/entries/${validId}`, data);
   }
 
   /**
    * Delete an entry
    */
   async delete(id: string): Promise<void> {
-    return this.http.delete(`/api/platform/entries/${id}`);
+    const validId = this.http.validatePathParam(id, 'entry ID');
+    return this.http.delete(`/api/platform/entries/${validId}`);
   }
 
   /**
    * Get collections that this entry belongs to
    */
   async listCollections(entryId: string): Promise<PlatformCollection[]> {
-    return this.http.get<PlatformCollection[]>(`/api/platform/entries/${entryId}/collections`);
+    const validId = this.http.validatePathParam(entryId, 'entry ID');
+    return this.http.get<PlatformCollection[]>(`/api/platform/entries/${validId}/collections`);
   }
 
   /**
    * Add entry to a collection
    */
   async addToCollection(entryId: string, collectionId: string): Promise<{ message: string }> {
+    const validEntryId = this.http.validatePathParam(entryId, 'entry ID');
+    const validCollectionId = this.http.validatePathParam(collectionId, 'collection ID');
     return this.http.post<{ message: string }>(
-      `/api/platform/entries/${entryId}/collections/${collectionId}`,
+      `/api/platform/entries/${validEntryId}/collections/${validCollectionId}`,
       {}
     );
   }
@@ -71,6 +77,8 @@ export class EntriesModule {
    * Remove entry from a collection
    */
   async removeFromCollection(entryId: string, collectionId: string): Promise<void> {
-    return this.http.delete(`/api/platform/entries/${entryId}/collections/${collectionId}`);
+    const validEntryId = this.http.validatePathParam(entryId, 'entry ID');
+    const validCollectionId = this.http.validatePathParam(collectionId, 'collection ID');
+    return this.http.delete(`/api/platform/entries/${validEntryId}/collections/${validCollectionId}`);
   }
 }

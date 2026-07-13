@@ -4,7 +4,7 @@
  * Workspace content management (CRUD operations)
  */
 
-export { PlatformClient, createPlatformClient } from './client';
+export { PlatformClient, createPlatformClient, createPlatformConfigFromEnv } from './client';
 export type { PlatformClientConfig } from './client';
 
 // Re-export Platform-specific types
@@ -94,7 +94,7 @@ export type { EventLogQueryParams } from './eventLog';
 
 // Auth (authenticated session management)
 export { AuthModule } from './auth';
-export type { AuthToken } from './auth';
+// AuthToken is exported from main types module
 
 // Theme
 export { ThemeModule } from './theme';

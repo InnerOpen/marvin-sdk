@@ -26,7 +26,8 @@ export class APIClientsModule {
    * Get a single API client by ID
    */
   async get(id: string): Promise<PlatformAPIClient> {
-    return this.http.get<PlatformAPIClient>(`/api/platform/api-clients/${id}`);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.get<PlatformAPIClient>(`/api/platform/api-clients/${validId}`);
   }
 
   /**
@@ -40,7 +41,8 @@ export class APIClientsModule {
    * Update an API client
    */
   async update(id: string, data: PlatformAPIClientUpdate): Promise<PlatformAPIClient> {
-    return this.http.patch<PlatformAPIClient>(`/api/platform/api-clients/${id}`, data);
+    const validId = this.http.validatePathParam(id, 'id');
+    return this.http.patch<PlatformAPIClient>(`/api/platform/api-clients/${validId}`, data);
   }
 
   /**

@@ -5,11 +5,7 @@
  */
 
 import type { HttpClient } from '../core';
-
-export interface AuthToken {
-  accessToken: string;
-  tokenType: string;
-}
+import type { AuthToken } from '../types';
 
 export class AuthModule {
   constructor(private http: HttpClient) {}
