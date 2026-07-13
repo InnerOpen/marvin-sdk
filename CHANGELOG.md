@@ -1,3 +1,10 @@
+# [2.0.0-next.22](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.21...v2.0.0-next.22) (2026-07-13)
+
+
+### Bug Fixes
+
+* Guard process.env access in config and platform client for browser compatibility ([9a64c47](https://github.com/inneropen/marvin-sdk/commit/9a64c4706b4520c4caf312381570c74914f2d938))
+
 # [2.0.0-next.21](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.20...v2.0.0-next.21) (2026-07-12)
 
 
