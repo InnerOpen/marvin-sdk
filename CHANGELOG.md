@@ -5,10 +5,13 @@
 
 * Address all HIGH priority security vulnerabilities ([a06d34b](https://github.com/inneropen/marvin-sdk/commit/a06d34bd1c422befef705f2ddb7d8888e81f68d7))
 * Address all MEDIUM priority security and quality issues ([655cf80](https://github.com/inneropen/marvin-sdk/commit/655cf8020db3abc492b426bcc21c3a2309e5e090))
+* Align hand-written types with generated OpenAPI schema ([0445144](https://github.com/inneropen/marvin-sdk/commit/04451447b64d20d4e31908e43247bfb693cccf67))
 * Disable typedoc plugin in mkdocs.yml ([bb2971f](https://github.com/inneropen/marvin-sdk/commit/bb2971f6cdc1266b62640ee5387a1846dba9cbd4))
 * **docs:** Fix MkDocs build errors in strict mode ([dd32cf6](https://github.com/inneropen/marvin-sdk/commit/dd32cf6229c981cb30b11508b9bff75530cac939)), closes [#assets--images](https://github.com/inneropen/marvin-sdk/issues/assets--images) [#assets-images](https://github.com/inneropen/marvin-sdk/issues/assets-images) [#metadata--seo](https://github.com/inneropen/marvin-sdk/issues/metadata--seo) [#metadata-seo](https://github.com/inneropen/marvin-sdk/issues/metadata-seo)
 * Guard all process.env access for browser compatibility ([c0b3d47](https://github.com/inneropen/marvin-sdk/commit/c0b3d47bf103e95e1ec1aee25cc1e4c0517bb113))
 * Guard process.env access in config and platform client for browser compatibility ([9a64c47](https://github.com/inneropen/marvin-sdk/commit/9a64c4706b4520c4caf312381570c74914f2d938))
+* Replace all hand-written publishing types with generated schema aliases ([8487e2a](https://github.com/inneropen/marvin-sdk/commit/8487e2a6f1c65e02ef8896c0130b3b4b73a56cdc))
+* Rewrite all drifted types to match generated OpenAPI schema ([8d73839](https://github.com/inneropen/marvin-sdk/commit/8d73839d33ef9b4a4212d24af21a2ea35c633472))
 * Use PUBLISHING_TOKEN parameter name ([f0a505e](https://github.com/inneropen/marvin-sdk/commit/f0a505eaa80cfeaec440a187c99b505a794ea4f4))
 
 

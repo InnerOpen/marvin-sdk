@@ -5,51 +5,17 @@
  */
 
 import type { HttpClient } from '../core';
+import type { components } from '../generated/schema';
 
-export interface Workspace {
-  id: string;
-  slug: string;
-  name: string;
-  description?: string | null;
-}
-
-export interface WorkspaceWithMembership {
-  workspace: Workspace;
-  role: string;
-  isActive: boolean;
-}
+export type Workspace = components['schemas']['GroupRead'];
+export type WorkspaceCreate = components['schemas']['GroupCreate'];
+export type WorkspaceUpdate = components['schemas']['GroupAdminUpdate'];
+export type WorkspacePreferences = components['schemas']['GroupPreferencesRead'];
+export type WorkspacePreferencesUpdate = components['schemas']['GroupPreferencesUpdate'];
+export type WorkspaceWithMembership = components['schemas']['WorkspaceWithMembership'];
 
 export interface WorkspaceActivationRequest {
   workspace: string;
-}
-
-export interface WorkspaceCreate {
-  name: string;
-  slug?: string;
-  description?: string | null;
-}
-
-export interface WorkspaceUpdate {
-  name?: string;
-  description?: string | null;
-}
-
-/**
- * Workspace preferences - dynamic key-value store
- * Common keys include: theme, locale, notifications, etc.
- */
-export interface WorkspacePreferences {
-  theme?: string;
-  locale?: string;
-  notifications?: boolean;
-  [key: string]: unknown; // Allow additional dynamic preferences
-}
-
-export interface WorkspacePreferencesUpdate {
-  theme?: string;
-  locale?: string;
-  notifications?: boolean;
-  [key: string]: unknown; // Allow additional dynamic preferences
 }
 
 export class WorkspacesModule {

@@ -13,14 +13,7 @@ export type WebhookCreate = components['schemas']['WebhookCreate'];
 export type WebhookPagination = components['schemas']['WebhookPagination'];
 export type WebhookMethod = components['schemas']['WebhookMethod'];
 
-export interface WebhookUpdate {
-  name?: string;
-  url?: string;
-  enabled?: boolean;
-  eventTypes?: string[];
-  method?: WebhookMethod;
-  headers?: Record<string, string>;
-}
+export type WebhookUpdate = components['schemas']['WebhookCreate'];
 
 export class WebhooksModule {
   constructor(private http: HttpClient) {}

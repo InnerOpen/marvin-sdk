@@ -4,32 +4,10 @@
 
 import type { HttpClient } from '../core';
 import type { PlatformEntryType } from './types';
+import type { components } from '../generated/schema';
 
-export interface EntryTypeCreate {
-  name: string;
-  slug?: string;
-  description?: string;
-  icon?: string;
-  color?: string;
-  sortOrder?: number;
-  isRendered?: boolean;
-  schemaJson?: Record<string, unknown>;
-  renderingJson?: Record<string, unknown>;
-  capabilitiesJson?: Record<string, unknown>;
-}
-
-export interface EntryTypeUpdate {
-  name?: string;
-  slug?: string;
-  description?: string;
-  icon?: string;
-  color?: string;
-  sortOrder?: number;
-  isRendered?: boolean;
-  schemaJson?: Record<string, unknown>;
-  renderingJson?: Record<string, unknown>;
-  capabilitiesJson?: Record<string, unknown>;
-}
+export type EntryTypeCreate = components['schemas']['EntryTypeCreate'];
+export type EntryTypeUpdate = components['schemas']['EntryTypeUpdate'];
 
 export class EntryTypesModule {
   constructor(private http: HttpClient) {}

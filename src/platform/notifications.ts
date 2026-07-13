@@ -5,31 +5,11 @@
  */
 
 import type { HttpClient } from '../core';
+import type { components } from '../generated/schema';
 
-export interface Notification {
-  id: string;
-  name: string;
-  enabled: boolean;
-  eventType: string;
-  url?: string;
-  config?: Record<string, any>;
-}
-
-export interface NotificationCreate {
-  name: string;
-  eventType: string;
-  url?: string;
-  enabled?: boolean;
-  config?: Record<string, any>;
-}
-
-export interface NotificationUpdate {
-  name?: string;
-  eventType?: string;
-  url?: string;
-  enabled?: boolean;
-  config?: Record<string, any>;
-}
+export type Notification = components['schemas']['GroupEventNotifierRead'];
+export type NotificationCreate = components['schemas']['GroupEventNotifierCreate'];
+export type NotificationUpdate = components['schemas']['GroupEventNotifierUpdate'];
 
 export class NotificationsModule {
   constructor(private http: HttpClient) {}

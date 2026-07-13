@@ -3,7 +3,7 @@
  */
 
 import type { MarvinHttpClient } from '../client/http';
-import type { MarvinEntry } from '../types';
+import type { MarvinEntry, MarvinEntryListItem } from '../types';
 import { Entry } from './entry';
 import { MarvinNotFoundError } from '../core/errors';
 
@@ -24,19 +24,17 @@ export class EntriesModule {
   /**
    * Get all published entries
    */
-  async list(options: GetEntriesOptions = {}): Promise<MarvinEntry[]> {
+  async list(options: GetEntriesOptions = {}): Promise<MarvinEntryListItem[]> {
     const queryString = this.http.buildQueryString({
       entry_type: options.entryType,
       collection: options.collection,
       limit: options.limit,
       offset: options.offset,
-      // Don't send status - backend always returns published
     });
 
     const endpoint = `/api/publish/${this.workspaceSlug}/entries${queryString}`;
-    const response = await this.http.fetch<{ data: MarvinEntry[] }>(endpoint);
+    const response = await this.http.fetch<{ data: MarvinEntryListItem[] }>(endpoint);
 
-    // Extract data from paginated response
     return response.data || [];
   }
 
@@ -46,17 +44,13 @@ export class EntriesModule {
    */
   async get(slug: string): Promise<Entry | null> {
     try {
-      // TODO: Implement this endpoint in Marvin backend
-      // Expected: GET /api/publish/{workspaceSlug}/entries/{slug}
       const endpoint = `/api/publish/${this.workspaceSlug}/entries/${slug}`;
       const data = await this.http.fetch<MarvinEntry>(endpoint);
-      return new Entry(data, this.http, this.workspaceSlug);
+      return new Entry(data);
     } catch (error) {
-      // Return null for not found - this is a normal condition
       if (error instanceof MarvinNotFoundError) {
         return null;
       }
-      // Re-throw other errors (auth, network, server)
       throw error;
     }
   }
@@ -64,21 +58,21 @@ export class EntriesModule {
   /**
    * Convenience: Get all pages
    */
-  async pages(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntry[]> {
+  async pages(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntryListItem[]> {
     return this.list({ ...options, entryType: 'page' });
   }
 
   /**
    * Convenience: Get all blog posts
    */
-  async posts(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntry[]> {
+  async posts(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntryListItem[]> {
     return this.list({ ...options, entryType: 'blog' });
   }
 
   /**
    * Convenience: Get all projects
    */
-  async projects(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntry[]> {
+  async projects(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntryListItem[]> {
     return this.list({ ...options, entryType: 'project' });
   }
 }

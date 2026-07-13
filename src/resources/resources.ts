@@ -3,7 +3,7 @@
  */
 
 import type { MarvinHttpClient } from '../client/http';
-import type { MarvinResource, MarvinEntry } from '../types';
+import type { MarvinResource } from '../types';
 import { Resource } from './resource';
 
 export interface GetResourcesOptions {
@@ -31,7 +31,6 @@ export class ResourcesModule {
     const endpoint = `/api/publish/${this.workspaceSlug}/resources${queryString}`;
     const response = await this.http.fetch<{ data: MarvinResource[] }>(endpoint);
 
-    // Extract data from paginated response
     return response.data || [];
   }
 
@@ -39,18 +38,16 @@ export class ResourcesModule {
    * Get a single resource by slug
    */
   async get(slug: string): Promise<Resource> {
-    // TODO: Implement this endpoint in Marvin backend
-    // Expected: GET /api/publish/{workspaceSlug}/resources/{slug}
     const endpoint = `/api/publish/${this.workspaceSlug}/resources/${slug}`;
     const data = await this.http.fetch<MarvinResource>(endpoint);
-    return new Resource(data, this.http, this.workspaceSlug);
+    return new Resource(data);
   }
 
   /**
-   * Get entries that reference this resource
+   * Get entry slugs that reference this resource
    */
-  async entries(slug: string): Promise<MarvinEntry[]> {
+  async entries(slug: string): Promise<string[]> {
     const resource = await this.get(slug);
-    return resource.entries();
+    return resource.entries;
   }
 }

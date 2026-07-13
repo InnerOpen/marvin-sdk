@@ -62,12 +62,4 @@ export class Workspace {
     const endpoint = `/api/publish/${this._slug}`;
     return this.http.fetch<{ slug: string; name: string }>(endpoint);
   }
-
-  /**
-   * Get workspace settings (future)
-   */
-  async settings(): Promise<any> {
-    // TODO: Implement settings endpoint
-    throw new Error('Workspace settings not yet implemented');
-  }
 }

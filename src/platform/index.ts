@@ -71,7 +71,7 @@ export type { Webhook, WebhookCreate, WebhookUpdate, WebhookPagination, WebhookM
 
 // Email Templates
 export { EmailTemplatesClient } from './emailTemplates';
-export type { EmailTemplateSummary, EmailTemplateRead, EmailTemplateCreate, EmailTemplateUpdate, TestEmailRequest, TestEmailResponse } from './emailTemplates';
+export type { EmailTemplateSummary, EmailTemplateRead, EmailTemplateCreate, EmailTemplateUpdate, TestEmailRequest } from './emailTemplates';
 
 // Scheduled Tasks
 export { ScheduledTasksModule } from './scheduledTasks';
