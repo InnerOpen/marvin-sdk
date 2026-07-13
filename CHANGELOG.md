@@ -1,3 +1,54 @@
+# [3.0.0](https://github.com/inneropen/marvin-sdk/compare/v2.0.1...v3.0.0) (2026-07-13)
+
+
+### Bug Fixes
+
+* Address all HIGH priority security vulnerabilities ([a06d34b](https://github.com/inneropen/marvin-sdk/commit/a06d34bd1c422befef705f2ddb7d8888e81f68d7))
+* Address all MEDIUM priority security and quality issues ([655cf80](https://github.com/inneropen/marvin-sdk/commit/655cf8020db3abc492b426bcc21c3a2309e5e090))
+* Disable typedoc plugin in mkdocs.yml ([bb2971f](https://github.com/inneropen/marvin-sdk/commit/bb2971f6cdc1266b62640ee5387a1846dba9cbd4))
+* **docs:** Fix MkDocs build errors in strict mode ([dd32cf6](https://github.com/inneropen/marvin-sdk/commit/dd32cf6229c981cb30b11508b9bff75530cac939)), closes [#assets--images](https://github.com/inneropen/marvin-sdk/issues/assets--images) [#assets-images](https://github.com/inneropen/marvin-sdk/issues/assets-images) [#metadata--seo](https://github.com/inneropen/marvin-sdk/issues/metadata--seo) [#metadata-seo](https://github.com/inneropen/marvin-sdk/issues/metadata-seo)
+* Guard all process.env access for browser compatibility ([c0b3d47](https://github.com/inneropen/marvin-sdk/commit/c0b3d47bf103e95e1ec1aee25cc1e4c0517bb113))
+* Guard process.env access in config and platform client for browser compatibility ([9a64c47](https://github.com/inneropen/marvin-sdk/commit/9a64c4706b4520c4caf312381570c74914f2d938))
+* Use PUBLISHING_TOKEN parameter name ([f0a505e](https://github.com/inneropen/marvin-sdk/commit/f0a505eaa80cfeaec440a187c99b505a794ea4f4))
+
+
+### Features
+
+* Add dedicated /publish entry point and MARVIN_USER_TOKEN support ([97cfbdb](https://github.com/inneropen/marvin-sdk/commit/97cfbdb84f417fe0b2ca430b14548963b18970d3))
+* Add entryTypes module to publishing client ([468fab1](https://github.com/inneropen/marvin-sdk/commit/468fab1102632cfb1670176fe8eeb0f2eaf8a6fd))
+* Add SDK security reviewer agent ([0406d78](https://github.com/inneropen/marvin-sdk/commit/0406d78fdc3d1f2323eea2bfc208bbb6fd66277d))
+* Add workspace export method ([dc36087](https://github.com/inneropen/marvin-sdk/commit/dc36087a5e559627c37ce6a6917c8499c5807dfd))
+* Improve debug logging - show response data preview and mask tokens ([70c65bb](https://github.com/inneropen/marvin-sdk/commit/70c65bbea7b7ccf9542277e23611b390b8a441ae))
+* Improve error handling, add typed errors, and collection fallback helper ([8b6c41e](https://github.com/inneropen/marvin-sdk/commit/8b6c41ed451e84a159bb71b96edb45343d8fd7f1))
+* Print full JSON response in debug mode instead of preview ([943bfa9](https://github.com/inneropen/marvin-sdk/commit/943bfa9c00f71fe1baa48ee70b30b291be23d290))
+* Rename entryTypes → renderers in publishing client, add isRendered flag ([b0f5ca2](https://github.com/inneropen/marvin-sdk/commit/b0f5ca2ba6a2c19d9a5bd24142c63f2c304bd67d))
+
+
+### BREAKING CHANGES
+
+* /publish export now points to dedicated publishing API
+
+Changes:
+- Created src/publish.ts as dedicated read-only Publishing API entry point
+- Updated /publish export in package.json to use new entry point
+- Added MARVIN_USER_TOKEN environment variable support for Platform API
+- Made Platform API config optional with environment defaults
+- Created comprehensive AUTHENTICATION.md guide
+- Added authentication examples in examples/authentication-examples.ts
+- Updated README with clear entry point documentation
+
+Entry Points:
+- /publish → Read-only publishing (MARVIN_SITE_CLIENT_TOKEN)
+- /platform → Full CRUD admin (MARVIN_USER_TOKEN or session cookies)
+- Default → Auth API + publishing (backwards compatible)
+
+Migration:
+- Publishing API users: Change import to '@inneropen/marvin-sdk/publish'
+- Platform API users: Can now use createPlatformClient() with no args
+  (reads MARVIN_USER_TOKEN from environment)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+
 # [2.0.0-next.21](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.20...v2.0.0-next.21) (2026-07-12)
 
 
