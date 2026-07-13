@@ -21,30 +21,21 @@ export interface MarvinSite {
 
 export interface MarvinEntryType {
   id: string;
+  groupId: string | null;
   name: string;
   slug: string;
-  icon?: string;
-  color?: string;
-  description?: string;
+  icon?: string | null;
+  color?: string | null;
+  description?: string | null;
   sortOrder: number;
   isSystem: boolean;
-  /**
-   * Schema definition for this entry type (schema-driven content model).
-   * Defines what fields exist, their types, and validation rules.
-   * @since 2.0.0
-   */
-  schemaJson?: Record<string, unknown>;
-  rendering?: {
-    renderer?: string;
-    package?: string;
-    version?: string;
-    config?: Record<string, unknown>;
-  };
-  capabilities?: {
-    publishable?: boolean;
-    submittable?: boolean;
-    routable?: boolean;
-  };
+  isRendered: boolean;
+  schemaJson?: Record<string, unknown> | null;
+  renderingJson?: Record<string, unknown> | null;
+  capabilitiesJson?: Record<string, unknown> | null;
+  createdAt?: string | null;
+  updateAt?: string | null;
+  warnings?: string[] | null;
 }
 
 export interface MarvinAsset {
@@ -122,49 +113,63 @@ export interface MarvinResource {
   updatedAt: string;
 }
 
-export interface MarvinEntry {
-  id: string;
-  title: string;
+export interface PublishedCollectionSummary {
   slug: string;
-  summary?: string;
-  description?: string;
-  /**
-   * Schema-driven content data structured according to entry type's schemaJson.
-   * @since 2.0.0
-   */
-  dataJson?: Record<string, unknown>;
-  /**
-   * @deprecated Use dataJson instead. Will be removed in v3.0.0
-   * @since 1.x
-   */
-  contentMarkdown?: string;
-  /**
-   * Custom non-schema metadata (API keys, external IDs, CMS-specific config).
-   * For content fields, use dataJson instead.
-   */
-  metadata?: Record<string, unknown>;
-  status: string;
-  publishedAt?: string;
-  createdAt: string;
-  updatedAt: string;
+  name: string;
+  metadataJson?: Record<string, unknown> | null;
+  sortOrder: number;
+}
 
+export interface PublishedResourceRead {
+  slug: string;
+  name: string;
+  resourceType: string;
+  description?: string | null;
+  url?: string | null;
+  externalId?: string | null;
+  metadataJson?: Record<string, unknown> | null;
+  role?: string | null;
+  quantity?: string | null;
+  unit?: string | null;
+  position: number;
+}
+
+export interface PublishedAssetRead {
+  slug: string;
+  name: string;
+  mimeType: string;
+  assetType: string;
+  fileSize: number;
+  width?: number | null;
+  height?: number | null;
+  altText?: string | null;
+  description?: string | null;
+  publicUrl: string;
+  metadataJson?: Record<string, unknown> | null;
+}
+
+export interface MarvinEntry {
+  slug: string;
+  title: string;
+  entryType: string;
   entryTypeInfo?: {
     slug: string;
-    renderer?: string;
-    package?: string;
-    version?: string;
-    config?: Record<string, unknown>;
-    publishable?: boolean;
-    submittable?: boolean;
-    routable?: boolean;
-  };
-
-  // Relationships
-  entryTypeId: string;
-  entryType?: MarvinEntryType;
-  collections?: MarvinCollection[];
-  assets?: MarvinAsset[];
-  resources?: MarvinResource[];
+    renderer?: string | null;
+    package?: string | null;
+    version?: string | null;
+    config?: Record<string, unknown> | null;
+    publishable: boolean;
+    submittable: boolean;
+    routable: boolean;
+  } | null;
+  summary?: string | null;
+  data: Record<string, unknown>;
+  publishedAt?: string | null;
+  metadataJson?: Record<string, unknown> | null;
+  collections: PublishedCollectionSummary[];
+  resources: PublishedResourceRead[];
+  assets: PublishedAssetRead[];
+  order?: number | null;
 }
 
 export interface MarvinPublishResponse<T> {
@@ -207,10 +212,10 @@ export interface PublishedEntryType {
     config?: Record<string, unknown>;
   };
   capabilities?: {
-    publishable?: boolean;
-    submittable?: boolean;
-    routable?: boolean;
-  };
+    publishable: boolean;
+    submittable: boolean;
+    routable: boolean;
+  } | null;
 }
 
 export interface GetResourcesOptions {

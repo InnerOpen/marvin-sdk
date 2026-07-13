@@ -3,95 +3,50 @@
  */
 
 import type { MarvinHttpClient } from '../client/http';
-import type { MarvinEntry, MarvinAsset, MarvinCollection } from '../types';
+import type { MarvinEntry, PublishedCollectionSummary, PublishedResourceRead, PublishedAssetRead } from '../types';
 
 export class Entry {
   constructor(
-    private data: MarvinEntry,
+    private raw: MarvinEntry,
     private http: MarvinHttpClient,
     private workspaceSlug: string
   ) {}
 
-  // Expose all entry data as properties
-  get id() { return this.data.id; }
-  get title() { return this.data.title; }
-  get slug() { return this.data.slug; }
-  get summary() { return this.data.summary; }
-  get description() { return this.data.description; }
+  get title() { return this.raw.title; }
+  get slug() { return this.raw.slug; }
+  get summary() { return this.raw.summary; }
+  get entryType() { return this.raw.entryType; }
+  get entryTypeInfo() { return this.raw.entryTypeInfo; }
+  get data() { return this.raw.data; }
+  get metadataJson() { return this.raw.metadataJson; }
+  get publishedAt() { return this.raw.publishedAt; }
+  get order() { return this.raw.order; }
 
-  /**
-   * @deprecated Use field('body') or dataJson instead. Will be removed in v3.0.0
-   */
-  get contentMarkdown() { return this.data.contentMarkdown; }
-
-  /**
-   * Schema-driven content data (replaces contentMarkdown in v2.0.0).
-   * Access specific fields using the field() helper method.
-   * @since 2.0.0
-   */
-  get dataJson() { return this.data.dataJson; }
-
-  get metadata() { return this.data.metadata; }
-  get status() { return this.data.status; }
-  get publishedAt() { return this.data.publishedAt; }
-  get createdAt() { return this.data.createdAt; }
-  get updatedAt() { return this.data.updatedAt; }
-  get entryTypeId() { return this.data.entryTypeId; }
-  get entryType() { return this.data.entryType; }
-
-  /**
-   * Get entry assets
-   */
-  get assets(): MarvinAsset[] {
-    return this.data.assets || [];
+  get assets(): PublishedAssetRead[] {
+    return this.raw.assets;
   }
 
-  /**
-   * Get entry collections
-   */
-  get collections(): MarvinCollection[] {
-    return this.data.collections || [];
+  get collections(): PublishedCollectionSummary[] {
+    return this.raw.collections;
   }
 
-  /**
-   * Get a specific field value from the entry's schema-driven content (dataJson).
-   *
-   * @param key - Field key as defined in the entry type's schema
-   * @returns The field value, or undefined if not present
-   * @since 2.0.0
-   *
-   * @example
-   * ```typescript
-   * const entry = await client.entries.get('my-entry');
-   * const body = entry.field('body');           // Get markdown body
-   * const difficulty = entry.field('difficulty'); // Get difficulty level
-   * const heroImage = entry.field('heroImage');  // Get hero image UUID
-   * ```
-   */
+  get resources(): PublishedResourceRead[] {
+    return this.raw.resources;
+  }
+
   field<T = unknown>(key: string): T | undefined {
-    return this.data.dataJson?.[key] as T | undefined;
+    return this.raw.data[key] as T | undefined;
   }
 
-  /**
-   * Get all fields from the entry's schema-driven content.
-   * @since 2.0.0
-   */
   get fields(): Record<string, unknown> {
-    return this.data.dataJson || {};
+    return this.raw.data;
   }
 
-  /**
-   * Get related entries (future)
-   */
   async relatedEntries(): Promise<MarvinEntry[]> {
-    // TODO: Implement related entries endpoint
     throw new Error('Related entries not yet implemented');
   }
 
-  /**
-   * Get raw entry data
-   */
   toJSON(): MarvinEntry {
-    return this.data;
+    return this.raw;
   }
 }

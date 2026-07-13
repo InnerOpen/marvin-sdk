@@ -12,6 +12,7 @@ export interface EntryTypeCreate {
   icon?: string;
   color?: string;
   sortOrder?: number;
+  isSystem?: boolean;
   isRendered?: boolean;
   schemaJson?: Record<string, unknown>;
   renderingJson?: Record<string, unknown>;
