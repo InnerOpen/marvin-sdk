@@ -1,3 +1,10 @@
+# [2.0.0-next.25](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.24...v2.0.0-next.25) (2026-07-13)
+
+
+### Bug Fixes
+
+* Replace all hand-written publishing types with generated schema aliases ([8487e2a](https://github.com/inneropen/marvin-sdk/commit/8487e2a6f1c65e02ef8896c0130b3b4b73a56cdc))
+
 # [2.0.0-next.24](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.23...v2.0.0-next.24) (2026-07-13)
 
 
