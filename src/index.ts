@@ -52,6 +52,8 @@ export {
 // Types
 export type {
   MarvinSite,
+  SiteConfiguration,
+  WorkspaceInfo,
   MarvinEntry,
   MarvinEntryListItem,
   MarvinEntryType,
