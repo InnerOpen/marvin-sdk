@@ -1,3 +1,17 @@
+# [3.1.0-next.1](https://github.com/inneropen/marvin-sdk/compare/v3.0.0...v3.1.0-next.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* Align hand-written types with generated OpenAPI schema ([0445144](https://github.com/inneropen/marvin-sdk/commit/04451447b64d20d4e31908e43247bfb693cccf67))
+* Replace all hand-written publishing types with generated schema aliases ([8487e2a](https://github.com/inneropen/marvin-sdk/commit/8487e2a6f1c65e02ef8896c0130b3b4b73a56cdc))
+* Rewrite all drifted types to match generated OpenAPI schema ([8d73839](https://github.com/inneropen/marvin-sdk/commit/8d73839d33ef9b4a4212d24af21a2ea35c633472))
+
+
+### Features
+
+* Add rich relationship types and Entry helpers ([36bfad5](https://github.com/inneropen/marvin-sdk/commit/36bfad56cd67f0579cdc169f78b768dcb71299cb))
+
 # [3.0.0](https://github.com/inneropen/marvin-sdk/compare/v2.0.1...v3.0.0) (2026-07-13)
 
 
