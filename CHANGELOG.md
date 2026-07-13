@@ -1,3 +1,10 @@
+# [2.0.0-next.23](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.22...v2.0.0-next.23) (2026-07-13)
+
+
+### Bug Fixes
+
+* Align hand-written types with generated OpenAPI schema ([0445144](https://github.com/inneropen/marvin-sdk/commit/04451447b64d20d4e31908e43247bfb693cccf67))
+
 # [2.0.0-next.22](https://github.com/inneropen/marvin-sdk/compare/v2.0.0-next.21...v2.0.0-next.22) (2026-07-13)
 
 
