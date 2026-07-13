@@ -104,14 +104,21 @@ export function validateConfig(config: Partial<MarvinConfig>): void {
   }
 }
 
+function getEnv(key: string): string | undefined {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key];
+  }
+  return undefined;
+}
+
 export function createConfigFromEnv(overrides?: Partial<MarvinConfig>): MarvinConfig {
   return {
-    apiUrl: overrides?.apiUrl || process.env.MARVIN_API_URL || '',
-    siteClientToken: overrides?.siteClientToken || process.env.MARVIN_SITE_CLIENT_TOKEN || '',
-    workspaceSlug: overrides?.workspaceSlug || process.env.MARVIN_WORKSPACE_SLUG || '',
+    apiUrl: overrides?.apiUrl || getEnv('MARVIN_API_URL') || '',
+    siteClientToken: overrides?.siteClientToken || getEnv('MARVIN_SITE_CLIENT_TOKEN') || '',
+    workspaceSlug: overrides?.workspaceSlug || getEnv('MARVIN_WORKSPACE_SLUG') || '',
     autoInitialize: overrides?.autoInitialize ?? false,
     cacheDuration: overrides?.cacheDuration ?? 5 * 60 * 1000, // 5 minutes
-    debug: overrides?.debug ?? (process.env.MARVIN_DEBUG === 'true'),
+    debug: overrides?.debug ?? (getEnv('MARVIN_DEBUG') === 'true'),
     logger: overrides?.logger ?? console,
   };
 }

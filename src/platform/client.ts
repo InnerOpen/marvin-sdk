@@ -36,10 +36,17 @@ export interface PlatformClientConfig {
 /**
  * Create Platform API config from environment
  */
+function getEnv(key: string): string | undefined {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key];
+  }
+  return undefined;
+}
+
 export function createPlatformConfigFromEnv(overrides?: Partial<PlatformClientConfig>): PlatformClientConfig {
   return {
-    apiUrl: overrides?.apiUrl || process.env.MARVIN_API_URL || 'http://localhost:8080',
-    userToken: overrides?.userToken || process.env.MARVIN_USER_TOKEN,
+    apiUrl: overrides?.apiUrl || getEnv('MARVIN_API_URL') || 'http://localhost:8080',
+    userToken: overrides?.userToken || getEnv('MARVIN_USER_TOKEN'),
     credentials: overrides?.credentials || 'include',
   };
 }
