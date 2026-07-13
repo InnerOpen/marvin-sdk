@@ -24,10 +24,11 @@ export type PublishedCollectionSummary = components['schemas']['PublishedCollect
 // Assets
 export type MarvinAsset = components['schemas']['PublishedAssetRead'];
 export type PublishedAssetRead = components['schemas']['PublishedAssetRead'];
+export type PublishedEntryAsset = components['schemas']['PublishedEntryAsset'];
 
 // Resources
 export type MarvinResource = components['schemas']['PublishedResourceSummary'];
-export type PublishedResourceRead = components['schemas']['PublishedResourceRead'];
+export type PublishedEntryResource = components['schemas']['PublishedEntryResource'];
 
 // Entry Types (admin — kept for backwards compat export)
 export type MarvinEntryType = components['schemas']['EntryTypeRead'];
