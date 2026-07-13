@@ -5673,6 +5673,50 @@ export interface components {
          */
         PlatformRole: "NONE" | "SUPER_ADMIN";
         /**
+         * PublishedEntryAsset
+         * @description An asset as used by a specific entry — relationship context + asset data.
+         */
+        PublishedEntryAsset: {
+            /** Role */
+            role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Focalpoint */
+            focalPoint?: string | null;
+            /** Caption */
+            caption?: string | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            asset: components["schemas"]["PublishedAssetRead"];
+        };
+        /**
+         * PublishedEntryResource
+         * @description A resource as used by a specific entry — relationship context + resource data.
+         */
+        PublishedEntryResource: {
+            /** Role */
+            role?: string | null;
+            /** Quantity */
+            quantity?: string | null;
+            /** Unit */
+            unit?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            resource: components["schemas"]["PublishedResourceSummary"];
+        };
+        /**
          * PublishedAssetRead
          * @description Schema for published assets in the publishing API.
          *
@@ -5818,6 +5862,11 @@ export interface components {
              * @default []
              */
             resourceSlugs: string[];
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            featuredAsset?: components["schemas"]["PublishedAssetRead"] | null;
             /** Order */
             order?: number | null;
         };
@@ -5860,12 +5909,12 @@ export interface components {
              * Resources
              * @default []
              */
-            resources: components["schemas"]["PublishedResourceRead"][];
+            resources: components["schemas"]["PublishedEntryResource"][];
             /**
              * Assets
              * @default []
              */
-            assets: components["schemas"]["PublishedAssetRead"][];
+            assets: components["schemas"]["PublishedEntryAsset"][];
             /** Order */
             order?: number | null;
         };
@@ -5941,41 +5990,6 @@ export interface components {
             metadata?: {
                 [key: string]: unknown;
             } | null;
-        };
-        /**
-         * PublishedResourceRead
-         * @description Schema for published resources in entry context.
-         *
-         *     Combines resource metadata with entry-specific placement info.
-         */
-        PublishedResourceRead: {
-            /** Slug */
-            slug: string;
-            /** Name */
-            name: string;
-            /** Resourcetype */
-            resourceType: string;
-            /** Description */
-            description?: string | null;
-            /** Url */
-            url?: string | null;
-            /** Externalid */
-            externalId?: string | null;
-            /** Metadatajson */
-            metadataJson?: {
-                [key: string]: unknown;
-            } | null;
-            /** Role */
-            role?: string | null;
-            /** Quantity */
-            quantity?: string | null;
-            /** Unit */
-            unit?: string | null;
-            /**
-             * Position
-             * @default 0
-             */
-            position: number;
         };
         /**
          * PublishedResourceSummary
