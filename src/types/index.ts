@@ -72,6 +72,16 @@ export interface CollectionEntry extends Omit<MarvinEntryListItem, 'collections'
 }
 
 /**
+ * A collection membership as it appears on an entry.
+ * - `collection`: the collection's own fields (slug, name, description, metadataJson, sortOrder)
+ * - `entryMetadata`: the entry's relationship to this collection (role, position, metadataJson)
+ */
+export interface EntryCollectionContext {
+  collection: PublishedCollectionSummary;
+  entryMetadata: CollectionEntryMetadata;
+}
+
+/**
  * An asset as it appears on an entry — includes the asset's own fields
  * plus `entryMetadata` for the entry's relationship to this asset.
  */

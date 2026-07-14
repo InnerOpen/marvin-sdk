@@ -63,6 +63,7 @@ export type {
   CollectionEntryMetadata,
   EntryAsset,
   EntryResource,
+  EntryCollectionContext,
   MarvinAsset,
   MarvinResource,
   MarvinPublishResponse,

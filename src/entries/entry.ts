@@ -2,7 +2,7 @@
  * Entry - Rich object representing a single entry
  */
 
-import type { MarvinEntry, PublishedEntryCollection, EntryAsset, EntryResource, CollectionEntryMetadata } from '../types';
+import type { MarvinEntry, EntryCollectionContext, EntryAsset, EntryResource, CollectionEntryMetadata } from '../types';
 
 export class Entry {
   constructor(private raw: MarvinEntry) {}
@@ -24,8 +24,11 @@ export class Entry {
     }));
   }
 
-  get collections(): PublishedEntryCollection[] {
-    return this.raw.collections;
+  get collections(): EntryCollectionContext[] {
+    return (this.raw.collections ?? []).map(({ collection, role, position, metadataJson }) => ({
+      collection,
+      entryMetadata: { role: role ?? null, position, metadataJson: metadataJson ?? null } satisfies CollectionEntryMetadata,
+    }));
   }
 
   get resources(): EntryResource[] {
