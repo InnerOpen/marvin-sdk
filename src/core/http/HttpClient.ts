@@ -246,7 +246,7 @@ export class HttpClient {
     const startTime = Date.now();
 
     if (this.debug) {
-      this.logger.log(`[Marvin] ${method} ${url}`);
+      this.logger.log(`[Marvin SDK] ${method} ${url}`);
     }
 
     try {
@@ -266,7 +266,7 @@ export class HttpClient {
 
       if (this.debug) {
         this.logger.log(
-          `[Marvin] ${response.status} ${response.statusText} (${duration}ms)`
+          `[Marvin SDK] ${response.status} ${response.statusText} (${duration}ms)`
         );
       }
 
@@ -281,7 +281,7 @@ export class HttpClient {
 
         if (this.debug) {
           this.logger.error(
-            `[Marvin] Error response: ${response.status} ${response.statusText}`,
+            `[Marvin SDK] Error response: ${response.status} ${response.statusText}`,
             errorText ? `Body: ${errorText}` : ''
           );
         }
@@ -294,7 +294,7 @@ export class HttpClient {
           const delay = this.calculateRetryDelay(retryAttempt);
           if (this.debug) {
             this.logger.warn(
-              `[Marvin] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (status: ${response.status})`
+              `[Marvin SDK] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (status: ${response.status})`
             );
           }
           await this.sleep(delay);
@@ -370,7 +370,7 @@ export class HttpClient {
           const delay = this.calculateRetryDelay(retryAttempt);
           if (this.debug) {
             this.logger.warn(
-              `[Marvin] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (network error)`
+              `[Marvin SDK] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (network error)`
             );
           }
           await this.sleep(delay);
