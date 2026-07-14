@@ -3880,26 +3880,6 @@ export interface components {
             /** Darkerror */
             darkError: string;
         };
-        /** AssetAttachment */
-        AssetAttachment: {
-            /**
-             * Asset Id
-             * Format: uuid4
-             */
-            asset_id: string;
-            /** Role */
-            role?: string | null;
-            /** Position */
-            position?: number | null;
-            /** Caption */
-            caption?: string | null;
-            /** Focal Point */
-            focal_point?: string | null;
-            /** Metadata */
-            metadata?: {
-                [key: string]: unknown;
-            } | null;
-        };
         /**
          * AssetRead
          * @description Full schema for reading an asset.
@@ -4663,10 +4643,6 @@ export interface components {
         EntryResourceRead: {
             /** Role */
             role?: string | null;
-            /** Quantity */
-            quantity?: string | null;
-            /** Unit */
-            unit?: string | null;
             /**
              * Position
              * @default 0
@@ -5995,28 +5971,6 @@ export interface components {
             meta: components["schemas"]["PaginationMeta"];
         };
         /**
-         * PublishedEntryAsset
-         * @description An asset as used by a specific entry — relationship context + asset data.
-         */
-        PublishedEntryAsset: {
-            /** Role */
-            role?: string | null;
-            /**
-             * Position
-             * @default 0
-             */
-            position: number;
-            /** Focalpoint */
-            focalPoint?: string | null;
-            /** Caption */
-            caption?: string | null;
-            /** Metadatajson */
-            metadataJson?: {
-                [key: string]: unknown;
-            } | null;
-            asset: components["schemas"]["PublishedAssetRead"];
-        };
-        /**
          * PublishedEntryListItem
          * @description Minimal entry schema for list responses.
          *
@@ -6107,28 +6061,6 @@ export interface components {
             assets: components["schemas"]["PublishedEntryAsset"][];
             /** Order */
             order?: number | null;
-        };
-        /**
-         * PublishedEntryResource
-         * @description A resource as used by a specific entry — relationship context + resource data.
-         */
-        PublishedEntryResource: {
-            /** Role */
-            role?: string | null;
-            /** Quantity */
-            quantity?: string | null;
-            /** Unit */
-            unit?: string | null;
-            /**
-             * Position
-             * @default 0
-             */
-            position: number;
-            /** Metadatajson */
-            metadataJson?: {
-                [key: string]: unknown;
-            } | null;
-            resource: components["schemas"]["PublishedResourceSummary"];
         };
         /**
          * PublishedEntryTypeInfo
@@ -6266,26 +6198,6 @@ export interface components {
             password: string;
             /** Passwordconfirm */
             passwordConfirm: string;
-        };
-        /** ResourceAttachment */
-        ResourceAttachment: {
-            /**
-             * Resource Id
-             * Format: uuid4
-             */
-            resource_id: string;
-            /** Role */
-            role?: string | null;
-            /** Quantity */
-            quantity?: string | null;
-            /** Unit */
-            unit?: string | null;
-            /** Position */
-            position?: number | null;
-            /** Metadata */
-            metadata?: {
-                [key: string]: unknown;
-            } | null;
         };
         /**
          * ResourceAttachment
