@@ -37,7 +37,6 @@ export type ResourceAttachment = components['schemas']['ResourceAttachment'];
 
 // Rich read types (admin API)
 export type EntryCollectionRead = components['schemas']['EntryCollectionRead'];
-export type EntryResourceRead = components['schemas']['EntryResourceRead'];
 
 // Entry Types (admin — kept for backwards compat export)
 export type MarvinEntryType = components['schemas']['EntryTypeRead'];
