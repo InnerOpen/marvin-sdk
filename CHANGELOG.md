@@ -1,3 +1,10 @@
+# [3.2.0-next.7](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.6...v3.2.0-next.7) (2026-07-14)
+
+
+### Bug Fixes
+
+* Update debug prefix from [Marvin] to [Marvin SDK] ([51f06c4](https://github.com/inneropen/marvin-sdk/commit/51f06c4267aa4e24b6030f0d7b00d570b74d23c9))
+
 # [3.2.0-next.6](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.5...v3.2.0-next.6) (2026-07-14)
 
 
