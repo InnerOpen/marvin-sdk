@@ -1,3 +1,17 @@
+# [3.2.0-next.10](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.9...v3.2.0-next.10) (2026-07-14)
+
+
+### Bug Fixes
+
+* Include queried collection in collectionSlugs for complete membership list ([4080d12](https://github.com/inneropen/marvin-sdk/commit/4080d12bcae1adea8625916c5d98c6fe65a4ae5e))
+
+
+### Features
+
+* CollectionEntry and EntryAsset/Resource with consistent entryMetadata ([2d852bc](https://github.com/inneropen/marvin-sdk/commit/2d852bcec140e1168927bf802add0dba0eeaae75))
+* Entry.collections uses EntryCollectionContext with entryMetadata ([a91fb3d](https://github.com/inneropen/marvin-sdk/commit/a91fb3d5cab76f5bdf6f49cf30ed01753b563166))
+* ListEntry type — entries.list() collections use entryMetadata convention ([d333cc7](https://github.com/inneropen/marvin-sdk/commit/d333cc7e596c946e64fa3237c03f6ec12da5776e))
+
 # [3.2.0-next.9](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.8...v3.2.0-next.9) (2026-07-14)
 
 
