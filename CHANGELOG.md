@@ -1,3 +1,15 @@
+# [3.2.0-next.2](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.1...v3.2.0-next.2) (2026-07-14)
+
+
+### Bug Fixes
+
+* Remove duplicate schema types after merge conflict resolution ([d6e9071](https://github.com/inneropen/marvin-sdk/commit/d6e9071d86575cc0d290d455a87b3c55e0891d13))
+
+
+### Features
+
+* Rich collection attachments + drop unused junction fields ([e96013c](https://github.com/inneropen/marvin-sdk/commit/e96013c1be957ca962631c299cd0d87461af5b96))
+
 # [3.2.0-next.1](https://github.com/inneropen/marvin-sdk/compare/v3.1.0...v3.2.0-next.1) (2026-07-14)
 
 
