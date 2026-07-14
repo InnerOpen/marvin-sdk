@@ -1,3 +1,10 @@
+# [3.2.0-next.3](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.2...v3.2.0-next.3) (2026-07-14)
+
+
+### Bug Fixes
+
+* Update generated schema for metadata_json rename and EntryCollectionRead ([520e142](https://github.com/inneropen/marvin-sdk/commit/520e1429a72b6a2b1ff10607f0f68ba3c7aeaeec))
+
 # [3.2.0-next.2](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.1...v3.2.0-next.2) (2026-07-14)
 
 
