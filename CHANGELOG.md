@@ -1,3 +1,10 @@
+# [3.2.0-next.4](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.3...v3.2.0-next.4) (2026-07-14)
+
+
+### Features
+
+* Add updateEntryJunction method to CollectionsModule ([26e41f8](https://github.com/inneropen/marvin-sdk/commit/26e41f8573c5363fb3bb442304ef6219f936dbae))
+
 # [3.2.0-next.3](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.2...v3.2.0-next.3) (2026-07-14)
 
 
