@@ -20,6 +20,7 @@ export type PublishedEntryType = components['schemas']['PublishedEntryTypeRead']
 // Collections
 export type MarvinCollection = components['schemas']['PublishedCollectionRead'];
 export type PublishedCollectionSummary = components['schemas']['PublishedCollectionSummary'];
+export type PublishedEntryCollection = components['schemas']['PublishedEntryCollection'];
 
 // Assets
 export type MarvinAsset = components['schemas']['PublishedAssetRead'];

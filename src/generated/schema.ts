@@ -2442,6 +2442,26 @@ export interface paths {
         patch: operations["reorder_collection_entries_api_platform_collections__item_id__entries_order_patch"];
         trace?: never;
     };
+    "/api/platform/collections/{item_id}/entries/{entry_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update Entry-Collection Junction
+         * @description Update role and metadata_json on a specific entry-collection junction record.
+         */
+        patch: operations["update_entry_junction_api_platform_collections__item_id__entries__entry_id__patch"];
+        trace?: never;
+    };
     "/api/platform/api-clients": {
         parameters: {
             query?: never;
@@ -3880,6 +3900,22 @@ export interface components {
             /** Darkerror */
             darkError: string;
         };
+        /** AssetAttachment */
+        AssetAttachment: {
+            /**
+             * Asset Id
+             * Format: uuid4
+             */
+            asset_id: string;
+            /** Role */
+            role?: string | null;
+            /** Position */
+            position?: number | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
         /**
          * AssetRead
          * @description Full schema for reading an asset.
@@ -3950,8 +3986,8 @@ export interface components {
             alt_text?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadatajson */
-            metadataJson?: {
+            /** Metadata */
+            metadata?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -4032,29 +4068,7 @@ export interface components {
             /** Isuptodate */
             isUpToDate: boolean;
         };
-        /**
-         * AssetAttachment
-         * @description Structured asset attachment with placement data.
-         */
-        AssetAttachment: {
-            /**
-             * Asset Id
-             * Format: uuid4
-             */
-            asset_id: string;
-            /** Role */
-            role?: string | null;
-            /** Position */
-            position?: number | null;
-            /** Metadata */
-            metadata?: {
-                [key: string]: unknown;
-            } | null;
-        };
-        /**
-         * CollectionAttachment
-         * @description Structured collection attachment with placement data.
-         */
+        /** CollectionAttachment */
         CollectionAttachment: {
             /**
              * Collection Id
@@ -4390,36 +4404,6 @@ export interface components {
             email: string;
         };
         /**
-         * EntryCollectionRead
-         * @description Collection summary plus entry-specific placement details.
-         */
-        EntryCollectionRead: {
-            /**
-             * Id
-             * Format: uuid4
-             */
-            id: string;
-            /** Name */
-            name: string;
-            /** Slug */
-            slug: string;
-            /** Icon */
-            icon?: string | null;
-            /** Color */
-            color?: string | null;
-            /** Role */
-            role?: string | null;
-            /** Placementmetadata */
-            placementMetadata?: {
-                [key: string]: unknown;
-            } | null;
-            /**
-             * Sortorder
-             * @default 0
-             */
-            sortOrder: number;
-        };
-        /**
          * EntryAssetRead
          * @description Asset metadata plus entry-specific placement details.
          */
@@ -4488,6 +4472,36 @@ export interface components {
             uploadedBy: string;
         };
         /**
+         * EntryCollectionRead
+         * @description Collection summary with entry-specific placement details.
+         */
+        EntryCollectionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Icon */
+            icon?: string | null;
+            /** Color */
+            color?: string | null;
+            /** Role */
+            role?: string | null;
+            /** Placementmetadata */
+            placementMetadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Sortorder
+             * @default 0
+             */
+            sortOrder: number;
+        };
+        /**
          * EntryCreate
          * @description Schema for creating an entry.
          *
@@ -4535,12 +4549,12 @@ export interface components {
             } | null;
             /** Collectionids */
             collectionIds?: string[] | null;
+            /** Collectionattachments */
+            collectionAttachments?: components["schemas"]["CollectionAttachment"][] | null;
             /** Assetids */
             assetIds?: string[] | null;
             /** Resourceids */
             resourceIds?: string[] | null;
-            /** Collectionattachments */
-            collectionAttachments?: components["schemas"]["CollectionAttachment"][] | null;
             /** Assetattachments */
             assetAttachments?: components["schemas"]["AssetAttachment"][] | null;
             /** Resourceattachments */
@@ -4637,34 +4651,38 @@ export interface components {
             order?: number | null;
         };
         /**
-         * EntryCollectionRead
-         * @description Collection summary with entry-specific placement details.
+         * EntryResourceRead
+         * @description Resource metadata plus entry-specific placement details.
          */
-        EntryCollectionRead: {
-            /**
-             * Id
-             * Format: uuid4
-             */
-            id: string;
-            /** Name */
-            name: string;
-            /** Slug */
-            slug: string;
-            /** Icon */
-            icon?: string | null;
-            /** Color */
-            color?: string | null;
+        EntryResourceRead: {
             /** Role */
             role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
             /** Placementmetadata */
             placementMetadata?: {
                 [key: string]: unknown;
             } | null;
             /**
-             * Sortorder
-             * @default 0
+             * Id
+             * Format: uuid4
              */
-            sortOrder: number;
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Resourcetype */
+            resourceType: string;
+            /** Description */
+            description?: string | null;
+            /** Url */
+            url?: string | null;
+            /** Externalid */
+            externalId?: string | null;
         };
         /**
          * EntryTypeCapabilities
@@ -4902,12 +4920,12 @@ export interface components {
             } | null;
             /** Collection Ids */
             collection_ids?: string[] | null;
+            /** Collection Attachments */
+            collection_attachments?: components["schemas"]["CollectionAttachment"][] | null;
             /** Asset Ids */
             asset_ids?: string[] | null;
             /** Resource Ids */
             resource_ids?: string[] | null;
-            /** Collection Attachments */
-            collection_attachments?: components["schemas"]["CollectionAttachment"][] | null;
             /** Asset Attachments */
             asset_attachments?: components["schemas"]["AssetAttachment"][] | null;
             /** Resource Attachments */
@@ -5821,42 +5839,6 @@ export interface components {
          */
         PlatformRole: "NONE" | "SUPER_ADMIN";
         /**
-         * PublishedEntryAsset
-         * @description An asset as used by a specific entry — relationship context + asset data.
-         */
-        PublishedEntryAsset: {
-            /** Role */
-            role?: string | null;
-            /**
-             * Position
-             * @default 0
-             */
-            position: number;
-            /** Metadatajson */
-            metadataJson?: {
-                [key: string]: unknown;
-            } | null;
-            asset: components["schemas"]["PublishedAssetRead"];
-        };
-        /**
-         * PublishedEntryResource
-         * @description A resource as used by a specific entry — relationship context + resource data.
-         */
-        PublishedEntryResource: {
-            /** Role */
-            role?: string | null;
-            /**
-             * Position
-             * @default 0
-             */
-            position: number;
-            /** Metadatajson */
-            metadataJson?: {
-                [key: string]: unknown;
-            } | null;
-            resource: components["schemas"]["PublishedResourceSummary"];
-        };
-        /**
          * PublishedAssetRead
          * @description Schema for published assets in the publishing API.
          *
@@ -5941,6 +5923,8 @@ export interface components {
             slug: string;
             /** Name */
             name: string;
+            /** Description */
+            description?: string | null;
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
@@ -5967,6 +5951,42 @@ export interface components {
             meta: components["schemas"]["PaginationMeta"];
         };
         /**
+         * PublishedEntryAsset
+         * @description An asset as used by a specific entry — relationship context + asset data.
+         */
+        PublishedEntryAsset: {
+            /** Role */
+            role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            asset: components["schemas"]["PublishedAssetRead"];
+        };
+        /**
+         * PublishedEntryCollection
+         * @description A collection as used by a specific entry — relationship context + collection data.
+         */
+        PublishedEntryCollection: {
+            /** Role */
+            role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            collection: components["schemas"]["PublishedCollectionSummary"];
+        };
+        /**
          * PublishedEntryListItem
          * @description Minimal entry schema for list responses.
          *
@@ -5991,7 +6011,7 @@ export interface components {
              * Collections
              * @default []
              */
-            collections: string[];
+            collections: components["schemas"]["PublishedEntryCollection"][];
             /**
              * Assetslugs
              * @default []
@@ -6044,7 +6064,7 @@ export interface components {
              * Collections
              * @default []
              */
-            collections: components["schemas"]["PublishedCollectionSummary"][];
+            collections: components["schemas"]["PublishedEntryCollection"][];
             /**
              * Resources
              * @default []
@@ -6057,6 +6077,24 @@ export interface components {
             assets: components["schemas"]["PublishedEntryAsset"][];
             /** Order */
             order?: number | null;
+        };
+        /**
+         * PublishedEntryResource
+         * @description A resource as used by a specific entry — relationship context + resource data.
+         */
+        PublishedEntryResource: {
+            /** Role */
+            role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            resource: components["schemas"]["PublishedResourceSummary"];
         };
         /**
          * PublishedEntryTypeInfo
@@ -6195,10 +6233,7 @@ export interface components {
             /** Passwordconfirm */
             passwordConfirm: string;
         };
-        /**
-         * ResourceAttachment
-         * @description Structured resource attachment with placement data.
-         */
+        /** ResourceAttachment */
         ResourceAttachment: {
             /**
              * Resource Id
@@ -6231,8 +6266,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadatajson */
-            metadataJson?: {
+            /** Metadata */
+            metadata?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -6285,8 +6320,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadatajson */
-            metadataJson?: {
+            /** Metadata */
+            metadata?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -6558,6 +6593,18 @@ export interface components {
              * @default 0
              */
             unlocked: number;
+        };
+        /**
+         * UpdateEntryCollectionRequest
+         * @description Schema for updating junction fields on an entry-collection relationship.
+         */
+        UpdateEntryCollectionRequest: {
+            /** Role */
+            role?: string | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * UserCreate
@@ -10332,6 +10379,44 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["ReorderEntriesRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_entry_junction_api_platform_collections__item_id__entries__entry_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateEntryCollectionRequest"];
             };
         };
         responses: {
