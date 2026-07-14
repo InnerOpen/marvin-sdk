@@ -1,3 +1,10 @@
+# [3.2.0-next.1](https://github.com/inneropen/marvin-sdk/compare/v3.1.0...v3.2.0-next.1) (2026-07-14)
+
+
+### Features
+
+* Rich relationship editing for entry assets & resources ([ba4b7a6](https://github.com/inneropen/marvin-sdk/commit/ba4b7a693b54ff168acec2b5683e46465a1a47e1))
+
 # [3.1.0](https://github.com/inneropen/marvin-sdk/compare/v3.0.1...v3.1.0) (2026-07-13)
 
 
