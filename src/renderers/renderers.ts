@@ -9,6 +9,7 @@ export class RenderersModule {
 
   async list(): Promise<PublishedEntryType[]> {
     const endpoint = `/api/publish/${this.workspaceSlug}/entry-types`;
-    return this.http.fetch<PublishedEntryType[]>(endpoint);
+    const all = await this.http.fetch<PublishedEntryType[]>(endpoint);
+    return all.filter((et) => et.isRendered);
   }
 }
