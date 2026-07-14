@@ -82,6 +82,15 @@ export interface EntryCollectionContext {
 }
 
 /**
+ * An entry as returned from the general entries list.
+ * Same as MarvinEntryListItem but with collections transformed to EntryCollectionContext[]
+ * so the entryMetadata naming convention is consistent across all entry contexts.
+ */
+export interface ListEntry extends Omit<MarvinEntryListItem, 'collections'> {
+  collections: EntryCollectionContext[];
+}
+
+/**
  * An asset as it appears on an entry — includes the asset's own fields
  * plus `entryMetadata` for the entry's relationship to this asset.
  */

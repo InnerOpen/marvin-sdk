@@ -64,6 +64,7 @@ export type {
   EntryAsset,
   EntryResource,
   EntryCollectionContext,
+  ListEntry,
   MarvinAsset,
   MarvinResource,
   MarvinPublishResponse,

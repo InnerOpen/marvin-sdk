@@ -11,6 +11,7 @@ import type {
   MarvinSite,
   MarvinEntry,
   MarvinEntryListItem,
+  ListEntry,
   MarvinAsset,
   MarvinResource,
   PublishedCollectionSummary,
@@ -185,7 +186,7 @@ export class MarvinClient {
   /**
    * @deprecated Use workspace.entries.list() instead
    */
-  async getEntries(options?: GetEntriesOptions): Promise<MarvinEntryListItem[]> {
+  async getEntries(options?: GetEntriesOptions): Promise<ListEntry[]> {
     return this.workspace.entries.list(options);
   }
 

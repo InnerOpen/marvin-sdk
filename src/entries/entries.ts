@@ -3,7 +3,7 @@
  */
 
 import type { MarvinHttpClient } from '../client/http';
-import type { MarvinEntry, MarvinEntryListItem } from '../types';
+import type { MarvinEntry, MarvinEntryListItem, ListEntry, CollectionEntryMetadata } from '../types';
 import { Entry } from './entry';
 import { MarvinNotFoundError } from '../core/errors';
 
@@ -15,6 +15,17 @@ export interface GetEntriesOptions {
   status?: string;
 }
 
+function toListEntry(raw: MarvinEntryListItem): ListEntry {
+  const { collections, ...rest } = raw;
+  return {
+    ...rest,
+    collections: (collections ?? []).map(({ collection, role, position, metadataJson }) => ({
+      collection,
+      entryMetadata: { role: role ?? null, position, metadataJson: metadataJson ?? null } satisfies CollectionEntryMetadata,
+    })),
+  };
+}
+
 export class EntriesModule {
   constructor(
     private http: MarvinHttpClient,
@@ -24,7 +35,7 @@ export class EntriesModule {
   /**
    * Get all published entries
    */
-  async list(options: GetEntriesOptions = {}): Promise<MarvinEntryListItem[]> {
+  async list(options: GetEntriesOptions = {}): Promise<ListEntry[]> {
     const queryString = this.http.buildQueryString({
       entry_type: options.entryType,
       collection: options.collection,
@@ -35,7 +46,7 @@ export class EntriesModule {
     const endpoint = `/api/publish/${this.workspaceSlug}/entries${queryString}`;
     const response = await this.http.fetch<{ data: MarvinEntryListItem[] }>(endpoint);
 
-    return response.data || [];
+    return (response.data || []).map(toListEntry);
   }
 
   /**
@@ -58,21 +69,21 @@ export class EntriesModule {
   /**
    * Convenience: Get all pages
    */
-  async pages(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntryListItem[]> {
+  async pages(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<ListEntry[]> {
     return this.list({ ...options, entryType: 'page' });
   }
 
   /**
    * Convenience: Get all blog posts
    */
-  async posts(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntryListItem[]> {
+  async posts(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<ListEntry[]> {
     return this.list({ ...options, entryType: 'blog' });
   }
 
   /**
    * Convenience: Get all projects
    */
-  async projects(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<MarvinEntryListItem[]> {
+  async projects(options?: Omit<GetEntriesOptions, 'entryType'>): Promise<ListEntry[]> {
     return this.list({ ...options, entryType: 'project' });
   }
 }
