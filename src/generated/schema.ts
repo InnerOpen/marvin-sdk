@@ -57,6 +57,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/app/about/login-info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Login Page Configuration
+         * @description Public endpoint returning OIDC/signup settings for the login page.
+         */
+        get: operations["get_login_info_api_app_about_login_info_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/app/about/clear-cache": {
         parameters: {
             query?: never;
@@ -3907,8 +3927,8 @@ export interface components {
             publicUrl?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata_?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -3930,8 +3950,8 @@ export interface components {
             alt_text?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -4406,8 +4426,6 @@ export interface components {
         EntryAssetRead: {
             /** Role */
             role?: string | null;
-            /** Usage */
-            usage?: string | null;
             /**
              * Position
              * @default 0
@@ -4459,8 +4477,8 @@ export interface components {
             publicUrl?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata_?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -4604,7 +4622,7 @@ export interface components {
              * Resources
              * @default []
              */
-            resources: components["schemas"]["ResourceSummary"][];
+            resources: components["schemas"]["EntryResourceRead"][];
             /**
              * Assets
              * @default []
@@ -4617,6 +4635,40 @@ export interface components {
             collections: components["schemas"]["EntryCollectionRead"][];
             /** Order */
             order?: number | null;
+        };
+        /**
+         * EntryResourceRead
+         * @description Resource metadata plus entry-specific placement details.
+         */
+        EntryResourceRead: {
+            /** Role */
+            role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Placementmetadata */
+            placementMetadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Resourcetype */
+            resourceType: string;
+            /** Description */
+            description?: string | null;
+            /** Url */
+            url?: string | null;
+            /** Externalid */
+            externalId?: string | null;
         };
         /**
          * EntryTypeCapabilities
@@ -5569,6 +5621,32 @@ export interface components {
             createdAt?: string | null;
         };
         /**
+         * LoginInfo
+         * @description Public login page configuration — no auth required.
+         */
+        LoginInfo: {
+            /**
+             * Oidcenabled
+             * @default false
+             */
+            oidcEnabled: boolean;
+            /**
+             * Oidcprovidername
+             * @default OAuth
+             */
+            oidcProviderName: string;
+            /**
+             * Oidcautoredirect
+             * @default false
+             */
+            oidcAutoRedirect: boolean;
+            /**
+             * Allowsignup
+             * @default false
+             */
+            allowSignup: boolean;
+        };
+        /**
          * LongLiveTokenCreate
          * @description Schema for creating a new long-lived API token (Personal Access Token).
          */
@@ -6157,8 +6235,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -6184,8 +6262,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -6193,29 +6271,6 @@ export interface components {
              * Format: uuid4
              */
             createdBy: string;
-        };
-        /**
-         * ResourceSummary
-         * @description Summary schema for a resource.
-         */
-        ResourceSummary: {
-            /**
-             * Id
-             * Format: uuid4
-             */
-            id: string;
-            /** Slug */
-            slug: string;
-            /** Name */
-            name: string;
-            /** Resourcetype */
-            resourceType: string;
-            /** Description */
-            description?: string | null;
-            /** Url */
-            url?: string | null;
-            /** Externalid */
-            externalId?: string | null;
         };
         /**
          * ResourceUpdate
@@ -6234,8 +6289,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -7090,6 +7145,26 @@ export interface operations {
             };
         };
     };
+    get_login_info_api_app_about_login_info_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginInfo"];
+                };
+            };
+        };
+    };
     clear_settings_cache_api_app_about_clear_cache_post: {
         parameters: {
             query?: never;
@@ -7222,9 +7297,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "application/json": unknown;
                 };
             };
         };

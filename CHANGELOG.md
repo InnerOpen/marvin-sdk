@@ -1,3 +1,36 @@
+# [3.2.0-next.4](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.3...v3.2.0-next.4) (2026-07-14)
+
+
+### Features
+
+* Add updateEntryJunction method to CollectionsModule ([26e41f8](https://github.com/inneropen/marvin-sdk/commit/26e41f8573c5363fb3bb442304ef6219f936dbae))
+
+# [3.2.0-next.3](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.2...v3.2.0-next.3) (2026-07-14)
+
+
+### Bug Fixes
+
+* Update generated schema for metadata_json rename and EntryCollectionRead ([520e142](https://github.com/inneropen/marvin-sdk/commit/520e1429a72b6a2b1ff10607f0f68ba3c7aeaeec))
+
+# [3.2.0-next.2](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.1...v3.2.0-next.2) (2026-07-14)
+
+
+### Bug Fixes
+
+* Remove duplicate schema types after merge conflict resolution ([d6e9071](https://github.com/inneropen/marvin-sdk/commit/d6e9071d86575cc0d290d455a87b3c55e0891d13))
+
+
+### Features
+
+* Rich collection attachments + drop unused junction fields ([e96013c](https://github.com/inneropen/marvin-sdk/commit/e96013c1be957ca962631c299cd0d87461af5b96))
+
+# [3.2.0-next.1](https://github.com/inneropen/marvin-sdk/compare/v3.1.0...v3.2.0-next.1) (2026-07-14)
+
+
+### Features
+
+* Rich relationship editing for entry assets & resources ([ba4b7a6](https://github.com/inneropen/marvin-sdk/commit/ba4b7a693b54ff168acec2b5683e46465a1a47e1))
+
 # [3.1.0](https://github.com/inneropen/marvin-sdk/compare/v3.0.1...v3.1.0) (2026-07-13)
 
 
