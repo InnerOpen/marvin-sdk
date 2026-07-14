@@ -1,3 +1,10 @@
+# [3.2.0-next.5](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.4...v3.2.0-next.5) (2026-07-14)
+
+
+### Features
+
+* Rich collection attachments + drop unused junction fields ([5cab475](https://github.com/inneropen/marvin-sdk/commit/5cab4753378a9d211209b18a2b489fab8fde292a))
+
 # [3.2.0-next.4](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.3...v3.2.0-next.4) (2026-07-14)
 
 
