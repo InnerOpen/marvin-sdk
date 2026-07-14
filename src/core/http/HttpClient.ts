@@ -344,7 +344,7 @@ export class HttpClient {
       // Log response data in debug mode (sanitized)
       if (this.debug) {
         const sanitized = this.sanitizeForLogging(data);
-        this.logger.log('[Marvin] Response:', JSON.stringify(sanitized, null, 2));
+        this.logger.log('[Marvin SDK] Response:', JSON.stringify(sanitized, null, 2));
       }
 
       return data;
