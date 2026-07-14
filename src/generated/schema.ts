@@ -4053,6 +4053,42 @@ export interface components {
             isUpToDate: boolean;
         };
         /**
+         * AssetAttachment
+         * @description Structured asset attachment with placement data.
+         */
+        AssetAttachment: {
+            /**
+             * Asset Id
+             * Format: uuid4
+             */
+            asset_id: string;
+            /** Role */
+            role?: string | null;
+            /** Position */
+            position?: number | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * CollectionAttachment
+         * @description Structured collection attachment with placement data.
+         */
+        CollectionAttachment: {
+            /**
+             * Collection Id
+             * Format: uuid4
+             */
+            collection_id: string;
+            /** Role */
+            role?: string | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
          * CollectionCreate
          * @description Schema for creating a new collection.
          */
@@ -4374,6 +4410,36 @@ export interface components {
             email: string;
         };
         /**
+         * EntryCollectionRead
+         * @description Collection summary plus entry-specific placement details.
+         */
+        EntryCollectionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Icon */
+            icon?: string | null;
+            /** Color */
+            color?: string | null;
+            /** Role */
+            role?: string | null;
+            /** Placementmetadata */
+            placementMetadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Sortorder
+             * @default 0
+             */
+            sortOrder: number;
+        };
+        /**
          * EntryAssetRead
          * @description Asset metadata plus entry-specific placement details.
          */
@@ -4385,10 +4451,6 @@ export interface components {
              * @default 0
              */
             position: number;
-            /** Focalpoint */
-            focalPoint?: string | null;
-            /** Caption */
-            caption?: string | null;
             /** Placementmetadata */
             placementMetadata?: {
                 [key: string]: unknown;
@@ -4497,6 +4559,8 @@ export interface components {
             assetIds?: string[] | null;
             /** Resourceids */
             resourceIds?: string[] | null;
+            /** Collectionattachments */
+            collectionAttachments?: components["schemas"]["CollectionAttachment"][] | null;
             /** Assetattachments */
             assetAttachments?: components["schemas"]["AssetAttachment"][] | null;
             /** Resourceattachments */
@@ -4588,7 +4652,7 @@ export interface components {
              * Collections
              * @default []
              */
-            collections: string[];
+            collections: components["schemas"]["EntryCollectionRead"][];
             /** Order */
             order?: number | null;
         };
@@ -4870,6 +4934,8 @@ export interface components {
             asset_ids?: string[] | null;
             /** Resource Ids */
             resource_ids?: string[] | null;
+            /** Collection Attachments */
+            collection_attachments?: components["schemas"]["CollectionAttachment"][] | null;
             /** Asset Attachments */
             asset_attachments?: components["schemas"]["AssetAttachment"][] | null;
             /** Resource Attachments */
@@ -5783,6 +5849,42 @@ export interface components {
          */
         PlatformRole: "NONE" | "SUPER_ADMIN";
         /**
+         * PublishedEntryAsset
+         * @description An asset as used by a specific entry — relationship context + asset data.
+         */
+        PublishedEntryAsset: {
+            /** Role */
+            role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            asset: components["schemas"]["PublishedAssetRead"];
+        };
+        /**
+         * PublishedEntryResource
+         * @description A resource as used by a specific entry — relationship context + resource data.
+         */
+        PublishedEntryResource: {
+            /** Role */
+            role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            resource: components["schemas"]["PublishedResourceSummary"];
+        };
+        /**
          * PublishedAssetRead
          * @description Schema for published assets in the publishing API.
          *
@@ -6178,6 +6280,25 @@ export interface components {
             quantity?: string | null;
             /** Unit */
             unit?: string | null;
+            /** Position */
+            position?: number | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * ResourceAttachment
+         * @description Structured resource attachment with placement data.
+         */
+        ResourceAttachment: {
+            /**
+             * Resource Id
+             * Format: uuid4
+             */
+            resource_id: string;
+            /** Role */
+            role?: string | null;
             /** Position */
             position?: number | null;
             /** Metadata */

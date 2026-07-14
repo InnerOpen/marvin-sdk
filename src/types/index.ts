@@ -32,9 +32,11 @@ export type PublishedEntryResource = components['schemas']['PublishedEntryResour
 
 // Structured attachments (for write API)
 export type AssetAttachment = components['schemas']['AssetAttachment'];
+export type CollectionAttachment = components['schemas']['CollectionAttachment'];
 export type ResourceAttachment = components['schemas']['ResourceAttachment'];
 
 // Rich read types (admin API)
+export type EntryCollectionRead = components['schemas']['EntryCollectionRead'];
 export type EntryResourceRead = components['schemas']['EntryResourceRead'];
 
 // Entry Types (admin — kept for backwards compat export)
