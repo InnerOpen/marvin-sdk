@@ -71,4 +71,20 @@ export class CollectionsModule {
     const validId = this.http.validatePathParam(id, 'collection ID');
     return this.http.patch(`/api/platform/collections/${validId}/entries/order`, { entries });
   }
+
+  /**
+   * Update junction fields (role, metadata) for an entry in a collection
+   */
+  async updateEntryJunction(
+    collectionId: string,
+    entryId: string,
+    data: { role?: string | null; metadataJson?: Record<string, unknown> | null }
+  ): Promise<void> {
+    const validCollectionId = this.http.validatePathParam(collectionId, 'collection ID');
+    const validEntryId = this.http.validatePathParam(entryId, 'entry ID');
+    return this.http.patch(
+      `/api/platform/collections/${validCollectionId}/entries/${validEntryId}`,
+      data
+    );
+  }
 }
