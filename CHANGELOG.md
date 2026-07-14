@@ -1,3 +1,10 @@
+# [3.2.0-next.8](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.7...v3.2.0-next.8) (2026-07-14)
+
+
+### Bug Fixes
+
+* Filter renderers.list() to only return entry types where isRendered is true ([2387479](https://github.com/inneropen/marvin-sdk/commit/2387479d9cb903c84bea58e90902ee38471dad4c))
+
 # [3.2.0-next.7](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.6...v3.2.0-next.7) (2026-07-14)
 
 
