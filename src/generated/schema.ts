@@ -4637,38 +4637,34 @@ export interface components {
             order?: number | null;
         };
         /**
-         * EntryResourceRead
-         * @description Resource metadata plus entry-specific placement details.
+         * EntryCollectionRead
+         * @description Collection summary with entry-specific placement details.
          */
-        EntryResourceRead: {
-            /** Role */
-            role?: string | null;
-            /**
-             * Position
-             * @default 0
-             */
-            position: number;
-            /** Placementmetadata */
-            placementMetadata?: {
-                [key: string]: unknown;
-            } | null;
+        EntryCollectionRead: {
             /**
              * Id
              * Format: uuid4
              */
             id: string;
-            /** Slug */
-            slug: string;
             /** Name */
             name: string;
-            /** Resourcetype */
-            resourceType: string;
-            /** Description */
-            description?: string | null;
-            /** Url */
-            url?: string | null;
-            /** Externalid */
-            externalId?: string | null;
+            /** Slug */
+            slug: string;
+            /** Icon */
+            icon?: string | null;
+            /** Color */
+            color?: string | null;
+            /** Role */
+            role?: string | null;
+            /** Placementmetadata */
+            placementMetadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Sortorder
+             * @default 0
+             */
+            sortOrder: number;
         };
         /**
          * EntryTypeCapabilities
