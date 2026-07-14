@@ -2,7 +2,7 @@
  * Entry - Rich object representing a single entry
  */
 
-import type { MarvinEntry, PublishedCollectionSummary, PublishedResourceRead, PublishedAssetRead } from '../types';
+import type { MarvinEntry, PublishedCollectionSummary, PublishedEntryResource, PublishedEntryAsset } from '../types';
 
 export class Entry {
   constructor(private raw: MarvinEntry) {}
@@ -17,7 +17,7 @@ export class Entry {
   get publishedAt() { return this.raw.publishedAt; }
   get order() { return this.raw.order; }
 
-  get assets(): PublishedAssetRead[] {
+  get assets(): PublishedEntryAsset[] {
     return this.raw.assets;
   }
 
@@ -25,7 +25,7 @@ export class Entry {
     return this.raw.collections;
   }
 
-  get resources(): PublishedResourceRead[] {
+  get resources(): PublishedEntryResource[] {
     return this.raw.resources;
   }
 

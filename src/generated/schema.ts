@@ -57,6 +57,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/app/about/login-info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Login Page Configuration
+         * @description Public endpoint returning OIDC/signup settings for the login page.
+         */
+        get: operations["get_login_info_api_app_about_login_info_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/app/about/clear-cache": {
         parameters: {
             query?: never;
@@ -3860,6 +3880,26 @@ export interface components {
             /** Darkerror */
             darkError: string;
         };
+        /** AssetAttachment */
+        AssetAttachment: {
+            /**
+             * Asset Id
+             * Format: uuid4
+             */
+            asset_id: string;
+            /** Role */
+            role?: string | null;
+            /** Position */
+            position?: number | null;
+            /** Caption */
+            caption?: string | null;
+            /** Focal Point */
+            focal_point?: string | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
         /**
          * AssetRead
          * @description Full schema for reading an asset.
@@ -4340,8 +4380,6 @@ export interface components {
         EntryAssetRead: {
             /** Role */
             role?: string | null;
-            /** Usage */
-            usage?: string | null;
             /**
              * Position
              * @default 0
@@ -4459,6 +4497,10 @@ export interface components {
             assetIds?: string[] | null;
             /** Resourceids */
             resourceIds?: string[] | null;
+            /** Assetattachments */
+            assetAttachments?: components["schemas"]["AssetAttachment"][] | null;
+            /** Resourceattachments */
+            resourceAttachments?: components["schemas"]["ResourceAttachment"][] | null;
         };
         /**
          * EntryOrderItem
@@ -4536,7 +4578,7 @@ export interface components {
              * Resources
              * @default []
              */
-            resources: components["schemas"]["ResourceSummary"][];
+            resources: components["schemas"]["EntryResourceRead"][];
             /**
              * Assets
              * @default []
@@ -4549,6 +4591,44 @@ export interface components {
             collections: string[];
             /** Order */
             order?: number | null;
+        };
+        /**
+         * EntryResourceRead
+         * @description Resource metadata plus entry-specific placement details.
+         */
+        EntryResourceRead: {
+            /** Role */
+            role?: string | null;
+            /** Quantity */
+            quantity?: string | null;
+            /** Unit */
+            unit?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Placementmetadata */
+            placementMetadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Resourcetype */
+            resourceType: string;
+            /** Description */
+            description?: string | null;
+            /** Url */
+            url?: string | null;
+            /** Externalid */
+            externalId?: string | null;
         };
         /**
          * EntryTypeCapabilities
@@ -4790,6 +4870,10 @@ export interface components {
             asset_ids?: string[] | null;
             /** Resource Ids */
             resource_ids?: string[] | null;
+            /** Asset Attachments */
+            asset_attachments?: components["schemas"]["AssetAttachment"][] | null;
+            /** Resource Attachments */
+            resource_attachments?: components["schemas"]["ResourceAttachment"][] | null;
         };
         /**
          * EventDocumentType
@@ -5495,6 +5579,32 @@ export interface components {
             createdAt?: string | null;
         };
         /**
+         * LoginInfo
+         * @description Public login page configuration — no auth required.
+         */
+        LoginInfo: {
+            /**
+             * Oidcenabled
+             * @default false
+             */
+            oidcEnabled: boolean;
+            /**
+             * Oidcprovidername
+             * @default OAuth
+             */
+            oidcProviderName: string;
+            /**
+             * Oidcautoredirect
+             * @default false
+             */
+            oidcAutoRedirect: boolean;
+            /**
+             * Allowsignup
+             * @default false
+             */
+            allowSignup: boolean;
+        };
+        /**
          * LongLiveTokenCreate
          * @description Schema for creating a new long-lived API token (Personal Access Token).
          */
@@ -5783,6 +5893,28 @@ export interface components {
             meta: components["schemas"]["PaginationMeta"];
         };
         /**
+         * PublishedEntryAsset
+         * @description An asset as used by a specific entry — relationship context + asset data.
+         */
+        PublishedEntryAsset: {
+            /** Role */
+            role?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Focalpoint */
+            focalPoint?: string | null;
+            /** Caption */
+            caption?: string | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            asset: components["schemas"]["PublishedAssetRead"];
+        };
+        /**
          * PublishedEntryListItem
          * @description Minimal entry schema for list responses.
          *
@@ -5818,6 +5950,11 @@ export interface components {
              * @default []
              */
             resourceSlugs: string[];
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            featuredAsset?: components["schemas"]["PublishedAssetRead"] | null;
             /** Order */
             order?: number | null;
         };
@@ -5860,14 +5997,36 @@ export interface components {
              * Resources
              * @default []
              */
-            resources: components["schemas"]["PublishedResourceRead"][];
+            resources: components["schemas"]["PublishedEntryResource"][];
             /**
              * Assets
              * @default []
              */
-            assets: components["schemas"]["PublishedAssetRead"][];
+            assets: components["schemas"]["PublishedEntryAsset"][];
             /** Order */
             order?: number | null;
+        };
+        /**
+         * PublishedEntryResource
+         * @description A resource as used by a specific entry — relationship context + resource data.
+         */
+        PublishedEntryResource: {
+            /** Role */
+            role?: string | null;
+            /** Quantity */
+            quantity?: string | null;
+            /** Unit */
+            unit?: string | null;
+            /**
+             * Position
+             * @default 0
+             */
+            position: number;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            resource: components["schemas"]["PublishedResourceSummary"];
         };
         /**
          * PublishedEntryTypeInfo
@@ -5943,41 +6102,6 @@ export interface components {
             } | null;
         };
         /**
-         * PublishedResourceRead
-         * @description Schema for published resources in entry context.
-         *
-         *     Combines resource metadata with entry-specific placement info.
-         */
-        PublishedResourceRead: {
-            /** Slug */
-            slug: string;
-            /** Name */
-            name: string;
-            /** Resourcetype */
-            resourceType: string;
-            /** Description */
-            description?: string | null;
-            /** Url */
-            url?: string | null;
-            /** Externalid */
-            externalId?: string | null;
-            /** Metadatajson */
-            metadataJson?: {
-                [key: string]: unknown;
-            } | null;
-            /** Role */
-            role?: string | null;
-            /** Quantity */
-            quantity?: string | null;
-            /** Unit */
-            unit?: string | null;
-            /**
-             * Position
-             * @default 0
-             */
-            position: number;
-        };
-        /**
          * PublishedResourceSummary
          * @description Schema for published resources in standalone context.
          *
@@ -6041,6 +6165,26 @@ export interface components {
             /** Passwordconfirm */
             passwordConfirm: string;
         };
+        /** ResourceAttachment */
+        ResourceAttachment: {
+            /**
+             * Resource Id
+             * Format: uuid4
+             */
+            resource_id: string;
+            /** Role */
+            role?: string | null;
+            /** Quantity */
+            quantity?: string | null;
+            /** Unit */
+            unit?: string | null;
+            /** Position */
+            position?: number | null;
+            /** Metadata */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
         /**
          * ResourceCreate
          * @description Schema for creating a new resource.
@@ -6094,29 +6238,6 @@ export interface components {
              * Format: uuid4
              */
             createdBy: string;
-        };
-        /**
-         * ResourceSummary
-         * @description Summary schema for a resource.
-         */
-        ResourceSummary: {
-            /**
-             * Id
-             * Format: uuid4
-             */
-            id: string;
-            /** Slug */
-            slug: string;
-            /** Name */
-            name: string;
-            /** Resourcetype */
-            resourceType: string;
-            /** Description */
-            description?: string | null;
-            /** Url */
-            url?: string | null;
-            /** Externalid */
-            externalId?: string | null;
         };
         /**
          * ResourceUpdate
@@ -6991,6 +7112,26 @@ export interface operations {
             };
         };
     };
+    get_login_info_api_app_about_login_info_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginInfo"];
+                };
+            };
+        };
+    };
     clear_settings_cache_api_app_about_clear_cache_post: {
         parameters: {
             query?: never;
@@ -7123,9 +7264,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: string;
-                    };
+                    "application/json": unknown;
                 };
             };
         };
