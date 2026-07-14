@@ -1,3 +1,16 @@
+# [3.2.0-next.6](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.5...v3.2.0-next.6) (2026-07-14)
+
+
+### Bug Fixes
+
+* Regenerate schema and fix missing/duplicate types ([e1876eb](https://github.com/inneropen/marvin-sdk/commit/e1876eb7151e6a5fce7edd6ad6cdc267e3da2eb2))
+* Update generated schema for metadata_json rename and EntryCollectionRead ([0b688a5](https://github.com/inneropen/marvin-sdk/commit/0b688a53cc7eaccd92b735aa5b68f3445733a8a6))
+
+
+### Features
+
+* Add updateEntryJunction method to CollectionsModule ([3caa092](https://github.com/inneropen/marvin-sdk/commit/3caa09225c9dcdeb5aa6e004df4febe3181f7bb0))
+
 # [3.2.0-next.5](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.4...v3.2.0-next.5) (2026-07-14)
 
 
