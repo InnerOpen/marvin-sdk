@@ -29,6 +29,7 @@ export type PublishedEntryAsset = components['schemas']['PublishedEntryAsset'];
 
 // Resources
 export type MarvinResource = components['schemas']['PublishedResourceSummary'];
+export type PublishedResourceSummary = components['schemas']['PublishedResourceSummary'];
 export type PublishedEntryResource = components['schemas']['PublishedEntryResource'];
 
 // Structured attachments (for write API)
@@ -41,6 +42,49 @@ export type EntryCollectionRead = components['schemas']['EntryCollectionRead'];
 
 // Entry Types (admin — kept for backwards compat export)
 export type MarvinEntryType = components['schemas']['EntryTypeRead'];
+
+/** Entry-specific relationship data within a collection */
+export interface CollectionEntryMetadata {
+  role: string | null;
+  position: number;
+  metadataJson: Record<string, unknown> | null;
+}
+
+/** The collection context when an entry is fetched through a specific collection */
+export interface CollectionContext {
+  slug: string;
+  name: string;
+  description?: string | null;
+  metadataJson?: Record<string, unknown> | null;
+  /** This entry's relationship to the collection (role, position, junction metadata) */
+  entryMetadata: CollectionEntryMetadata;
+}
+
+/**
+ * An entry as returned when fetched through a specific collection.
+ * - `collection`: the collection you queried through, with its junction context
+ * - `collectionSlugs`: slugs of other collections this entry also belongs to
+ */
+export interface CollectionEntry extends Omit<MarvinEntryListItem, 'collections'> {
+  collection: CollectionContext;
+  collectionSlugs: string[];
+}
+
+/**
+ * An asset as it appears on an entry — includes the asset's own fields
+ * plus `entryMetadata` for the entry's relationship to this asset.
+ */
+export interface EntryAsset extends PublishedAssetRead {
+  entryMetadata: CollectionEntryMetadata;
+}
+
+/**
+ * A resource as it appears on an entry — includes the resource's own fields
+ * plus `entryMetadata` for the entry's relationship to this resource.
+ */
+export interface EntryResource extends PublishedResourceSummary {
+  entryMetadata: CollectionEntryMetadata;
+}
 
 // SDK-only types (not in generated schema)
 

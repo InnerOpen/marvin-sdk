@@ -14,6 +14,7 @@ import type {
   MarvinAsset,
   MarvinResource,
   PublishedCollectionSummary,
+  CollectionEntry,
 } from '../types';
 import type { GetEntriesOptions } from '../entries/entries';
 import type { GetAssetsOptions } from '../assets/assets';
@@ -166,7 +167,7 @@ export class MarvinClient {
   async collectionFallback(
     slugs: string[],
     options?: { requireEntries?: boolean }
-  ): Promise<MarvinEntryListItem[]> {
+  ): Promise<CollectionEntry[]> {
     return this.workspace.collections.fallback(slugs, options);
   }
 
@@ -211,7 +212,7 @@ export class MarvinClient {
    */
   async getCollection(slug: string): Promise<import('../types').MarvinCollection | null> {
     const collection = await this.workspace.collections.get(slug);
-    if (!collection) {
+    if (Array.isArray(collection)) {
       return null;
     }
     return collection.toJSON();
@@ -220,7 +221,7 @@ export class MarvinClient {
   /**
    * @deprecated Use workspace.collections.entries() instead
    */
-  async getCollectionEntries(slug: string): Promise<MarvinEntryListItem[]> {
+  async getCollectionEntries(slug: string): Promise<CollectionEntry[]> {
     return this.workspace.collections.entries(slug);
   }
 
