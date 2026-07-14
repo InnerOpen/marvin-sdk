@@ -39,9 +39,7 @@ export class Collection {
       return {
         ...rest,
         collection,
-        collectionSlugs: collections
-          .filter(ec => ec.collection.slug !== this.data.slug)
-          .map(ec => ec.collection.slug),
+        collectionSlugs: collections.map(ec => ec.collection.slug),
       };
     });
   }

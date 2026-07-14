@@ -67,6 +67,7 @@ export interface CollectionContext {
  */
 export interface CollectionEntry extends Omit<MarvinEntryListItem, 'collections'> {
   collection: CollectionContext;
+  /** All collection slugs this entry belongs to, including the one queried through */
   collectionSlugs: string[];
 }
 
