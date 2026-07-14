@@ -3927,8 +3927,8 @@ export interface components {
             publicUrl?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata_?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -3950,8 +3950,8 @@ export interface components {
             alt_text?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -4477,8 +4477,8 @@ export interface components {
             publicUrl?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata_?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -6235,8 +6235,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -6262,8 +6262,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -6289,8 +6289,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
