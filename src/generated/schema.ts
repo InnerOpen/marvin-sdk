@@ -3907,8 +3907,8 @@ export interface components {
             publicUrl?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata_?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -3930,8 +3930,8 @@ export interface components {
             alt_text?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -4397,8 +4397,8 @@ export interface components {
             publicUrl?: string | null;
             /** Description */
             description?: string | null;
-            /** Metadata */
-            metadata_?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -4546,9 +4546,39 @@ export interface components {
              * Collections
              * @default []
              */
-            collections: string[];
+            collections: components["schemas"]["EntryCollectionRead"][];
             /** Order */
             order?: number | null;
+        };
+        /**
+         * EntryCollectionRead
+         * @description Collection summary with entry-specific placement details.
+         */
+        EntryCollectionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Icon */
+            icon?: string | null;
+            /** Color */
+            color?: string | null;
+            /** Role */
+            role?: string | null;
+            /** Placementmetadata */
+            placementMetadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Sortorder
+             * @default 0
+             */
+            sortOrder: number;
         };
         /**
          * EntryTypeCapabilities
@@ -6072,8 +6102,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -6099,8 +6129,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /**
@@ -6149,8 +6179,8 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
-            /** Metadata */
-            metadata?: {
+            /** Metadatajson */
+            metadataJson?: {
                 [key: string]: unknown;
             } | null;
         };
