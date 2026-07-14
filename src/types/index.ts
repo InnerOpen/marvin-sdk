@@ -30,6 +30,14 @@ export type PublishedEntryAsset = components['schemas']['PublishedEntryAsset'];
 export type MarvinResource = components['schemas']['PublishedResourceSummary'];
 export type PublishedEntryResource = components['schemas']['PublishedEntryResource'];
 
+// Structured attachments (for write API)
+export type AssetAttachment = components['schemas']['AssetAttachment'];
+export type CollectionAttachment = components['schemas']['CollectionAttachment'];
+export type ResourceAttachment = components['schemas']['ResourceAttachment'];
+
+// Rich read types (admin API)
+export type EntryCollectionRead = components['schemas']['EntryCollectionRead'];
+
 // Entry Types (admin — kept for backwards compat export)
 export type MarvinEntryType = components['schemas']['EntryTypeRead'];
 
