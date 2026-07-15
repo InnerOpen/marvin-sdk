@@ -1,3 +1,10 @@
+# [3.2.0-next.11](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.10...v3.2.0-next.11) (2026-07-15)
+
+
+### Features
+
+* Add scheduledTasks.log() method for workspace execution log ([acf88e0](https://github.com/inneropen/marvin-sdk/commit/acf88e07868afb6c7d490e1e52af14d1a76287d8))
+
 # [3.2.0-next.10](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.9...v3.2.0-next.10) (2026-07-14)
 
 
