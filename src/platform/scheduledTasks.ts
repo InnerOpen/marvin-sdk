@@ -82,6 +82,18 @@ export class ScheduledTasksModule {
   }
 
   /**
+   * Get execution log for all tasks in the current workspace
+   */
+  async log(options?: { limit?: number }): Promise<ScheduledTaskExecutionLog[]> {
+    const params = new URLSearchParams();
+    if (options?.limit) {
+      params.set('limit', options.limit.toString());
+    }
+    const query = params.toString() ? `?${params.toString()}` : '';
+    return this.http.get<ScheduledTaskExecutionLog[]>(`/api/platform/scheduled-tasks/log${query}`);
+  }
+
+  /**
    * Get available task types
    */
   async taskTypes(options?: { detailed?: boolean }): Promise<string[] | TaskTypeInfo[]> {
