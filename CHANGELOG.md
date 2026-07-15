@@ -1,3 +1,10 @@
+# [3.2.0-next.12](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.11...v3.2.0-next.12) (2026-07-15)
+
+
+### Bug Fixes
+
+* Remove client-side URL SSRF validation — server enforces security ([3039717](https://github.com/inneropen/marvin-sdk/commit/3039717128830056a3a62b9254862942fc800ee4))
+
 # [3.2.0-next.11](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.10...v3.2.0-next.11) (2026-07-15)
 
 
