@@ -1,3 +1,10 @@
+# [3.2.0-next.16](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.15...v3.2.0-next.16) (2026-07-15)
+
+
+### Bug Fixes
+
+* Update getOptions() to call /api/event/types endpoint ([4fd1a02](https://github.com/inneropen/marvin-sdk/commit/4fd1a02617f7f46ef9da40d2b29ae3c9b0fa945b))
+
 # [3.2.0-next.15](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.14...v3.2.0-next.15) (2026-07-15)
 
 
