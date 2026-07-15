@@ -1,3 +1,10 @@
+# [3.2.0-next.15](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.14...v3.2.0-next.15) (2026-07-15)
+
+
+### Features
+
+* Add VariablesModule to SDK ([a5d5d6c](https://github.com/inneropen/marvin-sdk/commit/a5d5d6cc2525fe787365f19e753d271665b74de4))
+
 # [3.2.0-next.14](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.13...v3.2.0-next.14) (2026-07-15)
 
 
