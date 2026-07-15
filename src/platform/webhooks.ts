@@ -124,11 +124,28 @@ export class WebhooksModule {
   }
 
   /**
-   * Test a webhook
+   * Test a webhook — fires a test request in the background
    */
-  async test(id: string): Promise<{ success: boolean; message?: string; statusCode?: number }> {
+  async test(id: string): Promise<{ message: string }> {
     const validId = this.http.validatePathParam(id, 'webhook ID');
-    return this.http.post<{ success: boolean; message?: string; statusCode?: number }>(`/api/groups/webhooks/${validId}/test`, {});
+    return this.http.get<{ message: string }>(`/api/groups/webhooks/${validId}/test`);
+  }
+
+  /**
+   * Get execution logs for a specific webhook
+   */
+  async logs(id: string, options?: { limit?: number }): Promise<any[]> {
+    const validId = this.http.validatePathParam(id, 'webhook ID');
+    const params = options?.limit ? `?limit=${options.limit}` : '';
+    return this.http.get<any[]>(`/api/groups/webhooks/${validId}/logs${params}`);
+  }
+
+  /**
+   * Get workspace-wide webhook execution log
+   */
+  async log(options?: { limit?: number }): Promise<any[]> {
+    const params = options?.limit ? `?limit=${options.limit}` : '';
+    return this.http.get<any[]>(`/api/groups/webhooks/log${params}`);
   }
 
   /**
