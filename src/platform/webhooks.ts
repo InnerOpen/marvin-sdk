@@ -102,28 +102,16 @@ export class WebhooksModule {
 
   /**
    * Create a new webhook
-   * Validates URL to prevent SSRF attacks
    */
   async create(data: WebhookCreate): Promise<Webhook> {
-    // Validate webhook URL before sending to server
-    if (data.url) {
-      this.validateWebhookUrl(data.url);
-    }
     return this.http.post<Webhook>('/api/groups/webhooks', data);
   }
 
   /**
    * Update a webhook
-   * Validates URL if provided to prevent SSRF attacks
    */
   async update(id: string, data: WebhookUpdate): Promise<Webhook> {
     const validId = this.http.validatePathParam(id, 'webhook ID');
-
-    // Validate webhook URL if being updated
-    if (data.url) {
-      this.validateWebhookUrl(data.url);
-    }
-
     return this.http.put<Webhook>(`/api/groups/webhooks/${validId}`, data);
   }
 
