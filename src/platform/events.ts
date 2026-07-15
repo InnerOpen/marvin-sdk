@@ -19,6 +19,6 @@ export class EventsModule {
    * Get available event types for webhooks and notifications
    */
   async getOptions(): Promise<EventOption[]> {
-    return this.http.get<EventOption[]>('/api/event/options');
+    return this.http.get<EventOption[]>('/api/event/types');
   }
 }
