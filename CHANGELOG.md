@@ -1,3 +1,10 @@
+# [3.2.0-next.13](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.12...v3.2.0-next.13) (2026-07-15)
+
+
+### Features
+
+* Add log(), logs(), test() methods to WebhooksModule ([54e6e71](https://github.com/inneropen/marvin-sdk/commit/54e6e713cfda0395b40149e0afabc9e92b79a652))
+
 # [3.2.0-next.12](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.11...v3.2.0-next.12) (2026-07-15)
 
 
