@@ -26,6 +26,7 @@ import { ThemeModule } from './theme';
 import { EmailTemplatesClient } from './emailTemplates';
 import { ScheduledTasksModule } from './scheduledTasks';
 import { FormsModule } from './forms';
+import { SecretsModule } from './secrets';
 
 export interface PlatformClientConfig {
   apiUrl?: string;
@@ -71,6 +72,7 @@ export class PlatformClient extends HttpClient {
   public emailTemplates: EmailTemplatesClient;
   public scheduledTasks: ScheduledTasksModule;
   public forms: FormsModule;
+  public secrets: SecretsModule;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -106,6 +108,7 @@ export class PlatformClient extends HttpClient {
     this.emailTemplates = new EmailTemplatesClient(this);
     this.scheduledTasks = new ScheduledTasksModule(this);
     this.forms = new FormsModule(this);
+    this.secrets = new SecretsModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);
