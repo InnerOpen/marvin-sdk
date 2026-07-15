@@ -1,3 +1,10 @@
+# [3.2.0-next.14](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.13...v3.2.0-next.14) (2026-07-15)
+
+
+### Features
+
+* Add SecretsModule to SDK (list, slugs, create, update, delete) ([302e93c](https://github.com/inneropen/marvin-sdk/commit/302e93c10651abf01e77571a867c7011288d1598))
+
 # [3.2.0-next.13](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.12...v3.2.0-next.13) (2026-07-15)
 
 
