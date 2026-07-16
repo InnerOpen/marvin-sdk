@@ -1,3 +1,10 @@
+# [3.2.0-next.18](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.17...v3.2.0-next.18) (2026-07-16)
+
+
+### Features
+
+* regenerate schema from live API; add EmailEventSubscriptions module ([eba829e](https://github.com/inneropen/marvin-sdk/commit/eba829efb3fb79a69ada3281b782000441b26593))
+
 # [3.2.0-next.17](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.16...v3.2.0-next.17) (2026-07-16)
 
 
