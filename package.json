@@ -69,6 +69,8 @@
     "dev": "tsup src/index.ts src/publish.ts src/platform.ts src/types/index.ts --format esm,cjs --dts --watch",
     "generate:types": "openapi-typescript http://localhost:8080/openapi.json -o src/generated/schema.ts",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "prepare": "npm run build",
     "prepublishOnly": "npm run build",
     "docs:serve": "mkdocs serve",
@@ -88,7 +90,8 @@
     "@types/node": "^26.1.0",
     "openapi-typescript": "^7.13.0",
     "semantic-release": "^25.0.5",
-    "tsup": "^8.5.1"
+    "tsup": "^8.5.1",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "mkdocs": "^0.0.1"
