@@ -1,3 +1,10 @@
+# [3.2.0-next.19](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.18...v3.2.0-next.19) (2026-07-16)
+
+
+### Features
+
+* fill SDK gaps — 42 missing endpoints now covered ([45bead9](https://github.com/inneropen/marvin-sdk/commit/45bead9ca770afd627ac6fb4ddf9c130fb5307f4))
+
 # [3.2.0-next.18](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.17...v3.2.0-next.18) (2026-07-16)
 
 
