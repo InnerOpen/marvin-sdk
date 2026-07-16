@@ -87,6 +87,31 @@ export class WorkspacesModule {
   }
 
   /**
+   * Import a workspace bundle (ZIP exported by exportBundle).
+   *
+   * Requires SUPER_ADMIN or workspace OWNER role.
+   *
+   * - SUPER_ADMIN: the workspace block in the bundle drives which workspace receives the import.
+   * - OWNER: always imports into the caller's own workspace.
+   *
+   * @param file - ZIP file (from exportBundle / /export/bundle)
+   * @param options.overwrite - When true, existing records matched by slug are updated.
+   *   ⚠️ Overwrites entries, collections, resources, and assets; junction rows are rebuilt.
+   */
+  async importBundle(
+    file: File | Blob,
+    options?: { overwrite?: boolean }
+  ): Promise<{ imported: Record<string, number> }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.request<{ imported: Record<string, number> }>(
+      'POST',
+      '/api/platform/workspace/import',
+      { body: formData, params: options?.overwrite ? { overwrite: true } : undefined }
+    );
+  }
+
+  /**
    * Get workspace preferences
    */
   async getPreferences(workspaceId: string): Promise<WorkspacePreferences> {
