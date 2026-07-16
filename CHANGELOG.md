@@ -1,3 +1,10 @@
+# [3.2.0-next.17](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.16...v3.2.0-next.17) (2026-07-16)
+
+
+### Features
+
+* add WorkspacesModule.importBundle() method ([636d6d1](https://github.com/inneropen/marvin-sdk/commit/636d6d17608436cbb1d155d8058ed667ed6f7ec1))
+
 # [3.2.0-next.16](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.15...v3.2.0-next.16) (2026-07-15)
 
 
