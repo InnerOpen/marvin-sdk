@@ -1,3 +1,10 @@
+# [3.2.0-next.20](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.19...v3.2.0-next.20) (2026-07-16)
+
+
+### Features
+
+* add get(id) to SecretsModule and VariablesModule ([60aacc8](https://github.com/inneropen/marvin-sdk/commit/60aacc82b1f26d24846435ea4d0eb6b710ea1ac0))
+
 # [3.2.0-next.19](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.18...v3.2.0-next.19) (2026-07-16)
 
 
