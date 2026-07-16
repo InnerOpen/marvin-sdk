@@ -38,6 +38,11 @@ export class VariablesModule {
     return this.http.get<WorkspaceVariable[]>('/api/groups/variables');
   }
 
+  async get(id: string): Promise<WorkspaceVariable> {
+    const validId = this.http.validatePathParam(id, 'variable ID');
+    return this.http.get<WorkspaceVariable>(`/api/groups/variables/${validId}`);
+  }
+
   async create(data: WorkspaceVariableCreate): Promise<WorkspaceVariable> {
     return this.http.post<WorkspaceVariable>('/api/groups/variables', data);
   }

@@ -39,6 +39,11 @@ export class SecretsModule {
     return this.http.get<WorkspaceSecret[]>('/api/groups/secrets');
   }
 
+  async get(id: string): Promise<WorkspaceSecret> {
+    const validId = this.http.validatePathParam(id, 'secret ID');
+    return this.http.get<WorkspaceSecret>(`/api/groups/secrets/${validId}`);
+  }
+
   /**
    * List available slugs for {{SLUG}} autocomplete
    */
