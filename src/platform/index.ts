@@ -86,7 +86,11 @@ export type { UserProfile, UserProfileUpdate, ApiToken, ApiTokenCreate, ApiToken
 
 // Events
 export { EventsModule } from './events';
-export type { EventOption } from './events';
+export type { EventOption, EventVariable } from './events';
+
+// Email Event Subscriptions
+export { EmailEventSubscriptionsModule } from './emailEventSubscriptions';
+export type { EmailEventSubscription, EmailEventSubscriptionCreate, RecipientType } from './emailEventSubscriptions';
 
 // Event Log (audit trail)
 export { EventLogModule } from './eventLog';

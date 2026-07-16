@@ -28,6 +28,7 @@ import { ScheduledTasksModule } from './scheduledTasks';
 import { FormsModule } from './forms';
 import { SecretsModule } from './secrets';
 import { VariablesModule } from './variables';
+import { EmailEventSubscriptionsModule } from './emailEventSubscriptions';
 
 export interface PlatformClientConfig {
   apiUrl?: string;
@@ -75,6 +76,7 @@ export class PlatformClient extends HttpClient {
   public forms: FormsModule;
   public secrets: SecretsModule;
   public variables: VariablesModule;
+  public emailEventSubscriptions: EmailEventSubscriptionsModule;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -112,6 +114,7 @@ export class PlatformClient extends HttpClient {
     this.forms = new FormsModule(this);
     this.secrets = new SecretsModule(this);
     this.variables = new VariablesModule(this);
+    this.emailEventSubscriptions = new EmailEventSubscriptionsModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);

@@ -498,6 +498,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/webhooks/log": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Workspace Webhook Execution Log
+         * @description Get recent webhook execution log entries for the current workspace.
+         */
+        get: operations["get_workspace_log_api_groups_webhooks_log_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/webhooks/{item_id}": {
         parameters: {
             query?: never;
@@ -523,15 +543,12 @@ export interface paths {
          * @description Updates an existing webhook configuration.
          *
          *     The webhook must belong to the current user's group.
-         *     Note: The input data schema is `WebhookCreate`. If partial updates are desired
-         *     or if `WebhookUpdate` schema exists and is different, this might need adjustment.
-         *     The mixin is currently typed as `HttpRepo[WebhookCreate, WebhookRead, WebhookCreate]`,
-         *     meaning `WebhookCreate` is also used as the Update schema type `U` for the mixin.
+         *     Uses WebhookSave internally to ensure `headers` is mapped to the ORM column
+         *     `headers_json` before the update is persisted.
          *
          *     Args:
          *         item_id (UUID4): The ID of the webhook to update.
          *         data (WebhookCreate): Pydantic schema with the update data.
-         *                               (Typically an Update schema like `WebhookUpdate` would be used here).
          *
          *     Returns:
          *         WebhookRead: The Pydantic schema of the updated webhook.
@@ -584,6 +601,162 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/groups/webhooks/{item_id}/logs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Execution Logs for a Webhook
+         * @description Get execution history for a specific webhook.
+         */
+        get: operations["get_webhook_logs_api_groups_webhooks__item_id__logs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/secrets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Secrets
+         * @description List all secrets (slugs + metadata only — no values).
+         */
+        get: operations["list_secrets_api_groups_secrets_get"];
+        put?: never;
+        /**
+         * Create Secret
+         * @description Create a workspace secret. Value is encrypted on write.
+         */
+        post: operations["create_secret_api_groups_secrets_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/secrets/slugs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Slugs
+         * @description Return secret slugs for {{SLUG}} autocomplete in webhook header builder.
+         */
+        get: operations["list_slugs_api_groups_secrets_slugs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/secrets/{secret_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Secret
+         * @description Delete a secret from the backend and metadata store.
+         */
+        delete: operations["delete_secret_api_groups_secrets__secret_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Secret
+         * @description Update a secret's name, description, or value.
+         */
+        patch: operations["update_secret_api_groups_secrets__secret_id__patch"];
+        trace?: never;
+    };
+    "/api/groups/secrets/{secret_id}/reveal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reveal Secret
+         * @description Return decrypted value. Workspace admins only.
+         */
+        post: operations["reveal_secret_api_groups_secrets__secret_id__reveal_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/variables": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Variables
+         * @description List all variables (including values — variables are not secret).
+         */
+        get: operations["list_variables_api_groups_variables_get"];
+        put?: never;
+        /**
+         * Create Variable
+         * @description Create a workspace variable.
+         */
+        post: operations["create_variable_api_groups_variables_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/variables/{var_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Variable
+         * @description Delete a variable.
+         */
+        delete: operations["delete_variable_api_groups_variables__var_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Variable
+         * @description Update a variable's name, description, or value.
+         */
+        patch: operations["update_variable_api_groups_variables__var_id__patch"];
         trace?: never;
     };
     "/api/group/notifications": {
@@ -882,6 +1055,54 @@ export interface paths {
          */
         post: operations["send_test_email_api_platform_workspaces__group_id__email_templates__template_id__test_post"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/email-event-subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get All
+         * @description List all email event subscriptions for the current workspace.
+         */
+        get: operations["get_all_api_groups_email_event_subscriptions_get"];
+        put?: never;
+        /**
+         * Create One
+         * @description Create a new email event subscription.
+         */
+        post: operations["create_one_api_groups_email_event_subscriptions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/email-event-subscriptions/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get One
+         * @description Get a specific email event subscription by ID.
+         */
+        get: operations["get_one_api_groups_email_event_subscriptions__item_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete One
+         * @description Delete an email event subscription.
+         */
+        delete: operations["delete_one_api_groups_email_event_subscriptions__item_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1360,6 +1581,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/event/types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List subscribable event types with data contracts
+         * @description Returns event types available for subscription with their data contracts —
+         *     what variables each event provides for use in templates and notifications.
+         *     Only returns events in the catalog (user-subscribable subset of all EventTypes).
+         */
+        get: operations["list_event_types_api_event_types_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/about": {
         parameters: {
             query?: never;
@@ -1463,6 +1706,112 @@ export interface paths {
         get: operations["check_app_config_api_admin_about_check_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/backups/workspaces/{workspace_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Create Workspace Backup
+         * @description Create a backup bundle for any workspace and persist to BACKUP_DIR.
+         *
+         *     Args:
+         *         workspace_id: ID of the workspace to export
+         *
+         *     Returns:
+         *         {filename, size, created_at, download_url}
+         */
+        post: operations["create_backup_api_admin_backups_workspaces__workspace_id__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/backups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: List All Backups
+         * @description List backup zips, newest first.
+         *
+         *     Args:
+         *         workspace_slug: When provided, only return backups for that workspace.
+         *
+         *     Returns:
+         *         List of {filename, size, created_at, workspace_slug} dicts
+         */
+        get: operations["list_backups_api_admin_backups_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/backups/{filename}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Download Backup
+         * @description Download any named backup zip.
+         *
+         *     Args:
+         *         filename: Zip filename as returned by list_backups or create_backup
+         *
+         *     Returns:
+         *         Zip file download
+         */
+        get: operations["download_backup_api_admin_backups__filename__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/backups/workspaces/{workspace_id}/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Import Workspace Bundle
+         * @description Import a workspace bundle into a specific workspace.
+         *
+         *     Args:
+         *         workspace_id: ID of the target workspace
+         *         file: Zip bundle file
+         *         overwrite: When True, existing records matched by slug are updated
+         *
+         *     Returns:
+         *         Import counts by type
+         */
+        post: operations["import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2247,6 +2596,138 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/scheduled-tasks/task-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Task Types
+         * @description List all available task types.
+         */
+        get: operations["list_task_types_api_admin_scheduled_tasks_task_types_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/scheduled-tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Tasks
+         * @description List all scheduled tasks across all workspaces (including system tasks).
+         */
+        get: operations["list_tasks_api_admin_scheduled_tasks_get"];
+        put?: never;
+        /**
+         * Create Task
+         * @description Create a system-level scheduled task (group_id=NULL).
+         */
+        post: operations["create_task_api_admin_scheduled_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/scheduled-tasks/log": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Global Log
+         * @description Get global execution log across all tasks and workspaces.
+         */
+        get: operations["get_global_log_api_admin_scheduled_tasks_log_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/scheduled-tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Task
+         * @description Get any scheduled task by ID.
+         */
+        get: operations["get_task_api_admin_scheduled_tasks__task_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Task
+         * @description Delete any scheduled task.
+         */
+        delete: operations["delete_task_api_admin_scheduled_tasks__task_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Task
+         * @description Update any scheduled task.
+         */
+        patch: operations["update_task_api_admin_scheduled_tasks__task_id__patch"];
+        trace?: never;
+    };
+    "/api/admin/scheduled-tasks/{task_id}/execute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Execute Task
+         * @description Manually trigger any task execution.
+         */
+        post: operations["execute_task_api_admin_scheduled_tasks__task_id__execute_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/scheduled-tasks/{task_id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Task History
+         * @description Get execution history for any task.
+         */
+        get: operations["get_task_history_api_admin_scheduled_tasks__task_id__history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/entry-types": {
         parameters: {
             query?: never;
@@ -2777,11 +3258,6 @@ export interface paths {
          * Export Workspace
          * @description Export the current workspace to JSON format.
          *
-         *     This endpoint exports the complete workspace structure including:
-         *     - Collections
-         *     - Entry types (workspace-scoped by default)
-         *     - Entries with their collection assignments
-         *
          *     The exported JSON can be used as a seed file for workspace restoration
          *     or migration to another instance.
          *
@@ -2809,10 +3285,7 @@ export interface paths {
         };
         /**
          * Export Workspace (Pretty)
-         * @description Export workspace with pretty-printed JSON (for readability).
-         *
-         *     Same as /export but with indented JSON formatting for easier reading
-         *     and version control.
+         * @description Export workspace with pretty-printed JSON.
          *
          *     Args:
          *         include_system_types: Whether to include system entry types
@@ -2823,6 +3296,99 @@ export interface paths {
         get: operations["export_workspace_pretty_api_platform_workspace_export_pretty_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/workspace/backups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Workspace Backups
+         * @description List all backup zips for the current workspace, newest first.
+         *
+         *     Returns:
+         *         List of {filename, size, created_at} dicts
+         */
+        get: operations["list_backups_api_platform_workspace_backups_get"];
+        put?: never;
+        /**
+         * Create Workspace Backup
+         * @description Create a backup bundle and persist it to BACKUP_DIR.
+         *
+         *     Returns metadata and a stable download URL for the created file.
+         *
+         *     Args:
+         *         include_system_types: Whether to include system entry types
+         *
+         *     Returns:
+         *         {filename, size, created_at, download_url}
+         */
+        post: operations["create_backup_api_platform_workspace_backups_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/workspace/backups/{filename}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download Workspace Backup
+         * @description Download a named backup zip.
+         *
+         *     Validates the filename (must be .zip, no path traversal, must match
+         *     the current workspace's slug prefix).
+         *
+         *     Args:
+         *         filename: Zip filename as returned by create_backup / list_backups
+         *
+         *     Returns:
+         *         Zip file download
+         */
+        get: operations["download_backup_api_platform_workspace_backups__filename__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/workspace/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import Workspace Bundle
+         * @description Import a workspace bundle into the current workspace.
+         *
+         *     Requires workspace OWNER or SUPER_ADMIN role.
+         *
+         *     Args:
+         *         file: Zip bundle file (from /backups)
+         *         overwrite: When True, existing records matched by slug are updated
+         *
+         *     Returns:
+         *         Import counts by type
+         */
+        post: operations["import_workspace_api_platform_workspace_import_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3130,6 +3696,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/scheduled-tasks/log": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Workspace Log
+         * @description Get execution log for all tasks in the current workspace.
+         */
+        get: operations["get_workspace_log_api_platform_scheduled_tasks_log_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/scheduled-tasks/{id_or_slug}": {
         parameters: {
             query?: never;
@@ -3192,6 +3778,107 @@ export interface paths {
         get: operations["get_task_history_api_platform_scheduled_tasks__id_or_slug__history_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Workspace Statistics */
+        get: operations["get_stats_api_platform_stats_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/email/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send Test Email
+         * @description Send a test email. Uses provided subject/message if given, otherwise generic defaults.
+         */
+        post: operations["send_test_email_api_platform_email_test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/email/template-vars": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Template Vars
+         * @description Return available per-send variables and required vars for a template type.
+         */
+        get: operations["list_template_vars_api_platform_email_template_vars_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/email/templates/{template_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Template
+         * @description Get a template by ID — workspace template or system template.
+         */
+        get: operations["get_template_api_platform_email_templates__template_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update Template
+         * @description Update a workspace template. Cannot update system templates.
+         */
+        patch: operations["update_template_api_platform_email_templates__template_id__patch"];
+        trace?: never;
+    };
+    "/api/platform/email/templates/{template_id}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send Template Test Email
+         * @description Send a test email using a specific workspace template with its subject and body.
+         */
+        post: operations["send_template_test_email_api_platform_email_templates__template_id__test_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4015,6 +4702,22 @@ export interface components {
              */
             remember_me: boolean;
         };
+        /** Body_import_workspace_api_platform_workspace_import_post */
+        Body_import_workspace_api_platform_workspace_import_post: {
+            /**
+             * File
+             * Format: binary
+             */
+            file: string;
+        };
+        /** Body_import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post */
+        Body_import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post: {
+            /**
+             * File
+             * Format: binary
+             */
+            file: string;
+        };
         /** Body_upload_asset_api_platform_assets_upload_post */
         Body_upload_asset_api_platform_assets_upload_post: {
             /**
@@ -4189,6 +4892,72 @@ export interface components {
             } | null;
             /** Entryids */
             entryIds?: string[] | null;
+        };
+        /** EmailEventSubscriptionCreate */
+        EmailEventSubscriptionCreate: {
+            /** Groupid */
+            groupId?: string | null;
+            /**
+             * Templateid
+             * Format: uuid4
+             */
+            templateId: string;
+            /** Eventtype */
+            eventType: string;
+            /** @default admins */
+            recipientType: components["schemas"]["RecipientType"];
+            /**
+             * Recipientfield
+             * @description Snake-case field name from event data, e.g. invitee_email
+             */
+            recipientField?: string | null;
+            /**
+             * Recipientemail
+             * @description Literal email address for recipient_type=specific
+             */
+            recipientEmail?: string | null;
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+        };
+        /** EmailEventSubscriptionRead */
+        EmailEventSubscriptionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /**
+             * Templateid
+             * Format: uuid4
+             */
+            templateId: string;
+            /** Eventtype */
+            eventType: string;
+            recipientType: components["schemas"]["RecipientType"];
+            /** Recipientfield */
+            recipientField: string | null;
+            /** Recipientemail */
+            recipientEmail: string | null;
+            /** Enabled */
+            enabled: boolean;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Updateat
+             * Format: date-time
+             */
+            updateAt: string;
         };
         /**
          * EmailInitationResponse
@@ -4365,6 +5134,8 @@ export interface components {
             description: string | null;
             /** Enabled */
             enabled: boolean;
+            /** Groupid */
+            groupId?: string | null;
         };
         /**
          * EmailTemplateUpdate
@@ -4396,12 +5167,15 @@ export interface components {
         };
         /**
          * EmailTest
-         * @description Schema for the request body when sending a test email.
-         *     Specifies the recipient email address.
+         * @description Request body for sending a test email.
          */
         EmailTest: {
             /** Email */
             email: string;
+            /** Subject */
+            subject?: string | null;
+            /** Message */
+            message?: string | null;
         };
         /**
          * EntryAssetRead
@@ -6209,6 +6983,11 @@ export interface components {
             meta: components["schemas"]["PaginationMeta"];
         };
         /**
+         * RecipientType
+         * @enum {string}
+         */
+        RecipientType: "event_field" | "admins" | "specific";
+        /**
          * ReorderEntriesRequest
          * @description Schema for bulk reordering entries in a collection.
          */
@@ -6561,6 +7340,21 @@ export interface components {
             total_size: string;
             /** Data Dir Path */
             data_dir_path: string;
+        };
+        /** TemplateTestRequest */
+        TemplateTestRequest: {
+            /**
+             * Recipient Email
+             * Format: email
+             */
+            recipient_email: string;
+            /**
+             * Variables
+             * @default {}
+             */
+            variables: {
+                [key: string]: unknown;
+            };
         };
         /**
          * TestEmailRequest
@@ -6954,6 +7748,55 @@ export interface components {
              * Format: date-time
              */
             scheduledTime: string;
+            /** Headers */
+            headers?: {
+                [key: string]: string;
+            } | null;
+            /** Subscribedevents */
+            subscribedEvents?: string[] | null;
+        };
+        /**
+         * WebhookExecutionLogRead
+         * @description Schema for reading a webhook execution log entry.
+         */
+        WebhookExecutionLogRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Webhookid
+             * Format: uuid4
+             */
+            webhookId: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /**
+             * Executedat
+             * Format: date-time
+             */
+            executedAt: string;
+            /** Status */
+            status: string;
+            /** Httpstatuscode */
+            httpStatusCode?: number | null;
+            /** Errormessage */
+            errorMessage?: string | null;
+            /**
+             * Retryattempt
+             * @default 0
+             */
+            retryAttempt: number;
+            /** Requestpayload */
+            requestPayload?: {
+                [key: string]: unknown;
+            } | null;
+            /** Responsebody */
+            responseBody?: string | null;
         };
         /**
          * WebhookMethod
@@ -7020,6 +7863,12 @@ export interface components {
              * Format: date-time
              */
             scheduledTime: string;
+            /** Headers */
+            headers?: {
+                [key: string]: string;
+            } | null;
+            /** Subscribedevents */
+            subscribedEvents?: string[] | null;
             /**
              * Groupid
              * Format: uuid4
@@ -7120,6 +7969,86 @@ export interface components {
          */
         WorkspaceRole: "OWNER" | "ADMIN" | "EDITOR" | "AUTHOR" | "VIEWER";
         /**
+         * WorkspaceSecretCreate
+         * @description Create a new workspace secret. Value is plaintext — encrypted on write.
+         */
+        WorkspaceSecretCreate: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description?: string | null;
+            /** Value */
+            value: string;
+        };
+        /**
+         * WorkspaceSecretRead
+         * @description Read schema — value is intentionally excluded (write-only like GitHub Secrets).
+         */
+        WorkspaceSecretRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description?: string | null;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Updateat */
+            updateAt?: string | null;
+        };
+        /**
+         * WorkspaceSecretUpdate
+         * @description Update a workspace secret. Omit value to keep the existing one.
+         */
+        WorkspaceSecretUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Value */
+            value?: string | null;
+        };
+        /**
+         * WorkspaceSecretWithValue
+         * @description Includes decrypted value — only returned by the /reveal endpoint.
+         */
+        WorkspaceSecretWithValue: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description?: string | null;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Updateat */
+            updateAt?: string | null;
+            /** Value */
+            value: string;
+        };
+        /**
          * WorkspaceSiteInfo
          * @description Combined workspace and site configuration response.
          *
@@ -7128,6 +8057,97 @@ export interface components {
         WorkspaceSiteInfo: {
             workspace: components["schemas"]["WorkspaceInfo"];
             site: components["schemas"]["SiteConfiguration"];
+        };
+        /** WorkspaceStats */
+        WorkspaceStats: {
+            /**
+             * Entries
+             * @default 0
+             */
+            entries: number;
+            /**
+             * Assets
+             * @default 0
+             */
+            assets: number;
+            /**
+             * Collections
+             * @default 0
+             */
+            collections: number;
+            /**
+             * Webhooks
+             * @default 0
+             */
+            webhooks: number;
+            /**
+             * Scheduledtasks
+             * @default 0
+             */
+            scheduledTasks: number;
+            /**
+             * Secrets
+             * @default 0
+             */
+            secrets: number;
+            /**
+             * Variables
+             * @default 0
+             */
+            variables: number;
+            /**
+             * Members
+             * @default 0
+             */
+            members: number;
+        };
+        /** WorkspaceVariableCreate */
+        WorkspaceVariableCreate: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description?: string | null;
+            /** Value */
+            value: string;
+        };
+        /**
+         * WorkspaceVariableRead
+         * @description Value IS included — variables are not secret.
+         */
+        WorkspaceVariableRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description?: string | null;
+            /** Value */
+            value: string;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Updateat */
+            updateAt?: string | null;
+        };
+        /** WorkspaceVariableUpdate */
+        WorkspaceVariableUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Value */
+            value?: string | null;
         };
         /**
          * WorkspaceWithMembership
@@ -7613,6 +8633,37 @@ export interface operations {
             };
         };
     };
+    get_workspace_log_api_groups_webhooks_log_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookExecutionLogRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_one_api_groups_webhooks__item_id__get: {
         parameters: {
             query?: never;
@@ -7732,6 +8783,324 @@ export interface operations {
                     "application/json": {
                         [key: string]: string;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_webhook_logs_api_groups_webhooks__item_id__logs_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookExecutionLogRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_secrets_api_groups_secrets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceSecretRead"][];
+                };
+            };
+        };
+    };
+    create_secret_api_groups_secrets_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceSecretCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceSecretRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_slugs_api_groups_secrets_slugs_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
+                };
+            };
+        };
+    };
+    delete_secret_api_groups_secrets__secret_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                secret_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_secret_api_groups_secrets__secret_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                secret_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceSecretUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceSecretRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reveal_secret_api_groups_secrets__secret_id__reveal_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                secret_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceSecretWithValue"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_variables_api_groups_variables_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceVariableRead"][];
+                };
+            };
+        };
+    };
+    create_variable_api_groups_variables_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceVariableCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceVariableRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_variable_api_groups_variables__var_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                var_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_variable_api_groups_variables__var_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                var_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceVariableUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceVariableRead"];
                 };
             };
             /** @description Validation Error */
@@ -8203,6 +9572,119 @@ export interface operations {
                         [key: string]: unknown;
                     };
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_all_api_groups_email_event_subscriptions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailEventSubscriptionRead"][];
+                };
+            };
+        };
+    };
+    create_one_api_groups_email_event_subscriptions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailEventSubscriptionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailEventSubscriptionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_one_api_groups_email_event_subscriptions__item_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailEventSubscriptionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_one_api_groups_email_event_subscriptions__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
@@ -8724,6 +10206,28 @@ export interface operations {
             };
         };
     };
+    list_event_types_api_event_types_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
+                };
+            };
+        };
+    };
     get_app_info_api_admin_about_get: {
         parameters: {
             query?: never;
@@ -8800,6 +10304,141 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CheckAppConfig"];
+                };
+            };
+        };
+    };
+    create_backup_api_admin_backups_workspaces__workspace_id__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_backups_api_admin_backups_get: {
+        parameters: {
+            query?: {
+                workspace_slug?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown[];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_backup_api_admin_backups__filename__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                filename: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post: {
+        parameters: {
+            query?: {
+                /** @description When true, existing records matched by slug are updated. ⚠️ Overwrites entries, collections, resources, and assets. Junction rows are cleared and rebuilt from the bundle. */
+                overwrite?: boolean;
+            };
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -9768,6 +11407,280 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_task_types_api_admin_scheduled_tasks_task_types_get: {
+        parameters: {
+            query?: {
+                detailed?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_tasks_api_admin_scheduled_tasks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRead"][];
+                };
+            };
+        };
+    };
+    create_task_api_admin_scheduled_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScheduledTaskCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_global_log_api_admin_scheduled_tasks_log_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskExecutionLogRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_task_api_admin_scheduled_tasks__task_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_task_api_admin_scheduled_tasks__task_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_task_api_admin_scheduled_tasks__task_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScheduledTaskUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    execute_task_api_admin_scheduled_tasks__task_id__execute_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_task_history_api_admin_scheduled_tasks__task_id__history_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskExecutionLogRead"][];
                 };
             };
             /** @description Validation Error */
@@ -11244,6 +13157,128 @@ export interface operations {
             };
         };
     };
+    list_backups_api_platform_workspace_backups_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown[];
+                };
+            };
+        };
+    };
+    create_backup_api_platform_workspace_backups_post: {
+        parameters: {
+            query?: {
+                include_system_types?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_backup_api_platform_workspace_backups__filename__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                filename: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    import_workspace_api_platform_workspace_import_post: {
+        parameters: {
+            query?: {
+                /** @description When true, existing records matched by slug are updated with bundle data. ⚠️ This will overwrite entries, collections, resources, and assets that exist in the workspace. Entry junction rows (→asset, →collection, →resource) are cleared and rebuilt from the bundle. */
+                overwrite?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_import_workspace_api_platform_workspace_import_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_workspace_members_api_platform_workspaces__workspace_id__members_get: {
         parameters: {
             query?: never;
@@ -11651,6 +13686,37 @@ export interface operations {
             };
         };
     };
+    get_workspace_log_api_platform_scheduled_tasks_log_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskExecutionLogRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_task_api_platform_scheduled_tasks__id_or_slug__get: {
         parameters: {
             query?: never;
@@ -11797,6 +13863,199 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ScheduledTaskExecutionLogRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_stats_api_platform_stats_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStats"];
+                };
+            };
+        };
+    };
+    send_test_email_api_platform_email_test_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "accept-language"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailTest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailSuccess"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_template_vars_api_platform_email_template_vars_get: {
+        parameters: {
+            query?: {
+                template_type?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_template_api_platform_email_templates__template_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_template_api_platform_email_templates__template_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    send_template_test_email_api_platform_email_templates__template_id__test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TemplateTestRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

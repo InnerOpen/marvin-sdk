@@ -6,10 +6,21 @@
 
 import type { HttpClient } from '../core';
 
+export interface EventVariable {
+  slug: string;
+  description: string;
+  example: string;
+  type: string;
+}
+
 export interface EventOption {
   value: string;
   label: string;
   description?: string;
+  category?: string;
+  enabled?: boolean;
+  variables?: EventVariable[];
+  payloadExample?: Record<string, unknown>;
 }
 
 export class EventsModule {
