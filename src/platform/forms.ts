@@ -96,23 +96,35 @@ export class FormsModule {
   /**
    * Get a published form by slug (Publishing API - public access)
    */
-  async getPublishedForm(slug: string): Promise<PlatformForm> {
-    return this.http.get<PlatformForm>(`/api/publish/forms/${slug}`);
+  async getPublishedForm(workspaceSlug: string, formSlug: string): Promise<PlatformForm> {
+    const validWorkspace = this.http.validatePathParam(workspaceSlug, 'workspace slug');
+    const validForm = this.http.validatePathParam(formSlug, 'form slug');
+    return this.http.get<PlatformForm>(`/api/publish/${validWorkspace}/forms/${validForm}`);
   }
 
   /**
    * Submit data to a published form (Publishing API - public access)
    * Validates data before submission to prevent XSS and malicious content
    */
-  async submitForm(slug: string, data: Record<string, unknown>): Promise<PlatformFormSubmission> {
-    // Validate slug
-    const validSlug = this.http.validatePathParam(slug, 'form slug');
+  async submitForm(workspaceSlug: string, formSlug: string, data: Record<string, unknown>): Promise<PlatformFormSubmission> {
+    // Validate slugs
+    const validWorkspace = this.http.validatePathParam(workspaceSlug, 'workspace slug');
+    const validForm = this.http.validatePathParam(formSlug, 'form slug');
 
     // Validate form data
     this.validateFormData(data);
 
-    return this.http.post<PlatformFormSubmission>(`/api/publish/forms/${validSlug}/submit`, {
+    return this.http.post<PlatformFormSubmission>(`/api/publish/${validWorkspace}/forms/${validForm}/submit`, {
       dataJson: data,
     });
+  }
+
+  /**
+   * Get entries for a published resource (Publishing API - public access)
+   */
+  async getPublishedResourceEntries(workspaceSlug: string, resourceSlug: string): Promise<unknown[]> {
+    const validWorkspace = this.http.validatePathParam(workspaceSlug, 'workspace slug');
+    const validResource = this.http.validatePathParam(resourceSlug, 'resource slug');
+    return this.http.get<unknown[]>(`/api/publish/${validWorkspace}/resources/${validResource}/entries`);
   }
 }

@@ -62,4 +62,48 @@ export class EmailTemplatesClient {
       email: recipientEmail,
     });
   }
+
+  // -----------------------------------------------------------------------
+  // Platform-level email endpoints (no workspace scoping)
+  // -----------------------------------------------------------------------
+
+  /**
+   * Get template variable info for a given template type
+   */
+  async getTemplateVars(templateType: string): Promise<unknown> {
+    return this.http.get<unknown>(`/api/platform/email/template-vars`, { template_type: templateType });
+  }
+
+  /**
+   * Get a system email template by ID
+   */
+  async getSystemTemplate(templateId: string): Promise<EmailTemplateRead> {
+    const validId = this.http.validatePathParam(templateId, 'template ID');
+    return this.http.get<EmailTemplateRead>(`/api/platform/email/templates/${validId}`);
+  }
+
+  /**
+   * Update a system email template
+   */
+  async updateSystemTemplate(templateId: string, data: EmailTemplateUpdate): Promise<EmailTemplateRead> {
+    const validId = this.http.validatePathParam(templateId, 'template ID');
+    return this.http.patch<EmailTemplateRead>(`/api/platform/email/templates/${validId}`, data);
+  }
+
+  /**
+   * Send a test email using a system template
+   */
+  async sendSystemTemplateTest(templateId: string, recipientEmail: string): Promise<{ message: string }> {
+    const validId = this.http.validatePathParam(templateId, 'template ID');
+    return this.http.post<{ message: string }>(`/api/platform/email/templates/${validId}/test`, {
+      recipient_email: recipientEmail,
+    });
+  }
+
+  /**
+   * Test SMTP configuration by sending a test email
+   */
+  async testSmtp(email: string): Promise<{ message: string }> {
+    return this.http.post<{ message: string }>('/api/platform/email/test', { email });
+  }
 }

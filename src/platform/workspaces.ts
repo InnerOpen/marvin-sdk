@@ -124,4 +124,26 @@ export class WorkspacesModule {
   async updatePreferences(workspaceId: string, data: WorkspacePreferencesUpdate): Promise<WorkspacePreferences> {
     return this.http.patch<WorkspacePreferences>(`/api/groups/${workspaceId}/preferences`, data);
   }
+
+  /**
+   * Get platform-level stats for the current workspace
+   */
+  async getStats(): Promise<unknown> {
+    return this.http.get<unknown>('/api/platform/stats');
+  }
+
+  /**
+   * List available workspace backups
+   */
+  async listBackups(): Promise<unknown[]> {
+    return this.http.get<unknown[]>('/api/platform/workspace/backups');
+  }
+
+  /**
+   * Download a workspace backup by filename
+   */
+  async downloadBackup(filename: string): Promise<unknown> {
+    const validFilename = this.http.validatePathParam(filename, 'filename');
+    return this.http.get<unknown>(`/api/platform/workspace/backups/${validFilename}`);
+  }
 }

@@ -6,6 +6,7 @@
 
 import type { HttpClient } from '../../core';
 import type { components } from '../../generated/schema';
+import type { EmailTemplateSummary, EmailTemplateRead, EmailTemplateUpdate } from '../emailTemplates';
 
 // Type aliases from OpenAPI schema
 export type AdminAboutInfo = components['schemas']['AdminAboutInfo'];
@@ -101,5 +102,42 @@ export class AdminSystemModule {
    */
   async updateEmailSettings(data: EmailSettingsUpdate): Promise<EmailSettings> {
     return this.http.put<EmailSettings>('/api/admin/email', data);
+  }
+
+  // -----------------------------------------------------------------------
+  // Admin email templates
+  // -----------------------------------------------------------------------
+
+  /**
+   * List all system email templates
+   */
+  async listEmailTemplates(): Promise<EmailTemplateSummary[]> {
+    return this.http.get<EmailTemplateSummary[]>('/api/admin/email/templates');
+  }
+
+  /**
+   * Get a system email template by ID
+   */
+  async getEmailTemplate(templateId: string): Promise<EmailTemplateRead> {
+    const validId = this.http.validatePathParam(templateId, 'template ID');
+    return this.http.get<EmailTemplateRead>(`/api/admin/email/templates/${validId}`);
+  }
+
+  /**
+   * Update a system email template
+   */
+  async updateEmailTemplate(templateId: string, data: EmailTemplateUpdate): Promise<EmailTemplateRead> {
+    const validId = this.http.validatePathParam(templateId, 'template ID');
+    return this.http.patch<EmailTemplateRead>(`/api/admin/email/templates/${validId}`, data);
+  }
+
+  /**
+   * Send a test email using a system template
+   */
+  async sendEmailTemplateTest(templateId: string, recipientEmail: string): Promise<{ message: string }> {
+    const validId = this.http.validatePathParam(templateId, 'template ID');
+    return this.http.post<{ message: string }>(`/api/admin/email/templates/${validId}/test`, {
+      recipient_email: recipientEmail,
+    });
   }
 }

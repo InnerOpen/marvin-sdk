@@ -17,7 +17,8 @@ import { WorkspacesModule } from './workspaces';
 import { InvitesModule } from './invites';
 import { NotificationsModule } from './notifications';
 import { WebhooksModule } from './webhooks';
-import { AdminUsersModule, AdminSystemModule, AdminMaintenanceModule } from './admin';
+import { AdminUsersModule, AdminSystemModule, AdminMaintenanceModule, AdminScheduledTasksModule, AdminBackupsModule, AdminWorkspacesModule } from './admin';
+import { AppModule } from './app';
 import { UserModule } from './user';
 import { EventsModule } from './events';
 import { EventLogModule } from './eventLog';
@@ -82,6 +83,12 @@ export class PlatformClient extends HttpClient {
   public adminUsers: AdminUsersModule;
   public adminSystem: AdminSystemModule;
   public adminMaintenance: AdminMaintenanceModule;
+  public adminScheduledTasks: AdminScheduledTasksModule;
+  public adminBackups: AdminBackupsModule;
+  public adminWorkspaces: AdminWorkspacesModule;
+
+  // App module
+  public app: AppModule;
 
   constructor(config: PlatformClientConfig) {
     const httpConfig: HttpClientConfig = {
@@ -120,6 +127,12 @@ export class PlatformClient extends HttpClient {
     this.adminUsers = new AdminUsersModule(this);
     this.adminSystem = new AdminSystemModule(this);
     this.adminMaintenance = new AdminMaintenanceModule(this);
+    this.adminScheduledTasks = new AdminScheduledTasksModule(this);
+    this.adminBackups = new AdminBackupsModule(this);
+    this.adminWorkspaces = new AdminWorkspacesModule(this);
+
+    // App module
+    this.app = new AppModule(this);
   }
 }
 

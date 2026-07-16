@@ -155,6 +155,14 @@ export class AssetsModule {
   }
 
   /**
+   * Fetch the raw file for an asset
+   */
+  async getFile(id: string): Promise<unknown> {
+    const validId = this.http.validatePathParam(id, 'asset ID');
+    return this.http.get<unknown>(`/api/platform/assets/${validId}/file`);
+  }
+
+  /**
    * Get download URL for an asset file
    * Use this to create download links or fetch the file directly
    */

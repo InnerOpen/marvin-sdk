@@ -73,6 +73,15 @@ export class CollectionsModule {
   }
 
   /**
+   * Get a single entry within a collection by entry ID
+   */
+  async getEntry(collectionId: string, entryId: string): Promise<unknown> {
+    const validCollectionId = this.http.validatePathParam(collectionId, 'collection ID');
+    const validEntryId = this.http.validatePathParam(entryId, 'entry ID');
+    return this.http.get<unknown>(`/api/platform/collections/${validCollectionId}/entries/${validEntryId}`);
+  }
+
+  /**
    * Update junction fields (role, metadata) for an entry in a collection
    */
   async updateEntryJunction(

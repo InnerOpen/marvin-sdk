@@ -104,5 +104,9 @@ export { AuthModule } from './auth';
 export { ThemeModule } from './theme';
 export type { AppTheme } from './theme';
 
+// App module
+export { AppModule } from './app';
+export type { LoginInfo, AppAboutInfo } from './app';
+
 // Admin modules
 export * from './admin';

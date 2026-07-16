@@ -68,4 +68,13 @@ export class SecretsModule {
     const validId = this.http.validatePathParam(id, 'secret ID');
     await this.http.delete<void>(`/api/groups/secrets/${validId}`);
   }
+
+  /**
+   * Reveal the plaintext value of a secret.
+   * Requires appropriate permissions.
+   */
+  async reveal(id: string): Promise<{ value: string }> {
+    const validId = this.http.validatePathParam(id, 'secret ID');
+    return this.http.get<{ value: string }>(`/api/groups/secrets/${validId}/reveal`);
+  }
 }

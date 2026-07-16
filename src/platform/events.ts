@@ -32,4 +32,12 @@ export class EventsModule {
   async getOptions(): Promise<EventOption[]> {
     return this.http.get<EventOption[]>('/api/event/types');
   }
+
+  /**
+   * Get available event options via the legacy endpoint
+   * @deprecated Use getOptions() (/api/event/types) instead
+   */
+  async getOptionsLegacy(): Promise<EventOption[]> {
+    return this.http.get<EventOption[]>('/api/event/options');
+  }
 }
