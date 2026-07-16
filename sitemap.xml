@@ -2,146 +2,146 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/contributing/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/examples/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/api/assets/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/api/client/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/api/collections/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/api/entries/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/api/platform/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/api/resources/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/api/workspace/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/concepts/architecture/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/concepts/assets/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/concepts/collections/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/concepts/entries/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/concepts/resources/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/concepts/workspace/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/getting-started/configuration/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/getting-started/installation/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/getting-started/quickstart/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/guides/astro/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/guides/caching/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/guides/cli/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/guides/express/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/guides/nextjs/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/migration/breaking-changes/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/migration/v2-migration/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/platform/admin/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/platform/auth/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/platform/email-templates/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/platform/overview/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/platform/webhooks/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/platform/workspaces/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/reference/errors/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/reference/security/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/reference/troubleshooting/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
     <url>
          <loc>https://github.com/inneropen/marvin-sdk/reference/types/</loc>
-         <lastmod>2026-07-13</lastmod>
+         <lastmod>2026-07-16</lastmod>
     </url>
 </urlset>
