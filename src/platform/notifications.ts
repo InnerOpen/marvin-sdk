@@ -18,7 +18,8 @@ export class NotificationsModule {
    * List all notifications for the current workspace
    */
   async list(): Promise<Notification[]> {
-    return this.http.get<Notification[]>('/api/group/notifications');
+    const response = await this.http.get<{ items: Notification[] }>('/api/group/notifications');
+    return response.items || [];
   }
 
   /**
