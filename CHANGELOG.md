@@ -1,3 +1,10 @@
+# [3.2.0-next.21](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.20...v3.2.0-next.21) (2026-07-17)
+
+
+### Bug Fixes
+
+* notifications.list() unwraps pagination response items ([7e275e5](https://github.com/inneropen/marvin-sdk/commit/7e275e565efbb1444e09aaff56b1b8a3d20ee25f))
+
 # [3.2.0-next.20](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.19...v3.2.0-next.20) (2026-07-16)
 
 
