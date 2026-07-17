@@ -30,6 +30,7 @@ import { FormsModule } from './forms';
 import { SecretsModule } from './secrets';
 import { VariablesModule } from './variables';
 import { EmailEventSubscriptionsModule } from './emailEventSubscriptions';
+import { AIModule } from './ai';
 
 export interface PlatformClientConfig {
   apiUrl?: string;
@@ -79,6 +80,9 @@ export class PlatformClient extends HttpClient {
   public variables: VariablesModule;
   public emailEventSubscriptions: EmailEventSubscriptionsModule;
 
+  // AI (providers, models, operations, executions, settings)
+  public ai: AIModule;
+
   // Admin modules
   public adminUsers: AdminUsersModule;
   public adminSystem: AdminSystemModule;
@@ -122,6 +126,9 @@ export class PlatformClient extends HttpClient {
     this.secrets = new SecretsModule(this);
     this.variables = new VariablesModule(this);
     this.emailEventSubscriptions = new EmailEventSubscriptionsModule(this);
+
+    // AI module (composite: settings, providers+models, operations, executions)
+    this.ai = new AIModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);

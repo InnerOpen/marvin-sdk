@@ -108,5 +108,34 @@ export type { AppTheme } from './theme';
 export { AppModule } from './app';
 export type { LoginInfo, AppAboutInfo } from './app';
 
+// AI (providers, models, operations, executions, settings)
+export {
+  AIModule,
+  AISettingsModule,
+  AIProvidersModule,
+  AIModelsModule,
+  AIOperationsModule,
+  AIExecutionsModule,
+} from './ai';
+export type {
+  AIModel,
+  AIModelCreate,
+  AIModelUpdate,
+  AIProvider,
+  AIProviderCreate,
+  AIProviderUpdate,
+  AIProviderTestResult,
+  AIProviderType,
+  AISettings,
+  AISettingsUpdate,
+  AICredentialMode,
+  AIApprovalMode,
+  AIOperationInfo,
+  AIOperationExecuteRequest,
+  AIExecution,
+  AIExecutionStatus,
+  AIExecutionListParams,
+} from './ai';
+
 // Admin modules
 export * from './admin';
