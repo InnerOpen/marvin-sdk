@@ -1,3 +1,10 @@
+# [3.2.0-next.22](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.21...v3.2.0-next.22) (2026-07-17)
+
+
+### Features
+
+* add platform.ai module (providers, models, operations, executions, settings) ([7ac984a](https://github.com/inneropen/marvin-sdk/commit/7ac984a808e76003ea1abf1a09c138ca97fdf66e))
+
 # [3.2.0-next.21](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.20...v3.2.0-next.21) (2026-07-17)
 
 
