@@ -3192,6 +3192,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/collections/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Reorder Collections
+         * @description Bulk-update collection sort_order for this workspace.
+         *
+         *     Writes sort_order directly (not via the repo update), so it works for system
+         *     collections too — reordering is display-only and doesn't touch their locked content.
+         */
+        patch: operations["reorder_collections_api_platform_collections_order_patch"];
+        trace?: never;
+    };
     "/api/platform/collections/{item_id}": {
         parameters: {
             query?: never;
@@ -4689,6 +4712,11 @@ export interface components {
             assetIds?: string[] | null;
             /** Modeloverride */
             modelOverride?: string | null;
+            /**
+             * Source
+             * @default editor
+             */
+            source: string;
         };
         /** AIExecutionRead */
         AIExecutionRead: {
@@ -4852,6 +4880,11 @@ export interface components {
             };
             /** Modeloverride */
             modelOverride?: string | null;
+            /**
+             * Source
+             * @default editor
+             */
+            source: string;
         };
         /** AIProviderCreate */
         AIProviderCreate: {
@@ -5433,12 +5466,30 @@ export interface components {
             smartRules?: {
                 [key: string]: unknown;
             } | null;
+            /**
+             * Ispublic
+             * @default true
+             */
+            isPublic: boolean;
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
             /** Entryids */
             entryIds?: string[] | null;
+        };
+        /**
+         * CollectionOrderItem
+         * @description Schema for a single collection order update.
+         */
+        CollectionOrderItem: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Sortorder */
+            sortOrder: number;
         };
         /**
          * CollectionRead
@@ -5464,6 +5515,16 @@ export interface components {
             color?: string | null;
             /** Issmart */
             isSmart: boolean;
+            /**
+             * Issystem
+             * @default false
+             */
+            isSystem: boolean;
+            /**
+             * Ispublic
+             * @default true
+             */
+            isPublic: boolean;
             /** Createdat */
             createdAt?: string | null;
             /** Updateat */
@@ -5505,6 +5566,8 @@ export interface components {
             smartRules?: {
                 [key: string]: unknown;
             } | null;
+            /** Ispublic */
+            isPublic?: boolean | null;
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
@@ -7619,6 +7682,14 @@ export interface components {
          * @enum {string}
          */
         RecipientType: "event_field" | "admins" | "specific";
+        /**
+         * ReorderCollectionsRequest
+         * @description Schema for bulk reordering collections in the workspace.
+         */
+        ReorderCollectionsRequest: {
+            /** Collections */
+            collections: components["schemas"]["CollectionOrderItem"][];
+        };
         /**
          * ReorderEntriesRequest
          * @description Schema for bulk reordering entries in a collection.
@@ -13618,6 +13689,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CollectionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reorder_collections_api_platform_collections_order_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReorderCollectionsRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

@@ -73,6 +73,12 @@ describe('CollectionsModule', () => {
     await module.getEntries('c-1')
     expect(http.get).toHaveBeenCalledWith('/api/platform/collections/c-1/entries')
   })
+
+  it('reorder patches /order with the collection sortOrder list', async () => {
+    const order = [{ id: 'a', sortOrder: 0 }, { id: 'b', sortOrder: 1 }]
+    await module.reorder(order)
+    expect(http.patch).toHaveBeenCalledWith('/api/platform/collections/order', { collections: order })
+  })
 })
 
 // ---------------------------------------------------------------------------

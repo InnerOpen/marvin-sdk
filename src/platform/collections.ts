@@ -73,6 +73,17 @@ export class CollectionsModule {
   }
 
   /**
+   * Bulk-reorder collections by setting each one's sortOrder. Works for system collections
+   * too (reordering is display-only). Pass the collections in the desired order with ascending
+   * sortOrder values.
+   */
+  async reorder(order: Array<{ id: string; sortOrder: number }>): Promise<{ updated: number }> {
+    return this.http.patch<{ updated: number }>('/api/platform/collections/order', {
+      collections: order,
+    });
+  }
+
+  /**
    * Get entries in a collection
    */
   async getEntries(id: string): Promise<PlatformEntry[]> {
