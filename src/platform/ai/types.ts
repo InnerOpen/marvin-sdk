@@ -152,6 +152,11 @@ export interface AIOperationExecuteRequest {
   input?: Record<string, unknown>;
   /** Override the workspace default model for this call. */
   modelOverride?: string | null;
+  /**
+   * Invocation surface (editor/forms/actions/mcp/scheduled/agent/api). Set by the calling
+   * infrastructure; gated against the workspace policy ∩ the operation's declared sources.
+   */
+  source?: string;
 }
 
 // ── Compose ──────────────────────────────────────────────────────────────────
@@ -165,6 +170,8 @@ export interface AIComposeEntryRequest {
   assetIds?: string[] | null;
   /** Override the workspace default model for this call. */
   modelOverride?: string | null;
+  /** Invocation surface (e.g. "mcp"); gated by the workspace policy. Defaults server-side. */
+  source?: string;
 }
 
 /**
