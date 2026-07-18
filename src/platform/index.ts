@@ -18,6 +18,7 @@ export type {
   PlatformCollection,
   PlatformCollectionCreate,
   PlatformCollectionUpdate,
+  SmartCollectionRules,
 
   // Resources
   PlatformResource,

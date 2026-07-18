@@ -10,6 +10,7 @@ import type {
   PlatformCollectionCreate,
   PlatformCollectionUpdate,
   PlatformEntry,
+  SmartCollectionRules,
 } from './types';
 
 export class CollectionsModule {
@@ -35,6 +36,24 @@ export class CollectionsModule {
    */
   async create(data: PlatformCollectionCreate): Promise<PlatformCollection> {
     return this.http.post<PlatformCollection>('/api/platform/collections', data);
+  }
+
+  /**
+   * Create a **smart collection** whose membership is derived from `rules` and materialized
+   * server-side on entry changes (published/updated/…). You don't add entries to it — the
+   * server keeps membership in sync. Pass extra fields (description, icon, …) via `extra`.
+   */
+  async createSmart(
+    name: string,
+    rules: SmartCollectionRules,
+    extra?: Partial<PlatformCollectionCreate>
+  ): Promise<PlatformCollection> {
+    return this.create({
+      ...(extra ?? {}),
+      name,
+      isSmart: true,
+      smartRules: rules,
+    } as PlatformCollectionCreate);
   }
 
   /**

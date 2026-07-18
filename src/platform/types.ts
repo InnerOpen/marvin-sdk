@@ -27,6 +27,28 @@ export type PlatformCollectionCreate = components['schemas']['CollectionCreate']
 export type PlatformCollectionUpdate = components['schemas']['CollectionUpdate'];
 
 /**
+ * Rules for a **smart collection** (`isSmart: true`). Membership is derived from these rules
+ * and materialized server-side on entry changes — do not manually add/reorder entries on a
+ * smart collection, its membership is rule-managed.
+ *
+ * Every dimension is optional; an empty ruleset matches **nothing** (so a misconfigured smart
+ * collection can't swallow the whole workspace). Dimensions are combined per `match`.
+ *
+ * NOTE: keys are snake_case — `smartRules` is stored as opaque JSON and the server evaluates
+ * these exact keys.
+ */
+export interface SmartCollectionRules {
+  /** entry-type slugs to include */
+  entry_types?: string[];
+  /** entry statuses to include (e.g. "published") */
+  statuses?: string[];
+  /** tags to include — reserved; active once entries carry tags */
+  tags?: string[];
+  /** how to combine the dimensions above (default "all") */
+  match?: 'all' | 'any';
+}
+
+/**
  * Resource (Platform API - full CRUD)
  */
 export type PlatformResource = components['schemas']['ResourceRead'];

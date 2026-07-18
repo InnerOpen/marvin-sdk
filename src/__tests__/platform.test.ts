@@ -14,6 +14,7 @@ import { SecretsModule } from '../platform/secrets'
 import { VariablesModule } from '../platform/variables'
 import { WorkspacesModule } from '../platform/workspaces'
 import { AppModule } from '../platform/app'
+import { CollectionsModule } from '../platform/collections'
 
 function createMockHttp() {
   return {
@@ -26,6 +27,53 @@ function createMockHttp() {
     validatePathParam: vi.fn((v: string) => v),
   }
 }
+
+// ---------------------------------------------------------------------------
+// CollectionsModule
+// ---------------------------------------------------------------------------
+
+describe('CollectionsModule', () => {
+  let http: ReturnType<typeof createMockHttp>
+  let module: CollectionsModule
+
+  beforeEach(() => {
+    http = createMockHttp()
+    module = new CollectionsModule(http as any)
+  })
+
+  it('create posts to /api/platform/collections', async () => {
+    const data = { name: 'Manual', sortOrder: 0, isSmart: false } as any
+    await module.create(data)
+    expect(http.post).toHaveBeenCalledWith('/api/platform/collections', data)
+  })
+
+  it('createSmart posts a smart collection with isSmart + smartRules', async () => {
+    const rules = { entry_types: ['article'], statuses: ['published'], match: 'all' as const }
+    await module.createSmart('Published Articles', rules)
+    expect(http.post).toHaveBeenCalledWith('/api/platform/collections', {
+      name: 'Published Articles',
+      isSmart: true,
+      smartRules: rules,
+    })
+  })
+
+  it('createSmart merges extra fields (e.g. description)', async () => {
+    const rules = { statuses: ['inbox'] }
+    await module.createSmart('Drafts', rules, { description: 'Unpublished entries' })
+    expect(http.post).toHaveBeenCalledWith('/api/platform/collections', {
+      description: 'Unpublished entries',
+      name: 'Drafts',
+      isSmart: true,
+      smartRules: rules,
+    })
+  })
+
+  it('getEntries reads a collection membership', async () => {
+    http.get.mockResolvedValueOnce([])
+    await module.getEntries('c-1')
+    expect(http.get).toHaveBeenCalledWith('/api/platform/collections/c-1/entries')
+  })
+})
 
 // ---------------------------------------------------------------------------
 // EventsModule
