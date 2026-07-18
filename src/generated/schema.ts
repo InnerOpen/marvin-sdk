@@ -6086,47 +6086,38 @@ export interface components {
             color?: string | null;
             /** Description */
             description?: string | null;
+            /** Sortorder */
+            sortOrder?: number | null;
+            /** Issystem */
+            isSystem?: boolean | null;
+            /** Isrendered */
+            isRendered?: boolean | null;
             /**
-             * Sortorder
-             * @default 0
-             */
-            sortOrder: number;
-            /**
-             * Issystem
-             * @default false
-             */
-            isSystem: boolean;
-            /**
-             * Isrendered
-             * @default false
-             */
-            isRendered: boolean;
-            /**
-             * Schema Json
+             * Schemajson
              * @description Entry type schema definition (EntryTypeSchemaDefinition)
              */
-            schema_json?: {
+            schemaJson?: {
                 [key: string]: unknown;
             } | null;
             /**
-             * Rendering Json
+             * Renderingjson
              * @description Rendering configuration (RenderingDefinition)
              */
-            rendering_json?: {
+            renderingJson?: {
                 [key: string]: unknown;
             } | null;
             /**
-             * Capabilities Json
+             * Capabilitiesjson
              * @description Behavioral capabilities (CapabilitiesDefinition)
              */
-            capabilities_json?: {
+            capabilitiesJson?: {
                 [key: string]: unknown;
             } | null;
             /**
-             * Recipe Json
+             * Recipejson
              * @description Authoring recipe (EntryTypeRecipe)
              */
-            recipe_json?: {
+            recipeJson?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -6237,31 +6228,31 @@ export interface components {
             /** Isrendered */
             isRendered?: boolean | null;
             /**
-             * Schema Json
+             * Schemajson
              * @description Entry type schema definition (EntryTypeSchemaDefinition)
              */
-            schema_json?: {
+            schemaJson?: {
                 [key: string]: unknown;
             } | null;
             /**
-             * Rendering Json
+             * Renderingjson
              * @description Rendering configuration (RenderingDefinition)
              */
-            rendering_json?: {
+            renderingJson?: {
                 [key: string]: unknown;
             } | null;
             /**
-             * Capabilities Json
+             * Capabilitiesjson
              * @description Behavioral capabilities (CapabilitiesDefinition)
              */
-            capabilities_json?: {
+            capabilitiesJson?: {
                 [key: string]: unknown;
             } | null;
             /**
-             * Recipe Json
+             * Recipejson
              * @description Authoring recipe (EntryTypeRecipe)
              */
-            recipe_json?: {
+            recipeJson?: {
                 [key: string]: unknown;
             } | null;
         };
