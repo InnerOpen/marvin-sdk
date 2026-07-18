@@ -4,8 +4,11 @@
 
 The official TypeScript SDK for Marvin CMS. A modern, workspace-first SDK for building applications that integrate with Marvin.
 
+[![npm version](https://img.shields.io/npm/v/@inneropen/marvin-sdk)](https://www.npmjs.com/package/@inneropen/marvin-sdk)
+[![Test](https://github.com/inneropen/marvin-sdk/actions/workflows/test.yml/badge.svg?branch=develop)](https://github.com/inneropen/marvin-sdk/actions/workflows/test.yml)
+[![npm downloads](https://img.shields.io/npm/dm/@inneropen/marvin-sdk)](https://www.npmjs.com/package/@inneropen/marvin-sdk)
+[![license](https://img.shields.io/npm/l/@inneropen/marvin-sdk)](./LICENSE)
 [![Security Status](https://img.shields.io/badge/security-enterprise%20grade-brightgreen)](./SECURITY_FIXES_SUMMARY.md)
-[![Version](https://img.shields.io/badge/version-2.0.1-blue)](https://github.com/inneropen/marvin-sdk/releases)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)](https://www.typescriptlang.org/)
 
 ## Security First
