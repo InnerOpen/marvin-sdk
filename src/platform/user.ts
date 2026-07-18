@@ -12,6 +12,7 @@ export type UserProfileUpdate = components['schemas']['UserUpdate'];
 export type ApiToken = components['schemas']['LongLiveTokenRead'];
 export type ApiTokenCreate = components['schemas']['LongLiveTokenCreate'];
 export type ApiTokenWithToken = components['schemas']['LongLiveTokenWithToken'];
+export type ApiTokenUpdate = components['schemas']['LongLiveTokenUpdate'];
 export type PasswordChange = components['schemas']['ChangePassword'];
 
 export class UserModule {
@@ -43,6 +44,22 @@ export class UserModule {
    */
   async createApiToken(data: ApiTokenCreate): Promise<ApiTokenWithToken> {
     return this.http.post<ApiTokenWithToken>('/api/self/api-tokens', data);
+  }
+
+  /**
+   * Get a single personal API token by ID
+   */
+  async getApiToken(tokenId: string): Promise<ApiToken> {
+    const validId = this.http.validatePathParam(tokenId, 'token ID');
+    return this.http.get<ApiToken>(`/api/self/api-tokens/${validId}`);
+  }
+
+  /**
+   * Update a personal API token
+   */
+  async updateApiToken(tokenId: string, data: ApiTokenUpdate): Promise<ApiToken> {
+    const validId = this.http.validatePathParam(tokenId, 'token ID');
+    return this.http.patch<ApiToken>(`/api/self/api-tokens/${validId}`, data);
   }
 
   /**

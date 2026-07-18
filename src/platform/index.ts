@@ -61,11 +61,11 @@ export { APIClientsModule } from './apiClients';
 export { EntryTypesModule } from './entryTypes';
 export { WorkspaceMembersModule } from './workspaceMembers';
 export { WorkspacesModule } from './workspaces';
-export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest, WorkspaceCreate, WorkspaceUpdate, WorkspacePreferences, WorkspacePreferencesUpdate } from './workspaces';
+export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest, WorkspaceCreate, WorkspaceUpdate, WorkspacePreferences, WorkspacePreferencesUpdate, WorkspacePagination } from './workspaces';
 export { InvitesModule } from './invites';
 export type { InviteTokenCreate, InviteTokenSummary, InviteTokenPagination, EmailInvitationRequest } from './invites';
 export { NotificationsModule } from './notifications';
-export type { Notification, NotificationCreate, NotificationUpdate } from './notifications';
+export type { Notification, NotificationCreate, NotificationUpdate, NotificationExecutionLog } from './notifications';
 export { WebhooksModule } from './webhooks';
 export type { Webhook, WebhookCreate, WebhookUpdate, WebhookPagination, WebhookMethod } from './webhooks';
 
@@ -82,7 +82,7 @@ export { FormsModule } from './forms';
 
 // User self-service
 export { UserModule } from './user';
-export type { UserProfile, UserProfileUpdate, ApiToken, ApiTokenCreate, ApiTokenWithToken, PasswordChange } from './user';
+export type { UserProfile, UserProfileUpdate, ApiToken, ApiTokenCreate, ApiTokenWithToken, ApiTokenUpdate, PasswordChange } from './user';
 
 // Events
 export { EventsModule } from './events';
@@ -135,6 +135,7 @@ export type {
   AIExecution,
   AIExecutionStatus,
   AIExecutionListParams,
+  AIReindexRequest,
 } from './ai';
 
 // Admin modules

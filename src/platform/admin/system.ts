@@ -10,6 +10,9 @@ import type { EmailTemplateSummary, EmailTemplateRead, EmailTemplateUpdate } fro
 
 // Type aliases from OpenAPI schema
 export type AdminAboutInfo = components['schemas']['AdminAboutInfo'];
+export type EmailTest = components['schemas']['EmailTest'];
+export type EmailSuccess = components['schemas']['EmailSuccess'];
+export type EmailTemplateCreate = components['schemas']['EmailTemplateCreate'];
 
 /**
  * Email settings returned from API (read-only)
@@ -104,9 +107,31 @@ export class AdminSystemModule {
     return this.http.put<EmailSettings>('/api/admin/email', data);
   }
 
+  /**
+   * Send a test email using the configured SMTP settings
+   */
+  async sendTestEmail(data: EmailTest): Promise<EmailSuccess> {
+    return this.http.post<EmailSuccess>('/api/admin/email', data);
+  }
+
   // -----------------------------------------------------------------------
   // Admin email templates
   // -----------------------------------------------------------------------
+
+  /**
+   * Create a new system email template
+   */
+  async createEmailTemplate(data: EmailTemplateCreate): Promise<EmailTemplateRead> {
+    return this.http.post<EmailTemplateRead>('/api/admin/email/templates', data);
+  }
+
+  /**
+   * Delete a system email template
+   */
+  async deleteEmailTemplate(templateId: string): Promise<void> {
+    const validId = this.http.validatePathParam(templateId, 'template ID');
+    await this.http.delete<void>(`/api/admin/email/templates/${validId}`);
+  }
 
   /**
    * List all system email templates

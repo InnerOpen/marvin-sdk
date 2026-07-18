@@ -149,6 +149,13 @@ export class WebhooksModule {
   }
 
   /**
+   * List the available webhook types
+   */
+  async types(): Promise<unknown[]> {
+    return this.http.get<unknown[]>('/api/groups/webhooks/types');
+  }
+
+  /**
    * Rerun failed webhooks
    */
   async rerun(): Promise<{ message: string; requeued: number }> {

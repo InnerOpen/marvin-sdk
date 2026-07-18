@@ -37,6 +37,13 @@ export class AdminUsersModule {
   }
 
   /**
+   * Create a new user
+   */
+  async create(data: UserCreate): Promise<User> {
+    return this.http.post<User>('/api/admin/users', data);
+  }
+
+  /**
    * Get a user by ID
    */
   async get(id: string): Promise<User> {

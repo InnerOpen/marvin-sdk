@@ -9,6 +9,7 @@ export { AIModule } from './ai';
 export { AISettingsModule } from './settings';
 export { AIProvidersModule, AIModelsModule } from './providers';
 export { AIOperationsModule } from './operations';
+export type { AIReindexRequest } from './operations';
 export { AIExecutionsModule } from './executions';
 
 export type {

@@ -15,6 +15,13 @@ export class AdminMaintenanceModule {
   constructor(private http: HttpClient) {}
 
   /**
+   * Get the maintenance summary (system overview)
+   */
+  async getSummary(): Promise<MaintenanceSummary> {
+    return this.http.get<MaintenanceSummary>('/api/admin/maintenance');
+  }
+
+  /**
    * Clean temporary files
    */
   async cleanTemp(): Promise<{ message: string }> {

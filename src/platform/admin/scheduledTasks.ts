@@ -5,7 +5,7 @@
  */
 
 import type { HttpClient } from '../../core';
-import type { ScheduledTask, ScheduledTaskExecutionLog, TaskTypeInfo } from '../scheduledTasks';
+import type { ScheduledTask, ScheduledTaskCreate, ScheduledTaskUpdate, ScheduledTaskExecutionLog, TaskTypeInfo } from '../scheduledTasks';
 
 export class AdminScheduledTasksModule {
   constructor(private http: HttpClient) {}
@@ -30,6 +30,29 @@ export class AdminScheduledTasksModule {
    */
   async taskTypes(): Promise<string[] | TaskTypeInfo[]> {
     return this.http.get<string[] | TaskTypeInfo[]>('/api/admin/scheduled-tasks/task-types');
+  }
+
+  /**
+   * Create a new scheduled task
+   */
+  async create(data: ScheduledTaskCreate): Promise<ScheduledTask> {
+    return this.http.post<ScheduledTask>('/api/admin/scheduled-tasks', data);
+  }
+
+  /**
+   * Update a scheduled task
+   */
+  async update(taskId: string, data: ScheduledTaskUpdate): Promise<ScheduledTask> {
+    const validId = this.http.validatePathParam(taskId, 'task ID');
+    return this.http.patch<ScheduledTask>(`/api/admin/scheduled-tasks/${validId}`, data);
+  }
+
+  /**
+   * Delete a scheduled task
+   */
+  async delete(taskId: string): Promise<void> {
+    const validId = this.http.validatePathParam(taskId, 'task ID');
+    await this.http.delete<void>(`/api/admin/scheduled-tasks/${validId}`);
   }
 
   /**

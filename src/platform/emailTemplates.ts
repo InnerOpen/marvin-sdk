@@ -55,6 +55,14 @@ export class EmailTemplatesClient {
   }
 
   /**
+   * List the event connections available for workspace email templates
+   */
+  async getEventConnections(groupId: string): Promise<unknown[]> {
+    const validId = this.http.validatePathParam(groupId, 'group ID');
+    return this.http.get<unknown[]>(`/api/platform/workspaces/${validId}/email-templates/event-connections`);
+  }
+
+  /**
    * Send a test email using a template
    */
   async sendTest(groupId: string, templateId: string, recipientEmail: string): Promise<{ message: string }> {

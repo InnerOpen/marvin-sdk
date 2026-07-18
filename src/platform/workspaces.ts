@@ -13,6 +13,7 @@ export type WorkspaceUpdate = components['schemas']['GroupAdminUpdate'];
 export type WorkspacePreferences = components['schemas']['GroupPreferencesRead'];
 export type WorkspacePreferencesUpdate = components['schemas']['GroupPreferencesUpdate'];
 export type WorkspaceWithMembership = components['schemas']['WorkspaceWithMembership'];
+export type WorkspacePagination = components['schemas']['GroupPagination'];
 
 export interface WorkspaceActivationRequest {
   workspace: string;
@@ -59,6 +60,13 @@ export class WorkspacesModule {
    */
   async create(data: WorkspaceCreate): Promise<Workspace> {
     return this.http.post<Workspace>('/api/admin/groups', data);
+  }
+
+  /**
+   * List all workspaces/groups (admin — requires SUPER_ADMIN)
+   */
+  async listAdminGroups(): Promise<WorkspacePagination> {
+    return this.http.get<WorkspacePagination>('/api/admin/groups');
   }
 
   /**
@@ -137,6 +145,13 @@ export class WorkspacesModule {
    */
   async listBackups(): Promise<unknown[]> {
     return this.http.get<unknown[]>('/api/platform/workspace/backups');
+  }
+
+  /**
+   * Create a new backup of the current workspace
+   */
+  async createBackup(): Promise<Record<string, unknown>> {
+    return this.http.post<Record<string, unknown>>('/api/platform/workspace/backups', {});
   }
 
   /**

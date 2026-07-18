@@ -10,6 +10,7 @@ import type { components } from '../generated/schema';
 export type Notification = components['schemas']['GroupEventNotifierRead'];
 export type NotificationCreate = components['schemas']['GroupEventNotifierCreate'];
 export type NotificationUpdate = components['schemas']['GroupEventNotifierUpdate'];
+export type NotificationExecutionLog = components['schemas']['NotificationExecutionLogRead'];
 
 export class NotificationsModule {
   constructor(private http: HttpClient) {}
@@ -55,5 +56,22 @@ export class NotificationsModule {
    */
   async test(id: string): Promise<{ success: boolean; message?: string }> {
     return this.http.post<{ success: boolean; message?: string }>(`/api/group/notifications/${id}/test`, {});
+  }
+
+  /**
+   * Get the workspace-wide notification execution log
+   */
+  async log(options?: { limit?: number }): Promise<NotificationExecutionLog[]> {
+    const params = options?.limit ? { limit: options.limit } : undefined;
+    return this.http.get<NotificationExecutionLog[]>('/api/group/notifications/log', params);
+  }
+
+  /**
+   * Get execution logs for a specific notification
+   */
+  async logs(id: string, options?: { limit?: number }): Promise<NotificationExecutionLog[]> {
+    const validId = this.http.validatePathParam(id, 'notification ID');
+    const params = options?.limit ? { limit: options.limit } : undefined;
+    return this.http.get<NotificationExecutionLog[]>(`/api/group/notifications/${validId}/logs`, params);
   }
 }
