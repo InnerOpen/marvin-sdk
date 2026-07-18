@@ -5525,6 +5525,8 @@ export interface components {
              * @default true
              */
             isPublic: boolean;
+            /** Entrycount */
+            entryCount?: number | null;
             /** Createdat */
             createdAt?: string | null;
             /** Updateat */
