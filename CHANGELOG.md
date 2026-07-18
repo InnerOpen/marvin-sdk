@@ -1,3 +1,18 @@
+# [3.2.0-next.23](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.22...v3.2.0-next.23) (2026-07-18)
+
+
+### Bug Fixes
+
+* **release:** parse gitmoji-prefixed commit subjects ([a464cff](https://github.com/inneropen/marvin-sdk/commit/a464cff5934196cc2f5019ef4547a29b68c042c2))
+
+
+### Features
+
+* **ai:** add operations.composeEntry() for the compose-entry endpoint ([485fc93](https://github.com/inneropen/marvin-sdk/commit/485fc935421a91006b8ed3dc83fe87b0cc21ec58))
+* **collections:** SDK reorder() + isSystem/isPublic types ([bb39b7b](https://github.com/inneropen/marvin-sdk/commit/bb39b7b5849a10ffa7edf5e987d7d7e1b1562498))
+* **collections:** SDK understands smart collections ([d141bbe](https://github.com/inneropen/marvin-sdk/commit/d141bbe5d0f7e95f7ce90aaa034cc56eb0b928b8))
+* **platform:** add methods for full API coverage ([87b23db](https://github.com/inneropen/marvin-sdk/commit/87b23db13e2b14a1b6de1c83aa400e7d4357df2e))
+
 # [3.2.0-next.22](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.21...v3.2.0-next.22) (2026-07-17)
 
 
