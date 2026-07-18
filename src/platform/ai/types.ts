@@ -154,6 +154,37 @@ export interface AIOperationExecuteRequest {
   modelOverride?: string | null;
 }
 
+// ── Compose ──────────────────────────────────────────────────────────────────
+
+export interface AIComposeEntryRequest {
+  /** Entry type slug or id to compose. */
+  entryType: string;
+  /** What the entry should be about. */
+  brief: string;
+  /** Image assets the model can see (vision) and that get attached to the draft. */
+  assetIds?: string[] | null;
+  /** Override the workspace default model for this call. */
+  modelOverride?: string | null;
+}
+
+/**
+ * Result of composing a draft entry. The entry lands as `inbox` (draft) for review.
+ * When AI is off/unconfigured a blank skeleton draft is created instead and
+ * `aiSkipped` is true (executionId/tokens/cost are null in that case).
+ */
+export interface AIComposeEntryResult {
+  entryId: string;
+  status: string;
+  title: string;
+  editUrl: string;
+  executionId: string | null;
+  totalTokens: number | null;
+  estimatedCostUsd: number | null;
+  generated: Record<string, unknown>;
+  /** Present and true only on the no-AI skeleton fallback path. */
+  aiSkipped?: boolean;
+}
+
 // ── Executions ───────────────────────────────────────────────────────────────
 
 export type AIExecutionStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';

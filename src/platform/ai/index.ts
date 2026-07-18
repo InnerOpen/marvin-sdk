@@ -27,6 +27,8 @@ export type {
   AIApprovalMode,
   AIOperationInfo,
   AIOperationExecuteRequest,
+  AIComposeEntryRequest,
+  AIComposeEntryResult,
   AIExecution,
   AIExecutionStatus,
   AIExecutionListParams,

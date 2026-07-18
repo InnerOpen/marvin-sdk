@@ -159,6 +159,23 @@ describe('AIOperationsModule', () => {
     await module.execute('generate-summary')
     expect(http.post).toHaveBeenCalledWith('/api/ai/operations/generate-summary/execute', {})
   })
+
+  it('reindex posts to /api/ai/embeddings/reindex with body', async () => {
+    const body = { entryTypeId: 'et-1' }
+    await module.reindex(body as any)
+    expect(http.post).toHaveBeenCalledWith('/api/ai/embeddings/reindex', body)
+  })
+
+  it('reindex defaults to an empty body', async () => {
+    await module.reindex()
+    expect(http.post).toHaveBeenCalledWith('/api/ai/embeddings/reindex', {})
+  })
+
+  it('composeEntry posts to /api/ai/compose-entry with body', async () => {
+    const body = { entryType: 'article', brief: 'A post about waxed canvas', assetIds: ['a-1'] }
+    await module.composeEntry(body)
+    expect(http.post).toHaveBeenCalledWith('/api/ai/compose-entry', body)
+  })
 })
 
 // ---------------------------------------------------------------------------
