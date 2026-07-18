@@ -1,3 +1,10 @@
+# [3.2.0-next.24](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.23...v3.2.0-next.24) (2026-07-18)
+
+
+### Features
+
+* **ai:** add `source` to execute + compose request types ([f974acb](https://github.com/inneropen/marvin-sdk/commit/f974acbcb721e4c1ee7cf608a002b42a230a7ced))
+
 # [3.2.0-next.23](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.22...v3.2.0-next.23) (2026-07-18)
 
 
