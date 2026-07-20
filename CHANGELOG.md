@@ -1,3 +1,16 @@
+# [3.2.0-next.26](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.25...v3.2.0-next.26) (2026-07-20)
+
+
+### Features
+
+* **ai:** add AIModule.agent() for the tool-calling agent loop ([e5b774c](https://github.com/inneropen/marvin-sdk/commit/e5b774cbfb1b6ae75e94d595519ddb3ab006dffd))
+* **ai:** model management module (installed models + Ollama pull) ([5cc4981](https://github.com/inneropen/marvin-sdk/commit/5cc4981515a1465fc547b4766548c8a1cb6725ae))
+* **automation:** execution history — runs + per-step records ([8bc932a](https://github.com/inneropen/marvin-sdk/commit/8bc932a59991bd89a870223eb6fd0bf73cbbc924))
+* **automation:** incoming webhooks SDK module + trigger types ([85e139b](https://github.com/inneropen/marvin-sdk/commit/85e139b2baed0203ad76cd16d1254a310f4502f1))
+* **automation:** target an entry by slug in operation actions ([1aa26a0](https://github.com/inneropen/marvin-sdk/commit/1aa26a0fd7b9c75c26b09a6463444053c6a4a703))
+* **automation:** target selector (FROM) + dry-run preview ([4715a42](https://github.com/inneropen/marvin-sdk/commit/4715a426282f9b51c82370e425ec1e845b584b9f))
+* **automation:** validate() + per-trigger condition fields ([d39396c](https://github.com/inneropen/marvin-sdk/commit/d39396cb2443684d0ad4edb1d708699fce01efb1))
+
 # [3.2.0-next.25](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.24...v3.2.0-next.25) (2026-07-20)
 
 
