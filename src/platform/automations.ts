@@ -264,6 +264,38 @@ export interface AutomationExecutionDetail extends AutomationExecution {
   actions: AutomationActionExecution[];
 }
 
+/** One resolved step from a dry run — what the action WOULD do, with inputs resolved but not executed. */
+export interface AutomationPlanStep {
+  targetIndex: number;
+  /** The resolved target entity (id/type/status/…), or null for a target-less step. */
+  target?: Record<string, unknown> | null;
+  actionIndex: number;
+  kind: string;
+  label?: string | null;
+  /** "success" = would run; "failed" = a gate/resolve error stopped it (see error). */
+  status: string;
+  /** The executor's resolved preview (e.g. { op, entityId, input } for an operation). */
+  resolved?: Record<string, unknown> | null;
+  error?: string | null;
+}
+
+/** Result of a dry run — target + conditions evaluated, inputs resolved, nothing executed or recorded. */
+export interface AutomationDryRunResult {
+  status: string;   // "dry_run"
+  ok: boolean;
+  ran: number;      // targets that passed conditions and were resolved
+  dryRun: boolean;
+  plan: AutomationPlanStep[];
+}
+
+/** Result of a real run. */
+export interface AutomationRunResult {
+  status: string;   // "ran"
+  ok: boolean;
+  ran: number;
+  result: Record<string, unknown>;
+}
+
 export class AutomationsModule {
   constructor(private http: HttpClient) {}
 
@@ -316,9 +348,19 @@ export class AutomationsModule {
   }
 
   /** Run an automation now (the Manual trigger). Skips the trigger + condition gates. */
-  async run(id: string): Promise<{ status: string; ok: boolean; ran: number; result: Record<string, unknown> }> {
+  async run(id: string): Promise<AutomationRunResult> {
     const validId = this.http.validatePathParam(id, 'automation id');
-    return this.http.post(`/api/automations/${validId}/run`, {});
+    return this.http.post<AutomationRunResult>(`/api/automations/${validId}/run`, {});
+  }
+
+  /**
+   * Dry-run an automation: evaluate its target + conditions and resolve each action's inputs, but
+   * execute nothing (no AI call, no mutation, no webhook POST) and record nothing. Returns `plan` —
+   * the resolved per-step preview of what a real run would do. Works on a disabled draft.
+   */
+  async dryRun(id: string): Promise<AutomationDryRunResult> {
+    const validId = this.http.validatePathParam(id, 'automation id');
+    return this.http.post<AutomationDryRunResult>(`/api/automations/${validId}/run?dry_run=true`, {});
   }
 
   /** Recent runs of an automation, newest first (status, targets, step counts, timing). */
