@@ -54,6 +54,20 @@ export type {
   PlatformFormSubmission,
 } from './types';
 
+export { AutomationsModule } from './automations';
+export type {
+  Automation,
+  AutomationCreate,
+  AutomationUpdate,
+  AutomationDefinition,
+  AutomationTrigger,
+  AutomationCondition,
+  AutomationAction,
+  AutomationActionOption,
+  AutomationOptions,
+  AutomationWebhookOption,
+  AutomationTargetOption,
+} from './automations';
 export { EntriesModule } from './entries';
 export { CollectionsModule } from './collections';
 export { ResourcesModule } from './resources';
@@ -116,6 +130,8 @@ export {
   AIProvidersModule,
   AIModelsModule,
   AIOperationsModule,
+  AIToolsModule,
+  AIMcpServersModule,
   AIExecutionsModule,
 } from './ai';
 export type {
@@ -133,6 +149,17 @@ export type {
   AIApprovalMode,
   AIOperationInfo,
   AIOperationExecuteRequest,
+  AIChatRequest,
+  AIChatResult,
+  AIToolInfo,
+  AIToolInvokeRequest,
+  AgentToolInfo,
+  McpServer,
+  McpServerCreate,
+  McpServerUpdate,
+  McpServerToolInfo,
+  McpServerTestResult,
+  McpTransport,
   AIExecution,
   AIExecutionStatus,
   AIExecutionListParams,

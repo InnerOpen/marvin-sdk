@@ -10,6 +10,8 @@ export { AISettingsModule } from './settings';
 export { AIProvidersModule, AIModelsModule } from './providers';
 export { AIOperationsModule } from './operations';
 export type { AIReindexRequest } from './operations';
+export { AIToolsModule } from './tools';
+export { AIMcpServersModule } from './mcpServers';
 export { AIExecutionsModule } from './executions';
 
 export type {
@@ -27,6 +29,17 @@ export type {
   AIApprovalMode,
   AIOperationInfo,
   AIOperationExecuteRequest,
+  AIChatRequest,
+  AIChatResult,
+  AIToolInfo,
+  AIToolInvokeRequest,
+  AgentToolInfo,
+  McpServer,
+  McpServerCreate,
+  McpServerUpdate,
+  McpServerToolInfo,
+  McpServerTestResult,
+  McpTransport,
   AIComposeEntryRequest,
   AIComposeEntryResult,
   AIExecution,

@@ -113,6 +113,12 @@ export interface AISettings {
   budgetConfig: Record<string, unknown> | null;
   loggingConfig: Record<string, unknown> | null;
   moderationConfig: Record<string, unknown> | null;
+  /** Master switch: may the agent draw tools from registered external MCP servers? */
+  externalMcpEnabled: boolean;
+  /** Per-workspace AI persona: display name for the assistant (defaults to "Marvin"). */
+  assistantName?: string | null;
+  /** Free-text voice/tone instruction appended to the system prompt. */
+  personaPrompt?: string | null;
 }
 
 export interface AISettingsUpdate {
@@ -127,6 +133,9 @@ export interface AISettingsUpdate {
   budgetConfig?: Record<string, unknown> | null;
   loggingConfig?: Record<string, unknown> | null;
   moderationConfig?: Record<string, unknown> | null;
+  externalMcpEnabled?: boolean;
+  assistantName?: string | null;
+  personaPrompt?: string | null;
 }
 
 // ── Operations ───────────────────────────────────────────────────────────────
@@ -157,6 +166,116 @@ export interface AIOperationExecuteRequest {
    * infrastructure; gated against the workspace policy ∩ the operation's declared sources.
    */
   source?: string;
+}
+
+// ── Chat (plain completion — no tools, no RAG) ────────────────────────────────
+
+export interface AIChatRequest {
+  /** The user's message. */
+  message: string;
+  /** Override the workspace default model for this call. */
+  modelOverride?: string | null;
+  /** Invocation surface; gated by the workspace policy. Defaults server-side to "agent". */
+  source?: string;
+}
+
+export interface AIChatResult {
+  reply: string;
+  model: string;
+  totalTokens: number;
+  estimatedCostUsd: number | null;
+  executionId: string;
+}
+
+// ── Tools (core registry) ─────────────────────────────────────────────────────
+
+/**
+ * Core tool metadata. NOTE: snake_case — like AIOperationInfo, the backend returns
+ * `tool.info()` as a raw dict that does not pass through the camelCase alias generator.
+ *
+ * These are Marvin's direct-handler read/query/action capabilities (search, browse, list),
+ * defined once in the core tool registry, used in-process by the internal agent and projected
+ * here for external MCP hosts.
+ */
+export interface AIToolInfo {
+  name: string;
+  description: string;
+  input_schema: Record<string, unknown>;
+  min_role: number;
+  sources: string[];
+  read_only: boolean;
+}
+
+export interface AIToolInvokeRequest {
+  /** Tool args matching the tool's input schema. */
+  args?: Record<string, unknown>;
+  /** Invocation surface (e.g. "mcp"); gated by the workspace policy ∩ the tool's sources. */
+  source?: string;
+}
+
+/**
+ * One tool the agent loop actually binds for the caller (GET /api/ai/agent/tools) — the live
+ * surface behind the Ask Marvin agent, including allowlisted external MCP tools.
+ */
+export interface AgentToolInfo {
+  name: string;
+  description: string;
+  /** "builtin" for core registry / compose tools, "external" for tools from an MCP server. */
+  source: 'builtin' | 'external';
+  /** For external tools, the originating MCP server's display name; null otherwise. */
+  server: string | null;
+}
+
+// ── MCP servers (external agent tool sources) ─────────────────────────────────
+
+export type McpTransport = 'http' | 'sse';
+
+export interface McpServer {
+  id: string;
+  groupId: string;
+  name: string;
+  slug: string;
+  transport: McpTransport | string;
+  url: string;
+  secretRef: string | null;
+  enabled: boolean;
+  /** DENY by default — only tools listed here are callable by the agent. */
+  allowedTools: string[] | null;
+  createdBy: string | null;
+}
+
+export interface McpServerCreate {
+  name: string;
+  /** Generated from name when omitted. */
+  slug?: string;
+  transport?: McpTransport | string;
+  url: string;
+  /** Slug of a WorkspaceSecret holding a Bearer token. */
+  secretRef?: string | null;
+  enabled?: boolean;
+  allowedTools?: string[] | null;
+}
+
+export interface McpServerUpdate {
+  name?: string;
+  transport?: McpTransport | string;
+  url?: string;
+  secretRef?: string | null;
+  enabled?: boolean;
+  allowedTools?: string[] | null;
+}
+
+export interface McpServerToolInfo {
+  name: string;
+  description: string;
+  inputSchema: Record<string, unknown>;
+}
+
+export interface McpServerTestResult {
+  success: boolean;
+  message: string;
+  /** The server's advertised tools (from tools/list) — used to build the allowlist. */
+  tools: McpServerToolInfo[];
 }
 
 // ── Compose ──────────────────────────────────────────────────────────────────

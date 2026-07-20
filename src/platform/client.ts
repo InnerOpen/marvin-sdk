@@ -31,6 +31,7 @@ import { SecretsModule } from './secrets';
 import { VariablesModule } from './variables';
 import { EmailEventSubscriptionsModule } from './emailEventSubscriptions';
 import { AIModule } from './ai';
+import { AutomationsModule } from './automations';
 
 export interface PlatformClientConfig {
   apiUrl?: string;
@@ -83,6 +84,9 @@ export class PlatformClient extends HttpClient {
   // AI (providers, models, operations, executions, settings)
   public ai: AIModule;
 
+  // Automations (Flavor B: event → conditions → actions; general — works with AI off)
+  public automations: AutomationsModule;
+
   // Admin modules
   public adminUsers: AdminUsersModule;
   public adminSystem: AdminSystemModule;
@@ -129,6 +133,9 @@ export class PlatformClient extends HttpClient {
 
     // AI module (composite: settings, providers+models, operations, executions)
     this.ai = new AIModule(this);
+
+    // Automations (general workflow engine; AI is one optional action kind)
+    this.automations = new AutomationsModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);
