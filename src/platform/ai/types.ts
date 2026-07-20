@@ -119,6 +119,8 @@ export interface AISettings {
   assistantName?: string | null;
   /** Free-text voice/tone instruction appended to the system prompt. */
   personaPrompt?: string | null;
+  /** Default tone register for agent runs (axis B) — "auto" | "professional" | "playful". */
+  defaultRegister?: string;
 }
 
 export interface AISettingsUpdate {
@@ -136,6 +138,7 @@ export interface AISettingsUpdate {
   externalMcpEnabled?: boolean;
   assistantName?: string | null;
   personaPrompt?: string | null;
+  defaultRegister?: string;
 }
 
 // ── Operations ───────────────────────────────────────────────────────────────
