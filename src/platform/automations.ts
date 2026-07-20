@@ -10,13 +10,24 @@
 
 import type { HttpClient } from '../core';
 
+/**
+ * A condition — either a leaf (`{field, op, value}`) or a boolean group (`{all: [...]}`,
+ * `{any: [...]}`, `{not: <cond>}`, nestable). A top-level array is an implicit AND.
+ */
 export interface AutomationCondition {
-  /** Dotted path into the match context, e.g. "entry.entry_type". */
-  field: string;
-  /** eq | neq | contains | exists (see AutomationOptions.conditionOps). */
-  op: string;
-  /** Comparison value; may embed $event.* / $previous.* templates. */
+  /** Dotted path into the match context, e.g. "entry.entry_type" (leaf conditions). */
+  field?: string;
+  /**
+   * eq | neq | contains | in | starts_with | exists | changed | changed_from | changed_to
+   * (see AutomationOptions.conditionOps). The `changed*` operators key on an update's diff.
+   */
+  op?: string;
+  /** Comparison value; may embed ${...} templates ($event.* / $previous.* / $steps.<id>.output.*). */
   value?: unknown;
+  /** Boolean groups (alternative to a leaf) — nestable. */
+  all?: AutomationCondition[];
+  any?: AutomationCondition[];
+  not?: AutomationCondition;
 }
 
 /**
@@ -27,6 +38,8 @@ export interface AutomationCondition {
 export interface AutomationAction {
   /** operation | entry | emit_event | handler | webhook (see AutomationOptions.actionKinds). */
   kind: string;
+  /** Optional step id — makes this step's output addressable as $steps.<id>.output.* downstream. */
+  id?: string;
   // operation (op = the AI operation slug) / entry (op = publish | unpublish | archive | restore):
   op?: string;
   input?: Record<string, unknown>;
