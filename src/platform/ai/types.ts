@@ -226,6 +226,35 @@ export interface AgentToolInfo {
   server: string | null;
 }
 
+// ── Installed models + on-demand pull (Ollama) ────────────────────────────────
+
+/** What's actually installed in the workspace's active provider (vs. registered metadata). */
+export interface InstalledModels {
+  providerType: string;
+  /** Whether this provider can pull models on demand (Ollama). */
+  supportsPull: boolean;
+  models: string[];
+}
+
+export interface ModelPullRequest {
+  /** Model to download, e.g. "qwen3-coder" or "nomic-embed-text". */
+  name: string;
+}
+
+/** Progress of a background model pull. Poll `pullStatus` until `done`. */
+export interface ModelPullStatus {
+  id: string;
+  name: string;
+  status: 'pulling' | 'success' | 'error';
+  /** Latest provider status line, e.g. "pulling manifest". */
+  detail: string;
+  completed: number;
+  total: number;
+  percent: number;
+  error: string | null;
+  done: boolean;
+}
+
 // ── MCP servers (external agent tool sources) ─────────────────────────────────
 
 export type McpTransport = 'http' | 'sse';

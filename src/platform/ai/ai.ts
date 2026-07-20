@@ -13,6 +13,7 @@ import type { HttpClient } from '../../core';
 import type { AIChatRequest, AIChatResult } from './types';
 import { AISettingsModule } from './settings';
 import { AIProvidersModule } from './providers';
+import { AIModelManagementModule } from './models';
 import { AIOperationsModule } from './operations';
 import { AIToolsModule } from './tools';
 import { AIMcpServersModule } from './mcpServers';
@@ -21,6 +22,7 @@ import { AIExecutionsModule } from './executions';
 export class AIModule {
   public settings: AISettingsModule;
   public providers: AIProvidersModule;
+  public models: AIModelManagementModule;
   public operations: AIOperationsModule;
   public tools: AIToolsModule;
   public mcpServers: AIMcpServersModule;
@@ -29,6 +31,7 @@ export class AIModule {
   constructor(private http: HttpClient) {
     this.settings = new AISettingsModule(http);
     this.providers = new AIProvidersModule(http);
+    this.models = new AIModelManagementModule(http);
     this.operations = new AIOperationsModule(http);
     this.tools = new AIToolsModule(http);
     this.mcpServers = new AIMcpServersModule(http);

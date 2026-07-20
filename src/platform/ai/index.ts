@@ -8,6 +8,7 @@
 export { AIModule } from './ai';
 export { AISettingsModule } from './settings';
 export { AIProvidersModule, AIModelsModule } from './providers';
+export { AIModelManagementModule } from './models';
 export { AIOperationsModule } from './operations';
 export type { AIReindexRequest } from './operations';
 export { AIToolsModule } from './tools';
@@ -34,6 +35,9 @@ export type {
   AIToolInfo,
   AIToolInvokeRequest,
   AgentToolInfo,
+  InstalledModels,
+  ModelPullRequest,
+  ModelPullStatus,
   McpServer,
   McpServerCreate,
   McpServerUpdate,
