@@ -25,9 +25,9 @@ export interface AutomationCondition {
  * JSON keys, not aliased.
  */
 export interface AutomationAction {
-  /** operation | emit_event | handler | webhook (see AutomationOptions.actionKinds). */
+  /** operation | entry | emit_event | handler | webhook (see AutomationOptions.actionKinds). */
   kind: string;
-  // operation:
+  // operation (op = the AI operation slug) / entry (op = publish | unpublish | archive | restore):
   op?: string;
   input?: Record<string, unknown>;
   entity_type?: string;
