@@ -56,4 +56,32 @@ export class TagsModule {
     const e = this.http.validatePathParam(entryId, 'entry ID');
     return this.http.delete(`/api/platform/tags/${t}/entries/${e}`);
   }
+
+  /** Apply a tag to an asset (idempotent). */
+  async attachAsset(tagId: string, assetId: string): Promise<void> {
+    const t = this.http.validatePathParam(tagId, 'tag ID');
+    const a = this.http.validatePathParam(assetId, 'asset ID');
+    return this.http.post(`/api/platform/tags/${t}/assets/${a}`, {});
+  }
+
+  /** Remove a tag from an asset. */
+  async detachAsset(tagId: string, assetId: string): Promise<void> {
+    const t = this.http.validatePathParam(tagId, 'tag ID');
+    const a = this.http.validatePathParam(assetId, 'asset ID');
+    return this.http.delete(`/api/platform/tags/${t}/assets/${a}`);
+  }
+
+  /** Apply a tag to a resource (idempotent). */
+  async attachResource(tagId: string, resourceId: string): Promise<void> {
+    const t = this.http.validatePathParam(tagId, 'tag ID');
+    const r = this.http.validatePathParam(resourceId, 'resource ID');
+    return this.http.post(`/api/platform/tags/${t}/resources/${r}`, {});
+  }
+
+  /** Remove a tag from a resource. */
+  async detachResource(tagId: string, resourceId: string): Promise<void> {
+    const t = this.http.validatePathParam(tagId, 'tag ID');
+    const r = this.http.validatePathParam(resourceId, 'resource ID');
+    return this.http.delete(`/api/platform/tags/${t}/resources/${r}`);
+  }
 }

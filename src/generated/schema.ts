@@ -3346,9 +3346,10 @@ export interface paths {
         put?: never;
         /**
          * Validate an automation definition
-         * @description Advisory coherence check for a definition — flags conditions/actions that reference a
-         *     namespace the trigger doesn't provide (e.g. entry.* under a webhook trigger). Never rejects;
-         *     the builder shows the issues as warnings.
+         * @description Check a definition before saving. Returns two levels of issue: structural **errors** (a
+         *     shape the definition model rejects — unknown action kind, missing required field, wrong type;
+         *     these block a save) and advisory **warnings** (coherent but won't match anything, e.g. entry.*
+         *     under a webhook trigger). The builder surfaces both; only errors gate the save.
          */
         post: operations["validate_api_automations_validate_post"];
         delete?: never;
@@ -3432,6 +3433,10 @@ export interface paths {
          * Run an automation now (manual trigger)
          * @description Run the automation's steps immediately — the Manual trigger / Run button. Skips the
          *     trigger + condition gates (the caller asked for it explicitly).
+         *
+         *     ``dry_run=true`` resolves the target + each action's inputs but executes nothing (no AI call,
+         *     no mutation, no webhook POST) and records nothing — it returns ``plan``, the resolved per-step
+         *     preview. A disabled draft can be dry-run (that's when you most want to preview it).
          */
         post: operations["run_automation_api_automations__automation_id__run_post"];
         delete?: never;
@@ -3685,12 +3690,12 @@ export interface paths {
         put?: never;
         /**
          * Add Entry to Collection
-         * @description Add an entry to a collection.
+         * @description Add an entry to a collection (via EntryService — emits `entry_added_to_collection`).
          */
         post: operations["add_entry_to_collection_api_platform_entries__entry_id__collections__collection_id__post"];
         /**
          * Remove Entry from Collection
-         * @description Remove an entry from a collection.
+         * @description Remove an entry from a collection (via EntryService — emits `entry_removed_from_collection`).
          */
         delete: operations["remove_entry_from_collection_api_platform_entries__entry_id__collections__collection_id__delete"];
         options?: never;
@@ -3874,6 +3879,48 @@ export interface paths {
         post: operations["attach_tag_api_platform_tags__tag_id__entries__entry_id__post"];
         /** Detach Tag from Entry */
         delete: operations["detach_tag_api_platform_tags__tag_id__entries__entry_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/tags/{tag_id}/assets/{asset_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Attach Tag to Asset
+         * @description Apply a tag to an asset. Idempotent.
+         */
+        post: operations["attach_tag_to_asset_api_platform_tags__tag_id__assets__asset_id__post"];
+        /** Detach Tag from Asset */
+        delete: operations["detach_tag_from_asset_api_platform_tags__tag_id__assets__asset_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/tags/{tag_id}/resources/{resource_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Attach Tag to Resource
+         * @description Apply a tag to a resource. Idempotent.
+         */
+        post: operations["attach_tag_to_resource_api_platform_tags__tag_id__resources__resource_id__post"];
+        /** Detach Tag from Resource */
+        delete: operations["detach_tag_from_resource_api_platform_tags__tag_id__resources__resource_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -5961,6 +6008,11 @@ export interface components {
              * Format: uuid4
              */
             uploadedBy: string;
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
         };
         /**
          * AssetUpdate
@@ -5979,6 +6031,8 @@ export interface components {
             metadata?: {
                 [key: string]: unknown;
             } | null;
+            /** Tag Ids */
+            tag_ids?: string[] | null;
         };
         /**
          * AuthMethod
@@ -6296,6 +6350,13 @@ export interface components {
              * @default []
              */
             incomingWebhooks: components["schemas"]["AutomationIncomingWebhookOption"][];
+            /**
+             * Definitionschema
+             * @default {}
+             */
+            definitionSchema: {
+                [key: string]: unknown;
+            };
         };
         /**
          * AutomationPreviewMatch
@@ -7034,6 +7095,11 @@ export interface components {
              * Format: uuid4
              */
             uploadedBy: string;
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
         };
         /**
          * EntryCollectionRead
@@ -7560,6 +7626,8 @@ export interface components {
             integrationId: string;
             /** Operation */
             operation?: string | null;
+            /** Correlationid */
+            correlationId?: string | null;
             /** Eventdata */
             eventData: {
                 [key: string]: unknown;
@@ -7606,6 +7674,8 @@ export interface components {
             entityId?: string | null;
             /** Entitytype */
             entityType?: string | null;
+            /** Correlationid */
+            correlationId?: string | null;
             /** Messagetitle */
             messageTitle: string;
             /** Messagebody */
@@ -8701,6 +8771,11 @@ export interface components {
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
         };
         /**
          * PublishedAssetsResponse
@@ -9039,6 +9114,11 @@ export interface components {
              * @default []
              */
             entries: string[];
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
         };
         /**
          * PublishedResourcesResponse
@@ -9124,6 +9204,8 @@ export interface components {
             metadata?: {
                 [key: string]: unknown;
             } | null;
+            /** Tag Ids */
+            tag_ids?: string[] | null;
         };
         /**
          * ResourceRead
@@ -9156,6 +9238,11 @@ export interface components {
              * Format: uuid4
              */
             createdBy: string;
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
         };
         /**
          * ResourceUpdate
@@ -9178,6 +9265,8 @@ export interface components {
             metadata?: {
                 [key: string]: unknown;
             } | null;
+            /** Tag Ids */
+            tag_ids?: string[] | null;
         };
         /**
          * ScheduledTaskCreate
@@ -9449,6 +9538,8 @@ export interface components {
             color?: string | null;
             /** Entrycount */
             entryCount?: number | null;
+            /** Usagecount */
+            usageCount?: number | null;
             /** Createdat */
             createdAt?: string | null;
             /** Updateat */
@@ -15313,7 +15404,9 @@ export interface operations {
     };
     run_automation_api_automations__automation_id__run_post: {
         parameters: {
-            query?: never;
+            query?: {
+                dry_run?: boolean;
+            };
             header?: never;
             path: {
                 automation_id: string;
@@ -16664,6 +16757,142 @@ export interface operations {
             };
         };
     };
+    attach_tag_to_asset_api_platform_tags__tag_id__assets__asset_id__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tag_id: string;
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    detach_tag_from_asset_api_platform_tags__tag_id__assets__asset_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tag_id: string;
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    attach_tag_to_resource_api_platform_tags__tag_id__resources__resource_id__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tag_id: string;
+                resource_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    detach_tag_from_resource_api_platform_tags__tag_id__resources__resource_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tag_id: string;
+                resource_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_api_clients_api_platform_api_clients_get: {
         parameters: {
             query?: never;
@@ -17768,6 +17997,7 @@ export interface operations {
                 entity_type?: string | null;
                 entity_id?: string | null;
                 user_id?: string | null;
+                correlation_id?: string | null;
                 start_date?: string | null;
                 end_date?: string | null;
                 limit?: number;
