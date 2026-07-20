@@ -92,10 +92,16 @@ export interface AutomationTarget {
   query?: Record<string, unknown>;
 }
 
+/**
+ * The automation definition. NOTE: the server's Pydantic discriminated-union model is the single
+ * source of truth for this shape (validated on create/update; its JSON Schema is served as
+ * AutomationOptions.definitionSchema). These interfaces mirror it for DX; keep them in sync.
+ */
 export interface AutomationDefinition {
   trigger?: AutomationTrigger;
   target?: AutomationTarget;
-  conditions?: AutomationCondition[];
+  /** A list (implicit AND) or a single boolean group. */
+  conditions?: AutomationCondition[] | AutomationCondition;
   actions?: AutomationAction[];
 }
 
@@ -186,6 +192,13 @@ export interface AutomationOptions {
   automations: AutomationTargetOption[];
   /** The workspace's incoming (ingress) webhooks — an incoming_webhook trigger targets one. */
   incomingWebhooks: AutomationIncomingWebhookOption[];
+  /**
+   * JSON Schema of the `definition` (trigger/action/condition/target discriminated unions) — the
+   * server's single structural source of truth. The hand-written AutomationDefinition/Action/Trigger
+   * interfaces above mirror it; when they disagree, this schema wins. A builder can drive its shape
+   * (kinds, required fields, enums) from here instead of hardcoding.
+   */
+  definitionSchema: Record<string, unknown>;
 }
 
 /** One advisory coherence issue from POST /api/automations/validate (not a hard error). */
