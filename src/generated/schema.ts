@@ -3784,6 +3784,30 @@ export interface paths {
         patch: operations["update_collection_api_platform_collections__item_id__patch"];
         trace?: never;
     };
+    "/api/platform/collections/{item_id}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Collection Members
+         * @description Lightweight membership list for a collection of any target type.
+         *
+         *     Returns ``[{id, label, slug, type}]`` — entries (title), assets (name), or resources (name)
+         *     depending on the collection's target_type. Used by the admin UI to show membership of
+         *     asset/resource smart collections uniformly.
+         */
+        get: operations["get_collection_members_api_platform_collections__item_id__members_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/collections/{item_id}/entries": {
         parameters: {
             query?: never;
@@ -6769,6 +6793,11 @@ export interface components {
                 [key: string]: unknown;
             } | null;
             /**
+             * Targettype
+             * @default entry
+             */
+            targetType: string;
+            /**
              * Ispublic
              * @default true
              */
@@ -6817,6 +6846,11 @@ export interface components {
             color?: string | null;
             /** Issmart */
             isSmart: boolean;
+            /**
+             * Targettype
+             * @default entry
+             */
+            targetType: string;
             /**
              * Issystem
              * @default false
@@ -6870,6 +6904,8 @@ export interface components {
             smartRules?: {
                 [key: string]: unknown;
             } | null;
+            /** Targettype */
+            targetType?: string | null;
             /** Ispublic */
             isPublic?: boolean | null;
             /** Metadatajson */
@@ -16562,6 +16598,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CollectionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_collection_members_api_platform_collections__item_id__members_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
                 };
             };
             /** @description Validation Error */
