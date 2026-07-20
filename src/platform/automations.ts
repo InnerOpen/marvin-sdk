@@ -48,7 +48,7 @@ export interface AutomationAction {
 
 /** Trigger config (snake_case — literal keys the engine reads, not aliased API fields). */
 export interface AutomationTrigger {
-  /** event | manual | schedule | chained | on_error (webhook/chat/mcp as they land). Defaults to "event". */
+  /** event | manual | schedule | chained | on_error | incoming_webhook (mcp as it lands). Defaults to "event". */
   type?: string;
   /** For type="event": the event name, e.g. "entry_published". */
   event?: string;
@@ -58,6 +58,8 @@ export interface AutomationTrigger {
   schedule_config?: Record<string, unknown>;
   /** For type="chained" | "on_error": target automation (slug or id); omit/"any" = every automation. */
   automation?: string;
+  /** For type="incoming_webhook": target incoming webhook (slug); omit/"any" = any webhook. */
+  webhook?: string;
 }
 
 export interface AutomationDefinition {
@@ -113,6 +115,16 @@ export interface AutomationTargetOption {
   name: string;
 }
 
+/** One of the workspace's incoming webhooks — an incoming_webhook trigger targets it by slug. */
+export interface AutomationIncomingWebhookOption {
+  id: string;
+  slug: string;
+  name: string;
+  enabled: boolean;
+  /** Whether a token has been minted (the endpoint is live). */
+  hasToken: boolean;
+}
+
 /** The builder's vocabulary, from GET /api/automations/options. */
 export interface AutomationOptions {
   /** Trigger types available (event | manual | schedule | chained | on_error | …). */
@@ -125,10 +137,12 @@ export interface AutomationOptions {
   actionKinds: string[];
   /** AI operations available as `operation` actions — empty when AI is off / the source is disabled. */
   operations: AutomationActionOption[];
-  /** The workspace's configured webhooks, for the `webhook` action. */
+  /** The workspace's configured (outgoing) webhooks, for the `webhook` action. */
   webhooks: AutomationWebhookOption[];
   /** Other automations in the workspace — chained/on-error triggers may target one. */
   automations: AutomationTargetOption[];
+  /** The workspace's incoming (ingress) webhooks — an incoming_webhook trigger targets one. */
+  incomingWebhooks: AutomationIncomingWebhookOption[];
 }
 
 export class AutomationsModule {

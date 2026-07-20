@@ -32,6 +32,7 @@ import { VariablesModule } from './variables';
 import { EmailEventSubscriptionsModule } from './emailEventSubscriptions';
 import { AIModule } from './ai';
 import { AutomationsModule } from './automations';
+import { IncomingWebhooksModule } from './incomingWebhooks';
 
 export interface PlatformClientConfig {
   apiUrl?: string;
@@ -86,6 +87,8 @@ export class PlatformClient extends HttpClient {
 
   // Automations (Flavor B: event → conditions → actions; general — works with AI off)
   public automations: AutomationsModule;
+  // Incoming (ingress) webhooks — tokened endpoints that drop events on the bus.
+  public incomingWebhooks: IncomingWebhooksModule;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -136,6 +139,7 @@ export class PlatformClient extends HttpClient {
 
     // Automations (general workflow engine; AI is one optional action kind)
     this.automations = new AutomationsModule(this);
+    this.incomingWebhooks = new IncomingWebhooksModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);

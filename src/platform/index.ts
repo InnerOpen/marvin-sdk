@@ -67,7 +67,14 @@ export type {
   AutomationOptions,
   AutomationWebhookOption,
   AutomationTargetOption,
+  AutomationIncomingWebhookOption,
 } from './automations';
+export { IncomingWebhooksModule } from './incomingWebhooks';
+export type {
+  IncomingWebhook,
+  IncomingWebhookCreate,
+  IncomingWebhookUpdate,
+} from './incomingWebhooks';
 export { EntriesModule } from './entries';
 export { CollectionsModule } from './collections';
 export { ResourcesModule } from './resources';
