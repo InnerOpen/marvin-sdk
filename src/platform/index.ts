@@ -65,9 +65,12 @@ export type {
   AutomationAction,
   AutomationActionOption,
   AutomationOptions,
+  AutomationConditionField,
   AutomationWebhookOption,
   AutomationTargetOption,
   AutomationIncomingWebhookOption,
+  AutomationValidationIssue,
+  AutomationValidateResult,
 } from './automations';
 export { IncomingWebhooksModule } from './incomingWebhooks';
 export type {

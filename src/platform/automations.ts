@@ -125,6 +125,14 @@ export interface AutomationIncomingWebhookOption {
   hasToken: boolean;
 }
 
+/** A field a condition can reference, suggested per trigger context (guided builder). */
+export interface AutomationConditionField {
+  /** Dotted path, e.g. "entry.entry_type" or "event.payload." (a prefix to complete). */
+  field: string;
+  label: string;
+  description: string;
+}
+
 /** The builder's vocabulary, from GET /api/automations/options. */
 export interface AutomationOptions {
   /** Trigger types available (event | manual | schedule | chained | on_error | …). */
@@ -133,6 +141,8 @@ export interface AutomationOptions {
   triggers: string[];
   /** Condition operators (eq/neq/contains/exists). */
   conditionOps: string[];
+  /** Suggested condition fields per trigger type — so the field picker offers the right fields. */
+  conditionFields: Record<string, AutomationConditionField[]>;
   /** Action kinds with a registered executor. */
   actionKinds: string[];
   /** AI operations available as `operation` actions — empty when AI is off / the source is disabled. */
@@ -145,6 +155,19 @@ export interface AutomationOptions {
   incomingWebhooks: AutomationIncomingWebhookOption[];
 }
 
+/** One advisory coherence issue from POST /api/automations/validate (not a hard error). */
+export interface AutomationValidationIssue {
+  level: 'warning' | 'error';
+  message: string;
+  where: 'trigger' | 'condition' | 'action';
+  /** Position within conditions/actions, when applicable. */
+  index?: number | null;
+}
+
+export interface AutomationValidateResult {
+  issues: AutomationValidationIssue[];
+}
+
 export class AutomationsModule {
   constructor(private http: HttpClient) {}
 
@@ -153,9 +176,18 @@ export class AutomationsModule {
     return this.http.get<Automation[]>('/api/automations');
   }
 
-  /** The builder's vocabulary — triggers, condition ops, action kinds, available AI operations. */
+  /** The builder's vocabulary — triggers, condition ops + fields, action kinds, AI operations. */
   async options(): Promise<AutomationOptions> {
     return this.http.get<AutomationOptions>('/api/automations/options');
+  }
+
+  /**
+   * Advisory coherence check for a definition before saving — flags conditions/actions that
+   * reference a namespace the trigger doesn't provide (e.g. entry.* under a webhook trigger).
+   * Never rejects; returns issues for the builder to surface as warnings.
+   */
+  async validate(definition: AutomationDefinition): Promise<AutomationValidateResult> {
+    return this.http.post<AutomationValidateResult>('/api/automations/validate', { definition });
   }
 
   async get(id: string): Promise<Automation> {
