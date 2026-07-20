@@ -74,6 +74,9 @@ export type {
   AutomationTarget,
   AutomationPreviewMatch,
   AutomationPreviewResult,
+  AutomationExecution,
+  AutomationExecutionDetail,
+  AutomationActionExecution,
 } from './automations';
 export { IncomingWebhooksModule } from './incomingWebhooks';
 export type {

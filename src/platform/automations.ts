@@ -208,6 +208,47 @@ export interface AutomationPreviewResult {
   error?: string | null;
 }
 
+/** One recorded step within a run — which target, which action, and how it went. */
+export interface AutomationActionExecution {
+  id: string;
+  targetIndex: number;
+  targetEntityType?: string | null;
+  targetEntityId?: string | null;
+  actionIndex: number;
+  kind: string;
+  label?: string | null;
+  status: string;               // success | failed
+  error?: string | null;
+  durationMs?: number | null;
+  outputSnapshot?: Record<string, unknown> | null;
+}
+
+/** One recorded run of an automation (compact — for the history list). */
+export interface AutomationExecution {
+  id: string;
+  automationId?: string | null;
+  automationSlug: string;
+  triggerType: string;
+  status: string;               // running | success | partial | failed
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  durationMs?: number | null;
+  targetsMatched: number;
+  targetsRun: number;
+  capped: boolean;
+  stepsTotal: number;
+  stepsOk: number;
+  stepsFailed: number;
+  error?: string | null;
+  correlationId?: string | null;
+  triggeredBy?: string | null;
+}
+
+export interface AutomationExecutionDetail extends AutomationExecution {
+  definitionSnapshot?: AutomationDefinition | null;
+  actions: AutomationActionExecution[];
+}
+
 export class AutomationsModule {
   constructor(private http: HttpClient) {}
 
@@ -260,8 +301,21 @@ export class AutomationsModule {
   }
 
   /** Run an automation now (the Manual trigger). Skips the trigger + condition gates. */
-  async run(id: string): Promise<{ status: string; ok: boolean; result: Record<string, unknown> }> {
+  async run(id: string): Promise<{ status: string; ok: boolean; ran: number; result: Record<string, unknown> }> {
     const validId = this.http.validatePathParam(id, 'automation id');
     return this.http.post(`/api/automations/${validId}/run`, {});
+  }
+
+  /** Recent runs of an automation, newest first (status, targets, step counts, timing). */
+  async executions(id: string, limit = 25): Promise<AutomationExecution[]> {
+    const validId = this.http.validatePathParam(id, 'automation id');
+    return this.http.get<AutomationExecution[]>(`/api/automations/${validId}/executions`, { limit });
+  }
+
+  /** One run plus its per-(target, step) records and the definition it ran against. */
+  async execution(id: string, executionId: string): Promise<AutomationExecutionDetail> {
+    const validId = this.http.validatePathParam(id, 'automation id');
+    const validExec = this.http.validatePathParam(executionId, 'execution id');
+    return this.http.get<AutomationExecutionDetail>(`/api/automations/${validId}/executions/${validExec}`);
   }
 }
