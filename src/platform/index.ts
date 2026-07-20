@@ -20,6 +20,11 @@ export type {
   PlatformCollectionUpdate,
   SmartCollectionRules,
 
+  // Tags
+  PlatformTag,
+  PlatformTagCreate,
+  PlatformTagUpdate,
+
   // Resources
   PlatformResource,
   PlatformResourceCreate,
@@ -86,6 +91,7 @@ export type {
 } from './incomingWebhooks';
 export { EntriesModule } from './entries';
 export { CollectionsModule } from './collections';
+export { TagsModule } from './tags';
 export { ResourcesModule } from './resources';
 export { AssetsModule } from './assets';
 export { APIClientsModule } from './apiClients';

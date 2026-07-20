@@ -8,6 +8,7 @@ import { HttpClient, SessionAuth } from '../core';
 import type { HttpClientConfig } from '../core';
 import { EntriesModule } from './entries';
 import { CollectionsModule } from './collections';
+import { TagsModule } from './tags';
 import { ResourcesModule } from './resources';
 import { AssetsModule } from './assets';
 import { APIClientsModule } from './apiClients';
@@ -61,6 +62,7 @@ export function createPlatformConfigFromEnv(overrides?: Partial<PlatformClientCo
 export class PlatformClient extends HttpClient {
   public entries: EntriesModule;
   public collections: CollectionsModule;
+  public tags: TagsModule;
   public resources: ResourcesModule;
   public assets: AssetsModule;
   public apiClients: APIClientsModule;
@@ -113,6 +115,7 @@ export class PlatformClient extends HttpClient {
     // Initialize modules
     this.entries = new EntriesModule(this);
     this.collections = new CollectionsModule(this);
+    this.tags = new TagsModule(this);
     this.resources = new ResourcesModule(this);
     this.assets = new AssetsModule(this);
     this.apiClients = new APIClientsModule(this);

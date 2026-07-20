@@ -2926,6 +2926,63 @@ export interface paths {
         patch: operations["update_model_api_ai_providers__provider_id__models__model_id__patch"];
         trace?: never;
     };
+    "/api/ai/installed-models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List installed Ollama models
+         * @description The models actually present in Ollama right now (its /api/tags).
+         */
+        get: operations["installed_models_api_ai_installed_models_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/models/pull": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Pull an Ollama model
+         * @description Start a background download of `name` into Ollama; poll the returned job id for progress.
+         */
+        post: operations["pull_model_api_ai_models_pull_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/models/pull/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Model pull status */
+        get: operations["pull_status_api_ai_models_pull__job_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ai/operations": {
         parameters: {
             query?: never;
@@ -2957,6 +3014,82 @@ export interface paths {
         get: operations["get_operation_api_ai_operations__slug__get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/tools": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List AI Tools
+         * @description Return the core tool registry specs projectable to MCP, filtered by the user's role.
+         *
+         *     Mirror of `list_operations`: MarvinMCP reads this to auto-project each tool. A tool is
+         *     listed only when it declares the `mcp` source and the caller meets its min_role.
+         */
+        get: operations["list_tools_api_ai_tools_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/agent/tools": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the agent's bound tools
+         * @description The tool surface the `/agent` loop actually binds for THIS caller — so the UI can show
+         *     "what can Marvin reach right now" honestly.
+         *
+         *     Unlike `/tools` (the MCP projection), this is the live agent catalogue: built-in registry
+         *     tools + `compose_entry` + allowlisted external MCP tools (only when the `external_mcp_enabled`
+         *     master switch is on), all role-filtered. External tools are named `mcp__<server>__<tool>`;
+         *     we surface `source` and the originating server so the UI can group them. No tool is called —
+         *     this only reads names/descriptions off the bound tools (external servers are queried live for
+         *     their tool list, so an unreachable server is simply omitted).
+         */
+        get: operations["list_agent_tools_api_ai_agent_tools_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/tools/{name}/invoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Invoke an AI Tool
+         * @description Generic execution endpoint every projected registry tool routes through.
+         *
+         *     Role-gates, checks the invocation source (tool's declared sources ∩ workspace policy),
+         *     builds a ToolContext, then calls the tool's handler with the raw `args` and returns the
+         *     JSON result. A provider is attached best-effort so tools that need one (semantic search)
+         *     can use it; tools that don't simply ignore it.
+         */
+        post: operations["invoke_tool_api_ai_tools__name__invoke_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3056,6 +3189,354 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ai/agent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Run the Marvin agent (tool-calling loop)
+         * @description Run the server-side agent: an iterative tool-calling loop over Marvin's capabilities.
+         *
+         *     v1 tools are Marvin's own read/authoring surfaces — search, browse, list types, and compose
+         *     a draft. The model decides which to call; the loop runs them and feeds results back until it
+         *     answers. Requires a tool-capable provider (OpenAI/Azure/Anthropic/Ollama). Composing still
+         *     creates an `inbox` draft for human review; the agent never publishes.
+         */
+        post: operations["run_agent_api_ai_agent_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Plain chat completion (no tools, no RAG)
+         * @description A straight conversational completion — NO tools, NO retrieval — so any model works,
+         *     including text-only Ollama models (gemma, phi) that can't run the agent. Not grounded in
+         *     workspace content (use `/ask` for that); this is just talking to the model.
+         */
+        post: operations["chat_api_ai_chat_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/mcp-servers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List MCP Servers */
+        get: operations["list_servers_api_ai_mcp_servers_get"];
+        put?: never;
+        /** Register MCP Server */
+        post: operations["create_server_api_ai_mcp_servers_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/mcp-servers/{server_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get MCP Server */
+        get: operations["get_server_api_ai_mcp_servers__server_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete MCP Server */
+        delete: operations["delete_server_api_ai_mcp_servers__server_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update MCP Server */
+        patch: operations["update_server_api_ai_mcp_servers__server_id__patch"];
+        trace?: never;
+    };
+    "/api/ai/mcp-servers/{server_id}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Test MCP Server (tools/list)
+         * @description Connect to the server and return its tools/list — for building the allowlist in the UI.
+         */
+        post: operations["test_server_api_ai_mcp_servers__server_id__test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Automations */
+        get: operations["list_automations_api_automations_get"];
+        put?: never;
+        /** Create Automation */
+        post: operations["create_automation_api_automations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Automation builder options
+         * @description Advertise the builder's vocabulary so the UI doesn't hardcode triggers/ops/operators.
+         *
+         *     Action kinds come from the executor registry. AI `operations` are listed ONLY when AI is
+         *     enabled for the workspace and the `automation` invocation source is allowed — Flavor B works
+         *     with AI off, so the builder just won't offer AI actions there.
+         */
+        get: operations["options_api_automations_options_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Validate an automation definition
+         * @description Advisory coherence check for a definition — flags conditions/actions that reference a
+         *     namespace the trigger doesn't provide (e.g. entry.* under a webhook trigger). Never rejects;
+         *     the builder shows the issues as warnings.
+         */
+        post: operations["validate_api_automations_validate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Dry-run a target selector
+         * @description Resolve a definition's `target` query (with an optional test payload) and show which
+         *     entities it would act on — WITHOUT running any action. `matches` is the capped set that also
+         *     passes the conditions; `total` is the full query count so the caller sees when it's capped.
+         */
+        post: operations["preview_api_automations_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/{automation_id}/executions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List recent runs
+         * @description Recent runs of this automation, newest first — status, targets, step counts, timing.
+         */
+        get: operations["list_executions_api_automations__automation_id__executions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/{automation_id}/executions/{execution_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Run detail
+         * @description One run plus its per-(target, step) records and the definition snapshot it ran against.
+         */
+        get: operations["get_execution_api_automations__automation_id__executions__execution_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/{automation_id}/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Run an automation now (manual trigger)
+         * @description Run the automation's steps immediately — the Manual trigger / Run button. Skips the
+         *     trigger + condition gates (the caller asked for it explicitly).
+         */
+        post: operations["run_automation_api_automations__automation_id__run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/{automation_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Automation */
+        get: operations["get_automation_api_automations__automation_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete Automation */
+        delete: operations["delete_automation_api_automations__automation_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Automation */
+        patch: operations["update_automation_api_automations__automation_id__patch"];
+        trace?: never;
+    };
+    "/api/incoming-webhooks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Incoming Webhooks */
+        get: operations["list_webhooks_api_incoming_webhooks_get"];
+        put?: never;
+        /** Create Incoming Webhook */
+        post: operations["create_webhook_api_incoming_webhooks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/incoming-webhooks/{webhook_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Incoming Webhook */
+        get: operations["get_webhook_api_incoming_webhooks__webhook_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete Incoming Webhook */
+        delete: operations["delete_webhook_api_incoming_webhooks__webhook_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Incoming Webhook */
+        patch: operations["update_webhook_api_incoming_webhooks__webhook_id__patch"];
+        trace?: never;
+    };
+    "/api/incoming-webhooks/{webhook_id}/token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mint or rotate the webhook token
+         * @description Generate a fresh secret token (rotating any existing one — the old URL stops working).
+         */
+        post: operations["mint_token_api_incoming_webhooks__webhook_id__token_post"];
+        /**
+         * Revoke the webhook token
+         * @description Clear the token so the receiver rejects all further requests to this webhook.
+         */
+        delete: operations["revoke_token_api_incoming_webhooks__webhook_id__token_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/hooks/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Receive an incoming webhook */
+        post: operations["receive_hook_api_hooks__token__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/entry-types": {
         parameters: {
             query?: never;
@@ -3128,6 +3609,49 @@ export interface paths {
         head?: never;
         /** Update Entry */
         patch: operations["update_entry_api_platform_entries__item_id__patch"];
+        trace?: never;
+    };
+    "/api/platform/entries/{item_id}/apply-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Apply AI Suggestion
+         * @description Apply the entry's staged AI suggestion (suggestion_json) and clear it.
+         *
+         *     This is the human-approval half of write-back: an AI op stages proposed changes under
+         *     suggestion_json (when approval_mode doesn't auto-apply); this endpoint commits them.
+         */
+        post: operations["apply_suggestion_api_platform_entries__item_id__apply_suggestion_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/{item_id}/reject-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reject AI Suggestion
+         * @description Discard the entry's staged AI suggestion without applying it.
+         */
+        post: operations["reject_suggestion_api_platform_entries__item_id__reject_suggestion_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/platform/entries/{entry_id}/collections": {
@@ -3292,6 +3816,67 @@ export interface paths {
          * @description Update role and metadata_json on a specific entry-collection junction record.
          */
         patch: operations["update_entry_junction_api_platform_collections__item_id__entries__entry_id__patch"];
+        trace?: never;
+    };
+    "/api/platform/tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Tags */
+        get: operations["list_tags_api_platform_tags_get"];
+        put?: never;
+        /**
+         * Create Tag
+         * @description Find-or-create a tag by slug. Returns the existing tag if the name already resolves to one.
+         */
+        post: operations["create_tag_api_platform_tags_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/tags/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Tag */
+        get: operations["get_tag_api_platform_tags__item_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete Tag */
+        delete: operations["delete_tag_api_platform_tags__item_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Tag */
+        patch: operations["update_tag_api_platform_tags__item_id__patch"];
+        trace?: never;
+    };
+    "/api/platform/tags/{tag_id}/entries/{entry_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Attach Tag to Entry
+         * @description Apply a tag to an entry. Idempotent — re-attaching an existing pair is a no-op.
+         */
+        post: operations["attach_tag_api_platform_tags__tag_id__entries__entry_id__post"];
+        /** Detach Tag from Entry */
+        delete: operations["detach_tag_api_platform_tags__tag_id__entries__entry_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/platform/api-clients": {
@@ -4341,12 +4926,14 @@ export interface paths {
          *     - Scoped to the workspace associated with the API client
          *     - `entry_type`: Filter by entry type slug
          *     - `collection`: Filter by collection slug
+         *     - `tag`: Filter by tag slug(s), comma-separated — matches entries carrying ANY of them
          *     - `slug`: Filter by specific slug(s), comma-separated for batch fetching
          *     - `updated_since`: ISO datetime, returns entries updated after this time
          *
          *     **Use cases:**
          *     - `?entry_type=page` - Get all static pages
          *     - `?collection=projects` - Get all project entries
+         *     - `?tag=leather,waxed` - Get entries tagged leather OR waxed
          *     - `?slug=about,contact,sizing` - Batch fetch specific pages
          *     - `?updated_since=2026-07-01T00:00:00Z` - Incremental builds
          *
@@ -4700,6 +5287,44 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         /**
+         * AIAgentRequest
+         * @description Run the Marvin agent — an iterative tool-calling loop over Marvin's own capabilities.
+         */
+        AIAgentRequest: {
+            /** Message */
+            message: string;
+            /** Entitytype */
+            entityType?: string | null;
+            /** Entityid */
+            entityId?: string | null;
+            /**
+             * History
+             * @default []
+             */
+            history: components["schemas"]["AIAgentTurn"][];
+            /** Register */
+            register?: string | null;
+            /** Modeloverride */
+            modelOverride?: string | null;
+            /** Maxsteps */
+            maxSteps?: number | null;
+            /**
+             * Source
+             * @default agent
+             */
+            source: string;
+        };
+        /**
+         * AIAgentTurn
+         * @description One prior turn of the conversation, replayed to give the agent short-term memory.
+         */
+        AIAgentTurn: {
+            /** Role */
+            role: string;
+            /** Content */
+            content: string;
+        };
+        /**
          * AIComposeEntryRequest
          * @description Compose a draft entry of `entry_type` from a short brief (+ optional image assets).
          */
@@ -4762,6 +5387,10 @@ export interface components {
             durationMs?: number | null;
             /** Errormessage */
             errorMessage?: string | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
             /** Startedat */
             startedAt?: string | null;
             /** Completedat */
@@ -4999,6 +5628,27 @@ export interface components {
             entityId?: string | null;
             /** Scope */
             scope?: string | null;
+        };
+        /**
+         * AIToolInvokeRequest
+         * @description Invoke a core AI tool by name with raw args (the generic execution endpoint).
+         *
+         *     This is the one endpoint MarvinMCP routes every projected registry tool through: the tool's
+         *     handler receives `args` verbatim and returns its JSON result.
+         */
+        AIToolInvokeRequest: {
+            /**
+             * Args
+             * @default {}
+             */
+            args: {
+                [key: string]: unknown;
+            };
+            /**
+             * Source
+             * @default mcp
+             */
+            source: string;
         };
         /**
          * APIClientCreate
@@ -5336,6 +5986,489 @@ export interface components {
          * @enum {string}
          */
         AuthMethod: "MARVIN" | "LDAP" | "OIDC";
+        /**
+         * AutomationActionExecutionRead
+         * @description One recorded step within a run — which target, which action, and how it went.
+         */
+        AutomationActionExecutionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Targetindex
+             * @default 0
+             */
+            targetIndex: number;
+            /** Targetentitytype */
+            targetEntityType?: string | null;
+            /** Targetentityid */
+            targetEntityId?: string | null;
+            /**
+             * Actionindex
+             * @default 0
+             */
+            actionIndex: number;
+            /** Kind */
+            kind: string;
+            /** Label */
+            label?: string | null;
+            /** Status */
+            status: string;
+            /** Error */
+            error?: string | null;
+            /** Durationms */
+            durationMs?: number | null;
+            /** Outputsnapshot */
+            outputSnapshot?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * AutomationActionOption
+         * @description One operation the builder can offer as an `operation` action.
+         */
+        AutomationActionOption: {
+            /** Op */
+            op: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string;
+            /**
+             * Entitytypes
+             * @default []
+             */
+            entityTypes: string[];
+            /**
+             * Writesback
+             * @default false
+             */
+            writesBack: boolean;
+        };
+        /**
+         * AutomationConditionField
+         * @description A field a condition can reference, suggested per trigger context (guided builder).
+         */
+        AutomationConditionField: {
+            /** Field */
+            field: string;
+            /** Label */
+            label: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+        };
+        /** AutomationCreate */
+        AutomationCreate: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Definition
+             * @default {}
+             */
+            definition: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * AutomationExecutionDetail
+         * @description A run plus its per-step records and the definition it ran against.
+         */
+        AutomationExecutionDetail: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Automationid */
+            automationId?: string | null;
+            /** Automationslug */
+            automationSlug: string;
+            /** Triggertype */
+            triggerType: string;
+            /** Status */
+            status: string;
+            /** Startedat */
+            startedAt?: string | null;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /** Durationms */
+            durationMs?: number | null;
+            /**
+             * Targetsmatched
+             * @default 1
+             */
+            targetsMatched: number;
+            /**
+             * Targetsrun
+             * @default 0
+             */
+            targetsRun: number;
+            /**
+             * Capped
+             * @default false
+             */
+            capped: boolean;
+            /**
+             * Stepstotal
+             * @default 0
+             */
+            stepsTotal: number;
+            /**
+             * Stepsok
+             * @default 0
+             */
+            stepsOk: number;
+            /**
+             * Stepsfailed
+             * @default 0
+             */
+            stepsFailed: number;
+            /** Error */
+            error?: string | null;
+            /** Correlationid */
+            correlationId?: string | null;
+            /** Triggeredby */
+            triggeredBy?: string | null;
+            /** Definitionsnapshot */
+            definitionSnapshot?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Actions
+             * @default []
+             */
+            actions: components["schemas"]["AutomationActionExecutionRead"][];
+        };
+        /**
+         * AutomationExecutionRead
+         * @description One recorded run of an automation (compact — for the history list).
+         */
+        AutomationExecutionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Automationid */
+            automationId?: string | null;
+            /** Automationslug */
+            automationSlug: string;
+            /** Triggertype */
+            triggerType: string;
+            /** Status */
+            status: string;
+            /** Startedat */
+            startedAt?: string | null;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /** Durationms */
+            durationMs?: number | null;
+            /**
+             * Targetsmatched
+             * @default 1
+             */
+            targetsMatched: number;
+            /**
+             * Targetsrun
+             * @default 0
+             */
+            targetsRun: number;
+            /**
+             * Capped
+             * @default false
+             */
+            capped: boolean;
+            /**
+             * Stepstotal
+             * @default 0
+             */
+            stepsTotal: number;
+            /**
+             * Stepsok
+             * @default 0
+             */
+            stepsOk: number;
+            /**
+             * Stepsfailed
+             * @default 0
+             */
+            stepsFailed: number;
+            /** Error */
+            error?: string | null;
+            /** Correlationid */
+            correlationId?: string | null;
+            /** Triggeredby */
+            triggeredBy?: string | null;
+        };
+        /**
+         * AutomationIncomingWebhookOption
+         * @description One of the workspace's incoming webhooks — an `incoming_webhook` trigger targets it by slug.
+         */
+        AutomationIncomingWebhookOption: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /**
+             * Hastoken
+             * @default false
+             */
+            hasToken: boolean;
+        };
+        /**
+         * AutomationOptions
+         * @description The builder's vocabulary — so the UI doesn't hardcode triggers/ops/operators.
+         */
+        AutomationOptions: {
+            /**
+             * Triggertypes
+             * @default []
+             */
+            triggerTypes: string[];
+            /**
+             * Triggers
+             * @default []
+             */
+            triggers: string[];
+            /**
+             * Triggergroups
+             * @default {}
+             */
+            triggerGroups: {
+                [key: string]: string[];
+            };
+            /**
+             * Conditionops
+             * @default []
+             */
+            conditionOps: string[];
+            /**
+             * Conditionfields
+             * @default {}
+             */
+            conditionFields: {
+                [key: string]: components["schemas"]["AutomationConditionField"][];
+            };
+            /**
+             * Actionkinds
+             * @default []
+             */
+            actionKinds: string[];
+            /**
+             * Operations
+             * @default []
+             */
+            operations: components["schemas"]["AutomationActionOption"][];
+            /**
+             * Webhooks
+             * @default []
+             */
+            webhooks: components["schemas"]["AutomationWebhookOption"][];
+            /**
+             * Automations
+             * @default []
+             */
+            automations: components["schemas"]["AutomationTargetOption"][];
+            /**
+             * Incomingwebhooks
+             * @default []
+             */
+            incomingWebhooks: components["schemas"]["AutomationIncomingWebhookOption"][];
+        };
+        /**
+         * AutomationPreviewMatch
+         * @description One entity a `target` selector resolved to (dry-run preview).
+         */
+        AutomationPreviewMatch: {
+            /** Id */
+            id: string;
+            /** Entrytype */
+            entryType?: string | null;
+            /** Status */
+            status?: string | null;
+            /** Title */
+            title?: string | null;
+            /** Slug */
+            slug?: string | null;
+        };
+        /** AutomationPreviewRequest */
+        AutomationPreviewRequest: {
+            /**
+             * Definition
+             * @default {}
+             */
+            definition: {
+                [key: string]: unknown;
+            };
+            /**
+             * Payload
+             * @default {}
+             */
+            payload: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * AutomationPreviewResult
+         * @description Dry-run of a `target` selector — which entities it resolves to, before running anything.
+         */
+        AutomationPreviewResult: {
+            /**
+             * Hastarget
+             * @default false
+             */
+            hasTarget: boolean;
+            /**
+             * Entity
+             * @default entry
+             */
+            entity: string;
+            /**
+             * Total
+             * @default 0
+             */
+            total: number;
+            /**
+             * Capped
+             * @default false
+             */
+            capped: boolean;
+            /**
+             * Matches
+             * @default []
+             */
+            matches: components["schemas"]["AutomationPreviewMatch"][];
+            /** Error */
+            error?: string | null;
+        };
+        /** AutomationRead */
+        AutomationRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Enabled */
+            enabled: boolean;
+            /**
+             * Definition
+             * @default {}
+             */
+            definition: {
+                [key: string]: unknown;
+            };
+            /** Createdby */
+            createdBy?: string | null;
+        };
+        /**
+         * AutomationTargetOption
+         * @description Another automation in the workspace — a chained/on-error trigger may target it.
+         */
+        AutomationTargetOption: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+        };
+        /** AutomationUpdate */
+        AutomationUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Definition */
+            definition?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /** AutomationValidateRequest */
+        AutomationValidateRequest: {
+            /**
+             * Definition
+             * @default {}
+             */
+            definition: {
+                [key: string]: unknown;
+            };
+        };
+        /** AutomationValidateResult */
+        AutomationValidateResult: {
+            /**
+             * Issues
+             * @default []
+             */
+            issues: components["schemas"]["AutomationValidationIssue"][];
+        };
+        /**
+         * AutomationValidationIssue
+         * @description One advisory coherence issue in a definition (not a hard error).
+         */
+        AutomationValidationIssue: {
+            /** Level */
+            level: string;
+            /** Message */
+            message: string;
+            /** Where */
+            where: string;
+            /** Index */
+            index?: number | null;
+        };
+        /**
+         * AutomationWebhookOption
+         * @description One of the workspace's configured webhooks, offered to the `webhook` action.
+         */
+        AutomationWebhookOption: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Url */
+            url: string;
+            /**
+             * Method
+             * @default POST
+             */
+            method: string;
+        };
         /** Body_get_token_api_auth_token_post */
         Body_get_token_api_auth_token_post: {
             /**
@@ -5990,6 +7123,8 @@ export interface components {
             assetAttachments?: components["schemas"]["AssetAttachment"][] | null;
             /** Resourceattachments */
             resourceAttachments?: components["schemas"]["ResourceAttachment"][] | null;
+            /** Tagids */
+            tagIds?: string[] | null;
         };
         /**
          * EntryOrderItem
@@ -6057,6 +7192,13 @@ export interface components {
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
+            /**
+             * Suggestionjson
+             * @description Pending AI-proposed changes staged for review (write-back)
+             */
+            suggestionJson?: {
+                [key: string]: unknown;
+            } | null;
             /** Createdby */
             createdBy?: string | null;
             /** Createdat */
@@ -6078,6 +7220,11 @@ export interface components {
              * @default []
              */
             collections: components["schemas"]["EntryCollectionRead"][];
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
             /** Order */
             order?: number | null;
         };
@@ -6373,6 +7520,8 @@ export interface components {
             asset_attachments?: components["schemas"]["AssetAttachment"][] | null;
             /** Resource Attachments */
             resource_attachments?: components["schemas"]["ResourceAttachment"][] | null;
+            /** Tag Ids */
+            tag_ids?: string[] | null;
         };
         /**
          * EventLogRead
@@ -7011,6 +8160,77 @@ export interface components {
              */
             status: string;
         };
+        /** IncomingWebhookCreate */
+        IncomingWebhookCreate: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+            /** Description */
+            description?: string | null;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+        };
+        /** IncomingWebhookRead */
+        IncomingWebhookRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description?: string | null;
+            /** Enabled */
+            enabled: boolean;
+            /** Token */
+            token?: string | null;
+            /**
+             * Receivedcount
+             * @default 0
+             */
+            receivedCount: number;
+            /** Lastreceivedat */
+            lastReceivedAt?: string | null;
+        };
+        /** IncomingWebhookUpdate */
+        IncomingWebhookUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Enabled */
+            enabled?: boolean | null;
+        };
+        /**
+         * InstalledModels
+         * @description The models actually present in the workspace's active provider (e.g. Ollama's /api/tags).
+         */
+        InstalledModels: {
+            /** Providertype */
+            providerType: string;
+            /**
+             * Supportspull
+             * @default false
+             */
+            supportsPull: boolean;
+            /**
+             * Models
+             * @default []
+             */
+            models: string[];
+        };
         /**
          * InviteTokenCreate
          * @description Schema for creating a new group invitation token.
@@ -7228,6 +8448,146 @@ export interface components {
              * @default bearer
              */
             token_type: string;
+        };
+        /** McpServerCreate */
+        McpServerCreate: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+            /**
+             * Transport
+             * @default http
+             */
+            transport: string;
+            /** Url */
+            url: string;
+            /** Secretref */
+            secretRef?: string | null;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /** Allowedtools */
+            allowedTools?: string[] | null;
+        };
+        /** McpServerRead */
+        McpServerRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Transport */
+            transport: string;
+            /** Url */
+            url: string;
+            /** Secretref */
+            secretRef?: string | null;
+            /** Enabled */
+            enabled: boolean;
+            /** Allowedtools */
+            allowedTools?: string[] | null;
+            /** Createdby */
+            createdBy?: string | null;
+        };
+        /** McpServerTestResult */
+        McpServerTestResult: {
+            /** Success */
+            success: boolean;
+            /** Message */
+            message: string;
+            /**
+             * Tools
+             * @default []
+             */
+            tools: components["schemas"]["McpServerToolInfo"][];
+        };
+        /**
+         * McpServerToolInfo
+         * @description A tool advertised by a server's tools/list (shown in the UI to build the allowlist).
+         */
+        McpServerToolInfo: {
+            /** Name */
+            name: string;
+            /** Description */
+            description: string;
+            /**
+             * Inputschema
+             * @default {}
+             */
+            inputSchema: {
+                [key: string]: unknown;
+            };
+        };
+        /** McpServerUpdate */
+        McpServerUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Transport */
+            transport?: string | null;
+            /** Url */
+            url?: string | null;
+            /** Secretref */
+            secretRef?: string | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Allowedtools */
+            allowedTools?: string[] | null;
+        };
+        /** ModelPullRequest */
+        ModelPullRequest: {
+            /** Name */
+            name: string;
+        };
+        /**
+         * ModelPullStatus
+         * @description Progress of a background model pull. Poll until `done`.
+         */
+        ModelPullStatus: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Status */
+            status: string;
+            /**
+             * Detail
+             * @default
+             */
+            detail: string;
+            /**
+             * Completed
+             * @default 0
+             */
+            completed: number;
+            /**
+             * Total
+             * @default 0
+             */
+            total: number;
+            /**
+             * Percent
+             * @default 0
+             */
+            percent: number;
+            /** Error */
+            error?: string | null;
+            /**
+             * Done
+             * @default false
+             */
+            done: boolean;
         };
         /** NotificationExecutionLogRead */
         NotificationExecutionLogRead: {
@@ -7493,6 +8853,11 @@ export interface components {
              * @default []
              */
             resourceSlugs: string[];
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
@@ -7546,6 +8911,11 @@ export interface components {
              * @default []
              */
             assets: components["schemas"]["PublishedEntryAsset"][];
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
             /** Order */
             order?: number | null;
         };
@@ -8045,6 +9415,59 @@ export interface components {
             total_size: string;
             /** Data Dir Path */
             data_dir_path: string;
+        };
+        /**
+         * TagCreate
+         * @description Schema for creating (or finding) a tag.
+         *
+         *     ``POST /tags`` is find-or-create by slug within the workspace, so posting a name that
+         *     already exists returns the existing tag rather than erroring.
+         */
+        TagCreate: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+            /** Color */
+            color?: string | null;
+        };
+        /**
+         * TagRead
+         * @description Full schema for reading a tag.
+         */
+        TagRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Color */
+            color?: string | null;
+            /** Entrycount */
+            entryCount?: number | null;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Updateat */
+            updateAt?: string | null;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+        };
+        /**
+         * TagUpdate
+         * @description Schema for renaming/recoloring a tag. The slug is stable and not updated here.
+         */
+        TagUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Color */
+            color?: string | null;
         };
         /** TemplateTestRequest */
         TemplateTestRequest: {
@@ -8631,6 +10054,20 @@ export interface components {
             moderationConfig?: {
                 [key: string]: unknown;
             } | null;
+            /**
+             * Externalmcpenabled
+             * @default false
+             */
+            externalMcpEnabled: boolean;
+            /** Assistantname */
+            assistantName?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            /**
+             * Defaultregister
+             * @default auto
+             */
+            defaultRegister: string;
             /** Id */
             id?: string | null;
             /** Groupid */
@@ -8675,6 +10112,14 @@ export interface components {
             moderationConfig?: {
                 [key: string]: unknown;
             } | null;
+            /** Externalmcpenabled */
+            externalMcpEnabled?: boolean | null;
+            /** Assistantname */
+            assistantName?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            /** Defaultregister */
+            defaultRegister?: string | null;
         };
         /**
          * WorkspaceActivationRequest
@@ -12993,6 +14438,90 @@ export interface operations {
             };
         };
     };
+    installed_models_api_ai_installed_models_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InstalledModels"];
+                };
+            };
+        };
+    };
+    pull_model_api_ai_models_pull_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModelPullRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModelPullStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    pull_status_api_ai_models_pull__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModelPullStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_operations_api_ai_operations_get: {
         parameters: {
             query?: never;
@@ -13025,6 +14554,87 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_tools_api_ai_tools_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
+                };
+            };
+        };
+    };
+    list_agent_tools_api_ai_agent_tools_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
+                };
+            };
+        };
+    };
+    invoke_tool_api_ai_tools__name__invoke_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIToolInvokeRequest"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -13228,6 +14838,834 @@ export interface operations {
         responses: {
             /** @description Successful Response */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_agent_api_ai_agent_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIAgentRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    chat_api_ai_chat_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIAgentRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_servers_api_ai_mcp_servers_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["McpServerRead"][];
+                };
+            };
+        };
+    };
+    create_server_api_ai_mcp_servers_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["McpServerCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["McpServerRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_server_api_ai_mcp_servers__server_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                server_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["McpServerRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_server_api_ai_mcp_servers__server_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                server_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_server_api_ai_mcp_servers__server_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                server_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["McpServerUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["McpServerRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    test_server_api_ai_mcp_servers__server_id__test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                server_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["McpServerTestResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_automations_api_automations_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationRead"][];
+                };
+            };
+        };
+    };
+    create_automation_api_automations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AutomationCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    options_api_automations_options_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationOptions"];
+                };
+            };
+        };
+    };
+    validate_api_automations_validate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AutomationValidateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationValidateResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_api_automations_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AutomationPreviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationPreviewResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_executions_api_automations__automation_id__executions_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                automation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationExecutionRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_execution_api_automations__automation_id__executions__execution_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                automation_id: string;
+                execution_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationExecutionDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_automation_api_automations__automation_id__run_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                automation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_automation_api_automations__automation_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                automation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_automation_api_automations__automation_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                automation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_automation_api_automations__automation_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                automation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AutomationUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_webhooks_api_incoming_webhooks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncomingWebhookRead"][];
+                };
+            };
+        };
+    };
+    create_webhook_api_incoming_webhooks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IncomingWebhookCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncomingWebhookRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_webhook_api_incoming_webhooks__webhook_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                webhook_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncomingWebhookRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_webhook_api_incoming_webhooks__webhook_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                webhook_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_webhook_api_incoming_webhooks__webhook_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                webhook_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IncomingWebhookUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncomingWebhookRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mint_token_api_incoming_webhooks__webhook_id__token_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                webhook_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncomingWebhookRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    revoke_token_api_incoming_webhooks__webhook_id__token_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                webhook_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IncomingWebhookRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    receive_hook_api_hooks__token__post: {
+        parameters: {
+            query?: {
+                wait?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -13531,6 +15969,68 @@ export interface operations {
                 "application/json": components["schemas"]["EntryUpdate"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    apply_suggestion_api_platform_entries__item_id__apply_suggestion_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reject_suggestion_api_platform_entries__item_id__reject_suggestion_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
@@ -13921,6 +16421,226 @@ export interface operations {
                 "application/json": components["schemas"]["UpdateEntryCollectionRequest"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_tags_api_platform_tags_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagRead"][];
+                };
+            };
+        };
+    };
+    create_tag_api_platform_tags_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_tag_api_platform_tags__item_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_tag_api_platform_tags__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_tag_api_platform_tags__item_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    attach_tag_api_platform_tags__tag_id__entries__entry_id__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tag_id: string;
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    detach_tag_api_platform_tags__tag_id__entries__entry_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tag_id: string;
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
@@ -15749,6 +18469,8 @@ export interface operations {
                 entry_type?: string | null;
                 /** @description Filter by collection slug */
                 collection?: string | null;
+                /** @description Filter by tag slug(s), comma-separated (matches ANY) */
+                tag?: string | null;
                 /** @description Filter by specific slug(s), comma-separated */
                 slug?: string | null;
                 /** @description Filter by entries updated since ISO datetime */

@@ -15,6 +15,13 @@ export type PlatformEntryCreate = components['schemas']['EntryCreate'];
 export type PlatformEntryUpdate = components['schemas']['EntryUpdate'];
 
 /**
+ * Tag (Platform API) — the shared, group-scoped label vocabulary.
+ */
+export type PlatformTag = components['schemas']['TagRead'];
+export type PlatformTagCreate = components['schemas']['TagCreate'];
+export type PlatformTagUpdate = components['schemas']['TagUpdate'];
+
+/**
  * Entry Type
  */
 export type PlatformEntryType = components['schemas']['EntryTypeRead'];
