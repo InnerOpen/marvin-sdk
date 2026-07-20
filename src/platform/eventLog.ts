@@ -12,6 +12,8 @@ export interface EventLogQueryParams {
   entity_type?: string;
   entity_id?: string;
   user_id?: string;
+  /** Chain filter — every event in one causal cascade (user action → automation → re-emitted event). */
+  correlation_id?: string;
   start_date?: string;
   end_date?: string;
   limit?: number;
@@ -49,6 +51,7 @@ export class EventLogModule {
     if (params?.entity_type) queryParams.append('entity_type', params.entity_type);
     if (params?.entity_id) queryParams.append('entity_id', params.entity_id);
     if (params?.user_id) queryParams.append('user_id', params.user_id);
+    if (params?.correlation_id) queryParams.append('correlation_id', params.correlation_id);
     if (params?.start_date) queryParams.append('start_date', params.start_date);
     if (params?.end_date) queryParams.append('end_date', params.end_date);
     if (params?.limit) queryParams.append('limit', params.limit.toString());
