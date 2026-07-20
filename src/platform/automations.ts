@@ -155,8 +155,10 @@ export interface AutomationConditionField {
 export interface AutomationOptions {
   /** Trigger types available (event | manual | schedule | chained | on_error | …). */
   triggerTypes: string[];
-  /** Event names for trigger type "event". */
+  /** Event names for trigger type "event" (flat, all groups). */
   triggers: string[];
+  /** Same event names grouped (Entries/Assets/Forms/…) for a grouped picker. */
+  triggerGroups: Record<string, string[]>;
   /** Condition operators (eq/neq/contains/exists). */
   conditionOps: string[];
   /** Suggested condition fields per trigger type — so the field picker offers the right fields. */
