@@ -397,6 +397,13 @@ export interface AIComposeEntryResult {
   entryId: string;
   status: string;
   title: string;
+  /** Tags the model reused/created and linked onto the draft. */
+  tags?: string[];
+  /** Slugs of existing resources linked onto the draft (reuse-only). */
+  resources?: string[];
+  /** Advisory notes when the draft doesn't yet satisfy the entry type's asset recipe
+   * (e.g. "This type expects a 'hero' image; none attached."). Never blocks the compose. */
+  warnings?: string[];
   editUrl: string;
   executionId: string | null;
   totalTokens: number | null;
@@ -423,9 +430,15 @@ export interface AIReviseEntryRequest {
  */
 export interface AIReviseEntryResult {
   entryId: string;
+  /** "applied" when the revision landed on the entry; "staged" when the workspace
+   * approval_mode held it back for review (the entry is unchanged — see `proposed`). */
+  outcome: 'applied' | 'staged';
   title: string;
   tags: string[];
   resources: string[];
+  /** What the model proposed, present only when `outcome` is "staged" (the entry itself
+   * is untouched, so `tags`/`resources` above still reflect the pre-revision state). */
+  proposed?: { tags: string[]; resources: string[] } | null;
   editUrl: string;
   executionId: string | null;
   totalTokens: number | null;
