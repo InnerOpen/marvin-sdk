@@ -1,3 +1,10 @@
+# [3.2.0-next.27](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.26...v3.2.0-next.27) (2026-07-20)
+
+
+### Features
+
+* **ai:** per-request timeout + agent tone register ([cb3fbe7](https://github.com/inneropen/marvin-sdk/commit/cb3fbe75cab390d957921a38c4457bb859150d77))
+
 # [3.2.0-next.26](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.25...v3.2.0-next.26) (2026-07-20)
 
 
