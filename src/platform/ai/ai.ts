@@ -20,6 +20,12 @@ import { AIMcpServersModule } from './mcpServers';
 import { AIExecutionsModule } from './executions';
 
 export class AIModule {
+  /**
+   * Default client-side budget for an agent run (ms). Deliberately far above the 30s default:
+   * the loop is multi-step, and local models are slow. Clamped by HttpClient.MAX_TIMEOUT.
+   */
+  static readonly AGENT_TIMEOUT_MS = 120000;
+
   public settings: AISettingsModule;
   public providers: AIProvidersModule;
   public models: AIModelManagementModule;
@@ -53,7 +59,12 @@ export class AIModule {
    *
    * Pass `entityType`/`entityId` to ground the run in what the user is looking at.
    */
-  async agent(body: AIAgentRequest): Promise<AIAgentResult> {
-    return this.http.post<AIAgentResult>('/api/ai/agent', body);
+  async agent(body: AIAgentRequest, options?: { timeout?: number }): Promise<AIAgentResult> {
+    // The agent makes several sequential model calls; a local model (Ollama) routinely runs
+    // minutes, well past the client-wide 30s default. Give it its own budget so a slow-but-
+    // working run isn't reported to the user as a failure while the server is still going.
+    return this.http.post<AIAgentResult>('/api/ai/agent', body, {
+      timeout: options?.timeout ?? AIModule.AGENT_TIMEOUT_MS,
+    });
   }
 }

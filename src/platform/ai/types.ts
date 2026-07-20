@@ -216,6 +216,18 @@ export interface AIAgentRequest {
   modelOverride?: string | null;
   /** Cap the tool-call iterations. Clamped server-side (max 12). */
   maxSteps?: number | null;
+  /**
+   * Tone register for THIS call — independent of the workspace persona.
+   *
+   * The workspace `personaPrompt` governs how the assistant *addresses* you. It should not
+   * govern *work product*: a review or critique written in character is not actionable. Callers
+   * asking for work product should send "professional", which suppresses the persona entirely.
+   *
+   *  - "auto"         (default) persona applies to framing only; findings stay plain
+   *  - "professional" persona suppressed — use for reviews, critiques, analyses
+   *  - "playful"      persona applies fully — conversational asks
+   */
+  register?: 'auto' | 'professional' | 'playful';
   /** Invocation surface; gated by the workspace policy. Defaults server-side to "agent". */
   source?: string;
 }
