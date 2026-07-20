@@ -1192,6 +1192,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/ai-settings/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List invocation sources (for the policy editor)
+         * @description The catalog of AI invocation surfaces — key + human label/description — so the settings UI
+         *     can render a toggle per source. A source is allowed unless the workspace policy sets it false.
+         */
+        get: operations["list_invocation_sources_api_groups_ai_settings_sources_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/ai-settings": {
         parameters: {
             query?: never;
@@ -4076,6 +4097,46 @@ export interface paths {
         patch: operations["update_resource_api_platform_resources__item_id__patch"];
         trace?: never;
     };
+    "/api/platform/resources/{item_id}/apply-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Apply AI Suggestion
+         * @description Apply the resource's staged AI suggestion (suggestion_json) and clear it.
+         */
+        post: operations["apply_suggestion_api_platform_resources__item_id__apply_suggestion_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/resources/{item_id}/reject-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reject AI Suggestion
+         * @description Discard the resource's staged AI suggestion without applying it.
+         */
+        post: operations["reject_suggestion_api_platform_resources__item_id__reject_suggestion_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/assets": {
         parameters: {
             query?: never;
@@ -4151,6 +4212,46 @@ export interface paths {
          *     Note: Technical metadata (MIME type, dimensions, checksum, etc) cannot be changed.
          */
         patch: operations["update_asset_api_platform_assets__item_id__patch"];
+        trace?: never;
+    };
+    "/api/platform/assets/{item_id}/apply-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Apply AI Suggestion
+         * @description Apply the asset's staged AI suggestion (suggestion_json) and clear it.
+         */
+        post: operations["apply_suggestion_api_platform_assets__item_id__apply_suggestion_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/assets/{item_id}/reject-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reject AI Suggestion
+         * @description Discard the asset's staged AI suggestion without applying it.
+         */
+        post: operations["reject_suggestion_api_platform_assets__item_id__reject_suggestion_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/platform/assets/{item_id}/file": {
@@ -6013,6 +6114,13 @@ export interface components {
              * @default []
              */
             tags: string[];
+            /**
+             * Suggestionjson
+             * @description Pending AI-proposed changes staged for review (write-back)
+             */
+            suggestionJson?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * AssetUpdate
@@ -7100,6 +7208,13 @@ export interface components {
              * @default []
              */
             tags: string[];
+            /**
+             * Suggestionjson
+             * @description Pending AI-proposed changes staged for review (write-back)
+             */
+            suggestionJson?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * EntryCollectionRead
@@ -9243,6 +9358,13 @@ export interface components {
              * @default []
              */
             tags: string[];
+            /**
+             * Suggestionjson
+             * @description Pending AI-proposed changes staged for review (write-back)
+             */
+            suggestionJson?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * ResourceUpdate
@@ -12164,6 +12286,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_invocation_sources_api_groups_ai_settings_sources_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
                 };
             };
         };
@@ -17264,6 +17408,68 @@ export interface operations {
             };
         };
     };
+    apply_suggestion_api_platform_resources__item_id__apply_suggestion_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reject_suggestion_api_platform_resources__item_id__reject_suggestion_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_assets_api_platform_assets_get: {
         parameters: {
             query?: never;
@@ -17395,6 +17601,68 @@ export interface operations {
                 "application/json": components["schemas"]["AssetUpdate"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssetRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    apply_suggestion_api_platform_assets__item_id__apply_suggestion_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssetRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reject_suggestion_api_platform_assets__item_id__reject_suggestion_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
