@@ -176,6 +176,12 @@ describe('AIOperationsModule', () => {
     await module.composeEntry(body)
     expect(http.post).toHaveBeenCalledWith('/api/ai/compose-entry', body)
   })
+
+  it('reviseEntry posts to /api/ai/revise-entry with body', async () => {
+    const body = { entry: 'waxed-canvas-care', instruction: 'determine the tags' }
+    await module.reviseEntry(body)
+    expect(http.post).toHaveBeenCalledWith('/api/ai/revise-entry', body)
+  })
 })
 
 // ---------------------------------------------------------------------------

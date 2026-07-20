@@ -50,6 +50,8 @@ export type {
   McpTransport,
   AIComposeEntryRequest,
   AIComposeEntryResult,
+  AIReviseEntryRequest,
+  AIReviseEntryResult,
   AIExecution,
   AIExecutionStatus,
   AIExecutionListParams,

@@ -406,6 +406,32 @@ export interface AIComposeEntryResult {
   aiSkipped?: boolean;
 }
 
+export interface AIReviseEntryRequest {
+  /** The entry to revise, by slug or id. */
+  entry: string;
+  /** What to determine / change (e.g. "determine the tags and attach relevant resources"). */
+  instruction: string;
+  /** Override the workspace default model for this call. */
+  modelOverride?: string | null;
+  /** Invocation surface (e.g. "editor"); gated by the workspace policy. Defaults server-side. */
+  source?: string;
+}
+
+/**
+ * Result of revising an existing entry in place. Reports the entry's tags/resources
+ * after the revision so the caller can reflect the enrichment without a refetch.
+ */
+export interface AIReviseEntryResult {
+  entryId: string;
+  title: string;
+  tags: string[];
+  resources: string[];
+  editUrl: string;
+  executionId: string | null;
+  totalTokens: number | null;
+  estimatedCostUsd: number | null;
+}
+
 // ── Executions ───────────────────────────────────────────────────────────────
 
 export type AIExecutionStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
