@@ -12,6 +12,13 @@
 import type { HttpClient } from '../../core';
 import type { AISettings, AISettingsUpdate } from './types';
 
+/** One AI invocation surface, for the invocation_sources policy editor. */
+export interface InvocationSource {
+  key: string;
+  label: string;
+  description: string;
+}
+
 export class AISettingsModule {
   constructor(private http: HttpClient) {}
 
@@ -23,5 +30,13 @@ export class AISettingsModule {
   /** Upsert the workspace AI settings. Creates the row on first write. */
   async update(data: AISettingsUpdate): Promise<AISettings> {
     return this.http.patch<AISettings>('/api/groups/ai-settings', data);
+  }
+
+  /**
+   * The catalog of AI invocation surfaces (key + label + description) for the invocation_sources
+   * policy editor. A source is allowed unless `settings.invocationSources[key] === false`.
+   */
+  async sources(): Promise<InvocationSource[]> {
+    return this.http.get<InvocationSource[]>('/api/groups/ai-settings/sources');
   }
 }
