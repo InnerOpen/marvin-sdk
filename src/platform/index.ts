@@ -71,6 +71,9 @@ export type {
   AutomationIncomingWebhookOption,
   AutomationValidationIssue,
   AutomationValidateResult,
+  AutomationTarget,
+  AutomationPreviewMatch,
+  AutomationPreviewResult,
 } from './automations';
 export { IncomingWebhooksModule } from './incomingWebhooks';
 export type {

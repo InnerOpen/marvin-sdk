@@ -65,8 +65,23 @@ export interface AutomationTrigger {
   webhook?: string;
 }
 
+/**
+ * Optional target selector — the automation's "FROM" clause. When present, the automation runs a
+ * query to select the entities to operate on (set-based), instead of acting on the single entity
+ * its trigger handed it. Conditions then filter that set (the WHERE), and actions run per matched
+ * row. Query values may be $event.* templates so a webhook can carry the query. snake_case — literal
+ * keys the engine reads. Capped server-side; preview before running.
+ */
+export interface AutomationTarget {
+  /** "entry" (collections/assets later). */
+  entity?: string;
+  /** Query (find_entries vocabulary): entry_type, status, text, collection, has_assets/has_images/has_resources. */
+  query?: Record<string, unknown>;
+}
+
 export interface AutomationDefinition {
   trigger?: AutomationTrigger;
+  target?: AutomationTarget;
   conditions?: AutomationCondition[];
   actions?: AutomationAction[];
 }
@@ -171,6 +186,28 @@ export interface AutomationValidateResult {
   issues: AutomationValidationIssue[];
 }
 
+/** One entity a target selector resolved to (dry-run preview). */
+export interface AutomationPreviewMatch {
+  id: string;
+  entryType?: string | null;
+  status?: string | null;
+  title?: string | null;
+  slug?: string | null;
+}
+
+export interface AutomationPreviewResult {
+  /** false when the definition has no target selector. */
+  hasTarget: boolean;
+  entity: string;
+  /** Entities matching the query — the FROM count, before the run cap. */
+  total: number;
+  /** total exceeded the run cap (only the first N would run). */
+  capped: boolean;
+  /** The capped set that also passes conditions (the WHERE). */
+  matches: AutomationPreviewMatch[];
+  error?: string | null;
+}
+
 export class AutomationsModule {
   constructor(private http: HttpClient) {}
 
@@ -191,6 +228,15 @@ export class AutomationsModule {
    */
   async validate(definition: AutomationDefinition): Promise<AutomationValidateResult> {
     return this.http.post<AutomationValidateResult>('/api/automations/validate', { definition });
+  }
+
+  /**
+   * Dry-run a definition's target selector: resolve the query (with an optional test payload) and
+   * return which entities it would act on — WITHOUT running anything. `total` is the full query
+   * count (so you see when it's capped); `matches` is the capped set that also passes conditions.
+   */
+  async preview(definition: AutomationDefinition, payload: Record<string, unknown> = {}): Promise<AutomationPreviewResult> {
+    return this.http.post<AutomationPreviewResult>('/api/automations/preview', { definition, payload });
   }
 
   async get(id: string): Promise<Automation> {
