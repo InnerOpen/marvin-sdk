@@ -1,3 +1,10 @@
+# [3.2.0-next.25](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.24...v3.2.0-next.25) (2026-07-20)
+
+
+### Features
+
+* **platform:** AI automations, tools, MCP servers, chat + persona settings ([fd22aae](https://github.com/inneropen/marvin-sdk/commit/fd22aae83398bab427da6ff7efbbf61b4b112b4d))
+
 # [3.2.0-next.24](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.23...v3.2.0-next.24) (2026-07-18)
 
 
