@@ -31,7 +31,10 @@ export interface AutomationAction {
   op?: string;
   input?: Record<string, unknown>;
   entity_type?: string;
+  /** Target entity by id (defaults to $event.entry_id). */
   entity_id?: string;
+  /** Target entry by slug — preferred for webhook payloads; resolved to the entry at run time. */
+  entity_slug?: string;
   write_back?: boolean;
   // emit_event:
   event?: string;
