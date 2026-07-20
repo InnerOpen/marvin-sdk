@@ -40,7 +40,8 @@ export interface AutomationAction {
   kind: string;
   /** Optional step id — makes this step's output addressable as $steps.<id>.output.* downstream. */
   id?: string;
-  // operation (op = the AI operation slug) / entry (op = publish | unpublish | archive | restore):
+  // operation (op = the AI operation slug) / entry (op = publish | unpublish | archive | restore |
+  // add_to_collection | remove_from_collection):
   op?: string;
   input?: Record<string, unknown>;
   entity_type?: string;
@@ -48,6 +49,10 @@ export interface AutomationAction {
   entity_id?: string;
   /** Target entry by slug — preferred for webhook payloads; resolved to the entry at run time. */
   entity_slug?: string;
+  /** For entry op add_to_collection / remove_from_collection: the collection by slug/name… */
+  collection_slug?: string;
+  /** …or by id. May be a $event.* template. */
+  collection_id?: string;
   write_back?: boolean;
   // emit_event:
   event?: string;
