@@ -187,6 +187,57 @@ export interface AIChatResult {
   executionId: string;
 }
 
+// ── Agent (tool-calling loop) ─────────────────────────────────────────────────
+
+/** One prior conversation turn, replayed to give the agent short-term memory. */
+export interface AIAgentTurn {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface AIAgentRequest {
+  /** The user's goal or question. */
+  message: string;
+  /**
+   * Prior turns, oldest first, EXCLUDING the current message. The agent is otherwise stateless —
+   * each call replays what the client remembers. Bounded server-side (turn count + characters),
+   * so sending a long transcript is safe: the oldest turns are simply dropped.
+   */
+  history?: AIAgentTurn[];
+  /**
+   * Optional grounding — what the caller is currently looking at. Purely informational:
+   * it tells the agent what to focus on and does NOT widen permissions (`min_role` and
+   * `invocation_sources` remain the wall, enforced server-side).
+   */
+  entityType?: string | null;
+  /** UUID *or* slug; resolved server-side (slugs resolve for entry/asset/resource). */
+  entityId?: string | null;
+  /** Override the workspace default model for this call. Must be a tool-capable model. */
+  modelOverride?: string | null;
+  /** Cap the tool-call iterations. Clamped server-side (max 12). */
+  maxSteps?: number | null;
+  /** Invocation surface; gated by the workspace policy. Defaults server-side to "agent". */
+  source?: string;
+}
+
+/** One tool invocation the agent made on the way to its answer. */
+export interface AIAgentStep {
+  tool: string;
+  arguments: Record<string, unknown>;
+  /** Raw tool output — a JSON string, as handed to the model. */
+  result: string;
+}
+
+export interface AIAgentResult {
+  answer: string;
+  steps: AIAgentStep[];
+  /** "complete" when the model finished; "max_steps" when the tool budget ran out. */
+  stoppedReason: 'complete' | 'max_steps' | string;
+  executionId: string;
+  totalTokens: number;
+  estimatedCostUsd: number | null;
+}
+
 // ── Tools (core registry) ─────────────────────────────────────────────────────
 
 /**

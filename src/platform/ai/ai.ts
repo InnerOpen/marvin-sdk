@@ -10,7 +10,7 @@
  */
 
 import type { HttpClient } from '../../core';
-import type { AIChatRequest, AIChatResult } from './types';
+import type { AIAgentRequest, AIAgentResult, AIChatRequest, AIChatResult } from './types';
 import { AISettingsModule } from './settings';
 import { AIProvidersModule } from './providers';
 import { AIModelManagementModule } from './models';
@@ -44,5 +44,16 @@ export class AIModule {
    */
   async chat(body: AIChatRequest): Promise<AIChatResult> {
     return this.http.post<AIChatResult>('/api/ai/chat', body);
+  }
+
+  /**
+   * Agent loop (POST /api/ai/agent) — the model picks tools (search, browse, compose) and
+   * chains them to reach a goal, then answers. Requires a tool-capable provider *and* model;
+   * callers should degrade to `operations` / `chat` when that isn't available.
+   *
+   * Pass `entityType`/`entityId` to ground the run in what the user is looking at.
+   */
+  async agent(body: AIAgentRequest): Promise<AIAgentResult> {
+    return this.http.post<AIAgentResult>('/api/ai/agent', body);
   }
 }
