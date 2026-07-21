@@ -731,6 +731,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/smtp-profiles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Workspace SMTP Profiles */
+        get: operations["list_profiles_api_groups_smtp_profiles_get"];
+        put?: never;
+        /** Create SMTP Profile */
+        post: operations["create_profile_api_groups_smtp_profiles_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/smtp-profiles/{profile_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get an SMTP Profile */
+        get: operations["get_profile_api_groups_smtp_profiles__profile_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete an SMTP Profile */
+        delete: operations["delete_profile_api_groups_smtp_profiles__profile_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update an SMTP Profile */
+        patch: operations["update_profile_api_groups_smtp_profiles__profile_id__patch"];
+        trace?: never;
+    };
+    "/api/groups/smtp-profiles/{profile_id}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send a test email via this profile */
+        post: operations["test_profile_api_groups_smtp_profiles__profile_id__test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/variables": {
         parameters: {
             query?: never;
@@ -1778,6 +1832,27 @@ export interface paths {
          *         AppStatistics: A Pydantic model containing application statistics.
          */
         get: operations["get_app_statistics_api_admin_about_statistics_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/about/roles-matrix": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Workspace role → capability matrix
+         * @description The workspace roles and what each can do, generated from the enforced
+         *     `workspace_role_can_*` helpers so it can never drift from actual behaviour.
+         */
+        get: operations["get_roles_matrix_api_admin_about_roles_matrix_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3204,6 +3279,32 @@ export interface paths {
          *     caller (Marvin / MCP / UI) decides whether to publish, which fires the usual pipeline.
          */
         post: operations["compose_entry_api_ai_compose_entry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/revise-entry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Revise an existing entry from an instruction
+         * @description Revise an EXISTING entry in place per an instruction — the counterpart to compose.
+         *
+         *     Same shared AuthoringService, but it enriches an entry that already exists (e.g.
+         *     "determine the tags and attach relevant resources", "tighten the summary") instead of
+         *     authoring a new draft. Grounded on the workspace catalog so it reuses existing tags and
+         *     resources rather than duplicating. Unlike compose there is no skeleton fallback — reworking
+         *     an entry has no meaning without a model, so an unconfigured provider is a hard error.
+         */
+        post: operations["revise_entry_api_ai_revise_entry_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4909,6 +5010,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/stats/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Dashboard activity + attention queue
+         * @description Recent workspace activity and the "needs attention" counts — draft entries awaiting
+         *     review, pending AI suggestions, and recent execution failures. Every query is guarded so a
+         *     single failure degrades to 0 rather than sinking the whole dashboard.
+         */
+        get: operations["get_dashboard_api_platform_stats_dashboard_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/email/test": {
         parameters: {
             query?: never;
@@ -5802,6 +5925,27 @@ export interface components {
             scope?: string | null;
         };
         /**
+         * AIReviseEntryRequest
+         * @description Revise an EXISTING entry in place per an instruction — never recreate it.
+         *
+         *     The counterpart to compose: same shared AuthoringService, but it enriches an entry that
+         *     already exists (e.g. "determine the tags and attach any relevant resources", "tighten the
+         *     summary") rather than authoring a new draft.
+         */
+        AIReviseEntryRequest: {
+            /** Entry */
+            entry: string;
+            /** Instruction */
+            instruction: string;
+            /** Modeloverride */
+            modelOverride?: string | null;
+            /**
+             * Source
+             * @default editor
+             */
+            source: string;
+        };
+        /**
          * AIToolInvokeRequest
          * @description Invoke a core AI tool by name with raw args (the generic execution endpoint).
          *
@@ -6000,6 +6144,21 @@ export interface components {
             totalApiClients: number;
             /** Totalwebhooks */
             totalWebhooks: number;
+            /**
+             * Totalaioperations
+             * @default 0
+             */
+            totalAiOperations: number;
+            /**
+             * Totalaitokens
+             * @default 0
+             */
+            totalAiTokens: number;
+            /**
+             * Totalaicostusd
+             * @default 0
+             */
+            totalAiCostUsd: number;
         };
         /**
          * AppTheme
@@ -6165,6 +6324,24 @@ export interface components {
             } | null;
             /** Tag Ids */
             tag_ids?: string[] | null;
+        };
+        /** AttentionCounts */
+        AttentionCounts: {
+            /**
+             * Drafts
+             * @default 0
+             */
+            drafts: number;
+            /**
+             * Aisuggestions
+             * @default 0
+             */
+            aiSuggestions: number;
+            /**
+             * Failures
+             * @default 0
+             */
+            failures: number;
         };
         /**
          * AuthMethod
@@ -6914,6 +7091,22 @@ export interface components {
             } | null;
             /** Entryids */
             entryIds?: string[] | null;
+        };
+        /** DashboardData */
+        DashboardData: {
+            /**
+             * Recentactivity
+             * @default []
+             */
+            recentActivity: components["schemas"]["RecentEvent"][];
+            /**
+             * @default {
+             *       "drafts": 0,
+             *       "aiSuggestions": 0,
+             *       "failures": 0
+             *     }
+             */
+            attention: components["schemas"]["AttentionCounts"];
         };
         /** EmailEventSubscriptionCreate */
         EmailEventSubscriptionCreate: {
@@ -8538,6 +8731,11 @@ export interface components {
              * @default false
              */
             allowSignup: boolean;
+            /**
+             * Isdemo
+             * @default false
+             */
+            isDemo: boolean;
         };
         /**
          * LongLiveTokenCreate
@@ -9280,6 +9478,19 @@ export interface components {
             data: components["schemas"]["PublishedResourceSummary"][];
             meta: components["schemas"]["PaginationMeta"];
         };
+        /** RecentEvent */
+        RecentEvent: {
+            /** Eventtype */
+            eventType: string;
+            /** Message */
+            message: string;
+            /** Entitytype */
+            entityType?: string | null;
+            /** Entityid */
+            entityId?: string | null;
+            /** Occurredat */
+            occurredAt?: string | null;
+        };
         /**
          * RecipientType
          * @enum {string}
@@ -9425,6 +9636,114 @@ export interface components {
             } | null;
             /** Tag Ids */
             tag_ids?: string[] | null;
+        };
+        /** SMTPProfileCreate */
+        SMTPProfileCreate: {
+            /** Name */
+            name: string;
+            /** Host */
+            host: string;
+            /**
+             * Port
+             * @default 587
+             */
+            port: number;
+            /** Username */
+            username?: string | null;
+            /** Password */
+            password?: string | null;
+            /** Fromname */
+            fromName?: string | null;
+            /** Fromemail */
+            fromEmail?: string | null;
+            /**
+             * Authstrategy
+             * @default TLS
+             * @enum {string}
+             */
+            authStrategy: "TLS" | "SSL" | "NONE";
+            /**
+             * Isactive
+             * @default false
+             */
+            isActive: boolean;
+        };
+        /** SMTPProfileRead */
+        SMTPProfileRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Groupid
+             * Format: uuid4
+             */
+            groupId: string;
+            /** Name */
+            name: string;
+            /** Host */
+            host: string;
+            /** Port */
+            port: number;
+            /** Username */
+            username?: string | null;
+            /** Fromname */
+            fromName?: string | null;
+            /** Fromemail */
+            fromEmail?: string | null;
+            /**
+             * Authstrategy
+             * @default TLS
+             */
+            authStrategy: string;
+            /**
+             * Isactive
+             * @default false
+             */
+            isActive: boolean;
+            /**
+             * Haspassword
+             * @default false
+             */
+            hasPassword: boolean;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Updatedat */
+            updatedAt?: string | null;
+        };
+        /** SMTPProfileTestRequest */
+        SMTPProfileTestRequest: {
+            /** Recipientemail */
+            recipientEmail: string;
+        };
+        /** SMTPProfileTestResult */
+        SMTPProfileTestResult: {
+            /** Success */
+            success: boolean;
+            /** Message */
+            message: string;
+        };
+        /** SMTPProfileUpdate */
+        SMTPProfileUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Host */
+            host?: string | null;
+            /** Port */
+            port?: number | null;
+            /** Username */
+            username?: string | null;
+            /** Password */
+            password?: string | null;
+            /** Fromname */
+            fromName?: string | null;
+            /** Fromemail */
+            fromEmail?: string | null;
+            /** Authstrategy */
+            authStrategy?: ("TLS" | "SSL" | "NONE") | null;
+            /** Isactive */
+            isActive?: boolean | null;
         };
         /**
          * ScheduledTaskCreate
@@ -9610,10 +9929,77 @@ export interface components {
             social?: {
                 [key: string]: unknown;
             } | null;
+            seo?: components["schemas"]["SiteSeo"] | null;
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /**
+         * SiteSeo
+         * @description Structured SEO / social-sharing metadata for a workspace's published site.
+         *
+         *     Stored under ``group_preferences.site_metadata_json['seo']`` and surfaced here, typed,
+         *     as ``site.seo`` on the publishing API. Every field is optional — a consuming site is
+         *     expected to fall back to the matching identity value (title, description, canonical_url)
+         *     when a field is absent. Marvin stores and serves these values; the rendering layer emits
+         *     the actual ``<meta>``/Open Graph/Twitter tags.
+         */
+        SiteSeo: {
+            /** Title */
+            title?: string | null;
+            /** Titletemplate */
+            titleTemplate?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Keywords */
+            keywords?: string[];
+            /**
+             * Robots
+             * @default index,follow
+             */
+            robots: string;
+            /** Image */
+            image?: string | null;
+            /** Imagealt */
+            imageAlt?: string | null;
+            /**
+             * Ogtype
+             * @default website
+             */
+            ogType: string;
+            /** Sitename */
+            siteName?: string | null;
+            /**
+             * Twittercard
+             * @default summary_large_image
+             */
+            twitterCard: string;
+            /** Twitterhandle */
+            twitterHandle?: string | null;
+            /** Twittercreator */
+            twitterCreator?: string | null;
+            /** Fbappid */
+            fbAppId?: string | null;
+            /** Themecolor */
+            themeColor?: string | null;
+            /** Publisher */
+            publisher?: string | null;
+            verification?: components["schemas"]["SiteSeoVerification"];
+        };
+        /**
+         * SiteSeoVerification
+         * @description Search-engine ownership verification tokens, each rendered as a <meta name="..."> tag.
+         */
+        SiteSeoVerification: {
+            /** Google */
+            google?: string | null;
+            /** Bing */
+            bing?: string | null;
+            /** Pinterest */
+            pinterest?: string | null;
+            /** Yandex */
+            yandex?: string | null;
         };
         /**
          * SuccessResponse
@@ -11529,6 +11915,189 @@ export interface operations {
             };
         };
     };
+    list_profiles_api_groups_smtp_profiles_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SMTPProfileRead"][];
+                };
+            };
+        };
+    };
+    create_profile_api_groups_smtp_profiles_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SMTPProfileCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SMTPProfileRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_profile_api_groups_smtp_profiles__profile_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                profile_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SMTPProfileRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_profile_api_groups_smtp_profiles__profile_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                profile_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_profile_api_groups_smtp_profiles__profile_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                profile_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SMTPProfileUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SMTPProfileRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    test_profile_api_groups_smtp_profiles__profile_id__test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                profile_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SMTPProfileTestRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SMTPProfileTestResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_variables_api_groups_variables_get: {
         parameters: {
             query?: never;
@@ -12968,6 +13537,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AppStatistics"];
+                };
+            };
+        };
+    };
+    get_roles_matrix_api_admin_about_roles_matrix_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };
@@ -15104,6 +15695,41 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["AIComposeEntryRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    revise_entry_api_ai_revise_entry_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIReviseEntryRequest"];
             };
         };
         responses: {
@@ -18759,6 +19385,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkspaceStats"];
+                };
+            };
+        };
+    };
+    get_dashboard_api_platform_stats_dashboard_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardData"];
                 };
             };
         };
