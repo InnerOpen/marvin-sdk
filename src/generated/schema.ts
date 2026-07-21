@@ -833,6 +833,114 @@ export interface paths {
         patch: operations["update_variable_api_groups_variables__var_id__patch"];
         trace?: never;
     };
+    "/api/groups/integrations/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Provider Catalog
+         * @description The available integration providers (the 'add integration' catalog).
+         */
+        get: operations["list_provider_catalog_api_groups_integrations_providers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Integrations
+         * @description List this workspace's configured integrations.
+         */
+        get: operations["list_integrations_api_groups_integrations_get"];
+        put?: never;
+        /**
+         * Create Integration
+         * @description Create an integration. Any credential is written to the secret backend.
+         */
+        post: operations["create_integration_api_groups_integrations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/{integration_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Integration
+         * @description Delete an integration and its stored credential.
+         */
+        delete: operations["delete_integration_api_groups_integrations__integration_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Integration
+         * @description Update name/enabled/config, or rotate the credential.
+         */
+        patch: operations["update_integration_api_groups_integrations__integration_id__patch"];
+        trace?: never;
+    };
+    "/api/groups/integrations/{integration_id}/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check Integration
+         * @description Run the provider's health check and persist the result.
+         */
+        post: operations["check_integration_api_groups_integrations__integration_id__check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/{integration_id}/actions/{action_key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Run Action
+         * @description Manually fire a provider action (also how the automation engine will call it).
+         */
+        post: operations["run_action_api_groups_integrations__integration_id__actions__action_key__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/group/notifications": {
         parameters: {
             query?: never;
@@ -8646,6 +8754,125 @@ export interface components {
             models: string[];
         };
         /**
+         * IntegrationActionResult
+         * @description Result of running (or test-firing) a provider action.
+         */
+        IntegrationActionResult: {
+            /** Ok */
+            ok: boolean;
+            /** Result */
+            result?: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * IntegrationCheckResult
+         * @description Result of a health check.
+         */
+        IntegrationCheckResult: {
+            /** Status */
+            status: string;
+            /** Lasterror */
+            lastError?: string | null;
+            /** Lastcheckedat */
+            lastCheckedAt?: string | null;
+        };
+        /**
+         * IntegrationCreate
+         * @description Create a new integration instance.
+         */
+        IntegrationCreate: {
+            /** Provider */
+            provider: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            };
+            /** Credential */
+            credential?: string | null;
+        };
+        /**
+         * IntegrationProviderInfo
+         * @description A provider catalog entry — what the 'add integration' screen renders from.
+         */
+        IntegrationProviderInfo: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Category */
+            category: string;
+            /** Configschema */
+            configSchema?: {
+                [key: string]: unknown;
+            };
+            /** Credentials */
+            credentials?: components["schemas"]["ProviderCredentialInfo"][];
+            /** Emits */
+            emits?: components["schemas"]["ProviderEventInfo"][];
+            /** Actions */
+            actions?: components["schemas"]["ProviderActionInfo"][];
+        };
+        /**
+         * IntegrationRead
+         * @description An integration as returned by the API. Never carries the credential value.
+         */
+        IntegrationRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Provider */
+            provider: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Hascredential
+             * @default false
+             */
+            hasCredential: boolean;
+            /** Status */
+            status: string;
+            /** Lastcheckedat */
+            lastCheckedAt?: string | null;
+            /** Lasterror */
+            lastError?: string | null;
+        };
+        /**
+         * IntegrationUpdate
+         * @description Patch an integration. A present `credential` rotates the stored secret.
+         */
+        IntegrationUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            } | null;
+            /** Credential */
+            credential?: string | null;
+        };
+        /**
          * InviteTokenCreate
          * @description Schema for creating a new group invitation token.
          *     Specifies the initial number of uses, role, and the group it belongs to.
@@ -9088,6 +9315,60 @@ export interface components {
          * @enum {string}
          */
         PlatformRole: "NONE" | "SUPER_ADMIN";
+        /**
+         * ProviderActionInfo
+         * @description An action a provider exposes to automations.
+         */
+        ProviderActionInfo: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Inputschema */
+            inputSchema?: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * ProviderCredentialInfo
+         * @description A credential field a provider needs (drives the create form).
+         */
+        ProviderCredentialInfo: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /**
+             * Help
+             * @default
+             */
+            help: string;
+            /**
+             * Required
+             * @default true
+             */
+            required: boolean;
+        };
+        /**
+         * ProviderEventInfo
+         * @description An event a provider can emit onto the bus.
+         */
+        ProviderEventInfo: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+        };
         /**
          * PublishedAssetRead
          * @description Schema for published assets in the publishing API.
@@ -12202,6 +12483,212 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkspaceVariableRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_provider_catalog_api_groups_integrations_providers_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationProviderInfo"][];
+                };
+            };
+        };
+    };
+    list_integrations_api_groups_integrations_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationRead"][];
+                };
+            };
+        };
+    };
+    create_integration_api_groups_integrations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IntegrationCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_integration_api_groups_integrations__integration_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                integration_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_integration_api_groups_integrations__integration_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                integration_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IntegrationUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_integration_api_groups_integrations__integration_id__check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                integration_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationCheckResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_action_api_groups_integrations__integration_id__actions__action_key__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                integration_id: string;
+                action_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                } | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationActionResult"];
                 };
             };
             /** @description Validation Error */

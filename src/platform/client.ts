@@ -30,6 +30,7 @@ import { ScheduledTasksModule } from './scheduledTasks';
 import { FormsModule } from './forms';
 import { SecretsModule } from './secrets';
 import { VariablesModule } from './variables';
+import { IntegrationsModule } from './integrations';
 import { EmailEventSubscriptionsModule } from './emailEventSubscriptions';
 import { AIModule } from './ai';
 import { AutomationsModule } from './automations';
@@ -82,6 +83,7 @@ export class PlatformClient extends HttpClient {
   public forms: FormsModule;
   public secrets: SecretsModule;
   public variables: VariablesModule;
+  public integrations: IntegrationsModule;
   public emailEventSubscriptions: EmailEventSubscriptionsModule;
 
   // AI (providers, models, operations, executions, settings)
@@ -135,6 +137,7 @@ export class PlatformClient extends HttpClient {
     this.forms = new FormsModule(this);
     this.secrets = new SecretsModule(this);
     this.variables = new VariablesModule(this);
+    this.integrations = new IntegrationsModule(this);
     this.emailEventSubscriptions = new EmailEventSubscriptionsModule(this);
 
     // AI module (composite: settings, providers+models, operations, executions)

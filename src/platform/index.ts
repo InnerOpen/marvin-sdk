@@ -117,6 +117,20 @@ export type { ScheduledTask, ScheduledTaskCreate, ScheduledTaskUpdate, Scheduled
 // Forms
 export { FormsModule } from './forms';
 
+// Integrations (credentialed connections to external services)
+export { IntegrationsModule } from './integrations';
+export type {
+  Integration,
+  IntegrationCreate,
+  IntegrationUpdate,
+  IntegrationProviderInfo,
+  IntegrationProviderCredential,
+  IntegrationProviderEvent,
+  IntegrationProviderAction,
+  IntegrationActionResult,
+  IntegrationCheckResult,
+} from './integrations';
+
 // User self-service
 export { UserModule } from './user';
 export type { UserProfile, UserProfileUpdate, ApiToken, ApiTokenCreate, ApiTokenWithToken, ApiTokenUpdate, PasswordChange } from './user';
