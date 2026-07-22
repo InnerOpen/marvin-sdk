@@ -89,6 +89,29 @@ export interface IntegrationPluginInfo {
   error: string | null;
 }
 
+export interface IntegrationEventSubscription {
+  id: string;
+  integrationId: string;
+  integrationName: string | null;
+  provider: string | null;
+  eventType: string;
+  action: string;
+  args: Record<string, unknown> | null;
+  enabled: boolean;
+}
+
+export interface IntegrationEventSubscriptionCreate {
+  integrationId: string;
+  eventType: string;
+  action: string;
+  args?: Record<string, unknown>;
+}
+
+export interface IntegrationEventSubscriptionUpdate {
+  enabled?: boolean;
+  args?: Record<string, unknown>;
+}
+
 const BASE = '/api/groups/integrations';
 
 export class IntegrationsModule {
@@ -140,5 +163,32 @@ export class IntegrationsModule {
     const validId = this.http.validatePathParam(id, 'integration ID');
     const validKey = this.http.validatePathParam(actionKey, 'action key');
     return this.http.post<IntegrationActionResult>(`${BASE}/${validId}/actions/${validKey}`, args);
+  }
+
+  // ---- event connections (integration action ⇄ event) ----
+
+  /** Integration actions wired to events. Pass eventType to scope to one event. */
+  async listSubscriptions(eventType?: string): Promise<IntegrationEventSubscription[]> {
+    return this.http.get<IntegrationEventSubscription[]>(
+      `${BASE}/subscriptions`,
+      eventType ? { event_type: eventType } : undefined,
+    );
+  }
+
+  /** Wire an integration action to an event type. */
+  async createSubscription(data: IntegrationEventSubscriptionCreate): Promise<IntegrationEventSubscription> {
+    return this.http.post<IntegrationEventSubscription>(`${BASE}/subscriptions`, data);
+  }
+
+  /** Toggle a connection or change its templated args. */
+  async updateSubscription(id: string, data: IntegrationEventSubscriptionUpdate): Promise<IntegrationEventSubscription> {
+    const validId = this.http.validatePathParam(id, 'subscription ID');
+    return this.http.patch<IntegrationEventSubscription>(`${BASE}/subscriptions/${validId}`, data);
+  }
+
+  /** Remove an integration ⇄ event connection. */
+  async deleteSubscription(id: string): Promise<void> {
+    const validId = this.http.validatePathParam(id, 'subscription ID');
+    await this.http.delete<void>(`${BASE}/subscriptions/${validId}`);
   }
 }

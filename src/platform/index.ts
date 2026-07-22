@@ -130,6 +130,9 @@ export type {
   IntegrationActionResult,
   IntegrationCheckResult,
   IntegrationPluginInfo,
+  IntegrationEventSubscription,
+  IntegrationEventSubscriptionCreate,
+  IntegrationEventSubscriptionUpdate,
 } from './integrations';
 
 // User self-service
