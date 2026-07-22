@@ -129,6 +129,7 @@ export type {
   IntegrationProviderAction,
   IntegrationActionResult,
   IntegrationCheckResult,
+  IntegrationPluginInfo,
 } from './integrations';
 
 // User self-service

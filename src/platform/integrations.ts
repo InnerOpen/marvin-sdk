@@ -79,6 +79,16 @@ export interface IntegrationCheckResult {
   lastCheckedAt: string | null;
 }
 
+export interface IntegrationPluginInfo {
+  name: string;
+  source: string; // "builtin" | "entry_point"
+  ok: boolean;
+  slugs: string[];
+  distribution: string | null;
+  version: string | null;
+  error: string | null;
+}
+
 const BASE = '/api/groups/integrations';
 
 export class IntegrationsModule {
@@ -90,6 +100,11 @@ export class IntegrationsModule {
    */
   async listProviders(): Promise<IntegrationProviderInfo[]> {
     return this.http.get<IntegrationProviderInfo[]>(`${BASE}/providers`);
+  }
+
+  /** Installed provider sources — built-ins and plugin packages — with load status/version. */
+  async listPlugins(): Promise<IntegrationPluginInfo[]> {
+    return this.http.get<IntegrationPluginInfo[]>(`${BASE}/plugins`);
   }
 
   /** List this workspace's configured integrations. */

@@ -853,6 +853,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/integrations/plugins": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Plugins
+         * @description Installed provider sources — built-ins and plugin packages — with load status/version.
+         */
+        get: operations["list_plugins_api_groups_integrations_plugins_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/integrations": {
         parameters: {
             query?: never;
@@ -8796,6 +8816,26 @@ export interface components {
             credential?: string | null;
         };
         /**
+         * IntegrationPluginInfo
+         * @description One provider source (built-ins, or an installed plugin distribution) and how it loaded.
+         */
+        IntegrationPluginInfo: {
+            /** Name */
+            name: string;
+            /** Source */
+            source: string;
+            /** Ok */
+            ok: boolean;
+            /** Slugs */
+            slugs?: string[];
+            /** Distribution */
+            distribution?: string | null;
+            /** Version */
+            version?: string | null;
+            /** Error */
+            error?: string | null;
+        };
+        /**
          * IntegrationProviderInfo
          * @description A provider catalog entry — what the 'add integration' screen renders from.
          */
@@ -12512,6 +12552,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["IntegrationProviderInfo"][];
+                };
+            };
+        };
+    };
+    list_plugins_api_groups_integrations_plugins_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationPluginInfo"][];
                 };
             };
         };
