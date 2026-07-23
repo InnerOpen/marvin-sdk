@@ -10,6 +10,7 @@ export class Entry {
   get title() { return this.raw.title; }
   get slug() { return this.raw.slug; }
   get summary() { return this.raw.summary; }
+  get description() { return this.raw.description; }
   get entryType() { return this.raw.entryType; }
   get entryTypeInfo() { return this.raw.entryTypeInfo; }
   get data() { return this.raw.data; }

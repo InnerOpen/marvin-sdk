@@ -9631,6 +9631,8 @@ export interface components {
             entryTypeInfo?: components["schemas"]["PublishedEntryTypeInfo"] | null;
             /** Summary */
             summary?: string | null;
+            /** Description */
+            description?: string | null;
             /** Data */
             data: {
                 [key: string]: unknown;
