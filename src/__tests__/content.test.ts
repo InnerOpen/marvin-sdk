@@ -233,7 +233,7 @@ describe('FormsModule', () => {
     // workspace slug must be in the URL
     expect(http.validatePathParam).toHaveBeenCalledWith('my-workspace', 'workspace slug')
     expect(http.validatePathParam).toHaveBeenCalledWith('contact', 'form slug')
-    const calledUrl: string = http.get.mock.calls[0][0]
+    const calledUrl: string = http.get.mock.calls[0]![0]
     expect(calledUrl).toContain('my-workspace')
     expect(calledUrl).toBe('/api/publish/my-workspace/forms/contact')
   })
@@ -244,7 +244,7 @@ describe('FormsModule', () => {
     await module.submitForm('my-workspace', 'contact', formData)
     expect(http.validatePathParam).toHaveBeenCalledWith('my-workspace', 'workspace slug')
     expect(http.validatePathParam).toHaveBeenCalledWith('contact', 'form slug')
-    const calledUrl: string = http.post.mock.calls[0][0]
+    const calledUrl: string = http.post.mock.calls[0]![0]
     expect(calledUrl).toContain('my-workspace')
     expect(calledUrl).toBe('/api/publish/my-workspace/forms/contact/submit')
     expect(http.post).toHaveBeenCalledWith(

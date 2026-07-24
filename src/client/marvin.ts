@@ -5,12 +5,10 @@
 import type { MarvinConfig } from './config';
 import { validateConfig } from './config';
 import { MarvinHttpClient } from './http';
-import { MarvinCache } from '../core';
 import { Workspace } from '../workspaces/workspace';
 import type {
   MarvinSite,
   MarvinEntry,
-  MarvinEntryListItem,
   ListEntry,
   MarvinAsset,
   MarvinResource,
@@ -22,14 +20,12 @@ import type { GetAssetsOptions } from '../assets/assets';
 
 export class MarvinClient {
   private http: MarvinHttpClient;
-  private cache: MarvinCache;
   private workspace: Workspace;
   private initialized = false;
 
   constructor(config: MarvinConfig) {
     validateConfig(config);
     this.http = new MarvinHttpClient(config);
-    this.cache = new MarvinCache(config.cacheDuration);
     this.workspace = new Workspace(this.http, config.workspaceSlug);
 
     if (config.autoInitialize) {

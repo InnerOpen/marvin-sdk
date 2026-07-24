@@ -4,7 +4,7 @@
  * Manage workspace webhooks
  */
 
-import { HttpClient, MarvinValidationError } from '../core';
+import { HttpClient } from '../core';
 import type { components } from '../generated/schema';
 
 // Type aliases from OpenAPI schema
@@ -17,72 +17,6 @@ export type WebhookUpdate = components['schemas']['WebhookCreate'];
 
 export class WebhooksModule {
   constructor(private http: HttpClient) {}
-
-  /**
-   * Validate webhook URL to prevent SSRF attacks
-   */
-  private validateWebhookUrl(url: string): void {
-    if (!url || typeof url !== 'string') {
-      throw new MarvinValidationError('Webhook URL is required and must be a string');
-    }
-
-    let parsed: URL;
-    try {
-      parsed = new URL(url);
-    } catch {
-      throw new MarvinValidationError('Invalid webhook URL format. Expected: https://example.com/webhook');
-    }
-
-    // Only allow HTTP/HTTPS protocols
-    if (!['http:', 'https:'].includes(parsed.protocol)) {
-      throw new MarvinValidationError(
-        `Webhook URL must use HTTP or HTTPS protocol. Got: ${parsed.protocol}`
-      );
-    }
-
-    // Prevent SSRF to localhost/internal IPs
-    const hostname = parsed.hostname.toLowerCase();
-    const blockedHosts = [
-      'localhost',
-      '127.0.0.1',
-      '0.0.0.0',
-      '::1',
-      '169.254.169.254', // AWS metadata service
-      '[::]',
-    ];
-
-    if (blockedHosts.some(blocked => hostname === blocked || hostname.includes(blocked))) {
-      throw new MarvinValidationError(
-        'Webhook URL cannot target localhost or internal network addresses'
-      );
-    }
-
-    // Block private IP ranges (basic check)
-    const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
-    const match = hostname.match(ipv4Regex);
-    if (match) {
-      const octets = match.slice(1).map(Number);
-
-      // Check for private IP ranges
-      // 10.0.0.0/8
-      if (octets[0] === 10) {
-        throw new MarvinValidationError('Webhook URL cannot target private IP range (10.x.x.x)');
-      }
-      // 172.16.0.0/12
-      if (octets[0] === 172 && octets[1] >= 16 && octets[1] <= 31) {
-        throw new MarvinValidationError('Webhook URL cannot target private IP range (172.16-31.x.x)');
-      }
-      // 192.168.0.0/16
-      if (octets[0] === 192 && octets[1] === 168) {
-        throw new MarvinValidationError('Webhook URL cannot target private IP range (192.168.x.x)');
-      }
-    }
-
-    // Ensure URL doesn't exceed reasonable length
-    if (url.length > 2048) {
-      throw new MarvinValidationError('Webhook URL exceeds maximum length of 2048 characters');
-    }
-  }
 
   /**
    * List all webhooks for the current workspace

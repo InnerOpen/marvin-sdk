@@ -2,7 +2,7 @@
  * Collection - Rich object representing a single collection
  */
 
-import type { MarvinCollection, MarvinEntryListItem, PublishedCollectionSummary, CollectionEntry, CollectionContext, CollectionEntryMetadata } from '../types';
+import type { MarvinCollection, CollectionEntry, CollectionContext, CollectionEntryMetadata } from '../types';
 
 export class Collection {
   constructor(private data: MarvinCollection) {}
