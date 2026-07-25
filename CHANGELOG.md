@@ -1,3 +1,26 @@
+# [3.2.0-next.28](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.27...v3.2.0-next.28) (2026-07-25)
+
+
+### Features
+
+* **ai/settings:** sources() — invocation-source catalog for the policy editor ([3b25155](https://github.com/inneropen/marvin-sdk/commit/3b25155b7f162de2211b35a276a078d50feed216))
+* **ai:** add defaultRegister to AISettings ([e91926b](https://github.com/inneropen/marvin-sdk/commit/e91926b35d05cd2255dcb0a9b3819477eb5704af))
+* **ai:** reflect compose/revise result fields (warnings, outcome, proposed) ([8ca7da4](https://github.com/inneropen/marvin-sdk/commit/8ca7da4c93f17d156390c9e0737bc0bb27a7f6c3))
+* **ai:** reviseEntry SDK method — the compose counterpart ([e00052b](https://github.com/inneropen/marvin-sdk/commit/e00052b3699cf733b27a8b3961b08acec6c90f40))
+* **automation:** condition groups + new operators + step ids (types) ([22874ad](https://github.com/inneropen/marvin-sdk/commit/22874ad553fb83c83e27ced5514ccfa3e917378a))
+* **automations:** add dryRun() + dry-run plan types ([990ff7b](https://github.com/inneropen/marvin-sdk/commit/990ff7b3fb57a9ba1cd50fc868bb9788f9c39ac6))
+* **automations:** collection_slug/collection_id on entry actions ([c404b62](https://github.com/inneropen/marvin-sdk/commit/c404b622e456ec305b7d15602578fd9b7dd6b0a5))
+* **automations:** mirror the server definition schema ([a4b74d8](https://github.com/inneropen/marvin-sdk/commit/a4b74d852245f049e1f39aef7922427ef52cc5ef))
+* **automation:** trigger_groups on options (grouped event picker) ([9f1576b](https://github.com/inneropen/marvin-sdk/commit/9f1576bdfdf035429ef0262206a7a3ebc5b67a07))
+* **entries:** expose entry description ([bb37c92](https://github.com/inneropen/marvin-sdk/commit/bb37c92e7cfb80fb7602647aabfb29e03c42e3f3))
+* **eventLog:** correlation_id chain filter ([1b12828](https://github.com/inneropen/marvin-sdk/commit/1b12828ee35834f44f5f60831aafa5d00ec6d88a))
+* **integrations:** IntegrationsModule on the platform client ([c899b17](https://github.com/inneropen/marvin-sdk/commit/c899b178fd3a4cb003a4112d8f65fa7895791981))
+* **integrations:** listPlugins() for installed-plugin introspection ([363e32d](https://github.com/inneropen/marvin-sdk/commit/363e32dd8769448e2a92babd0a05bd04d8274825))
+* **integrations:** subscription methods for integration⇄event connections ([b0c2868](https://github.com/inneropen/marvin-sdk/commit/b0c2868232a2802bbaf3c5b19afe4f97448a48ae))
+* **platform:** add TagsModule + Tag types; regen schema with tags ([317b532](https://github.com/inneropen/marvin-sdk/commit/317b53242f00d34c789da92096d60b9b407e64af))
+* **platform:** tags on assets/resources — attach/detach + regen schema ([be74915](https://github.com/inneropen/marvin-sdk/commit/be74915ea3f359f04cb45216f5e0b841f1160582))
+* **types:** typed SiteSeo on published site configuration ([0ceaec2](https://github.com/inneropen/marvin-sdk/commit/0ceaec2897fa83f0c97b19a250b35aa7ce5a9a67))
+
 # [3.2.0-next.27](https://github.com/inneropen/marvin-sdk/compare/v3.2.0-next.26...v3.2.0-next.27) (2026-07-20)
 
 
