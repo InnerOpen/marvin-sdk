@@ -39,6 +39,9 @@ export interface HttpClientConfig {
 }
 
 export class HttpClient {
+  /** Ceiling for any timeout, per-request overrides included — guards against resource exhaustion. */
+  static readonly MAX_TIMEOUT = 120000; // 2 minutes
+
   private baseUrl: string;
   private auth: AuthStrategy;
   private defaultHeaders: Record<string, string>;
@@ -59,8 +62,7 @@ export class HttpClient {
     this.credentials = config.credentials || 'same-origin';
 
     // Enforce maximum timeout to prevent resource exhaustion
-    const MAX_TIMEOUT = 120000; // 2 minutes
-    this.timeout = Math.min(config.timeout || 30000, MAX_TIMEOUT);
+    this.timeout = Math.min(config.timeout || 30000, HttpClient.MAX_TIMEOUT);
 
     this.debug = config.debug ?? false;
     this.logger = config.logger ?? console;
@@ -233,6 +235,13 @@ export class HttpClient {
       body?: unknown;
       headers?: Record<string, string>;
       params?: Record<string, string | number | boolean | undefined>;
+      /**
+       * Per-request timeout override in ms. For endpoints that are legitimately slow — the
+       * agent loop makes several sequential model calls, and a local model can take minutes —
+       * so they need their own budget rather than forcing the client-wide default up.
+       * Still clamped to MAX_TIMEOUT.
+       */
+      timeout?: number;
     },
     retryAttempt = 0
   ): Promise<T> {
@@ -240,8 +249,12 @@ export class HttpClient {
     const isFormData = options?.body instanceof FormData;
     const headers = this.buildHeaders(options?.headers, isFormData);
 
+    const effectiveTimeout = options?.timeout
+      ? Math.min(options.timeout, HttpClient.MAX_TIMEOUT)
+      : this.timeout;
+
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+    const timeoutId = setTimeout(() => controller.abort(), effectiveTimeout);
 
     const startTime = Date.now();
 
@@ -403,8 +416,8 @@ export class HttpClient {
   /**
    * POST request
    */
-  async post<T>(endpoint: string, body?: unknown): Promise<T> {
-    return this.request<T>('POST', endpoint, { body });
+  async post<T>(endpoint: string, body?: unknown, options?: { timeout?: number }): Promise<T> {
+    return this.request<T>('POST', endpoint, { body, timeout: options?.timeout });
   }
 
   /**

@@ -20,6 +20,11 @@ export type {
   PlatformCollectionUpdate,
   SmartCollectionRules,
 
+  // Tags
+  PlatformTag,
+  PlatformTagCreate,
+  PlatformTagUpdate,
+
   // Resources
   PlatformResource,
   PlatformResourceCreate,
@@ -54,8 +59,39 @@ export type {
   PlatformFormSubmission,
 } from './types';
 
+export { AutomationsModule } from './automations';
+export type {
+  Automation,
+  AutomationCreate,
+  AutomationUpdate,
+  AutomationDefinition,
+  AutomationTrigger,
+  AutomationCondition,
+  AutomationAction,
+  AutomationActionOption,
+  AutomationOptions,
+  AutomationConditionField,
+  AutomationWebhookOption,
+  AutomationTargetOption,
+  AutomationIncomingWebhookOption,
+  AutomationValidationIssue,
+  AutomationValidateResult,
+  AutomationTarget,
+  AutomationPreviewMatch,
+  AutomationPreviewResult,
+  AutomationExecution,
+  AutomationExecutionDetail,
+  AutomationActionExecution,
+} from './automations';
+export { IncomingWebhooksModule } from './incomingWebhooks';
+export type {
+  IncomingWebhook,
+  IncomingWebhookCreate,
+  IncomingWebhookUpdate,
+} from './incomingWebhooks';
 export { EntriesModule } from './entries';
 export { CollectionsModule } from './collections';
+export { TagsModule } from './tags';
 export { ResourcesModule } from './resources';
 export { AssetsModule } from './assets';
 export { APIClientsModule } from './apiClients';
@@ -80,6 +116,24 @@ export type { ScheduledTask, ScheduledTaskCreate, ScheduledTaskUpdate, Scheduled
 
 // Forms
 export { FormsModule } from './forms';
+
+// Integrations (credentialed connections to external services)
+export { IntegrationsModule } from './integrations';
+export type {
+  Integration,
+  IntegrationCreate,
+  IntegrationUpdate,
+  IntegrationProviderInfo,
+  IntegrationProviderCredential,
+  IntegrationProviderEvent,
+  IntegrationProviderAction,
+  IntegrationActionResult,
+  IntegrationCheckResult,
+  IntegrationPluginInfo,
+  IntegrationEventSubscription,
+  IntegrationEventSubscriptionCreate,
+  IntegrationEventSubscriptionUpdate,
+} from './integrations';
 
 // User self-service
 export { UserModule } from './user';
@@ -116,6 +170,8 @@ export {
   AIProvidersModule,
   AIModelsModule,
   AIOperationsModule,
+  AIToolsModule,
+  AIMcpServersModule,
   AIExecutionsModule,
 } from './ai';
 export type {
@@ -133,6 +189,17 @@ export type {
   AIApprovalMode,
   AIOperationInfo,
   AIOperationExecuteRequest,
+  AIChatRequest,
+  AIChatResult,
+  AIToolInfo,
+  AIToolInvokeRequest,
+  AgentToolInfo,
+  McpServer,
+  McpServerCreate,
+  McpServerUpdate,
+  McpServerToolInfo,
+  McpServerTestResult,
+  McpTransport,
   AIExecution,
   AIExecutionStatus,
   AIExecutionListParams,

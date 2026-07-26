@@ -10,6 +10,8 @@ import type { components } from '../generated/schema';
 // Site
 export type MarvinSite = components['schemas']['WorkspaceSiteInfo'];
 export type SiteConfiguration = components['schemas']['SiteConfiguration'];
+export type SiteSeo = components['schemas']['SiteSeo'];
+export type SiteSeoVerification = components['schemas']['SiteSeoVerification'];
 export type WorkspaceInfo = components['schemas']['WorkspaceInfo'];
 
 // Entries

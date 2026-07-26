@@ -19,7 +19,7 @@ export class MarvinError extends Error {
 export class MarvinApiError extends MarvinError {
   constructor(
     message: string,
-    public readonly statusCode: number,
+    public override readonly statusCode: number,
     public readonly endpoint: string,
     public readonly responseBody?: string
   ) {

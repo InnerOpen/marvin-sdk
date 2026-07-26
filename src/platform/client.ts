@@ -8,6 +8,7 @@ import { HttpClient, SessionAuth } from '../core';
 import type { HttpClientConfig } from '../core';
 import { EntriesModule } from './entries';
 import { CollectionsModule } from './collections';
+import { TagsModule } from './tags';
 import { ResourcesModule } from './resources';
 import { AssetsModule } from './assets';
 import { APIClientsModule } from './apiClients';
@@ -29,8 +30,11 @@ import { ScheduledTasksModule } from './scheduledTasks';
 import { FormsModule } from './forms';
 import { SecretsModule } from './secrets';
 import { VariablesModule } from './variables';
+import { IntegrationsModule } from './integrations';
 import { EmailEventSubscriptionsModule } from './emailEventSubscriptions';
 import { AIModule } from './ai';
+import { AutomationsModule } from './automations';
+import { IncomingWebhooksModule } from './incomingWebhooks';
 
 export interface PlatformClientConfig {
   apiUrl?: string;
@@ -59,6 +63,7 @@ export function createPlatformConfigFromEnv(overrides?: Partial<PlatformClientCo
 export class PlatformClient extends HttpClient {
   public entries: EntriesModule;
   public collections: CollectionsModule;
+  public tags: TagsModule;
   public resources: ResourcesModule;
   public assets: AssetsModule;
   public apiClients: APIClientsModule;
@@ -78,10 +83,16 @@ export class PlatformClient extends HttpClient {
   public forms: FormsModule;
   public secrets: SecretsModule;
   public variables: VariablesModule;
+  public integrations: IntegrationsModule;
   public emailEventSubscriptions: EmailEventSubscriptionsModule;
 
   // AI (providers, models, operations, executions, settings)
   public ai: AIModule;
+
+  // Automations (Flavor B: event → conditions → actions; general — works with AI off)
+  public automations: AutomationsModule;
+  // Incoming (ingress) webhooks — tokened endpoints that drop events on the bus.
+  public incomingWebhooks: IncomingWebhooksModule;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -106,6 +117,7 @@ export class PlatformClient extends HttpClient {
     // Initialize modules
     this.entries = new EntriesModule(this);
     this.collections = new CollectionsModule(this);
+    this.tags = new TagsModule(this);
     this.resources = new ResourcesModule(this);
     this.assets = new AssetsModule(this);
     this.apiClients = new APIClientsModule(this);
@@ -125,10 +137,15 @@ export class PlatformClient extends HttpClient {
     this.forms = new FormsModule(this);
     this.secrets = new SecretsModule(this);
     this.variables = new VariablesModule(this);
+    this.integrations = new IntegrationsModule(this);
     this.emailEventSubscriptions = new EmailEventSubscriptionsModule(this);
 
     // AI module (composite: settings, providers+models, operations, executions)
     this.ai = new AIModule(this);
+
+    // Automations (general workflow engine; AI is one optional action kind)
+    this.automations = new AutomationsModule(this);
+    this.incomingWebhooks = new IncomingWebhooksModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);

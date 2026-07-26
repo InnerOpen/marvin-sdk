@@ -16,6 +16,8 @@ import type {
   AIExecution,
   AIComposeEntryRequest,
   AIComposeEntryResult,
+  AIReviseEntryRequest,
+  AIReviseEntryResult,
 } from './types';
 
 export type AIReindexRequest = components['schemas']['AIReindexRequest'];
@@ -59,5 +61,17 @@ export class AIOperationsModule {
    */
   async composeEntry(body: AIComposeEntryRequest): Promise<AIComposeEntryResult> {
     return this.http.post<AIComposeEntryResult>('/api/ai/compose-entry', body);
+  }
+
+  /**
+   * Revise an EXISTING entry in place from an instruction — the counterpart to
+   * {@link composeEntry}. Enriches an entry that already exists (e.g. "determine
+   * the tags and attach relevant resources", "tighten the summary") instead of
+   * authoring a new draft. Grounded on the workspace catalog so it reuses existing
+   * tags and resources rather than duplicating. Unlike compose there is no skeleton
+   * fallback — an unconfigured provider is an error.
+   */
+  async reviseEntry(body: AIReviseEntryRequest): Promise<AIReviseEntryResult> {
+    return this.http.post<AIReviseEntryResult>('/api/ai/revise-entry', body);
   }
 }

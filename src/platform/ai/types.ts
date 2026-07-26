@@ -113,6 +113,14 @@ export interface AISettings {
   budgetConfig: Record<string, unknown> | null;
   loggingConfig: Record<string, unknown> | null;
   moderationConfig: Record<string, unknown> | null;
+  /** Master switch: may the agent draw tools from registered external MCP servers? */
+  externalMcpEnabled: boolean;
+  /** Per-workspace AI persona: display name for the assistant (defaults to "Marvin"). */
+  assistantName?: string | null;
+  /** Free-text voice/tone instruction appended to the system prompt. */
+  personaPrompt?: string | null;
+  /** Default tone register for agent runs (axis B) — "auto" | "professional" | "playful". */
+  defaultRegister?: string;
 }
 
 export interface AISettingsUpdate {
@@ -127,6 +135,10 @@ export interface AISettingsUpdate {
   budgetConfig?: Record<string, unknown> | null;
   loggingConfig?: Record<string, unknown> | null;
   moderationConfig?: Record<string, unknown> | null;
+  externalMcpEnabled?: boolean;
+  assistantName?: string | null;
+  personaPrompt?: string | null;
+  defaultRegister?: string;
 }
 
 // ── Operations ───────────────────────────────────────────────────────────────
@@ -159,6 +171,208 @@ export interface AIOperationExecuteRequest {
   source?: string;
 }
 
+// ── Chat (plain completion — no tools, no RAG) ────────────────────────────────
+
+export interface AIChatRequest {
+  /** The user's message. */
+  message: string;
+  /** Override the workspace default model for this call. */
+  modelOverride?: string | null;
+  /** Invocation surface; gated by the workspace policy. Defaults server-side to "agent". */
+  source?: string;
+}
+
+export interface AIChatResult {
+  reply: string;
+  model: string;
+  totalTokens: number;
+  estimatedCostUsd: number | null;
+  executionId: string;
+}
+
+// ── Agent (tool-calling loop) ─────────────────────────────────────────────────
+
+/** One prior conversation turn, replayed to give the agent short-term memory. */
+export interface AIAgentTurn {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface AIAgentRequest {
+  /** The user's goal or question. */
+  message: string;
+  /**
+   * Prior turns, oldest first, EXCLUDING the current message. The agent is otherwise stateless —
+   * each call replays what the client remembers. Bounded server-side (turn count + characters),
+   * so sending a long transcript is safe: the oldest turns are simply dropped.
+   */
+  history?: AIAgentTurn[];
+  /**
+   * Optional grounding — what the caller is currently looking at. Purely informational:
+   * it tells the agent what to focus on and does NOT widen permissions (`min_role` and
+   * `invocation_sources` remain the wall, enforced server-side).
+   */
+  entityType?: string | null;
+  /** UUID *or* slug; resolved server-side (slugs resolve for entry/asset/resource). */
+  entityId?: string | null;
+  /** Override the workspace default model for this call. Must be a tool-capable model. */
+  modelOverride?: string | null;
+  /** Cap the tool-call iterations. Clamped server-side (max 12). */
+  maxSteps?: number | null;
+  /**
+   * Tone register for THIS call — independent of the workspace persona.
+   *
+   * The workspace `personaPrompt` governs how the assistant *addresses* you. It should not
+   * govern *work product*: a review or critique written in character is not actionable. Callers
+   * asking for work product should send "professional", which suppresses the persona entirely.
+   *
+   *  - "auto"         (default) persona applies to framing only; findings stay plain
+   *  - "professional" persona suppressed — use for reviews, critiques, analyses
+   *  - "playful"      persona applies fully — conversational asks
+   */
+  register?: 'auto' | 'professional' | 'playful';
+  /** Invocation surface; gated by the workspace policy. Defaults server-side to "agent". */
+  source?: string;
+}
+
+/** One tool invocation the agent made on the way to its answer. */
+export interface AIAgentStep {
+  tool: string;
+  arguments: Record<string, unknown>;
+  /** Raw tool output — a JSON string, as handed to the model. */
+  result: string;
+}
+
+export interface AIAgentResult {
+  answer: string;
+  steps: AIAgentStep[];
+  /** "complete" when the model finished; "max_steps" when the tool budget ran out. */
+  stoppedReason: 'complete' | 'max_steps' | string;
+  executionId: string;
+  totalTokens: number;
+  estimatedCostUsd: number | null;
+}
+
+// ── Tools (core registry) ─────────────────────────────────────────────────────
+
+/**
+ * Core tool metadata. NOTE: snake_case — like AIOperationInfo, the backend returns
+ * `tool.info()` as a raw dict that does not pass through the camelCase alias generator.
+ *
+ * These are Marvin's direct-handler read/query/action capabilities (search, browse, list),
+ * defined once in the core tool registry, used in-process by the internal agent and projected
+ * here for external MCP hosts.
+ */
+export interface AIToolInfo {
+  name: string;
+  description: string;
+  input_schema: Record<string, unknown>;
+  min_role: number;
+  sources: string[];
+  read_only: boolean;
+}
+
+export interface AIToolInvokeRequest {
+  /** Tool args matching the tool's input schema. */
+  args?: Record<string, unknown>;
+  /** Invocation surface (e.g. "mcp"); gated by the workspace policy ∩ the tool's sources. */
+  source?: string;
+}
+
+/**
+ * One tool the agent loop actually binds for the caller (GET /api/ai/agent/tools) — the live
+ * surface behind the Ask Marvin agent, including allowlisted external MCP tools.
+ */
+export interface AgentToolInfo {
+  name: string;
+  description: string;
+  /** "builtin" for core registry / compose tools, "external" for tools from an MCP server. */
+  source: 'builtin' | 'external';
+  /** For external tools, the originating MCP server's display name; null otherwise. */
+  server: string | null;
+}
+
+// ── Installed models + on-demand pull (Ollama) ────────────────────────────────
+
+/** What's actually installed in the workspace's active provider (vs. registered metadata). */
+export interface InstalledModels {
+  providerType: string;
+  /** Whether this provider can pull models on demand (Ollama). */
+  supportsPull: boolean;
+  models: string[];
+}
+
+export interface ModelPullRequest {
+  /** Model to download, e.g. "qwen3-coder" or "nomic-embed-text". */
+  name: string;
+}
+
+/** Progress of a background model pull. Poll `pullStatus` until `done`. */
+export interface ModelPullStatus {
+  id: string;
+  name: string;
+  status: 'pulling' | 'success' | 'error';
+  /** Latest provider status line, e.g. "pulling manifest". */
+  detail: string;
+  completed: number;
+  total: number;
+  percent: number;
+  error: string | null;
+  done: boolean;
+}
+
+// ── MCP servers (external agent tool sources) ─────────────────────────────────
+
+export type McpTransport = 'http' | 'sse';
+
+export interface McpServer {
+  id: string;
+  groupId: string;
+  name: string;
+  slug: string;
+  transport: McpTransport | string;
+  url: string;
+  secretRef: string | null;
+  enabled: boolean;
+  /** DENY by default — only tools listed here are callable by the agent. */
+  allowedTools: string[] | null;
+  createdBy: string | null;
+}
+
+export interface McpServerCreate {
+  name: string;
+  /** Generated from name when omitted. */
+  slug?: string;
+  transport?: McpTransport | string;
+  url: string;
+  /** Slug of a WorkspaceSecret holding a Bearer token. */
+  secretRef?: string | null;
+  enabled?: boolean;
+  allowedTools?: string[] | null;
+}
+
+export interface McpServerUpdate {
+  name?: string;
+  transport?: McpTransport | string;
+  url?: string;
+  secretRef?: string | null;
+  enabled?: boolean;
+  allowedTools?: string[] | null;
+}
+
+export interface McpServerToolInfo {
+  name: string;
+  description: string;
+  inputSchema: Record<string, unknown>;
+}
+
+export interface McpServerTestResult {
+  success: boolean;
+  message: string;
+  /** The server's advertised tools (from tools/list) — used to build the allowlist. */
+  tools: McpServerToolInfo[];
+}
+
 // ── Compose ──────────────────────────────────────────────────────────────────
 
 export interface AIComposeEntryRequest {
@@ -183,6 +397,13 @@ export interface AIComposeEntryResult {
   entryId: string;
   status: string;
   title: string;
+  /** Tags the model reused/created and linked onto the draft. */
+  tags?: string[];
+  /** Slugs of existing resources linked onto the draft (reuse-only). */
+  resources?: string[];
+  /** Advisory notes when the draft doesn't yet satisfy the entry type's asset recipe
+   * (e.g. "This type expects a 'hero' image; none attached."). Never blocks the compose. */
+  warnings?: string[];
   editUrl: string;
   executionId: string | null;
   totalTokens: number | null;
@@ -190,6 +411,38 @@ export interface AIComposeEntryResult {
   generated: Record<string, unknown>;
   /** Present and true only on the no-AI skeleton fallback path. */
   aiSkipped?: boolean;
+}
+
+export interface AIReviseEntryRequest {
+  /** The entry to revise, by slug or id. */
+  entry: string;
+  /** What to determine / change (e.g. "determine the tags and attach relevant resources"). */
+  instruction: string;
+  /** Override the workspace default model for this call. */
+  modelOverride?: string | null;
+  /** Invocation surface (e.g. "editor"); gated by the workspace policy. Defaults server-side. */
+  source?: string;
+}
+
+/**
+ * Result of revising an existing entry in place. Reports the entry's tags/resources
+ * after the revision so the caller can reflect the enrichment without a refetch.
+ */
+export interface AIReviseEntryResult {
+  entryId: string;
+  /** "applied" when the revision landed on the entry; "staged" when the workspace
+   * approval_mode held it back for review (the entry is unchanged — see `proposed`). */
+  outcome: 'applied' | 'staged';
+  title: string;
+  tags: string[];
+  resources: string[];
+  /** What the model proposed, present only when `outcome` is "staged" (the entry itself
+   * is untouched, so `tags`/`resources` above still reflect the pre-revision state). */
+  proposed?: { tags: string[]; resources: string[] } | null;
+  editUrl: string;
+  executionId: string | null;
+  totalTokens: number | null;
+  estimatedCostUsd: number | null;
 }
 
 // ── Executions ───────────────────────────────────────────────────────────────

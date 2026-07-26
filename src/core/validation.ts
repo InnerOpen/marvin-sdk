@@ -56,8 +56,9 @@ export function validateEmail(email: string, fieldName: string = 'Email'): strin
     );
   }
 
-  // Additional checks
-  const [localPart, domain] = trimmed.split('@');
+  // Additional checks. EMAIL_REGEX above guarantees exactly one '@', so both parts exist;
+  // the defaults just satisfy the type checker under noUncheckedIndexedAccess.
+  const [localPart = '', domain = ''] = trimmed.split('@');
 
   // Local part (before @) max 64 chars
   if (localPart.length > 64) {

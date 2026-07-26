@@ -3,7 +3,7 @@
  */
 
 import type { MarvinHttpClient } from '../client/http';
-import type { MarvinCollection, MarvinEntryListItem, PublishedCollectionSummary, CollectionEntry } from '../types';
+import type { MarvinCollection, PublishedCollectionSummary, CollectionEntry } from '../types';
 import { Collection } from './collection';
 import { MarvinNotFoundError } from '../core/errors';
 
