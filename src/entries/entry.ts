@@ -40,11 +40,12 @@ export class Entry {
   }
 
   field<T = unknown>(key: string): T | undefined {
-    return this.raw.data[key] as T | undefined;
+    return this.fields[key] as T | undefined;
   }
 
+  /** The entry's schema fields. The API always sends an object; the generated type marks it optional. */
   get fields(): Record<string, unknown> {
-    return this.raw.data;
+    return this.raw.data ?? {};
   }
 
   toJSON(): MarvinEntry {

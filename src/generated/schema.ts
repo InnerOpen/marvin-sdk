@@ -873,6 +873,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/integrations/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Subscriptions
+         * @description Integration actions wired to events. Filter by ?event_type= for one event's connections.
+         */
+        get: operations["list_subscriptions_api_groups_integrations_subscriptions_get"];
+        put?: never;
+        /**
+         * Create Subscription
+         * @description Wire an integration action to an event type.
+         */
+        post: operations["create_subscription_api_groups_integrations_subscriptions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/subscriptions/{sub_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Subscription
+         * @description Remove an integration ⇄ event connection.
+         */
+        delete: operations["delete_subscription_api_groups_integrations_subscriptions__sub_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Subscription
+         * @description Toggle a connection or change its templated args.
+         */
+        patch: operations["update_subscription_api_groups_integrations_subscriptions__sub_id__patch"];
+        trace?: never;
+    };
     "/api/groups/integrations": {
         parameters: {
             query?: never;
@@ -2070,6 +2118,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/backups/workspaces/{workspace_id}/key": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Get/Create Workspace Backup Key
+         * @description Return the workspace's backup key, minting it on first request.
+         *
+         *     Secret values in a backup are encrypted with this key. Save it somewhere safe — restoring
+         *     the secrets onto another instance requires supplying it. It is never included in a bundle.
+         *
+         *     Returns:
+         *         {workspace_slug, backup_key, filename}
+         */
+        get: operations["get_backup_key_api_admin_backups_workspaces__workspace_id__key_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/backups": {
         parameters: {
             query?: never;
@@ -2139,6 +2213,7 @@ export interface paths {
          *         workspace_id: ID of the target workspace
          *         file: Zip bundle file
          *         overwrite: When True, existing records matched by slug are updated
+         *         backup_key: Per-workspace backup key for decrypting secret values
          *
          *     Returns:
          *         Import counts by type
@@ -3909,6 +3984,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/entries/{item_id}/suggested-assets/{asset_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Approve Suggested Asset
+         * @description Approve a pending AI-generated asset: clear the `suggested` flag on the entry↔asset link
+         *     so it becomes a normal confirmed asset (and reaches published output).
+         */
+        post: operations["approve_suggested_asset_api_platform_entries__item_id__suggested_assets__asset_id__approve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/{item_id}/suggested-assets/{asset_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reject Suggested Asset
+         * @description Reject a pending AI-generated asset: unlink it, and delete the asset if it's now orphaned.
+         */
+        post: operations["reject_suggested_asset_api_platform_entries__item_id__suggested_assets__asset_id__reject_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/entries/{entry_id}/collections": {
         parameters: {
             query?: never;
@@ -4674,6 +4790,35 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/workspace/backup-key": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get/Create Workspace Backup Key
+         * @description Return this workspace's backup key, minting it on first request.
+         *
+         *     Backed-up secret values are encrypted with this key. Keep it safe — restoring the secrets
+         *     onto another instance requires supplying it. It is never included in a bundle.
+         *
+         *     Requires workspace OWNER or platform SUPER_ADMIN — it unlocks every secret in any backup of
+         *     this workspace, so it is gated exactly like import.
+         *
+         *     Returns:
+         *         {workspace_slug, backup_key, filename}
+         */
+        get: operations["get_backup_key_api_platform_workspace_backup_key_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/workspace/backups/{filename}": {
         parameters: {
             query?: never;
@@ -4721,6 +4866,7 @@ export interface paths {
          *     Args:
          *         file: Zip bundle file (from /backups)
          *         overwrite: When True, existing records matched by slug are updated
+         *         backup_key: Per-workspace backup key for decrypting secret values
          *
          *     Returns:
          *         Import counts by type
@@ -5705,6 +5851,89 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Liveness probe (alias)
+         * @description Return 200 while the process is up. No dependencies are touched.
+         */
+        get: operations["liveness_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/livez": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Liveness probe (alias)
+         * @description Return 200 while the process is up. No dependencies are touched.
+         */
+        get: operations["liveness_livez_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/healthz": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Liveness probe
+         * @description Return 200 while the process is up. No dependencies are touched.
+         */
+        get: operations["liveness_healthz_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/readyz": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Readiness probe
+         * @description Return 200 only when the database answers, 503 otherwise.
+         *
+         *     Readiness gates traffic, so an instance that can't reach its database must report not-ready
+         *     even though the process itself is alive.
+         */
+        get: operations["readiness_readyz_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -5760,6 +5989,8 @@ export interface components {
             assetIds?: string[] | null;
             /** Modeloverride */
             modelOverride?: string | null;
+            /** Register */
+            register?: string | null;
             /**
              * Source
              * @default editor
@@ -6992,6 +7223,11 @@ export interface components {
              * Format: binary
              */
             file: string;
+            /**
+             * Backup Key
+             * @description Per-workspace backup key to decrypt secret values. Omit to restore secrets as valueless shells; when restoring into the workspace that made the backup, the stored key is tried automatically.
+             */
+            backup_key?: string | null;
         };
         /** Body_import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post */
         Body_import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post: {
@@ -7000,6 +7236,11 @@ export interface components {
              * Format: binary
              */
             file: string;
+            /**
+             * Backup Key
+             * @description Per-workspace backup key to decrypt secret values. Omit to restore secrets as valueless shells; when restoring into the workspace that made the backup, the stored key is tried automatically.
+             */
+            backup_key?: string | null;
         };
         /** Body_upload_asset_api_platform_assets_upload_post */
         Body_upload_asset_api_platform_assets_upload_post: {
@@ -8702,6 +8943,14 @@ export interface components {
              */
             status: string;
         };
+        /** HealthStatus */
+        HealthStatus: {
+            /**
+             * Status
+             * @default ok
+             */
+            status: string;
+        };
         /** IncomingWebhookCreate */
         IncomingWebhookCreate: {
             /** Name */
@@ -8814,6 +9063,61 @@ export interface components {
             };
             /** Credential */
             credential?: string | null;
+        };
+        /**
+         * IntegrationEventSubscriptionCreate
+         * @description Wire an integration action to an event type.
+         */
+        IntegrationEventSubscriptionCreate: {
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Eventtype */
+            eventType: string;
+            /** Action */
+            action: string;
+            /** Args */
+            args?: {
+                [key: string]: unknown;
+            };
+        };
+        /** IntegrationEventSubscriptionRead */
+        IntegrationEventSubscriptionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Integrationname */
+            integrationName?: string | null;
+            /** Provider */
+            provider?: string | null;
+            /** Eventtype */
+            eventType: string;
+            /** Action */
+            action: string;
+            /** Args */
+            args?: {
+                [key: string]: unknown;
+            } | null;
+            /** Enabled */
+            enabled: boolean;
+        };
+        /** IntegrationEventSubscriptionUpdate */
+        IntegrationEventSubscriptionUpdate: {
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Args */
+            args?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * IntegrationPluginInfo
@@ -9373,6 +9677,24 @@ export interface components {
             inputSchema?: {
                 [key: string]: unknown;
             };
+            /** Capability */
+            capability?: string | null;
+            /** Outputschema */
+            outputSchema?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Priority
+             * @default 0
+             */
+            priority: number;
+            /** Costhint */
+            costHint?: string | null;
+            /**
+             * Requiresapproval
+             * @default false
+             */
+            requiresApproval: boolean;
         };
         /**
          * ProviderCredentialInfo
@@ -9564,10 +9886,11 @@ export interface components {
         };
         /**
          * PublishedEntryListItem
-         * @description Minimal entry schema for list responses.
+         * @description Entry schema for list responses.
          *
-         *     Used when listing multiple entries - returns only essential fields
-         *     without full content.
+         *     Used when listing multiple entries. Carries the entry's schema fields (``data``) alongside
+         *     the summary, memberships, tags and a resolved featured asset, but not the full asset,
+         *     resource and collection detail of ``PublishedEntryRead``.
          */
         PublishedEntryListItem: {
             /** Slug */
@@ -9579,6 +9902,12 @@ export interface components {
             entryTypeInfo?: components["schemas"]["PublishedEntryTypeInfo"] | null;
             /** Summary */
             summary?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Data */
+            data?: {
+                [key: string]: unknown;
+            };
             /** Publishedat */
             publishedAt?: string | null;
             /** Status */
@@ -9634,7 +9963,7 @@ export interface components {
             /** Description */
             description?: string | null;
             /** Data */
-            data: {
+            data?: {
                 [key: string]: unknown;
             };
             /** Publishedat */
@@ -9973,7 +10302,10 @@ export interface components {
             port: number;
             /** Username */
             username?: string | null;
-            /** Password */
+            /**
+             * Password
+             * @description Literal SMTP password, or a reference to an existing workspace secret as {{SLUG}} or a bare uppercase SLUG.
+             */
             password?: string | null;
             /** Fromname */
             fromName?: string | null;
@@ -10057,7 +10389,10 @@ export interface components {
             port?: number | null;
             /** Username */
             username?: string | null;
-            /** Password */
+            /**
+             * Password
+             * @description Literal SMTP password, or a reference to an existing workspace secret as {{SLUG}} or a bare uppercase SLUG.
+             */
             password?: string | null;
             /** Fromname */
             fromName?: string | null;
@@ -10729,7 +11064,7 @@ export interface components {
              */
             groupId: string;
             /** Username */
-            username: string;
+            username?: string | null;
             /** Email */
             email?: string | null;
             /** Fullname */
@@ -11012,6 +11347,10 @@ export interface components {
             moderationConfig?: {
                 [key: string]: unknown;
             } | null;
+            /** Mediapresets */
+            mediaPresets?: {
+                [key: string]: unknown;
+            } | null;
             /**
              * Externalmcpenabled
              * @default false
@@ -11068,6 +11407,10 @@ export interface components {
             } | null;
             /** Moderationconfig */
             moderationConfig?: {
+                [key: string]: unknown;
+            } | null;
+            /** Mediapresets */
+            mediaPresets?: {
                 [key: string]: unknown;
             } | null;
             /** Externalmcpenabled */
@@ -12574,6 +12917,134 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["IntegrationPluginInfo"][];
+                };
+            };
+        };
+    };
+    list_subscriptions_api_groups_integrations_subscriptions_get: {
+        parameters: {
+            query?: {
+                event_type?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationEventSubscriptionRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_subscription_api_groups_integrations_subscriptions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IntegrationEventSubscriptionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationEventSubscriptionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_subscription_api_groups_integrations_subscriptions__sub_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sub_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_subscription_api_groups_integrations_subscriptions__sub_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sub_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IntegrationEventSubscriptionUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationEventSubscriptionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -14153,6 +14624,39 @@ export interface operations {
         };
     };
     create_backup_api_admin_backups_workspaces__workspace_id__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_backup_key_api_admin_backups_workspaces__workspace_id__key_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -17500,6 +18004,70 @@ export interface operations {
             };
         };
     };
+    approve_suggested_asset_api_platform_entries__item_id__suggested_assets__asset_id__approve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reject_suggested_asset_api_platform_entries__item_id__suggested_assets__asset_id__reject_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_entry_collections_api_platform_entries__entry_id__collections_get: {
         parameters: {
             query?: never;
@@ -19260,6 +19828,28 @@ export interface operations {
             };
         };
     };
+    get_backup_key_api_platform_workspace_backup_key_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
     download_backup_api_platform_workspace_backups__filename__get: {
         parameters: {
             query?: never;
@@ -20640,6 +21230,86 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    liveness_health_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HealthStatus"];
+                };
+            };
+        };
+    };
+    liveness_livez_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HealthStatus"];
+                };
+            };
+        };
+    };
+    liveness_healthz_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HealthStatus"];
+                };
+            };
+        };
+    };
+    readiness_readyz_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HealthStatus"];
                 };
             };
         };
