@@ -16,7 +16,6 @@ import { EntryTypesModule } from './entryTypes';
 import { WorkspaceMembersModule } from './workspaceMembers';
 import { WorkspacesModule } from './workspaces';
 import { InvitesModule } from './invites';
-import { NotificationsModule } from './notifications';
 import { WebhooksModule } from './webhooks';
 import { AdminUsersModule, AdminSystemModule, AdminMaintenanceModule, AdminScheduledTasksModule, AdminBackupsModule, AdminWorkspacesModule } from './admin';
 import { AppModule } from './app';
@@ -71,7 +70,6 @@ export class PlatformClient extends HttpClient {
   public workspaceMembers: WorkspaceMembersModule;
   public workspaces: WorkspacesModule;
   public invites: InvitesModule;
-  public notifications: NotificationsModule;
   public webhooks: WebhooksModule;
   public user: UserModule;
   public events: EventsModule;
@@ -125,7 +123,6 @@ export class PlatformClient extends HttpClient {
     this.workspaceMembers = new WorkspaceMembersModule(this);
     this.workspaces = new WorkspacesModule(this);
     this.invites = new InvitesModule(this);
-    this.notifications = new NotificationsModule(this);
     this.webhooks = new WebhooksModule(this);
     this.user = new UserModule(this);
     this.events = new EventsModule(this);

@@ -9,7 +9,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { EventsModule } from '../platform/events'
 import { EmailEventSubscriptionsModule } from '../platform/emailEventSubscriptions'
 import { WebhooksModule } from '../platform/webhooks'
-import { NotificationsModule } from '../platform/notifications'
 import { SecretsModule } from '../platform/secrets'
 import { VariablesModule } from '../platform/variables'
 import { WorkspacesModule } from '../platform/workspaces'
@@ -100,12 +99,6 @@ describe('EventsModule', () => {
     expect(http.get).toHaveBeenCalledWith('/api/event/types')
     expect(result).toEqual([{ value: 'entry.created', label: 'Entry Created' }])
   })
-
-  it('getOptionsLegacy calls GET /api/event/options', async () => {
-    http.get.mockResolvedValueOnce([])
-    await module.getOptionsLegacy()
-    expect(http.get).toHaveBeenCalledWith('/api/event/options')
-  })
 })
 
 // ---------------------------------------------------------------------------
@@ -188,35 +181,6 @@ describe('WebhooksModule', () => {
     const result = await module.test('wh-123')
     expect(http.get).toHaveBeenCalledWith('/api/groups/webhooks/wh-123/test')
     expect(result.message).toBe('Test sent')
-  })
-})
-
-// ---------------------------------------------------------------------------
-// NotificationsModule
-// ---------------------------------------------------------------------------
-
-describe('NotificationsModule', () => {
-  let http: ReturnType<typeof createMockHttp>
-  let module: NotificationsModule
-
-  beforeEach(() => {
-    http = createMockHttp()
-    module = new NotificationsModule(http as any)
-  })
-
-  it('list calls GET /api/group/notifications', async () => {
-    http.get.mockResolvedValueOnce([])
-    const result = await module.list()
-    expect(http.get).toHaveBeenCalledWith('/api/group/notifications')
-    expect(result).toEqual([])
-  })
-
-  it('create posts to /api/group/notifications with data', async () => {
-    const data = { name: 'My Notification', event_type: 'entry.created', channel: 'slack' }
-    http.post.mockResolvedValueOnce({ id: 'notif-1', ...data })
-    const result = await module.create(data as any)
-    expect(http.post).toHaveBeenCalledWith('/api/group/notifications', data)
-    expect((result as any).id).toBe('notif-1')
   })
 })
 

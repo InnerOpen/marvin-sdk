@@ -149,7 +149,7 @@ This document analyzes which Marvin server API endpoints are covered by the Type
 
 | Endpoint | SDK Method | Status |
 |----------|-----------|--------|
-| `GET /event/options` | `platform.events.getOptions()` | ✅ |
+| `GET /event/types` | `platform.events.getOptions()` | ✅ |
 
 ---
 
@@ -173,13 +173,6 @@ This document analyzes which Marvin server API endpoints are covered by the Type
 | `DELETE /groups/webhooks/{id}` | `platform.webhooks.delete(id)` | ✅ |
 | `POST /groups/webhooks/{id}/test` | `platform.webhooks.test(id)` | ✅ |
 | `POST /groups/webhooks/rerun` | `platform.webhooks.rerun()` | ✅ |
-| **Notifications** | | |
-| `GET /groups/notifications` | `platform.notifications.list()` | ✅ |
-| `POST /groups/notifications` | `platform.notifications.create()` | ✅ |
-| `GET /groups/notifications/{id}` | `platform.notifications.get(id)` | ✅ |
-| `PATCH /groups/notifications/{id}` | `platform.notifications.update(id)` | ✅ |
-| `DELETE /groups/notifications/{id}` | `platform.notifications.delete(id)` | ✅ |
-| `POST /groups/notifications/{id}/test` | `platform.notifications.test(id)` | ✅ |
 | **Email Templates** | | |
 | `GET /groups/email-templates` | `platform.emailTemplates.list()` | ✅ |
 | `POST /groups/email-templates` | `platform.emailTemplates.create()` | ✅ |
