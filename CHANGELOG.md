@@ -1,3 +1,22 @@
+# [4.0.0](https://github.com/inneropen/marvin-sdk/compare/v3.3.0...v4.0.0) (2026-10-04)
+
+
+### Features
+
+* **automations:** dryRun() takes an entryId/eventId sample ([b7a4819](https://github.com/inneropen/marvin-sdk/commit/b7a481913e3fda0d8eaf71b9df52a45044ec112a))
+* **platform:** remove the notifications module and events.getOptionsLegacy() ([a321a6a](https://github.com/inneropen/marvin-sdk/commit/a321a6a7cf47fccd3a2637fe4b33c3b23b650acf))
+
+
+### BREAKING CHANGES
+
+* **automations:** AutomationDryRunResult.dryRun is now dry_run, and
+AutomationPlanStep.targetIndex / actionIndex are now target_index / action_index,
+matching the response body (the camelCase names were never populated).
+* **platform:** platform.notifications, NotificationsModule, the Notification,
+NotificationCreate, NotificationUpdate and NotificationExecutionLog types, and
+events.getOptionsLegacy() are removed. Use the Apprise integration for
+notifications and events.getOptions() for event types.
+
 # [3.3.0](https://github.com/inneropen/marvin-sdk/compare/v3.2.0...v3.3.0) (2026-07-26)
 
 
