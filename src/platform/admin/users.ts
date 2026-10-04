@@ -10,7 +10,7 @@ import type { components } from '../../generated/schema';
 // Type aliases from OpenAPI schema
 export type User = components['schemas']['UserRead'];
 export type UserCreate = components['schemas']['UserCreate'];
-export type UserUpdate = components['schemas']['UserUpdate'];
+export type UserUpdate = components['schemas']['UserAdminUpdate'];
 export type UserPagination = components['schemas']['UserPagination'];
 export type UserSummary = components['schemas']['UserSummary'];
 

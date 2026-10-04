@@ -8,7 +8,7 @@ import type { HttpClient } from '../core';
 import type { components } from '../generated/schema';
 
 export type UserProfile = components['schemas']['UserRead'];
-export type UserProfileUpdate = components['schemas']['UserUpdate'];
+export type UserProfileUpdate = components['schemas']['UserProfileUpdate'];
 export type ApiToken = components['schemas']['LongLiveTokenRead'];
 export type ApiTokenCreate = components['schemas']['LongLiveTokenCreate'];
 export type ApiTokenWithToken = components['schemas']['LongLiveTokenWithToken'];

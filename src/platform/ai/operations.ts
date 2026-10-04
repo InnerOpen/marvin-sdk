@@ -20,7 +20,8 @@ import type {
   AIReviseEntryResult,
 } from './types';
 
-export type AIReindexRequest = components['schemas']['AIReindexRequest'];
+// `force` has a server-side default, which openapi-typescript renders as required; it is optional on the wire.
+export type AIReindexRequest = Partial<components['schemas']['AIReindexRequest']>;
 
 export class AIOperationsModule {
   constructor(private http: HttpClient) {}
