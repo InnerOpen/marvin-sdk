@@ -82,6 +82,11 @@ export type {
   AutomationExecution,
   AutomationExecutionDetail,
   AutomationActionExecution,
+  AutomationPlanStep,
+  AutomationRunResult,
+  AutomationDryRunResult,
+  AutomationDryRunSample,
+  AutomationDryRunOptions,
 } from './automations';
 export { IncomingWebhooksModule } from './incomingWebhooks';
 export type {

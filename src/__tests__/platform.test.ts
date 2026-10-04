@@ -14,6 +14,7 @@ import { VariablesModule } from '../platform/variables'
 import { WorkspacesModule } from '../platform/workspaces'
 import { AppModule } from '../platform/app'
 import { CollectionsModule } from '../platform/collections'
+import { AutomationsModule } from '../platform/automations'
 
 function createMockHttp() {
   return {
@@ -312,5 +313,39 @@ describe('AppModule', () => {
   it('getLoginInfo calls GET /api/app/about/login-info', async () => {
     await module.getLoginInfo()
     expect(http.get).toHaveBeenCalledWith('/api/app/about/login-info')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// AutomationsModule
+// ---------------------------------------------------------------------------
+
+describe('AutomationsModule', () => {
+  let http: ReturnType<typeof createMockHttp>
+  let module: AutomationsModule
+
+  beforeEach(() => {
+    http = createMockHttp()
+    module = new AutomationsModule(http as any)
+  })
+
+  it('dryRun without options posts with only dry_run=true', async () => {
+    await module.dryRun('auto-1')
+    expect(http.post).toHaveBeenCalledWith('/api/automations/auto-1/run?dry_run=true', {})
+  })
+
+  it('dryRun with entryId adds the entry_id sample param', async () => {
+    await module.dryRun('auto-1', { entryId: 'entry-9' })
+    expect(http.post).toHaveBeenCalledWith('/api/automations/auto-1/run?dry_run=true&entry_id=entry-9', {})
+  })
+
+  it('dryRun with eventId adds the event_id sample param', async () => {
+    await module.dryRun('auto-1', { eventId: 'evt-3' })
+    expect(http.post).toHaveBeenCalledWith('/api/automations/auto-1/run?dry_run=true&event_id=evt-3', {})
+  })
+
+  it('dryRun with both entryId and eventId rejects without calling the API', async () => {
+    await expect(module.dryRun('auto-1', { entryId: 'e', eventId: 'v' })).rejects.toThrow('not both')
+    expect(http.post).not.toHaveBeenCalled()
   })
 })
