@@ -8,7 +8,7 @@
  * Routes: /api/automations (CRUD) + /api/automations/options.
  */
 
-import type { HttpClient } from '../core';
+import { HttpClient, MarvinValidationError } from '../core';
 
 /**
  * A condition — either a leaf (`{field, op, value}`) or a boolean group (`{all: [...]}`,
@@ -282,12 +282,15 @@ export interface AutomationExecutionDetail extends AutomationExecution {
   actions: AutomationActionExecution[];
 }
 
-/** One resolved step from a dry run — what the action WOULD do, with inputs resolved but not executed. */
+/**
+ * One resolved step from a dry run — what the action WOULD do, with inputs resolved but not executed.
+ * The dry-run payload is a plain dict on the server, so its keys are snake_case on the wire.
+ */
 export interface AutomationPlanStep {
-  targetIndex: number;
+  target_index: number;
   /** The resolved target entity (id/type/status/…), or null for a target-less step. */
   target?: Record<string, unknown> | null;
-  actionIndex: number;
+  action_index: number;
   kind: string;
   label?: string | null;
   /** "success" = would run; "failed" = a gate/resolve error stopped it (see error). */
@@ -302,8 +305,37 @@ export interface AutomationDryRunResult {
   status: string;   // "dry_run"
   ok: boolean;
   ran: number;      // targets that passed conditions and were resolved
-  dryRun: boolean;
+  dry_run: boolean;
   plan: AutomationPlanStep[];
+  /** Event-triggered workflows only: the sample event the run was evaluated against (null = none found). */
+  sample?: AutomationDryRunSample | null;
+  /** Event-triggered workflows only: whether the sample event matches the trigger. */
+  trigger_matched?: boolean;
+  /** Event-triggered workflows only: per-condition verdicts with the values compared. */
+  conditions?: Record<string, unknown>[];
+  conditions_pass?: boolean;
+  /** Event-triggered workflows only: whether a real run would fire for this sample. */
+  would_fire?: boolean;
+}
+
+/** A sample an event-triggered workflow's dry run can test against (see `GET /api/automations/{id}/samples`). */
+export interface AutomationDryRunSample {
+  kind: 'event' | 'entry';
+  id: string;
+  label?: string | null;
+  event_type?: string | null;
+  occurred_at?: string | null;
+  /** true for an entry with no matching event — the server built one for the dry run. */
+  synthesized?: boolean;
+  conditions_pass?: boolean | null;
+}
+
+/** Pick the sample for an event-triggered dry run (pass at most one). */
+export interface AutomationDryRunOptions {
+  /** Test against the latest event of the trigger's type for this entry (or one built for it). */
+  entryId?: string;
+  /** Test against this event_log row. */
+  eventId?: string;
 }
 
 /** Result of a real run. */
@@ -375,10 +407,20 @@ export class AutomationsModule {
    * Dry-run an automation: evaluate its target + conditions and resolve each action's inputs, but
    * execute nothing (no AI call, no mutation, no webhook POST) and record nothing. Returns `plan` —
    * the resolved per-step preview of what a real run would do. Works on a disabled draft.
+   *
+   * An event-triggered workflow is evaluated against a sample event: `entryId` or `eventId` picks it,
+   * otherwise the server uses the latest matching event. The result then also carries `sample`,
+   * `trigger_matched`, `conditions` and `would_fire`.
    */
-  async dryRun(id: string): Promise<AutomationDryRunResult> {
+  async dryRun(id: string, options: AutomationDryRunOptions = {}): Promise<AutomationDryRunResult> {
     const validId = this.http.validatePathParam(id, 'automation id');
-    return this.http.post<AutomationDryRunResult>(`/api/automations/${validId}/run?dry_run=true`, {});
+    if (options.entryId && options.eventId) {
+      throw new MarvinValidationError('Pass entryId or eventId, not both');
+    }
+    const query = new URLSearchParams({ dry_run: 'true' });
+    if (options.entryId) query.set('entry_id', options.entryId);
+    if (options.eventId) query.set('event_id', options.eventId);
+    return this.http.post<AutomationDryRunResult>(`/api/automations/${validId}/run?${query}`, {});
   }
 
   /** Recent runs of an automation, newest first (status, targets, step counts, timing). */

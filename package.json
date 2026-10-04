@@ -67,6 +67,7 @@
   "scripts": {
     "build": "tsup src/index.ts src/publish.ts src/platform.ts src/types/index.ts --format esm,cjs --dts --clean",
     "dev": "tsup src/index.ts src/publish.ts src/platform.ts src/types/index.ts --format esm,cjs --dts --watch",
+    "generate": "openapi-typescript ./openapi.json -o src/generated/schema.ts",
     "generate:types": "openapi-typescript http://localhost:8080/openapi.json -o src/generated/schema.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

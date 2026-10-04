@@ -98,7 +98,6 @@ await platform.entries.delete(workspace.slug, entry.id);
 | `webhooks` | Configure webhooks |
 | `scheduledTasks` | Manage scheduled jobs |
 | `forms` | Handle form submissions |
-| `notifications` | User notifications |
 | `eventLog` | Audit trail |
 
 ### User & Session

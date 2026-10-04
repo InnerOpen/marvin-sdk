@@ -82,6 +82,11 @@ export type {
   AutomationExecution,
   AutomationExecutionDetail,
   AutomationActionExecution,
+  AutomationPlanStep,
+  AutomationRunResult,
+  AutomationDryRunResult,
+  AutomationDryRunSample,
+  AutomationDryRunOptions,
 } from './automations';
 export { IncomingWebhooksModule } from './incomingWebhooks';
 export type {
@@ -101,8 +106,6 @@ export { WorkspacesModule } from './workspaces';
 export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest, WorkspaceCreate, WorkspaceUpdate, WorkspacePreferences, WorkspacePreferencesUpdate, WorkspacePagination } from './workspaces';
 export { InvitesModule } from './invites';
 export type { InviteTokenCreate, InviteTokenSummary, InviteTokenPagination, EmailInvitationRequest } from './invites';
-export { NotificationsModule } from './notifications';
-export type { Notification, NotificationCreate, NotificationUpdate, NotificationExecutionLog } from './notifications';
 export { WebhooksModule } from './webhooks';
 export type { Webhook, WebhookCreate, WebhookUpdate, WebhookPagination, WebhookMethod } from './webhooks';
 

@@ -1,7 +1,7 @@
 /**
  * Events Module - Platform API
  *
- * Event type information for webhooks and notifications
+ * Event type information for webhooks and automations
  */
 
 import type { HttpClient } from '../core';
@@ -27,17 +27,9 @@ export class EventsModule {
   constructor(private http: HttpClient) {}
 
   /**
-   * Get available event types for webhooks and notifications
+   * Get available event types for webhooks and automations
    */
   async getOptions(): Promise<EventOption[]> {
     return this.http.get<EventOption[]>('/api/event/types');
-  }
-
-  /**
-   * Get available event options via the legacy endpoint
-   * @deprecated Use getOptions() (/api/event/types) instead
-   */
-  async getOptionsLegacy(): Promise<EventOption[]> {
-    return this.http.get<EventOption[]>('/api/event/options');
   }
 }

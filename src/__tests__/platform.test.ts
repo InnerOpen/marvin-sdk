@@ -9,12 +9,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { EventsModule } from '../platform/events'
 import { EmailEventSubscriptionsModule } from '../platform/emailEventSubscriptions'
 import { WebhooksModule } from '../platform/webhooks'
-import { NotificationsModule } from '../platform/notifications'
 import { SecretsModule } from '../platform/secrets'
 import { VariablesModule } from '../platform/variables'
 import { WorkspacesModule } from '../platform/workspaces'
 import { AppModule } from '../platform/app'
 import { CollectionsModule } from '../platform/collections'
+import { AutomationsModule } from '../platform/automations'
 
 function createMockHttp() {
   return {
@@ -100,12 +100,6 @@ describe('EventsModule', () => {
     expect(http.get).toHaveBeenCalledWith('/api/event/types')
     expect(result).toEqual([{ value: 'entry.created', label: 'Entry Created' }])
   })
-
-  it('getOptionsLegacy calls GET /api/event/options', async () => {
-    http.get.mockResolvedValueOnce([])
-    await module.getOptionsLegacy()
-    expect(http.get).toHaveBeenCalledWith('/api/event/options')
-  })
 })
 
 // ---------------------------------------------------------------------------
@@ -188,35 +182,6 @@ describe('WebhooksModule', () => {
     const result = await module.test('wh-123')
     expect(http.get).toHaveBeenCalledWith('/api/groups/webhooks/wh-123/test')
     expect(result.message).toBe('Test sent')
-  })
-})
-
-// ---------------------------------------------------------------------------
-// NotificationsModule
-// ---------------------------------------------------------------------------
-
-describe('NotificationsModule', () => {
-  let http: ReturnType<typeof createMockHttp>
-  let module: NotificationsModule
-
-  beforeEach(() => {
-    http = createMockHttp()
-    module = new NotificationsModule(http as any)
-  })
-
-  it('list calls GET /api/group/notifications', async () => {
-    http.get.mockResolvedValueOnce([])
-    const result = await module.list()
-    expect(http.get).toHaveBeenCalledWith('/api/group/notifications')
-    expect(result).toEqual([])
-  })
-
-  it('create posts to /api/group/notifications with data', async () => {
-    const data = { name: 'My Notification', event_type: 'entry.created', channel: 'slack' }
-    http.post.mockResolvedValueOnce({ id: 'notif-1', ...data })
-    const result = await module.create(data as any)
-    expect(http.post).toHaveBeenCalledWith('/api/group/notifications', data)
-    expect((result as any).id).toBe('notif-1')
   })
 })
 
@@ -348,5 +313,39 @@ describe('AppModule', () => {
   it('getLoginInfo calls GET /api/app/about/login-info', async () => {
     await module.getLoginInfo()
     expect(http.get).toHaveBeenCalledWith('/api/app/about/login-info')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// AutomationsModule
+// ---------------------------------------------------------------------------
+
+describe('AutomationsModule', () => {
+  let http: ReturnType<typeof createMockHttp>
+  let module: AutomationsModule
+
+  beforeEach(() => {
+    http = createMockHttp()
+    module = new AutomationsModule(http as any)
+  })
+
+  it('dryRun without options posts with only dry_run=true', async () => {
+    await module.dryRun('auto-1')
+    expect(http.post).toHaveBeenCalledWith('/api/automations/auto-1/run?dry_run=true', {})
+  })
+
+  it('dryRun with entryId adds the entry_id sample param', async () => {
+    await module.dryRun('auto-1', { entryId: 'entry-9' })
+    expect(http.post).toHaveBeenCalledWith('/api/automations/auto-1/run?dry_run=true&entry_id=entry-9', {})
+  })
+
+  it('dryRun with eventId adds the event_id sample param', async () => {
+    await module.dryRun('auto-1', { eventId: 'evt-3' })
+    expect(http.post).toHaveBeenCalledWith('/api/automations/auto-1/run?dry_run=true&event_id=evt-3', {})
+  })
+
+  it('dryRun with both entryId and eventId rejects without calling the API', async () => {
+    await expect(module.dryRun('auto-1', { entryId: 'e', eventId: 'v' })).rejects.toThrow('not both')
+    expect(http.post).not.toHaveBeenCalled()
   })
 })
