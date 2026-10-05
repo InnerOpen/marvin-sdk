@@ -1,3 +1,10 @@
+# [4.2.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.1.0...v4.2.0) (2026-10-05)
+
+
+### Features
+
+* expand: 'full' on collections.entries and entries.list ([3bace3d](https://github.com/InnerOpen/marvin-sdk/commit/3bace3d854325615fd42ad3d207760b435ccce1e))
+
 # [4.1.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.0.0...v4.1.0) (2026-10-05)
 
 
