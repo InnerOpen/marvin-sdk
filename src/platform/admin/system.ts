@@ -13,6 +13,10 @@ export type AdminAboutInfo = components['schemas']['AdminAboutInfo'];
 export type EmailTest = components['schemas']['EmailTest'];
 export type EmailSuccess = components['schemas']['EmailSuccess'];
 export type EmailTemplateCreate = components['schemas']['EmailTemplateCreate'];
+/** An installed plugin package (`kind` integration | ai_provider), its load status and the providers it registers. */
+export type AdminPlugin = components['schemas']['PluginRead'];
+/** One provider a plugin registers, with how many workspaces have connected it. */
+export type AdminPluginProvider = components['schemas']['PluginProviderRead'];
 
 /**
  * Email settings returned from API (read-only)
@@ -83,6 +87,14 @@ export class AdminSystemModule {
    */
   async getStartupInfo(): Promise<StartupInfo> {
     return this.http.get<StartupInfo>('/api/admin/about/startup-info');
+  }
+
+  /**
+   * The platform's installed plugin packages (read-only; the operator installs them), with each
+   * one's providers and how many workspaces use them. Platform admin only.
+   */
+  async listPlugins(): Promise<AdminPlugin[]> {
+    return this.http.get<AdminPlugin[]>('/api/admin/plugins');
   }
 
   /**

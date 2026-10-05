@@ -87,6 +87,7 @@ export type {
   AutomationDryRunResult,
   AutomationDryRunSample,
   AutomationDryRunOptions,
+  AutomationSamples,
 } from './automations';
 export { IncomingWebhooksModule } from './incomingWebhooks';
 export type {
@@ -136,7 +137,18 @@ export type {
   IntegrationEventSubscription,
   IntegrationEventSubscriptionCreate,
   IntegrationEventSubscriptionUpdate,
+  IntegrationAttention,
+  IntegrationErrorOverrides,
+  IntegrationResolveResult,
+  IntegrationOption,
+  AlertRouting,
+  AlertRoutingTarget,
+  AlertRoutingUpdate,
 } from './integrations';
+
+// Site (rebuild the workspace's static site)
+export { SiteModule } from './site';
+export type { SiteRebuildRequested, SiteRebuildStatus, SiteRebuildTarget, SiteRebuildPending, SiteRebuildSent, SiteBuildStatus } from './site';
 
 // User self-service
 export { UserModule } from './user';

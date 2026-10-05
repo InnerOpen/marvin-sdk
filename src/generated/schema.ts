@@ -6250,6 +6250,35 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/site/rebuild": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Site Rebuild Status
+         * @description Where the site rebuild stands: what builds it, the queued rebuild, the last one sent, and the
+         *     newest build or deploy status a host reported.
+         */
+        get: operations["site_rebuild_status_api_platform_site_rebuild_get"];
+        put?: never;
+        /**
+         * Request Site Rebuild
+         * @description Queue a rebuild of the workspace's site.
+         *
+         *     Joins the pending rebuild if there is one (repeat calls cost one build), which is sent to the
+         *     deploy target once requests have been quiet for SITE_REBUILD_QUIET_SECONDS. 409 when nothing
+         *     is set up to build the site.
+         */
+        post: operations["request_site_rebuild_api_platform_site_rebuild_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/publish/{workspace_slug}": {
         parameters: {
             query?: never;
@@ -12591,6 +12620,42 @@ export interface components {
             } | null;
         };
         /**
+         * SiteBuildStatus
+         * @description The newest build or deploy event a host reported (`site_build_*` / `site_deployment_*`).
+         */
+        SiteBuildStatus: {
+            /**
+             * Eventid
+             * Format: uuid4
+             */
+            eventId: string;
+            /** Eventtype */
+            eventType: string;
+            /**
+             * Stage
+             * @enum {string}
+             */
+            stage: "build" | "deployment";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "started" | "completed" | "failed";
+            /**
+             * Occurredat
+             * Format: date-time
+             */
+            occurredAt: string;
+            /** Message */
+            message: string;
+            /** Detail */
+            detail?: string | null;
+            /** Deploymentid */
+            deploymentId?: string | null;
+            /** Siteurl */
+            siteUrl?: string | null;
+        };
+        /**
          * SiteConfiguration
          * @description Site configuration for publishing API.
          *
@@ -12645,6 +12710,140 @@ export interface components {
             entityType?: string | null;
             /** Entityid */
             entityId?: string | null;
+        };
+        /**
+         * SiteRebuildPending
+         * @description A queued rebuild that hasn't been sent yet.
+         */
+        SiteRebuildPending: {
+            /**
+             * Queuedat
+             * Format: date-time
+             */
+            queuedAt: string;
+            /**
+             * Lastrequestedat
+             * Format: date-time
+             */
+            lastRequestedAt: string;
+            /**
+             * Expectedsendat
+             * Format: date-time
+             */
+            expectedSendAt: string;
+            /** Requestcount */
+            requestCount: number;
+            /** Reason */
+            reason?: string | null;
+            /**
+             * Changes
+             * @default []
+             */
+            changes: components["schemas"]["SiteRebuildChange"][];
+        };
+        /**
+         * SiteRebuildRequest
+         * @description Body of `POST /api/platform/site/rebuild` (optional).
+         */
+        SiteRebuildRequest: {
+            /** Reason */
+            reason?: string | null;
+        };
+        /**
+         * SiteRebuildRequested
+         * @description The rebuild was queued: it joins the workspace's pending rebuild, which goes out once requests go quiet.
+         */
+        SiteRebuildRequested: {
+            /**
+             * Requested
+             * @default true
+             */
+            requested: boolean;
+            /**
+             * Queuedat
+             * Format: date-time
+             */
+            queuedAt: string;
+            /**
+             * Lastrequestedat
+             * Format: date-time
+             */
+            lastRequestedAt: string;
+            /**
+             * Expectedsendat
+             * Format: date-time
+             */
+            expectedSendAt: string;
+            /** Requestcount */
+            requestCount: number;
+            /** Reason */
+            reason: string;
+            target?: components["schemas"]["SiteRebuildTarget"] | null;
+            /** Targets */
+            targets: components["schemas"]["SiteRebuildTarget"][];
+        };
+        /**
+         * SiteRebuildSent
+         * @description The last rebuild sent to the deploy target (its `webhook_triggered` event).
+         */
+        SiteRebuildSent: {
+            /**
+             * Eventid
+             * Format: uuid4
+             */
+            eventId: string;
+            /**
+             * Sentat
+             * Format: date-time
+             */
+            sentAt: string;
+            /** Message */
+            message: string;
+            /** Requestcount */
+            requestCount?: number | null;
+        };
+        /**
+         * SiteRebuildStatus
+         * @description `GET /api/platform/site/rebuild`: where the workspace's site rebuild stands.
+         */
+        SiteRebuildStatus: {
+            /** Configured */
+            configured: boolean;
+            target?: components["schemas"]["SiteRebuildTarget"] | null;
+            /**
+             * Targets
+             * @default []
+             */
+            targets: components["schemas"]["SiteRebuildTarget"][];
+            /** Quietseconds */
+            quietSeconds: number;
+            /** Maxwaitseconds */
+            maxWaitSeconds: number;
+            pending?: components["schemas"]["SiteRebuildPending"] | null;
+            lastSent?: components["schemas"]["SiteRebuildSent"] | null;
+            lastBuild?: components["schemas"]["SiteBuildStatus"] | null;
+        };
+        /**
+         * SiteRebuildTarget
+         * @description What builds the site when the rebuild is sent.
+         */
+        SiteRebuildTarget: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "webhook" | "integration";
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name?: string | null;
+            /** Provider */
+            provider?: string | null;
+            /** Action */
+            action?: string | null;
         };
         /**
          * SiteSeo
@@ -24710,6 +24909,59 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    site_rebuild_status_api_platform_site_rebuild_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteRebuildStatus"];
+                };
+            };
+        };
+    };
+    request_site_rebuild_api_platform_site_rebuild_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SiteRebuildRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteRebuildRequested"];
                 };
             };
             /** @description Validation Error */

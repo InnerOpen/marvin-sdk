@@ -82,6 +82,13 @@ describe('AdminSystemModule', () => {
     module = new AdminSystemModule(http as any)
   })
 
+  it('listPlugins calls GET /api/admin/plugins', async () => {
+    const plugins = [{ name: 'cloudflare_pages', kind: 'integration', ok: true, providers: [] }]
+    http.get.mockResolvedValueOnce(plugins)
+    expect(await module.listPlugins()).toEqual(plugins)
+    expect(http.get).toHaveBeenCalledWith('/api/admin/plugins')
+  })
+
   it('listEmailTemplates calls GET /api/admin/email/templates', async () => {
     http.get.mockResolvedValueOnce([{ id: 'tmpl-1', name: 'Welcome' }])
     const result = await module.listEmailTemplates()

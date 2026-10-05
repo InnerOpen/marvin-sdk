@@ -34,6 +34,7 @@ import { EmailEventSubscriptionsModule } from './emailEventSubscriptions';
 import { AIModule } from './ai';
 import { AutomationsModule } from './automations';
 import { IncomingWebhooksModule } from './incomingWebhooks';
+import { SiteModule } from './site';
 
 export interface PlatformClientConfig {
   apiUrl?: string;
@@ -91,6 +92,8 @@ export class PlatformClient extends HttpClient {
   public automations: AutomationsModule;
   // Incoming (ingress) webhooks — tokened endpoints that drop events on the bus.
   public incomingWebhooks: IncomingWebhooksModule;
+  // Site — request a rebuild of the workspace's static site and read its status.
+  public site: SiteModule;
 
   // Admin modules
   public adminUsers: AdminUsersModule;
@@ -143,6 +146,7 @@ export class PlatformClient extends HttpClient {
     // Automations (general workflow engine; AI is one optional action kind)
     this.automations = new AutomationsModule(this);
     this.incomingWebhooks = new IncomingWebhooksModule(this);
+    this.site = new SiteModule(this);
 
     // Admin modules
     this.adminUsers = new AdminUsersModule(this);

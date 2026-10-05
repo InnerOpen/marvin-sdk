@@ -348,4 +348,17 @@ describe('AutomationsModule', () => {
     await expect(module.dryRun('auto-1', { entryId: 'e', eventId: 'v' })).rejects.toThrow('not both')
     expect(http.post).not.toHaveBeenCalled()
   })
+
+  it('samples GETs /samples with the default limit', async () => {
+    const result = { event_type: 'entry_published', samples: [{ kind: 'event', id: 'evt-1', synthesized: false }] }
+    http.get.mockResolvedValueOnce(result)
+    expect(await module.samples('auto-1')).toEqual(result)
+    expect(http.get).toHaveBeenCalledWith('/api/automations/auto-1/samples', { limit: 10 })
+    expect(http.validatePathParam).toHaveBeenCalledWith('auto-1', 'automation id')
+  })
+
+  it('samples passes a custom limit', async () => {
+    await module.samples('auto-1', 3)
+    expect(http.get).toHaveBeenCalledWith('/api/automations/auto-1/samples', { limit: 3 })
+  })
 })

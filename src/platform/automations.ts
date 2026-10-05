@@ -330,6 +330,14 @@ export interface AutomationDryRunSample {
   conditions_pass?: boolean | null;
 }
 
+/** `samples()` result: what the dry run's sample picker offers. */
+export interface AutomationSamples {
+  /** The event type the workflow's trigger listens for; null for a workflow no event triggers. */
+  event_type: string | null;
+  /** Newest first: logged events of that type, then (entry triggers) recent entries no event covers. */
+  samples: AutomationDryRunSample[];
+}
+
 /** Pick the sample for an event-triggered dry run (pass at most one). */
 export interface AutomationDryRunOptions {
   /** Test against the latest event of the trigger's type for this entry (or one built for it). */
@@ -421,6 +429,17 @@ export class AutomationsModule {
     if (options.entryId) query.set('entry_id', options.entryId);
     if (options.eventId) query.set('event_id', options.eventId);
     return this.http.post<AutomationDryRunResult>(`/api/automations/${validId}/run?${query}`, {});
+  }
+
+  /**
+   * Samples an event-triggered workflow's dry run can test against: recent events its trigger would
+   * have fired on, each with whether its conditions pass, then (for an entry trigger) recent entries
+   * no logged event covers. Pass one's `id` to `dryRun` as `eventId` (kind `event`) or `entryId`
+   * (kind `entry`). Empty for a workflow no event triggers.
+   */
+  async samples(automationId: string, limit = 10): Promise<AutomationSamples> {
+    const validId = this.http.validatePathParam(automationId, 'automation id');
+    return this.http.get<AutomationSamples>(`/api/automations/${validId}/samples`, { limit });
   }
 
   /** Recent runs of an automation, newest first (status, targets, step counts, timing). */

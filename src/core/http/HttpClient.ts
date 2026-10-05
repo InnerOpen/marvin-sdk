@@ -111,9 +111,10 @@ export class HttpClient {
   }
 
   /**
-   * Build full URL from endpoint
+   * The absolute URL of an API path on this client's base URL. Makes no request — for links and
+   * `<img src>` that the browser fetches itself (e.g. a provider logo).
    */
-  private buildUrl(endpoint: string): string {
+  buildUrl(endpoint: string): string {
     // Remove trailing slash from baseUrl and leading slash from endpoint
     const base = this.baseUrl.replace(/\/$/, '');
     const path = endpoint.replace(/^\//, '');

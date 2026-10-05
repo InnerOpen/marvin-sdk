@@ -34,6 +34,10 @@ export interface IntegrationProviderInfo {
   name: string;
   description: string;
   category: string; // "source" | "destination" | "capability" | "notify"
+  /** The provider's emoji — the fallback when it has no logo. */
+  icon?: string;
+  /** Whether `providerLogoUrl(slug)` serves a logo (otherwise it 404s). */
+  hasLogo?: boolean;
   configSchema: Record<string, unknown>;
   credentials: IntegrationProviderCredential[];
   emits: IntegrationProviderEvent[];
@@ -51,6 +55,69 @@ export interface Integration {
   status: string; // "ok" | "error" | "unconfigured"
   lastCheckedAt: string | null;
   lastError: string | null;
+  /** The workspace secret it reads (`{{SLUG}}`), when the credential isn't its own copy. */
+  credentialSecret?: string | null;
+  /** Open alerts — the connection needs attention. Empty when it is healthy. */
+  attention?: IntegrationAttention[];
+  /** An admin's adjustments to the provider's error policy (see `setErrorOverrides`). */
+  errorOverrides?: IntegrationErrorOverrides;
+}
+
+/** An open alert on a connection ("Needs attention" on its card): one per error code, counted. */
+export interface IntegrationAttention {
+  id: string;
+  code: string;
+  message?: string | null;
+  count: number;
+  firstAt?: string | null;
+  lastAt?: string | null;
+  /** The last few failures: {at, message, action, entry_id, automation_slug, source}. */
+  samples?: Record<string, unknown>[];
+}
+
+/**
+ * Per-connection adjustments to the provider's error policy, keyed by a declared error code (or `*`
+ * for every code). Only `review` (send the entry to review) and `notify` (alert admins) can be
+ * adjusted; a code left out uses the provider's default.
+ */
+export type IntegrationErrorOverrides = Record<string, { review?: boolean; notify?: boolean }>;
+
+/** Result of `resolveAttention`: how many open alerts were marked resolved. */
+export interface IntegrationResolveResult {
+  resolved: number;
+}
+
+/** One choice for an action input: the value stored, and what people see. */
+export interface IntegrationOption {
+  value: string | number | boolean;
+  label: string;
+}
+
+/** A connection that can carry integration alerts (a chat or notification provider). */
+export interface AlertRoutingTarget {
+  integrationId: string;
+  name: string;
+  provider: string;
+  action: string;
+  /** Whether alerts currently go to it. */
+  enabled: boolean;
+}
+
+/** Where integration alerts go besides the bell (which always gets them). */
+export interface AlertRouting {
+  /** Email the workspace's owners and admins. */
+  emailAdmins: boolean;
+  targets: AlertRoutingTarget[];
+  /** An open alert is announced again after this many hours; 0 = never. */
+  reminderHours: number;
+}
+
+export interface AlertRoutingUpdate {
+  emailAdmins?: boolean;
+  /** The connections alerts go to — each must be one of `getAlertRouting().targets`. */
+  integrationIds?: string[];
+  /** 0–720; default 24. */
+  reminderHours?: number;
 }
 
 export interface IntegrationCreate {
@@ -130,6 +197,16 @@ export class IntegrationsModule {
     return this.http.get<IntegrationPluginInfo[]>(`${BASE}/plugins`);
   }
 
+  /**
+   * The URL of a provider's logo (SVG or PNG). Makes no request: the route is public, so an `<img>`
+   * can load it directly. It 404s when the provider has none — check `hasLogo` in `listProviders()`
+   * and fall back to its `icon`.
+   */
+  providerLogoUrl(slug: string): string {
+    const validSlug = this.http.validatePathParam(slug, 'provider slug');
+    return this.http.buildUrl(`${BASE}/providers/${encodeURIComponent(validSlug)}/logo`);
+  }
+
   /** List this workspace's configured integrations. */
   async list(): Promise<Integration[]> {
     return this.http.get<Integration[]>(BASE);
@@ -163,6 +240,47 @@ export class IntegrationsModule {
     const validId = this.http.validatePathParam(id, 'integration ID');
     const validKey = this.http.validatePathParam(actionKey, 'action key');
     return this.http.post<IntegrationActionResult>(`${BASE}/${validId}/actions/${validKey}`, args);
+  }
+
+  /**
+   * The choices for one action input, from the read action its `x-marvin-options` hint names
+   * (e.g. a Slack channel picker). Only that hinted action runs. 422 when the input has no hint or
+   * the provider fails.
+   */
+  async listOptions(integrationId: string, actionKey: string, input: string): Promise<IntegrationOption[]> {
+    const validId = this.http.validatePathParam(integrationId, 'integration ID');
+    return this.http.post<IntegrationOption[]>(`${BASE}/${validId}/options`, { actionKey, input });
+  }
+
+  // ---- error handling ----
+
+  /**
+   * "I fixed it": mark the connection's open alerts resolved — all of them, or one by `alertId`.
+   * Announces the resolution where each alert went and re-arms parked retries.
+   */
+  async resolveAttention(integrationId: string, alertId?: string): Promise<IntegrationResolveResult> {
+    const validId = this.http.validatePathParam(integrationId, 'integration ID');
+    const query = alertId ? `?${new URLSearchParams({ alert_id: this.http.validatePathParam(alertId, 'alert ID') })}` : '';
+    return this.http.post<IntegrationResolveResult>(`${BASE}/${validId}/resolve${query}`, {});
+  }
+
+  /**
+   * Replace the connection's error-policy overrides (`{}` resets to the provider's defaults).
+   * 422 for a code the provider doesn't declare or a flag other than `review`/`notify`.
+   */
+  async setErrorOverrides(integrationId: string, overrides: IntegrationErrorOverrides): Promise<Integration> {
+    const validId = this.http.validatePathParam(integrationId, 'integration ID');
+    return this.http.put<Integration>(`${BASE}/${validId}/error-overrides`, { overrides });
+  }
+
+  /** Where integration alerts go besides the bell: admins by email and chat/notification connections. */
+  async getAlertRouting(): Promise<AlertRouting> {
+    return this.http.get<AlertRouting>(`${BASE}/alert-routing`);
+  }
+
+  /** Set where integration alerts go. Fields left out take their defaults (off, none, 24 h). */
+  async setAlertRouting(body: AlertRoutingUpdate): Promise<AlertRouting> {
+    return this.http.put<AlertRouting>(`${BASE}/alert-routing`, body);
   }
 
   // ---- event connections (integration action ⇄ event) ----
