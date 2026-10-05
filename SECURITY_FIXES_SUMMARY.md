@@ -64,7 +64,17 @@ Configuration:
 - Max retries: 3 (configurable)
 - Initial delay: 1000ms
 - Max delay: 10000ms
-- Retryable status codes: `408, 429, 500, 502, 503, 504`
+- Retryable status codes: `429, 502, 503, 504` (configurable)
+
+What is retried (SDK 4.1):
+- **No response arrived** (the fetch failed or timed out): idempotent methods only — `GET`, `HEAD`,
+  `OPTIONS`, `PUT`, `DELETE`.
+- **A retryable status**: safe reads only — `GET`, `HEAD`, `OPTIONS`. A `Retry-After` header (seconds
+  or an HTTP date) sets the wait, capped at 60 s; without one the backoff below applies.
+- **Never**: `POST` and `PATCH`; `PUT` and `DELETE` once the server has answered (it may have acted —
+  a retried DELETE would turn a success into a 404); a 2xx whose body fails to parse (that is a
+  `MarvinApiError`, not a network error). An empty body (204/205, `content-length: 0`, or no content)
+  is `undefined`.
 
 Retry formula: `delay = min(initialDelay * 2^attempt, maxDelay)`
 
@@ -167,9 +177,10 @@ try {
 
 ### 3. Retry Logic Test
 ```typescript
-// Simulate 503 error (service unavailable)
-// SDK should retry 3 times with exponential backoff
-// Check logs for: "Retry 1/3 after 1000ms"
+// Simulate 503 error (service unavailable) on a GET
+// SDK should retry 3 times with exponential backoff (or wait as long as Retry-After asks)
+// Check logs for: "Retry 1/3 after 1000ms (status: 503)"
+// A POST, PATCH, PUT or DELETE answered 503 is not retried
 ```
 
 ### 4. CSRF Protection Test
@@ -222,7 +233,7 @@ const platform = createPlatformClient({
     maxRetries: 5,           // Default: 3
     initialDelay: 2000,      // Default: 1000
     maxDelay: 30000,         // Default: 10000
-    retryableStatuses: [408, 429, 500, 502, 503, 504] // Default
+    retryableStatuses: [429, 502, 503, 504] // Default; retried for GET/HEAD/OPTIONS only
   }
 });
 ```

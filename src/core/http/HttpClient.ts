@@ -20,15 +20,19 @@ export interface RetryConfig {
   /** Maximum delay in ms between retries (default: 10000) */
   maxDelay: number;
   /**
-   * @deprecated Ignored. A request is retried only when no response arrived (the fetch failed or
-   * timed out), and only for idempotent methods: once the server has answered, it may have acted,
-   * so retrying could repeat a write or turn a successful DELETE into a 404.
+   * Response statuses that retry a safe read — GET, HEAD or OPTIONS — honouring `Retry-After`
+   * (default: [429, 502, 503, 504]). Never a write: once the server has answered it may have acted,
+   * so a retried PUT/DELETE/POST/PATCH could repeat it or turn a successful DELETE into a 404.
    */
   retryableStatuses: number[];
 }
 
-/** Methods safe to send again when no response arrived. */
+/** Methods safe to send again when no response arrived (the fetch failed or timed out). */
 const IDEMPOTENT_METHODS = new Set(['GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']);
+/** Methods safe to send again after a retryable status: reads, which change nothing. */
+const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
+/** The longest a `Retry-After` header may make a retry wait (ms). */
+const MAX_RETRY_AFTER_MS = 60000;
 
 export interface HttpClientConfig {
   baseUrl: string;
@@ -79,7 +83,7 @@ export class HttpClient {
       maxRetries: config.retry?.maxRetries ?? 3,
       initialDelay: config.retry?.initialDelay ?? 1000,
       maxDelay: config.retry?.maxDelay ?? 10000,
-      retryableStatuses: config.retry?.retryableStatuses ?? [408, 429, 500, 502, 503, 504],
+      retryableStatuses: config.retry?.retryableStatuses ?? [429, 502, 503, 504],
     };
   }
 
@@ -227,6 +231,24 @@ export class HttpClient {
   }
 
   /**
+   * The wait a `Retry-After` header asks for, in ms (delta-seconds or an HTTP date), capped at
+   * MAX_RETRY_AFTER_MS; undefined when absent or unreadable.
+   */
+  private retryAfterDelay(header: string | null): number | undefined {
+    if (!header) return undefined;
+    const value = header.trim();
+    let ms: number;
+    if (/^\d+$/.test(value)) {
+      ms = Number(value) * 1000;
+    } else {
+      const at = Date.parse(value);
+      if (Number.isNaN(at)) return undefined;
+      ms = at - Date.now();
+    }
+    return Math.min(Math.max(ms, 0), MAX_RETRY_AFTER_MS);
+  }
+
+  /**
    * Sleep for specified milliseconds
    */
   private sleep(ms: number): Promise<void> {
@@ -234,8 +256,12 @@ export class HttpClient {
   }
 
   /**
-   * Perform an HTTP request. Retried (with backoff) only when no response arrived — the fetch failed
-   * or timed out — and only for idempotent methods (GET, HEAD, OPTIONS, PUT, DELETE).
+   * Perform an HTTP request, retrying with backoff (up to `retry.maxRetries`):
+   * - when no response arrived (the fetch failed or timed out), for idempotent methods — GET, HEAD,
+   *   OPTIONS, PUT, DELETE;
+   * - on a `retry.retryableStatuses` response (429, 502, 503, 504), for safe reads only — GET, HEAD,
+   *   OPTIONS — waiting as long as `Retry-After` asks (at most 60 s) when the server sends it.
+   * POST and PATCH are never retried.
    */
   async request<T>(
     method: string,
@@ -305,7 +331,7 @@ export class HttpClient {
     }
 
     clearTimeout(timeoutId);
-    // From here on the server has answered: nothing below retries.
+    // From here on the server has answered: only a safe read is retried, on a retryable status.
 
     const duration = Date.now() - startTime;
 
@@ -328,6 +354,21 @@ export class HttpClient {
           `[Marvin SDK] Error response: ${response.status} ${response.statusText}`,
           errorText ? `Body: ${errorText}` : ''
         );
+      }
+
+      if (
+        SAFE_METHODS.has(method.toUpperCase()) &&
+        this.retryConfig.retryableStatuses.includes(response.status) &&
+        retryAttempt < this.retryConfig.maxRetries
+      ) {
+        const delay = this.retryAfterDelay(response.headers.get('retry-after')) ?? this.calculateRetryDelay(retryAttempt);
+        if (this.debug) {
+          this.logger.warn(
+            `[Marvin SDK] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (status: ${response.status})`
+          );
+        }
+        await this.sleep(delay);
+        return this.request<T>(method, endpoint, options, retryAttempt + 1);
       }
 
       // Throw specific error types based on status code
