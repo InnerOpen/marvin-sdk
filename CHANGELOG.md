@@ -1,3 +1,16 @@
+# [4.1.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.0.0...v4.1.0) (2026-10-05)
+
+
+### Bug Fixes
+
+* **http:** empty JSON bodies and retries after a response ([9eb28f5](https://github.com/InnerOpen/marvin-sdk/commit/9eb28f59e1bd151541ff7bb4f21fc1327aa083bf))
+* **http:** retry safe reads on 429/502/503/504, honouring Retry-After ([7efdd98](https://github.com/InnerOpen/marvin-sdk/commit/7efdd98682b6eea80129e92c73d1b4647b92857f))
+
+
+### Features
+
+* **platform:** integration error handling, workflow samples and site rebuild ([b39b2fa](https://github.com/InnerOpen/marvin-sdk/commit/b39b2faaee476c013cb5193043d740a83fd82860))
+
 # [4.0.0](https://github.com/inneropen/marvin-sdk/compare/v3.3.0...v4.0.0) (2026-10-04)
 
 
