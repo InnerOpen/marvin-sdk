@@ -19,9 +19,16 @@ export interface RetryConfig {
   initialDelay: number;
   /** Maximum delay in ms between retries (default: 10000) */
   maxDelay: number;
-  /** HTTP status codes that should trigger a retry (default: [408, 429, 500, 502, 503, 504]) */
+  /**
+   * @deprecated Ignored. A request is retried only when no response arrived (the fetch failed or
+   * timed out), and only for idempotent methods: once the server has answered, it may have acted,
+   * so retrying could repeat a write or turn a successful DELETE into a 404.
+   */
   retryableStatuses: number[];
 }
+
+/** Methods safe to send again when no response arrived. */
+const IDEMPOTENT_METHODS = new Set(['GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']);
 
 export interface HttpClientConfig {
   baseUrl: string;
@@ -227,7 +234,8 @@ export class HttpClient {
   }
 
   /**
-   * Perform HTTP request with automatic retry on transient failures
+   * Perform an HTTP request. Retried (with backoff) only when no response arrived — the fetch failed
+   * or timed out — and only for idempotent methods (GET, HEAD, OPTIONS, PUT, DELETE).
    */
   async request<T>(
     method: string,
@@ -263,8 +271,9 @@ export class HttpClient {
       this.logger.log(`[Marvin SDK] ${method} ${url}`);
     }
 
+    let response: Response;
     try {
-      const response = await fetch(url, {
+      response = await fetch(url, {
         method,
         headers,
         body: isFormData
@@ -273,137 +282,135 @@ export class HttpClient {
         credentials: this.credentials,
         signal: controller.signal,
       });
-
-      clearTimeout(timeoutId);
-
-      const duration = Date.now() - startTime;
-
-      if (this.debug) {
-        this.logger.log(
-          `[Marvin SDK] ${response.status} ${response.statusText} (${duration}ms)`
-        );
-      }
-
-      // Handle unauthorized
-      if (response.status === 401 && this.auth.handleUnauthorized) {
-        await this.auth.handleUnauthorized();
-        // Could retry request here, but for now just throw
-      }
-
-      if (!response.ok) {
-        const errorText = await response.text().catch(() => '');
-
-        if (this.debug) {
-          this.logger.error(
-            `[Marvin SDK] Error response: ${response.status} ${response.statusText}`,
-            errorText ? `Body: ${errorText}` : ''
-          );
-        }
-
-        // Check if this error is retryable
-        const isRetryable = this.retryConfig.retryableStatuses.includes(response.status);
-        const canRetry = retryAttempt < this.retryConfig.maxRetries;
-
-        if (isRetryable && canRetry) {
-          const delay = this.calculateRetryDelay(retryAttempt);
-          if (this.debug) {
-            this.logger.warn(
-              `[Marvin SDK] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (status: ${response.status})`
-            );
-          }
-          await this.sleep(delay);
-          return this.request<T>(method, endpoint, options, retryAttempt + 1);
-        }
-
-        // Throw specific error types based on status code
-        if (response.status === 404) {
-          throw new MarvinNotFoundError(
-            `Resource not found: ${endpoint}`,
-            endpoint
-          );
-        }
-
-        if (response.status === 401 || response.status === 403) {
-          throw new MarvinAuthError(
-            `Authentication failed: ${response.statusText}`,
-            response.status
-          );
-        }
-
-        if (response.status >= 500) {
-          throw new MarvinServerError(
-            `Server error: ${response.status} ${response.statusText}`,
-            response.status,
-            endpoint
-          );
-        }
-
-        // Generic API error for other cases
-        throw MarvinApiError.fromResponse(
-          response.status,
-          response.statusText,
-          endpoint,
-          errorText
-        );
-      }
-
-      // Handle empty responses
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        return undefined as T;
-      }
-
-      const data = (await response.json()) as T;
-
-      // Log response data in debug mode (sanitized)
-      if (this.debug) {
-        const sanitized = this.sanitizeForLogging(data);
-        this.logger.log('[Marvin SDK] Response:', JSON.stringify(sanitized, null, 2));
-      }
-
-      return data;
     } catch (error) {
+      // No response arrived: a network failure or our timeout. Only now is a retry safe, and only for
+      // a method the server may see twice.
       clearTimeout(timeoutId);
-
-      // Re-throw Marvin errors as-is (they've already been through retry logic)
-      if (
-        error instanceof MarvinApiError ||
-        error instanceof MarvinNotFoundError ||
-        error instanceof MarvinAuthError ||
-        error instanceof MarvinServerError
-      ) {
-        throw error;
-      }
-
-      // Handle network/timeout errors with retry
-      if (error instanceof Error) {
-        const canRetry = retryAttempt < this.retryConfig.maxRetries;
-
-        if (canRetry && error.name !== 'AbortError') {
-          // Retry on network errors, but not on timeout
-          const delay = this.calculateRetryDelay(retryAttempt);
-          if (this.debug) {
-            this.logger.warn(
-              `[Marvin SDK] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (network error)`
-            );
-          }
-          await this.sleep(delay);
-          return this.request<T>(method, endpoint, options, retryAttempt + 1);
-        }
-
-        if (error.name === 'AbortError') {
-          throw new MarvinNetworkError(
-            `Request timeout after ${this.timeout}ms`,
-            error
+      const timedOut = error instanceof Error && error.name === 'AbortError';
+      if (IDEMPOTENT_METHODS.has(method.toUpperCase()) && retryAttempt < this.retryConfig.maxRetries) {
+        const delay = this.calculateRetryDelay(retryAttempt);
+        if (this.debug) {
+          this.logger.warn(
+            `[Marvin SDK] Retry ${retryAttempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms (${timedOut ? 'timeout' : 'network error'})`
           );
         }
-        throw new MarvinNetworkError(
-          `Network error: ${error.message}`,
-          error
+        await this.sleep(delay);
+        return this.request<T>(method, endpoint, options, retryAttempt + 1);
+      }
+      const cause = error instanceof Error ? error : undefined;
+      if (timedOut) {
+        throw new MarvinNetworkError(`Request timeout after ${effectiveTimeout}ms`, cause);
+      }
+      throw new MarvinNetworkError(`Network error: ${cause?.message ?? String(error)}`, cause);
+    }
+
+    clearTimeout(timeoutId);
+    // From here on the server has answered: nothing below retries.
+
+    const duration = Date.now() - startTime;
+
+    if (this.debug) {
+      this.logger.log(
+        `[Marvin SDK] ${response.status} ${response.statusText} (${duration}ms)`
+      );
+    }
+
+    // Handle unauthorized
+    if (response.status === 401 && this.auth.handleUnauthorized) {
+      await this.auth.handleUnauthorized();
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+
+      if (this.debug) {
+        this.logger.error(
+          `[Marvin SDK] Error response: ${response.status} ${response.statusText}`,
+          errorText ? `Body: ${errorText}` : ''
         );
       }
 
-      throw error;
+      // Throw specific error types based on status code
+      if (response.status === 404) {
+        throw new MarvinNotFoundError(
+          `Resource not found: ${endpoint}`,
+          endpoint
+        );
+      }
+
+      if (response.status === 401 || response.status === 403) {
+        throw new MarvinAuthError(
+          `Authentication failed: ${response.statusText}`,
+          response.status
+        );
+      }
+
+      if (response.status >= 500) {
+        throw new MarvinServerError(
+          `Server error: ${response.status} ${response.statusText}`,
+          response.status,
+          endpoint
+        );
+      }
+
+      // Generic API error for other cases
+      throw MarvinApiError.fromResponse(
+        response.status,
+        response.statusText,
+        endpoint,
+        errorText
+      );
+    }
+
+    const data = await this.readBody<T>(response, method, endpoint);
+
+    // Log response data in debug mode (sanitized)
+    if (this.debug && data !== undefined) {
+      const sanitized = this.sanitizeForLogging(data);
+      this.logger.log('[Marvin SDK] Response:', JSON.stringify(sanitized, null, 2));
+    }
+
+    return data;
+  }
+
+  /**
+   * A successful response's JSON body, or `undefined` when there is none: 204/205, `content-length: 0`,
+   * a non-JSON content type, or an empty body (some routes send 204 with `application/json`). Invalid
+   * JSON is a `MarvinApiError` naming the request — never a network error, and never retried.
+   */
+  private async readBody<T>(response: Response, method: string, endpoint: string): Promise<T> {
+    if (response.status === 204 || response.status === 205 || response.headers.get('content-length') === '0') {
+      return undefined as T;
+    }
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      return undefined as T;
+    }
+
+    let text: string;
+    try {
+      text = await response.text();
+    } catch (error) {
+      const cause = error instanceof Error ? error : undefined;
+      throw new MarvinNetworkError(
+        `Reading the ${response.status} response to ${method} ${endpoint} failed: ${cause?.message ?? String(error)}`,
+        cause
+      );
+    }
+    if (!text.trim()) {
+      return undefined as T;
+    }
+
+    try {
+      return JSON.parse(text) as T;
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      throw new MarvinApiError(
+        `Invalid JSON in the ${response.status} response to ${method} ${endpoint}: ${reason}`,
+        response.status,
+        endpoint,
+        text.slice(0, 1000)
+      );
     }
   }
 
