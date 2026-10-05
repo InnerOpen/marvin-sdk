@@ -822,7 +822,8 @@ export interface paths {
         };
         /**
          * List Secrets
-         * @description List all secrets (slugs + metadata only — no values).
+         * @description List all secrets (slugs + metadata only — no values). OWNER/ADMIN only, like the rest of the
+         *     workspace settings; members who need a slug for {{SLUG}} autocomplete use /slugs.
          */
         get: operations["list_secrets_api_groups_secrets_get"];
         put?: never;
@@ -1057,6 +1058,128 @@ export interface paths {
         get: operations["get_alert_routing_api_groups_integrations_alert_routing_get"];
         /** Set Alert Routing */
         put: operations["set_alert_routing_api_groups_integrations_alert_routing_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Health
+         * @description Each connection at a glance: last successful action, last check, 7-day failures, open alerts.
+         */
+        get: operations["get_health_api_groups_integrations_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Alerts
+         * @description The workspace's open alerts, or its resolved ones (how long each was open, how it resolved).
+         */
+        get: operations["list_alerts_api_groups_integrations_alerts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/retries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Retries
+         * @description Failed workflow steps waiting to be retried (pending, parked until the connection recovers, running).
+         */
+        get: operations["list_retries_api_groups_integrations_retries_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/retries/{retry_id}/retry-now": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retry Now
+         * @description Make a pending or parked retry due now. The retry sweep runs it on its next tick (about a
+         *     minute) — never this request. 409 while it is running, or once it has finished.
+         */
+        post: operations["retry_now_api_groups_integrations_retries__retry_id__retry_now_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/retries/{retry_id}/give-up": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Give Up Retry
+         * @description Stop retrying: the chain ends as superseded and nothing else happens (no review, no alert).
+         *     409 while it is running, or once it has finished.
+         */
+        post: operations["give_up_retry_api_groups_integrations_retries__retry_id__give_up_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/handled-failures": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Handled Failures
+         * @description Failed integration steps an error policy took in hand (default: the last 7 days), newest first.
+         */
+        get: operations["list_handled_failures_api_groups_integrations_handled_failures_get"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -1480,7 +1603,8 @@ export interface paths {
         put?: never;
         /**
          * Send Test Email
-         * @description Send a test email using the specified template.
+         * @description Send a test email using the specified template. Workspace OWNER/ADMIN only: it sends mail
+         *     through the workspace's SMTP to any address, like the /platform/email test routes.
          *
          *     Args:
          *         group_id: Workspace ID
@@ -3847,7 +3971,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Executions */
+        /**
+         * List Executions
+         * @description The workspace's runs for OWNERs/ADMINs; other members see only the runs they triggered.
+         */
         get: operations["list_executions_api_ai_executions_get"];
         put?: never;
         post?: never;
@@ -3864,7 +3991,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get Execution */
+        /**
+         * Get Execution
+         * @description One run. Below ADMIN, another member's run (or a system run) is the same 404 as a missing id.
+         */
         get: operations["get_execution_api_ai_executions__execution_id__get"];
         put?: never;
         post?: never;
@@ -6279,6 +6409,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/media-embeds/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Media Embed Providers */
+        get: operations["list_providers_api_platform_media_embeds_providers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/media-embeds/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resolve a Media Link */
+        post: operations["resolve_api_platform_media_embeds_resolve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/publish/{workspace_slug}": {
         parameters: {
             query?: never;
@@ -6394,6 +6558,10 @@ export interface paths {
          *     - `?tag=leather,waxed` - Get entries tagged leather OR waxed
          *     - `?slug=about,contact,sizing` - Batch fetch specific pages
          *     - `?updated_since=2026-07-01T00:00:00Z` - Incremental builds
+         *     - `?collection=projects&expand=full` - A page of full entries (the single-read shape), no per-entry reads
+         *
+         *     `expand=full` keeps the same filters and pagination, including the `limit` cap
+         *     (`PUBLISHING_MAX_PAGE_SIZE`, 100).
          *
          *     **Authentication**: Requires API client token (marvin_sk_*)
          *     **Permissions**: read:published_entries OR read:all_entries
@@ -6481,8 +6649,12 @@ export interface paths {
          *     **Filters:**
          *     - Only includes entries with `status = 'published'`
          *
+         *     **Expand:** `?expand=full` returns every entry in the single-read shape, in one response.
+         *     Published entries only, even for a `read:all_entries` token. Honoured up to
+         *     `PUBLISHING_MAX_EXPANDED_ENTRIES` (500) entries; a larger collection comes back unexpanded.
+         *
          *     **Authentication**: Requires API client token (marvin_sk_*)
-         *     **Permissions**: read:collections
+         *     **Permissions**: read:collections (plus read:published_entries OR read:all_entries with `expand=full`)
          *
          *     **Raises:**
          *     - 404: Collection not found
@@ -6678,8 +6850,11 @@ export interface paths {
          *
          *     **Use case**: "View projects using this fabric" links on resource pages.
          *
+         *     **Expand:** `?expand=full` returns each entry in the single-read shape. Honoured up to
+         *     `PUBLISHING_MAX_EXPANDED_ENTRIES` (500) entries; past that the response is unexpanded.
+         *
          *     **Authentication**: Requires API client token (marvin_sk_*)
-         *     **Permissions**: read:resources
+         *     **Permissions**: read:resources (plus read:published_entries OR read:all_entries with `expand=full`)
          *
          *     **Raises:**
          *     - 404: Resource not found
@@ -8406,7 +8581,7 @@ export interface components {
              * Retries
              * @default []
              */
-            retries: components["schemas"]["IntegrationRetryRead"][];
+            retries: components["schemas"]["marvin__schemas__group__automation__IntegrationRetryRead"][];
         };
         /**
          * AutomationExecutionRead
@@ -9635,6 +9810,30 @@ export interface components {
             /** Message */
             message?: string | null;
         };
+        /** EmbedProviderInfo */
+        EmbedProviderInfo: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Kinds */
+            kinds: string[];
+            /** Hosts */
+            hosts: string[];
+            /** Examples */
+            examples: string[];
+            /** Linkonly */
+            linkOnly: boolean;
+            /** Notes */
+            notes?: string | null;
+        };
+        /** EmbedProvidersResponse */
+        EmbedProvidersResponse: {
+            /** Providers */
+            providers: components["schemas"]["EmbedProviderInfo"][];
+            /** Framesources */
+            frameSources: string[];
+        };
         /**
          * EntryAssetRead
          * @description Asset metadata plus entry-specific placement details.
@@ -10771,6 +10970,78 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** HandledFailurePage */
+        HandledFailurePage: {
+            /** Items */
+            items: components["schemas"]["HandledFailureRead"][];
+            /** Page */
+            page: number;
+            /** Perpage */
+            perPage: number;
+            /** Total */
+            total: number;
+            /**
+             * Since
+             * Format: date-time
+             */
+            since: string;
+        };
+        /**
+         * HandledFailureRead
+         * @description A failed integration step that the provider's error policy took in hand.
+         */
+        HandledFailureRead: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Executionid
+             * Format: uuid
+             */
+            executionId: string;
+            /** Runstatus */
+            runStatus: string;
+            /**
+             * Isretry
+             * @default false
+             */
+            isRetry: boolean;
+            /** At */
+            at?: string | null;
+            /** Automationid */
+            automationId?: string | null;
+            /** Automationname */
+            automationName?: string | null;
+            /** Entryid */
+            entryId?: string | null;
+            /** Entrytitle */
+            entryTitle?: string | null;
+            /**
+             * Entryexists
+             * @default false
+             */
+            entryExists: boolean;
+            /** Integrationid */
+            integrationId?: string | null;
+            /** Integrationslug */
+            integrationSlug?: string | null;
+            /** Provider */
+            provider?: string | null;
+            /** Providername */
+            providerName?: string | null;
+            /** Action */
+            action?: string | null;
+            /** Code */
+            code?: string | null;
+            /** Error */
+            error?: string | null;
+            /** Outcome */
+            outcome: string;
+            /** Retrystatus */
+            retryStatus?: string | null;
+        };
         /**
          * HealthCheck
          * @description Response model for the health check endpoint.
@@ -10910,6 +11181,70 @@ export interface components {
                 [key: string]: unknown;
             };
         };
+        /** IntegrationAlertPage */
+        IntegrationAlertPage: {
+            /** Items */
+            items: components["schemas"]["IntegrationAlertRead"][];
+            /** Page */
+            page: number;
+            /** Perpage */
+            perPage: number;
+            /** Total */
+            total: number;
+        };
+        /**
+         * IntegrationAlertRead
+         * @description One connection alert, open or resolved, with how long it was open and how it ended.
+         */
+        IntegrationAlertRead: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Integrationid
+             * Format: uuid
+             */
+            integrationId: string;
+            /** Integrationname */
+            integrationName?: string | null;
+            /** Integrationslug */
+            integrationSlug: string;
+            /** Provider */
+            provider: string;
+            /** Providername */
+            providerName: string;
+            /** Code */
+            code: string;
+            /** Message */
+            message?: string | null;
+            /** Count */
+            count: number;
+            /** Status */
+            status: string;
+            /** Firstat */
+            firstAt?: string | null;
+            /** Lastat */
+            lastAt?: string | null;
+            /** Notifiedat */
+            notifiedAt?: string | null;
+            /** Remindafter */
+            remindAfter?: string | null;
+            /**
+             * Reminderhours
+             * @default 0
+             */
+            reminderHours: number;
+            /** Resolvedat */
+            resolvedAt?: string | null;
+            /** Resolution */
+            resolution?: string | null;
+            /** Resolvedbyname */
+            resolvedByName?: string | null;
+            /** Openseconds */
+            openSeconds?: number | null;
+        };
         /**
          * IntegrationAttention
          * @description An open alert on a connection — "Needs attention" on its card. One per error code, counted.
@@ -11035,6 +11370,52 @@ export interface components {
             args?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /**
+         * IntegrationHealthRow
+         * @description One connection at a glance.
+         */
+        IntegrationHealthRow: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Provider */
+            provider: string;
+            /** Providername */
+            providerName: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Status */
+            status: string;
+            /** Lastcheckedat */
+            lastCheckedAt?: string | null;
+            /** Lasterror */
+            lastError?: string | null;
+            /** Lastsuccessat */
+            lastSuccessAt?: string | null;
+            /**
+             * Failures7D
+             * @default 0
+             */
+            failures7d: number;
+            /**
+             * Openalerts
+             * @default 0
+             */
+            openAlerts: number;
+            /** Alertcodes */
+            alertCodes?: string[];
+            /**
+             * Liveretries
+             * @default 0
+             */
+            liveRetries: number;
         };
         /**
          * IntegrationOption
@@ -11164,47 +11545,6 @@ export interface components {
         IntegrationResolveResult: {
             /** Resolved */
             resolved: number;
-        };
-        /**
-         * IntegrationRetryRead
-         * @description A failed integration step's retry chain — pending, parked (waiting for the connection), or done.
-         */
-        IntegrationRetryRead: {
-            /**
-             * Id
-             * Format: uuid4
-             */
-            id: string;
-            /** Status */
-            status: string;
-            /** Integrationslug */
-            integrationSlug: string;
-            /** Action */
-            action: string;
-            /** Code */
-            code: string;
-            /** Stepindex */
-            stepIndex: number;
-            /** Entryid */
-            entryId?: string | null;
-            /**
-             * Attempt
-             * @default 0
-             */
-            attempt: number;
-            /**
-             * Maxattempts
-             * @default 0
-             */
-            maxAttempts: number;
-            /** Nextattemptat */
-            nextAttemptAt?: string | null;
-            /** Finishedat */
-            finishedAt?: string | null;
-            /** Lasterror */
-            lastError?: string | null;
-            /** Originexecutionid */
-            originExecutionId?: string | null;
         };
         /**
          * IntegrationUpdate
@@ -11818,6 +12158,38 @@ export interface components {
             meta: components["schemas"]["PaginationMeta"];
         };
         /**
+         * PublishedCollectionExpandedRead
+         * @description A published collection read with ``?expand=full``.
+         *
+         *     Same collection fields as ``PublishedCollectionRead``; each entry has the shape of the
+         *     single-entry read (``PublishedEntryRead``).
+         */
+        PublishedCollectionExpandedRead: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            /**
+             * Issmart
+             * @default false
+             */
+            isSmart: boolean;
+            /** Smartrules */
+            smartRules?: {
+                [key: string]: unknown;
+            } | null;
+            /** Metadatajson */
+            metadataJson?: {
+                [key: string]: unknown;
+            } | null;
+            /** Entrycount */
+            entryCount: number;
+            /** Entries */
+            entries: components["schemas"]["PublishedEntryRead"][];
+        };
+        /**
          * PublishedCollectionRead
          * @description Schema for published collections in the publishing API.
          *
@@ -11876,6 +12248,85 @@ export interface components {
         PublishedCollectionsResponse: {
             /** Data */
             data: components["schemas"]["PublishedCollectionSummary"][];
+            meta: components["schemas"]["PaginationMeta"];
+        };
+        /**
+         * PublishedEmbed
+         * @description A media link in an entry (a bare provider URL in a markdown field, or an ``embed`` field) resolved
+         *     to a player. Keyed in ``embeds`` by the URL exactly as written in the field.
+         */
+        PublishedEmbed: {
+            /** Url */
+            url: string;
+            /** Canonicalurl */
+            canonicalUrl: string;
+            /** Provider */
+            provider: string;
+            /** Providername */
+            providerName: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "video" | "audio" | "podcast" | "playlist";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "link" | "unavailable";
+            /** Title */
+            title?: string | null;
+            /** Authorname */
+            authorName?: string | null;
+            /** Thumbnailurl */
+            thumbnailUrl?: string | null;
+            iframe?: components["schemas"]["PublishedEmbedIframe"] | null;
+            link: components["schemas"]["PublishedEmbedLink"];
+            /** Html */
+            html: string;
+        };
+        /**
+         * PublishedEmbedIframe
+         * @description A Marvin-built player: every attribute comes from Marvin's provider registry, never from the provider.
+         */
+        PublishedEmbedIframe: {
+            /** Src */
+            src: string;
+            /** Title */
+            title: string;
+            /** Allow */
+            allow: string;
+            /** Sandbox */
+            sandbox: string;
+            /** Referrerpolicy */
+            referrerpolicy: string;
+            /** Aspectratio */
+            aspectRatio?: string | null;
+            /** Height */
+            height?: number | null;
+        };
+        /**
+         * PublishedEmbedLink
+         * @description The plain link to the media on its provider — the fallback and the link card.
+         */
+        PublishedEmbedLink: {
+            /** Href */
+            href: string;
+            /** Title */
+            title: string;
+            /** Providername */
+            providerName: string;
+        };
+        /**
+         * PublishedEntriesExpandedResponse
+         * @description Paginated response for listing published entries with ``?expand=full``.
+         *
+         *     Each item has the shape of the single-entry read (``PublishedEntryRead``), so a site can
+         *     render a page of entries without re-reading each one.
+         */
+        PublishedEntriesExpandedResponse: {
+            /** Data */
+            data: components["schemas"]["PublishedEntryRead"][];
             meta: components["schemas"]["PaginationMeta"];
         };
         /**
@@ -11978,6 +12429,10 @@ export interface components {
                 [key: string]: unknown;
             } | null;
             featuredAsset?: components["schemas"]["PublishedAssetRead"] | null;
+            /** Embeds */
+            embeds?: {
+                [key: string]: components["schemas"]["PublishedEmbed"];
+            };
             /** Order */
             order?: number | null;
         };
@@ -12035,6 +12490,10 @@ export interface components {
              * @default []
              */
             tags: string[];
+            /** Embeds */
+            embeds?: {
+                [key: string]: components["schemas"]["PublishedEmbed"];
+            };
             /** Order */
             order?: number | null;
         };
@@ -12225,6 +12684,27 @@ export interface components {
             password: string;
             /** Passwordconfirm */
             passwordConfirm: string;
+        };
+        /** ResolveEmbedRequest */
+        ResolveEmbedRequest: {
+            /** Input */
+            input: string;
+            /**
+             * Mode
+             * @default direct
+             * @enum {string}
+             */
+            mode: "direct" | "click_to_load";
+        };
+        /** ResolveEmbedResponse */
+        ResolveEmbedResponse: {
+            /** Input */
+            input: string;
+            /** Url */
+            url?: string | null;
+            embed?: components["schemas"]["PublishedEmbed"] | null;
+            /** Error */
+            error?: string | null;
         };
         /** ResourceAttachment */
         ResourceAttachment: {
@@ -12692,10 +13172,31 @@ export interface components {
                 [key: string]: unknown;
             } | null;
             seo?: components["schemas"]["SiteSeo"] | null;
+            embeds?: components["schemas"]["SiteEmbeds"];
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /**
+         * SiteEmbeds
+         * @description How a site shows media embeds. Stored under ``group_preferences.site_metadata_json['embeds']``
+         *     (``mode``, ``consentText``); ``frame_sources`` is computed from Marvin's provider registry.
+         */
+        SiteEmbeds: {
+            /**
+             * Mode
+             * @default click_to_load
+             * @enum {string}
+             */
+            mode: "direct" | "click_to_load";
+            /**
+             * Consenttext
+             * @default Loading this player connects to {provider}, which may set cookies.
+             */
+            consentText: string;
+            /** Framesources */
+            frameSources?: string[];
         };
         /**
          * SiteRebuildChange
@@ -14282,6 +14783,107 @@ export interface components {
             /** Isactive */
             isActive: boolean;
         };
+        /**
+         * IntegrationRetryRead
+         * @description A failed integration step's retry chain — pending, parked (waiting for the connection), or done.
+         */
+        marvin__schemas__group__automation__IntegrationRetryRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Status */
+            status: string;
+            /** Integrationslug */
+            integrationSlug: string;
+            /** Action */
+            action: string;
+            /** Code */
+            code: string;
+            /** Stepindex */
+            stepIndex: number;
+            /** Entryid */
+            entryId?: string | null;
+            /**
+             * Attempt
+             * @default 0
+             */
+            attempt: number;
+            /**
+             * Maxattempts
+             * @default 0
+             */
+            maxAttempts: number;
+            /** Nextattemptat */
+            nextAttemptAt?: string | null;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /** Lasterror */
+            lastError?: string | null;
+            /** Originexecutionid */
+            originExecutionId?: string | null;
+        };
+        /**
+         * IntegrationRetryRead
+         * @description A failed workflow step that is waiting to be retried (or running right now).
+         */
+        marvin__schemas__group__integration__IntegrationRetryRead: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Status */
+            status: string;
+            /**
+             * Automationid
+             * Format: uuid
+             */
+            automationId: string;
+            /** Automationname */
+            automationName?: string | null;
+            /**
+             * Automationenabled
+             * @default true
+             */
+            automationEnabled: boolean;
+            /** Entryid */
+            entryId?: string | null;
+            /** Entrytitle */
+            entryTitle?: string | null;
+            /**
+             * Entryexists
+             * @default false
+             */
+            entryExists: boolean;
+            /** Integrationid */
+            integrationId?: string | null;
+            /** Integrationname */
+            integrationName?: string | null;
+            /** Integrationslug */
+            integrationSlug: string;
+            /** Provider */
+            provider: string;
+            /** Providername */
+            providerName: string;
+            /** Action */
+            action: string;
+            /** Code */
+            code: string;
+            /** Attempt */
+            attempt: number;
+            /** Maxattempts */
+            maxAttempts: number;
+            /** Nextattemptat */
+            nextAttemptAt?: string | null;
+            /** Leaseuntil */
+            leaseUntil?: string | null;
+            /** Lasterror */
+            lastError?: string | null;
+            /** Createdat */
+            createdAt?: string | null;
+        };
     };
     responses: never;
     parameters: never;
@@ -15785,6 +16387,174 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AlertRouting"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_health_api_groups_integrations_health_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationHealthRow"][];
+                };
+            };
+        };
+    };
+    list_alerts_api_groups_integrations_alerts_get: {
+        parameters: {
+            query?: {
+                status?: "open" | "resolved";
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationAlertPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_retries_api_groups_integrations_retries_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["marvin__schemas__group__integration__IntegrationRetryRead"][];
+                };
+            };
+        };
+    };
+    retry_now_api_groups_integrations_retries__retry_id__retry_now_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                retry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["marvin__schemas__group__integration__IntegrationRetryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    give_up_retry_api_groups_integrations_retries__retry_id__give_up_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                retry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["marvin__schemas__group__integration__IntegrationRetryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_handled_failures_api_groups_integrations_handled_failures_get: {
+        parameters: {
+            query?: {
+                since?: string | null;
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HandledFailurePage"];
                 };
             };
             /** @description Validation Error */
@@ -24975,6 +25745,59 @@ export interface operations {
             };
         };
     };
+    list_providers_api_platform_media_embeds_providers_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmbedProvidersResponse"];
+                };
+            };
+        };
+    };
+    resolve_api_platform_media_embeds_resolve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolveEmbedRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResolveEmbedResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_workspace_info_api_publish__workspace_slug__get: {
         parameters: {
             query?: never;
@@ -25085,6 +25908,8 @@ export interface operations {
                 limit?: number;
                 /** @description Pagination offset */
                 offset?: number;
+                /** @description `full` returns each entry in the shape of the single-entry read (`PublishedEntryRead`: `assets[]`, `resources[]`, full collection memberships, `data`, `embeds`) instead of a list item, so a site needs no per-entry reads. Only published entries are included, and the token needs `read:published_entries` or `read:all_entries`, as for the single read. */
+                expand?: "full" | null;
             };
             header?: never;
             path: {
@@ -25100,7 +25925,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PublishedEntriesResponse"];
+                    "application/json": components["schemas"]["PublishedEntriesResponse"] | components["schemas"]["PublishedEntriesExpandedResponse"];
                 };
             };
             /** @description Validation Error */
@@ -25184,7 +26009,10 @@ export interface operations {
     };
     get_published_collection_api_publish__workspace_slug__collections__collection_slug__get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description `full` returns each entry in the shape of the single-entry read (`PublishedEntryRead`: `assets[]`, `resources[]`, full collection memberships, `data`, `embeds`) instead of a list item, so a site needs no per-entry reads. Only published entries are included, and the token needs `read:published_entries` or `read:all_entries`, as for the single read. */
+                expand?: "full" | null;
+            };
             header?: never;
             path: {
                 collection_slug: string;
@@ -25200,7 +26028,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PublishedCollectionRead"];
+                    "application/json": components["schemas"]["PublishedCollectionRead"] | components["schemas"]["PublishedCollectionExpandedRead"];
                 };
             };
             /** @description Validation Error */
@@ -25388,7 +26216,10 @@ export interface operations {
     };
     get_resource_entries_api_publish__workspace_slug__resources__resource_slug__entries_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description `full` returns each entry in the shape of the single-entry read (`PublishedEntryRead`: `assets[]`, `resources[]`, full collection memberships, `data`, `embeds`) instead of a list item, so a site needs no per-entry reads. Only published entries are included, and the token needs `read:published_entries` or `read:all_entries`, as for the single read. */
+                expand?: "full" | null;
+            };
             header?: never;
             path: {
                 resource_slug: string;
@@ -25404,7 +26235,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PublishedEntryListItem"][];
+                    "application/json": components["schemas"]["PublishedEntryListItem"][] | components["schemas"]["PublishedEntryRead"][];
                 };
             };
             /** @description Validation Error */

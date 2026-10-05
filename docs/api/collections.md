@@ -77,6 +77,31 @@ for (const entry of entries) {
 }
 ```
 
+### `entries(slug, { expand: 'full' })`
+
+Get the whole collection as full entries in one request: each one is an `Entry`, the same object
+`entry(slug)` returns, with `assets` (placements with roles), `resources`, every collection
+membership and its `order` in this collection. Use it instead of calling `entry()` for each list item.
+
+```typescript
+async entries(slug: string, options?: { expand?: 'full' }): Promise<Entry[] | CollectionEntry[]>
+```
+
+A Marvin server without `expand` support (or a collection larger than the server's
+`PUBLISHING_MAX_EXPANDED_ENTRIES`) returns list items; those come back as `CollectionEntry[]`,
+exactly as without the option. Tell them apart with `instanceof Entry`.
+
+```typescript
+import { Entry } from '@inneropen/marvin-sdk';
+
+const entries = await marvin.collections.entries('projects', { expand: 'full' });
+const full = entries.every((entry) => entry instanceof Entry)
+  ? entries
+  : await Promise.all(entries.map((item) => marvin.entry(item.slug)));
+```
+
+`entries.list({ ..., expand: 'full' })` does the same for a page of `/entries`.
+
 ## Collection Object
 
 ### Properties

@@ -3,8 +3,8 @@
  */
 
 import type { MarvinHttpClient } from '../client/http';
-import type { MarvinEntry, MarvinEntryListItem, ListEntry, CollectionEntryMetadata } from '../types';
-import { Entry } from './entry';
+import type { MarvinEntry, MarvinEntryListItem, ListEntry, CollectionEntryMetadata, ExpandOptions } from '../types';
+import { Entry, isFullEntryData } from './entry';
 import { MarvinNotFoundError } from '../core/errors';
 
 export interface GetEntriesOptions {
@@ -34,19 +34,30 @@ export class EntriesModule {
 
   /**
    * Get all published entries
+   *
+   * With `{ expand: 'full' }` each entry on the page comes back as a full `Entry` (the
+   * single-entry read), so no per-entry reads are needed. A server without `expand` support
+   * returns list items instead; those come back as `ListEntry[]`, as without the option.
    */
-  async list(options: GetEntriesOptions = {}): Promise<ListEntry[]> {
+  async list(options?: GetEntriesOptions): Promise<ListEntry[]>;
+  async list(options: GetEntriesOptions & ExpandOptions): Promise<Entry[] | ListEntry[]>;
+  async list(options: GetEntriesOptions & ExpandOptions = {}): Promise<Entry[] | ListEntry[]> {
     const queryString = this.http.buildQueryString({
       entry_type: options.entryType,
       collection: options.collection,
       limit: options.limit,
       offset: options.offset,
+      expand: options.expand,
     });
 
     const endpoint = `/api/publish/${this.workspaceSlug}/entries${queryString}`;
-    const response = await this.http.fetch<{ data: MarvinEntryListItem[] }>(endpoint);
+    const response = await this.http.fetch<{ data: Array<MarvinEntryListItem | MarvinEntry> }>(endpoint);
+    const data = response.data || [];
 
-    return (response.data || []).map(toListEntry);
+    if (options.expand === 'full' && data.every(isFullEntryData)) {
+      return (data as MarvinEntry[]).map((entry) => new Entry(entry));
+    }
+    return (data as MarvinEntryListItem[]).map(toListEntry);
   }
 
   /**

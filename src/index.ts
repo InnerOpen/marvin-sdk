@@ -58,6 +58,8 @@ export type {
   MarvinEntryListItem,
   MarvinEntryType,
   MarvinCollection,
+  MarvinCollectionExpanded,
+  ExpandOptions,
   CollectionEntry,
   CollectionContext,
   CollectionEntryMetadata,
@@ -80,7 +82,7 @@ export type {
 
 // Workspace & Modules
 export { Workspace } from './workspaces/workspace';
-export { Entry } from './entries/entry';
+export { Entry, isFullEntryData } from './entries/entry';
 export { Collection } from './collections/collection';
 export { Resource } from './resources/resource';
 

@@ -4,6 +4,18 @@
 
 import type { MarvinEntry, EntryCollectionContext, EntryAsset, EntryResource, CollectionEntryMetadata } from '../types';
 
+/**
+ * True for a full entry as the API sends it (`PublishedEntryRead`): `assets[]` placements and no
+ * `assetSlugs`/`resourceSlugs`. A list item (`PublishedEntryListItem`) has only the slugs. Lets an
+ * `expand: 'full'` read tell an expanded response from an older server's list items.
+ */
+export function isFullEntryData(raw: unknown): raw is MarvinEntry {
+  if (!raw || typeof raw !== 'object') return false;
+  const record = raw as Record<string, unknown>;
+  if ('assetSlugs' in record || 'resourceSlugs' in record) return false;
+  return Array.isArray(record.assets) || Array.isArray(record.resources);
+}
+
 export class Entry {
   constructor(private raw: MarvinEntry) {}
 

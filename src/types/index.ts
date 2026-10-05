@@ -21,6 +21,8 @@ export type PublishedEntryType = components['schemas']['PublishedEntryTypeRead']
 
 // Collections
 export type MarvinCollection = components['schemas']['PublishedCollectionRead'];
+/** A collection read with `?expand=full`: each entry in the single-read shape (`MarvinEntry`). */
+export type MarvinCollectionExpanded = components['schemas']['PublishedCollectionExpandedRead'];
 export type PublishedCollectionSummary = components['schemas']['PublishedCollectionSummary'];
 export type PublishedEntryCollection = components['schemas']['PublishedEntryCollection'];
 
@@ -109,6 +111,16 @@ export interface EntryResource extends PublishedResourceSummary {
 }
 
 // SDK-only types (not in generated schema)
+
+/**
+ * `expand: 'full'` asks a publishing list endpoint for full entries (the single-entry read:
+ * `assets[]`, `resources[]`, every collection membership) instead of list items, so a site needs
+ * no per-entry reads. Needs a Marvin server with `expand` support; an older one ignores it and
+ * returns list items, which the SDK passes through in their usual shape.
+ */
+export interface ExpandOptions {
+  expand?: 'full';
+}
 
 export interface AssetUploadRequest {
   slug: string;

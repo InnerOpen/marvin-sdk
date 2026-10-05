@@ -54,7 +54,7 @@ export function createMarvinClient(config?: Partial<_MarvinConfig>): _MarvinClie
 
 // Workspace & Modules (read-only)
 export { Workspace } from './workspaces/workspace';
-export { Entry } from './entries/entry';
+export { Entry, isFullEntryData } from './entries/entry';
 export { Collection } from './collections/collection';
 export { Resource } from './resources/resource';
 
@@ -67,6 +67,8 @@ export type {
   MarvinEntryListItem,
   MarvinEntryType,
   MarvinCollection,
+  MarvinCollectionExpanded,
+  ExpandOptions,
   MarvinAsset,
   MarvinResource,
   MarvinPublishResponse,
