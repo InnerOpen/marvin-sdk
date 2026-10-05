@@ -58,12 +58,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/inneropen/marvin-sdk.git"
+    "url": "https://github.com/InnerOpen/marvin-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/inneropen/marvin-sdk/issues"
+    "url": "https://github.com/InnerOpen/marvin-sdk/issues"
   },
-  "homepage": "https://github.com/inneropen/marvin-sdk#readme",
+  "homepage": "https://github.com/InnerOpen/marvin-sdk#readme",
   "scripts": {
     "build": "tsup src/index.ts src/publish.ts src/platform.ts src/types/index.ts --format esm,cjs --dts --clean",
     "dev": "tsup src/index.ts src/publish.ts src/platform.ts src/types/index.ts --format esm,cjs --dts --watch",
