@@ -8872,10 +8872,7 @@ export interface components {
         };
         /** Body_import_workspace_api_platform_workspace_import_post */
         Body_import_workspace_api_platform_workspace_import_post: {
-            /**
-             * File
-             * Format: binary
-             */
+            /** File */
             file: string;
             /**
              * Backup Key
@@ -8885,10 +8882,7 @@ export interface components {
         };
         /** Body_import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post */
         Body_import_workspace_bundle_api_admin_backups_workspaces__workspace_id__import_post: {
-            /**
-             * File
-             * Format: binary
-             */
+            /** File */
             file: string;
             /**
              * Backup Key
@@ -8908,10 +8902,7 @@ export interface components {
         };
         /** Body_upload_asset_api_platform_assets_upload_post */
         Body_upload_asset_api_platform_assets_upload_post: {
-            /**
-             * File
-             * Format: binary
-             */
+            /** File */
             file: string;
             /** Slug */
             slug: string;
@@ -13444,6 +13435,10 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
         };
         /**
          * WebhookCreate
