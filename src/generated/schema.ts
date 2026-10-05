@@ -1043,6 +1043,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/integrations/alert-routing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Alert Routing
+         * @description Where integration alerts go besides the bell: admins by email, chat/notification connections.
+         */
+        get: operations["get_alert_routing_api_groups_integrations_alert_routing_get"];
+        /** Set Alert Routing */
+        put: operations["set_alert_routing_api_groups_integrations_alert_routing_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/integrations/subscriptions": {
         parameters: {
             query?: never;
@@ -1159,6 +1180,48 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/integrations/{integration_id}/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resolve Attention
+         * @description Mark the connection's open alerts (or one, by `alert_id`) resolved — "I fixed it". Announces
+         *     the resolution through the channels that delivered each alert and re-arms parked retries.
+         */
+        post: operations["resolve_attention_api_groups_integrations__integration_id__resolve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/{integration_id}/error-overrides": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set Error Overrides
+         * @description Adjust the provider's error policy for this connection: per declared code (or "*"), whether
+         *     a failure sends the entry to review and whether it alerts admins. Retries stay the provider's.
+         */
+        put: operations["set_error_overrides_api_groups_integrations__integration_id__error_overrides_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/integrations/{integration_id}/actions/{action_key}": {
         parameters: {
             query?: never;
@@ -1173,6 +1236,51 @@ export interface paths {
          * @description Manually fire a provider action (also how the automation engine will call it).
          */
         post: operations["run_action_api_groups_integrations__integration_id__actions__action_key__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/{integration_id}/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Action Input Options
+         * @description The choices for one action input, from the read action its `x-marvin-options` hint names.
+         *
+         *     Only that hinted action runs, with the hint's static args — the caller names an input, never an
+         *     action — so this can't be used to fire arbitrary actions. Same access as Run action. Errors come
+         *     back as a 4xx with a plain message; the picker shows it and keeps free text.
+         */
+        post: operations["action_input_options_api_groups_integrations__integration_id__options_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/integrations/providers/{slug}/logo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Provider Logo
+         * @description A provider's validated logo. Public: logos aren't secret, they're platform-wide rather than
+         *     per-workspace, and an <img> can't send a Bearer header. 404 → the UI shows the provider's emoji.
+         */
+        get: operations["provider_logo_api_groups_integrations_providers__slug__logo_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1538,8 +1646,10 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Preview a tone's prompt clause
-         * @description The clause a tone adds to every agent step (with this workspace's persona), and its rough token cost.
+         * Preview a tone's prompt section
+         * @description The section a tone adds to every agent step, with this workspace's character, in its parts, and its
+         *     rough token cost: a saved tone (`slug`), a draft one (the editor's fields) or, with neither, the
+         *     workspace default. `personaPrompt` / `assistantName` preview unsaved Character fields.
          */
         post: operations["preview_tone_api_groups_ai_settings_tones_preview_post"];
         delete?: never;
@@ -3674,6 +3784,10 @@ export interface paths {
          *     we surface `source` and the originating server so the UI can group them. No tool is called —
          *     this only reads names/descriptions off the bound tools (external servers are queried live for
          *     their tool list, so an unreachable server is simply omitted).
+         *
+         *     Bound exactly as the bubble's Marvin binds them — through Marvin's permission matrix at the
+         *     caller's role, on a run that can park — so blocked tools are absent and `asksFirst` marks the
+         *     ones that pause for the user's approval.
          */
         get: operations["list_agent_tools_api_ai_agent_tools_get"];
         put?: never;
@@ -4029,6 +4143,51 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ai/agents/preview-prompt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview the system prompt of an agent not saved yet
+         * @description As `/agents/{slug}/preview-prompt`, for the New form: `data` is the whole create payload, read as the
+         *     saved agent would be. Nothing is stored; never calls a model.
+         */
+        post: operations["preview_new_agent_prompt_api_ai_agents_preview_prompt_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/agents/{slug}/preview-prompt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview the system prompt an agent runs with
+         * @description What a run of this agent sends the model as its system prompt, assembled by the run's own code, in
+         *     labelled parts: the workspace preamble, the agent's instructions, the character and tone (with the rule
+         *     for which wins), and who it may hand off to. `data` is the Edit form's unsaved values; anything left
+         *     out is the stored agent's. Tools are bound as you would run it from the Ask page and only counted per
+         *     category. Never calls a model.
+         */
+        post: operations["preview_agent_prompt_api_ai_agents__slug__preview_prompt_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ai/agents/{slug}/run": {
         parameters: {
             query?: never;
@@ -4111,6 +4270,13 @@ export interface paths {
          *     the user declined, and the loop goes on — on the same execution row, in the same thread. Only
          *     the thread's owner may decide (admins see the thread but cannot approve on its behalf). A
          *     missing decision is a deny. The run may park again; the response has the same shape as a run.
+         *
+         *     A specialist's ask carried up through a hand-off (slice C2) is decided here too: its id is a path
+         *     (`c1/c7`). The specialist resumes first on its own thread and execution; its answer becomes the
+         *     hand-off's result and the router finishes once. Resuming on the specialist's own thread forwards
+         *     to the root conversation (ids translated), so one place decides; the answer is the root's.
+         *     Permissions are taken at decision time, never widened: the owner of every thread involved, the
+         *     caller may still talk to each agent, and each run's tools rebound at the caller's current role.
          */
         post: operations["resume_thread_api_ai_threads__thread_id__resume_post"];
         delete?: never;
@@ -4704,7 +4870,8 @@ export interface paths {
         put?: never;
         /**
          * Add Entry to Collection
-         * @description Add an entry to a collection (via EntryService — emits `entry_added_to_collection`).
+         * @description Add an entry to a collection (via EntryService — emits `entry_added_to_collection`). Gated as
+         *     an edit of the entry: an entry PATCH can set its collections too.
          */
         post: operations["add_entry_to_collection_api_platform_entries__entry_id__collections__collection_id__post"];
         /**
@@ -7057,6 +7224,8 @@ export interface components {
             pending: {
                 [key: string]: unknown;
             }[];
+            /** Rootthreadid */
+            rootThreadId?: string | null;
         };
         /** AIThreadMessageRead */
         AIThreadMessageRead: {
@@ -7379,6 +7548,148 @@ export interface components {
             /** Slug */
             slug: string;
         };
+        /**
+         * AgentDefinitionPreviewRequest
+         * @description A whole agent not saved yet (the New form's create payload) for a prompt preview. The slug is
+         *     optional and unchecked: nothing is stored, and it only keeps the agent off its own roster.
+         */
+        AgentDefinitionPreviewRequest: {
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            /**
+             * Kind
+             * @default persona
+             * @enum {string}
+             */
+            kind: "persona" | "model";
+            /** Systemprompt */
+            systemPrompt?: string | null;
+            /** Modeloverride */
+            modelOverride?: string | null;
+            /** Toolallowlist */
+            toolAllowlist?: string[] | null;
+            /** Defaultregister */
+            defaultRegister?: string | null;
+            /**
+             * Minrole
+             * @default 1
+             */
+            minRole: number;
+            /** Sources */
+            sources?: string[] | null;
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /**
+             * Allowwrites
+             * @default false
+             */
+            allowWrites: boolean;
+            /** Toolpolicy */
+            toolPolicy?: {
+                [key: string]: "allow" | "block" | "ask";
+            } | null;
+            /** Icon */
+            icon?: string | null;
+            /** Suggestions */
+            suggestions?: string[] | null;
+            /** Handoffhint */
+            handoffHint?: string | null;
+            /** Slug */
+            slug?: string | null;
+        };
+        /**
+         * AgentPromptPreview
+         * @description The system prompt a run of this agent sends, in labelled parts, assembled by the run's own code.
+         *
+         *     Leaves out what only a run knows: the "what the user is looking at" block, the conversation, and the
+         *     tool definitions themselves (summarised as counts per permission-matrix category).
+         */
+        AgentPromptPreview: {
+            /** System */
+            system: string;
+            /** Tokens */
+            tokens: number;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "persona" | "model";
+            /**
+             * Workspace
+             * @default
+             */
+            workspace: string;
+            /** Instructions */
+            instructions: string;
+            /** Defaultinstructions */
+            defaultInstructions: boolean;
+            tone: components["schemas"]["TonePreview"];
+            /**
+             * Tonesource
+             * @enum {string}
+             */
+            toneSource: "agent" | "workspace";
+            /**
+             * Roster
+             * @default
+             */
+            roster: string;
+            /**
+             * Toolcount
+             * @default 0
+             */
+            toolCount: number;
+            /**
+             * Askfirstcount
+             * @default 0
+             */
+            askFirstCount: number;
+            /** Toolcategories */
+            toolCategories?: components["schemas"]["AgentToolCategory"][];
+        };
+        /**
+         * AgentPromptPreviewRequest
+         * @description The Edit form's unsaved values for a prompt preview; anything left out is the stored agent's.
+         */
+        AgentPromptPreviewRequest: {
+            /** Name */
+            name?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Kind */
+            kind?: ("persona" | "model") | null;
+            /** Systemprompt */
+            systemPrompt?: string | null;
+            /** Modeloverride */
+            modelOverride?: string | null;
+            /** Toolallowlist */
+            toolAllowlist?: string[] | null;
+            /** Defaultregister */
+            defaultRegister?: string | null;
+            /** Minrole */
+            minRole?: number | null;
+            /** Sources */
+            sources?: string[] | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Allowwrites */
+            allowWrites?: boolean | null;
+            /** Toolpolicy */
+            toolPolicy?: {
+                [key: string]: "allow" | "block" | "ask";
+            } | null;
+            /** Icon */
+            icon?: string | null;
+            /** Suggestions */
+            suggestions?: string[] | null;
+            /** Handoffhint */
+            handoffHint?: string | null;
+        };
         /** AgentRead */
         AgentRead: {
             /** Name */
@@ -7437,6 +7748,15 @@ export interface components {
             isSystem: boolean;
             character?: components["schemas"]["AssistantCharacter"] | null;
         };
+        /** AgentToolCategory */
+        AgentToolCategory: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** Count */
+            count: number;
+        };
         /** AgentUpdate */
         AgentUpdate: {
             /** Name */
@@ -7471,6 +7791,61 @@ export interface components {
             suggestions?: string[] | null;
             /** Handoffhint */
             handoffHint?: string | null;
+        };
+        /**
+         * AlertRouting
+         * @description Where integration alerts go besides the bell (which always gets them).
+         */
+        AlertRouting: {
+            /**
+             * Emailadmins
+             * @default false
+             */
+            emailAdmins: boolean;
+            /** Targets */
+            targets?: components["schemas"]["AlertRoutingTarget"][];
+            /**
+             * Reminderhours
+             * @default 24
+             */
+            reminderHours: number;
+        };
+        /**
+         * AlertRoutingTarget
+         * @description A connection that can carry integration alerts (a chat or notification provider).
+         */
+        AlertRoutingTarget: {
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Name */
+            name: string;
+            /** Provider */
+            provider: string;
+            /** Action */
+            action: string;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+        };
+        /** AlertRoutingUpdate */
+        AlertRoutingUpdate: {
+            /**
+             * Emailadmins
+             * @default false
+             */
+            emailAdmins: boolean;
+            /** Integrationids */
+            integrationIds?: string[];
+            /**
+             * Reminderhours
+             * @default 24
+             */
+            reminderHours: number;
         };
         /**
          * AppInfo
@@ -7797,6 +8172,11 @@ export interface components {
              */
             drafts: number;
             /**
+             * Needsreview
+             * @default 0
+             */
+            needsReview: number;
+            /**
              * Aisuggestions
              * @default 0
              */
@@ -7849,6 +8229,10 @@ export interface components {
             durationMs?: number | null;
             /** Outputsnapshot */
             outputSnapshot?: {
+                [key: string]: unknown;
+            } | null;
+            /** Handling */
+            handling?: {
                 [key: string]: unknown;
             } | null;
         };
@@ -7968,6 +8352,13 @@ export interface components {
             correlationId?: string | null;
             /** Triggeredby */
             triggeredBy?: string | null;
+            /**
+             * Handled
+             * @default false
+             */
+            handled: boolean;
+            /** Retryofid */
+            retryOfId?: string | null;
             /** Definitionsnapshot */
             definitionSnapshot?: {
                 [key: string]: unknown;
@@ -7977,6 +8368,16 @@ export interface components {
              * @default []
              */
             actions: components["schemas"]["AutomationActionExecutionRead"][];
+            /**
+             * Retrychain
+             * @default []
+             */
+            retryChain: components["schemas"]["AutomationExecutionRead"][];
+            /**
+             * Retries
+             * @default []
+             */
+            retries: components["schemas"]["IntegrationRetryRead"][];
         };
         /**
          * AutomationExecutionRead
@@ -8038,6 +8439,13 @@ export interface components {
             correlationId?: string | null;
             /** Triggeredby */
             triggeredBy?: string | null;
+            /**
+             * Handled
+             * @default false
+             */
+            handled: boolean;
+            /** Retryofid */
+            retryOfId?: string | null;
         };
         /**
          * AutomationIncomingWebhookOption
@@ -8943,6 +9351,7 @@ export interface components {
              * @default {
              *       "inbox": 0,
              *       "drafts": 0,
+             *       "needsReview": 0,
              *       "aiSuggestions": 0,
              *       "failures": 0
              *     }
@@ -9860,6 +10269,11 @@ export interface components {
             runId?: string | null;
             /** Workflowname */
             workflowName?: string | null;
+            /**
+             * Handled
+             * @default false
+             */
+            handled: boolean;
             /** Targetcount */
             targetCount?: number | null;
             /** Quietseconds */
@@ -10477,6 +10891,34 @@ export interface components {
             };
         };
         /**
+         * IntegrationAttention
+         * @description An open alert on a connection — "Needs attention" on its card. One per error code, counted.
+         */
+        IntegrationAttention: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Code */
+            code: string;
+            /** Message */
+            message?: string | null;
+            /**
+             * Count
+             * @default 1
+             */
+            count: number;
+            /** Firstat */
+            firstAt?: string | null;
+            /** Lastat */
+            lastAt?: string | null;
+            /** Samples */
+            samples?: {
+                [key: string]: unknown;
+            }[];
+        };
+        /**
          * IntegrationCheckResult
          * @description Result of a health check.
          */
@@ -10505,6 +10947,19 @@ export interface components {
             };
             /** Credential */
             credential?: string | null;
+        };
+        /**
+         * IntegrationErrorOverrides
+         * @description Per-connection adjustments to the provider's error policy. Only `review` and `notify` per code
+         *     (or "*"); a code left out uses the provider's default.
+         */
+        IntegrationErrorOverrides: {
+            /** Overrides */
+            overrides?: {
+                [key: string]: {
+                    [key: string]: boolean;
+                };
+            };
         };
         /**
          * IntegrationEventSubscriptionCreate
@@ -10562,6 +11017,27 @@ export interface components {
             } | null;
         };
         /**
+         * IntegrationOption
+         * @description One choice for an action input: the value stored, and what people see.
+         */
+        IntegrationOption: {
+            /** Value */
+            value: string | number | boolean;
+            /** Label */
+            label: string;
+        };
+        /**
+         * IntegrationOptionsRequest
+         * @description Which action input to load options for. The input's `x-marvin-options` hint names the read
+         *     action to run — the caller never picks the action or its args.
+         */
+        IntegrationOptionsRequest: {
+            /** Actionkey */
+            actionKey: string;
+            /** Input */
+            input: string;
+        };
+        /**
          * IntegrationPluginInfo
          * @description One provider source (built-ins, or an installed plugin distribution) and how it loaded.
          */
@@ -10602,6 +11078,11 @@ export interface components {
              * @default
              */
             icon: string;
+            /**
+             * Haslogo
+             * @default false
+             */
+            hasLogo: boolean;
             /** Configschema */
             configSchema?: {
                 [key: string]: unknown;
@@ -10612,6 +11093,10 @@ export interface components {
             emits?: components["schemas"]["ProviderEventInfo"][];
             /** Actions */
             actions?: components["schemas"]["ProviderActionInfo"][];
+            /** Errorpolicy */
+            errorPolicy?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * IntegrationRead
@@ -10648,6 +11133,58 @@ export interface components {
             lastCheckedAt?: string | null;
             /** Lasterror */
             lastError?: string | null;
+            /** Attention */
+            attention?: components["schemas"]["IntegrationAttention"][];
+            /** Erroroverrides */
+            errorOverrides?: {
+                [key: string]: unknown;
+            };
+        };
+        /** IntegrationResolveResult */
+        IntegrationResolveResult: {
+            /** Resolved */
+            resolved: number;
+        };
+        /**
+         * IntegrationRetryRead
+         * @description A failed integration step's retry chain — pending, parked (waiting for the connection), or done.
+         */
+        IntegrationRetryRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Status */
+            status: string;
+            /** Integrationslug */
+            integrationSlug: string;
+            /** Action */
+            action: string;
+            /** Code */
+            code: string;
+            /** Stepindex */
+            stepIndex: number;
+            /** Entryid */
+            entryId?: string | null;
+            /**
+             * Attempt
+             * @default 0
+             */
+            attempt: number;
+            /**
+             * Maxattempts
+             * @default 0
+             */
+            maxAttempts: number;
+            /** Nextattemptat */
+            nextAttemptAt?: string | null;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /** Lasterror */
+            lastError?: string | null;
+            /** Originexecutionid */
+            originExecutionId?: string | null;
         };
         /**
          * IntegrationUpdate
@@ -11089,6 +11626,16 @@ export interface components {
             /** Name */
             name: string;
             /**
+             * Icon
+             * @default
+             */
+            icon: string;
+            /**
+             * Haslogo
+             * @default false
+             */
+            hasLogo: boolean;
+            /**
              * Actions
              * @default 0
              */
@@ -11163,6 +11710,10 @@ export interface components {
              * @default false
              */
             requiresApproval: boolean;
+            /** Errorpolicy */
+            errorPolicy?: {
+                [key: string]: unknown;
+            };
         };
         /**
          * ProviderCredentialInfo
@@ -12461,16 +13012,54 @@ export interface components {
             /** Description */
             description?: string | null;
         };
-        /** TonePreview */
+        /**
+         * TonePreview
+         * @description A tone's prompt section, whole and in labelled parts, so the editor never parses the text.
+         */
         TonePreview: {
             /** Clause */
             clause: string;
             /** Tokens */
             tokens: number;
+            /** Persona */
+            persona: string;
+            /** Personasummary */
+            personaSummary: string;
+            /** Haspersona */
+            hasPersona: boolean;
+            /**
+             * Character
+             * @default
+             */
+            character: string;
+            /**
+             * Fromtone
+             * @default
+             */
+            fromTone: string;
+            /**
+             * Rule
+             * @default
+             */
+            rule: string;
+            /**
+             * Toneslug
+             * @default
+             */
+            toneSlug: string;
+            /**
+             * Tonename
+             * @default
+             */
+            toneName: string;
         };
         /**
          * TonePreviewRequest
-         * @description A saved tone by slug, or a draft one (name + instructions + persona) as the editor has it.
+         * @description A saved tone by slug, or a draft one (name + instructions + persona) as the editor has it; neither →
+         *     the workspace default tone (the Character box's preview).
+         *
+         *     ``persona_prompt`` / ``assistant_name``, when sent, stand in for the stored ones (the AI settings form's
+         *     unsaved values; blank means blank, so a cleared Character previews Marvin's default one).
          */
         TonePreviewRequest: {
             /** Slug */
@@ -12481,6 +13070,10 @@ export interface components {
             instructions?: string | null;
             /** Persona */
             persona?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            /** Assistantname */
+            assistantName?: string | null;
         };
         /** ToneRead */
         ToneRead: {
@@ -14958,6 +15551,59 @@ export interface operations {
             };
         };
     };
+    get_alert_routing_api_groups_integrations_alert_routing_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertRouting"];
+                };
+            };
+        };
+    };
+    set_alert_routing_api_groups_integrations_alert_routing_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertRoutingUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlertRouting"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_subscriptions_api_groups_integrations_subscriptions_get: {
         parameters: {
             query?: {
@@ -15234,6 +15880,74 @@ export interface operations {
             };
         };
     };
+    resolve_attention_api_groups_integrations__integration_id__resolve_post: {
+        parameters: {
+            query?: {
+                alert_id?: string | null;
+            };
+            header?: never;
+            path: {
+                integration_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationResolveResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_error_overrides_api_groups_integrations__integration_id__error_overrides_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                integration_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IntegrationErrorOverrides"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     run_action_api_groups_integrations__integration_id__actions__action_key__post: {
         parameters: {
             query?: never;
@@ -15260,6 +15974,87 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["IntegrationActionResult"];
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    action_input_options_api_groups_integrations__integration_id__options_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                integration_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IntegrationOptionsRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationOption"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    provider_logo_api_groups_integrations_providers__slug__logo_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/svg+xml": unknown;
+                    "image/png": unknown;
+                };
+            };
+            /** @description Not Modified */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
@@ -19627,6 +20422,74 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AssistantCharacter"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_new_agent_prompt_api_ai_agents_preview_prompt_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgentDefinitionPreviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentPromptPreview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_agent_prompt_api_ai_agents__slug__preview_prompt_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgentPromptPreviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentPromptPreview"];
                 };
             };
             /** @description Validation Error */
