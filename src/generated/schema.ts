@@ -8981,6 +8981,11 @@ export interface components {
                 [key: string]: string[];
             };
             /**
+             * Emittable
+             * @default []
+             */
+            emittable: string[];
+            /**
              * Conditionops
              * @default []
              */
