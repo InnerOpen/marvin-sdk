@@ -1,3 +1,16 @@
+# [4.3.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.2.0...v4.3.0) (2026-10-06)
+
+
+### Bug Fixes
+
+* **platform:** assets.getFile returned undefined for every file; add assets.download ([2e115d0](https://github.com/InnerOpen/marvin-sdk/commit/2e115d0cdfe3611d20c6d252d573260065710b24))
+
+
+### Features
+
+* **platform:** review queue, dashboard, blueprints, signature schemes, collection preview/members ([5244b48](https://github.com/InnerOpen/marvin-sdk/commit/5244b481d9fc223f937eedb97a31e7047f4d21cb))
+* **publish:** tag, slug and updatedSince entry filters, and assets.download ([3b5afaf](https://github.com/InnerOpen/marvin-sdk/commit/3b5afaf54f564fdd1e570f28a7f4d4c88c875721))
+
 # [4.2.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.1.0...v4.2.0) (2026-10-05)
 
 
