@@ -9118,6 +9118,10 @@ export interface components {
             };
             /** Createdby */
             createdBy?: string | null;
+            /** Sourceintegrationid */
+            sourceIntegrationId?: string | null;
+            /** Sourceblueprint */
+            sourceBlueprint?: string | null;
         };
         /**
          * AutomationTargetOption
@@ -9782,6 +9786,10 @@ export interface components {
             metadataJson?: {
                 [key: string]: unknown;
             } | null;
+            /** Sourceintegrationid */
+            sourceIntegrationId?: string | null;
+            /** Sourceblueprint */
+            sourceBlueprint?: string | null;
         };
         /**
          * CollectionUpdate
@@ -11411,6 +11419,10 @@ export interface components {
             receivedCount: number;
             /** Lastreceivedat */
             lastReceivedAt?: string | null;
+            /** Sourceintegrationid */
+            sourceIntegrationId?: string | null;
+            /** Sourceblueprint */
+            sourceBlueprint?: string | null;
         };
         /** IncomingWebhookUpdate */
         IncomingWebhookUpdate: {
@@ -11643,6 +11655,10 @@ export interface components {
             } | null;
             /** Enabled */
             enabled: boolean;
+            /** Sourceintegrationid */
+            sourceIntegrationId?: string | null;
+            /** Sourceblueprint */
+            sourceBlueprint?: string | null;
         };
         /** IntegrationEventSubscriptionUpdate */
         IntegrationEventSubscriptionUpdate: {
@@ -13354,6 +13370,10 @@ export interface components {
             } | null;
             /** Lastdurationms */
             lastDurationMs?: number | null;
+            /** Sourceintegrationid */
+            sourceIntegrationId?: string | null;
+            /** Sourceblueprint */
+            sourceBlueprint?: string | null;
         };
         /**
          * ScheduledTaskUpdate
