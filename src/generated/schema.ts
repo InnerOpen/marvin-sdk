@@ -1940,7 +1940,8 @@ export interface paths {
         /**
          * Change event types' audit settings
          * @description Record (`true`) or skip (`false`) event types, or put them back to the default (`null`). Types left
-         *     out keep their setting. An unknown type is a 422; a locked (security) type a 409; nothing is saved then.
+         *     out keep their setting. An unknown or platform type is a 422; a locked (security) type a 409; nothing is saved
+         *     then.
          */
         patch: operations["update_audit_settings_api_groups_audit_settings_patch"];
         trace?: never;
@@ -2908,6 +2909,67 @@ export interface paths {
          *         Success message
          */
         post: operations["send_template_test_email_api_admin_email_templates__template_id__test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List platform events
+         * @description Platform events across every workspace, newest first. Filter by type, workspace and date range (UTC).
+         *     A type that isn't a platform event matches nothing.
+         */
+        get: operations["list_events_api_admin_events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/events/catalog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List platform event types
+         * @description Every platform-scope event type, in category display order, for the Events page's filter.
+         */
+        get: operations["list_event_types_api_admin_events_catalog_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/events/{event_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get a platform event
+         * @description One platform event with its full payload. A workspace event is a 404 here: it's in its workspace's log.
+         */
+        get: operations["get_event_api_admin_events__event_id__get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -7746,6 +7808,140 @@ export interface components {
             defaultGroup: string;
             /** Buildid */
             buildId: string;
+        };
+        /**
+         * AdminEventPagination
+         * @description One page of platform events, newest first.
+         */
+        AdminEventPagination: {
+            /**
+             * Page
+             * @default 1
+             */
+            page: number;
+            /**
+             * Per Page
+             * @default 10
+             */
+            per_page: number;
+            /**
+             * Total
+             * @default 0
+             */
+            total: number;
+            /**
+             * Total Pages
+             * @default 0
+             */
+            total_pages: number;
+            /** Items */
+            items: components["schemas"]["AdminEventSummary"][];
+            /** Next */
+            next?: string | null;
+            /** Previous */
+            previous?: string | null;
+        };
+        /**
+         * AdminEventRead
+         * @description A platform event with its full payload.
+         */
+        AdminEventRead: {
+            /**
+             * Eventid
+             * Format: uuid4
+             */
+            eventId: string;
+            /** Eventtype */
+            eventType: string;
+            /** Eventname */
+            eventName: string;
+            /**
+             * Occurredat
+             * Format: date-time
+             */
+            occurredAt: string;
+            /** Messagetitle */
+            messageTitle: string;
+            /** Messagebody */
+            messageBody?: string | null;
+            /** Workspaceid */
+            workspaceId?: string | null;
+            /** Workspacename */
+            workspaceName?: string | null;
+            /** Workspaceslug */
+            workspaceSlug?: string | null;
+            /** Userid */
+            userId?: string | null;
+            /** Username */
+            userName?: string | null;
+            /** Useremail */
+            userEmail?: string | null;
+            /** Entityid */
+            entityId?: string | null;
+            /** Entitytype */
+            entityType?: string | null;
+            /** Integrationid */
+            integrationId: string;
+            /** Correlationid */
+            correlationId?: string | null;
+            /** Eventdata */
+            eventData: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * AdminEventSummary
+         * @description A platform event as the admin Events page lists it, with the names a super admin needs to read it.
+         */
+        AdminEventSummary: {
+            /**
+             * Eventid
+             * Format: uuid4
+             */
+            eventId: string;
+            /** Eventtype */
+            eventType: string;
+            /** Eventname */
+            eventName: string;
+            /**
+             * Occurredat
+             * Format: date-time
+             */
+            occurredAt: string;
+            /** Messagetitle */
+            messageTitle: string;
+            /** Messagebody */
+            messageBody?: string | null;
+            /** Workspaceid */
+            workspaceId?: string | null;
+            /** Workspacename */
+            workspaceName?: string | null;
+            /** Workspaceslug */
+            workspaceSlug?: string | null;
+            /** Userid */
+            userId?: string | null;
+            /** Username */
+            userName?: string | null;
+            /** Useremail */
+            userEmail?: string | null;
+            /** Entityid */
+            entityId?: string | null;
+            /** Entitytype */
+            entityType?: string | null;
+        };
+        /**
+         * AdminEventType
+         * @description A platform-scope event type, for the Events page's filter.
+         */
+        AdminEventType: {
+            /** Eventtype */
+            eventType: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string;
+            /** Category */
+            category: string;
         };
         /** AgentCreate */
         AgentCreate: {
@@ -19246,6 +19442,93 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_events_api_admin_events_get: {
+        parameters: {
+            query?: {
+                event_type?: string | null;
+                workspace_id?: string | null;
+                start_date?: string | null;
+                end_date?: string | null;
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminEventPagination"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_event_types_api_admin_events_catalog_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminEventType"][];
+                };
+            };
+        };
+    };
+    get_event_api_admin_events__event_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminEventRead"];
                 };
             };
             /** @description Validation Error */
