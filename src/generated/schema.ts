@@ -2976,6 +2976,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/event-types/{event_type}/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What sends a platform event type and what reacts to it
+         * @description A platform event type's senders, reactions (platform-wide, then by workspace) and newest `limit` events in
+         *     any workspace. 404 for an unknown type or a workspace one (the workspace API has those).
+         */
+        get: operations["detail_api_admin_event_types__event_type__connections_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/users": {
         parameters: {
             query?: never;
@@ -6229,6 +6250,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/event-types/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * How connected each event type is
+         * @description Every workspace event type, in catalog order: how many things send it and react to it, and when the
+         *     Event Log last recorded one.
+         */
+        get: operations["summary_api_platform_event_types_connections_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/event-types/{event_type}/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What sends an event type and what reacts to it
+         * @description One event type: what sends it (Marvin itself, workflows, incoming webhooks, scheduled tasks), what
+         *     happens (workflows, integration actions, emails, webhooks — switched-off ones too — and the built-in
+         *     reactions), its newest `limit` events and the chain it's part of. 404 for an unknown or platform type.
+         */
+        get: operations["detail_api_platform_event_types__event_type__connections_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/scheduled-tasks/task-types": {
         parameters: {
             query?: never;
@@ -7808,6 +7872,33 @@ export interface components {
             defaultGroup: string;
             /** Buildid */
             buildId: string;
+        };
+        /**
+         * AdminEventConnections
+         * @description A platform event type's story across the platform: what sends it, what happens (built in, plus each
+         *     workspace's own subscriptions, grouped by workspace), and its newest events in any workspace.
+         */
+        AdminEventConnections: {
+            /** Eventtype */
+            eventType: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string;
+            /** Category */
+            category: string;
+            /** Senders */
+            senders: components["schemas"]["EventSender"][];
+            /** Reactions */
+            reactions: components["schemas"]["EventReaction"][];
+            /** Workspaces */
+            workspaces: components["schemas"]["WorkspaceEventReactions"][];
+            /** Recent */
+            recent: components["schemas"]["AdminEventSummary"][];
+            /** Leadsto */
+            leadsTo: components["schemas"]["EventTypeRef"][];
+            /** Causedby */
+            causedBy: components["schemas"]["EventTypeRef"][];
         };
         /**
          * AdminEventPagination
@@ -10716,6 +10807,50 @@ export interface components {
             tag_ids?: string[] | null;
         };
         /**
+         * EventConnectionCounts
+         * @description One row of the Events catalog: how connected an event type is, in both directions.
+         */
+        EventConnectionCounts: {
+            /** Eventtype */
+            eventType: string;
+            /** Senders */
+            senders: number;
+            /** Reactions */
+            reactions: number;
+            /** Activereactions */
+            activeReactions: number;
+            /** Builtinreactions */
+            builtinReactions: number;
+            /** Lastoccurredat */
+            lastOccurredAt?: string | null;
+        };
+        /**
+         * EventConnections
+         * @description An event type's whole story in one workspace: what sends it, what happens, and when it last did.
+         */
+        EventConnections: {
+            /** Eventtype */
+            eventType: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description: string;
+            /** Category */
+            category: string;
+            /** Senders */
+            senders: components["schemas"]["EventSender"][];
+            /** Reactions */
+            reactions: components["schemas"]["EventReaction"][];
+            /** Audited */
+            audited: boolean;
+            /** Recent */
+            recent: components["schemas"]["EventLogSummary"][];
+            /** Leadsto */
+            leadsTo: components["schemas"]["EventTypeRef"][];
+            /** Causedby */
+            causedBy: components["schemas"]["EventTypeRef"][];
+        };
+        /**
          * EventFeed
          * @description Events since a cursor, oldest first, plus the server's clock to poll from next.
          */
@@ -10892,6 +11027,63 @@ export interface components {
             relatedEntityId?: string | null;
             /** Relatedentitylabel */
             relatedEntityLabel?: string | null;
+        };
+        /**
+         * EventReaction
+         * @description One thing that runs when the event happens.
+         */
+        EventReaction: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "workflow" | "integration_action" | "email" | "webhook" | "builtin";
+            /** Id */
+            id?: string | null;
+            /** Name */
+            name: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Detail */
+            detail?: string | null;
+            /** Triggertype */
+            triggerType?: string | null;
+            /** Managedat */
+            managedAt?: string | null;
+            installedBy?: components["schemas"]["InstalledBy"] | null;
+        };
+        /**
+         * EventSender
+         * @description One thing that sends the event: Marvin itself (a line from the catalog) or a row in this workspace.
+         */
+        EventSender: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "marvin" | "workflow" | "incoming_webhook" | "scheduled_task";
+            /** Id */
+            id?: string | null;
+            /** Name */
+            name: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Detail */
+            detail?: string | null;
+            /** Viaworkflowid */
+            viaWorkflowId?: string | null;
+            /** Viaworkflowname */
+            viaWorkflowName?: string | null;
+            /** Managedat */
+            managedAt?: string | null;
+            installedBy?: components["schemas"]["InstalledBy"] | null;
+        };
+        /** EventTypeRef */
+        EventTypeRef: {
+            /** Eventtype */
+            eventType: string;
+            /** Name */
+            name: string;
         };
         /**
          * ForgotPassword
@@ -11449,6 +11641,23 @@ export interface components {
             signatureConfig?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /**
+         * InstalledBy
+         * @description The integration whose blueprint created a workflow, task, incoming webhook or integration action.
+         */
+        InstalledBy: {
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Name */
+            name: string;
+            /** Provider */
+            provider: string;
+            /** Blueprint */
+            blueprint?: string | null;
         };
         /**
          * InstalledModels
@@ -14798,6 +15007,20 @@ export interface components {
         WorkspaceActivationRequest: {
             /** Workspace */
             workspace: string;
+        };
+        /** WorkspaceEventReactions */
+        WorkspaceEventReactions: {
+            /**
+             * Workspaceid
+             * Format: uuid4
+             */
+            workspaceId: string;
+            /** Workspacename */
+            workspaceName?: string | null;
+            /** Workspaceslug */
+            workspaceSlug?: string | null;
+            /** Reactions */
+            reactions: components["schemas"]["EventReaction"][];
         };
         /**
          * WorkspaceInfo
@@ -19554,6 +19777,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminEventRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    detail_api_admin_event_types__event_type__connections_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                event_type: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminEventConnections"];
                 };
             };
             /** @description Validation Error */
@@ -25659,6 +25915,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EventLogSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    summary_api_platform_event_types_connections_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventConnectionCounts"][];
+                };
+            };
+        };
+    };
+    detail_api_platform_event_types__event_type__connections_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                event_type: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventConnections"];
                 };
             };
             /** @description Validation Error */
