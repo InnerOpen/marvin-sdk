@@ -5,6 +5,7 @@
  */
 
 import { HttpClient, MarvinValidationError } from '../core';
+import type { BinaryResponse } from '../core';
 import type {
   PlatformAsset,
   PlatformAssetUpdate,
@@ -155,11 +156,20 @@ export class AssetsModule {
   }
 
   /**
-   * Fetch the raw file for an asset
+   * Download an asset's file: its bytes and content type. A redirect to storage is followed.
+   */
+  async download(id: string): Promise<BinaryResponse> {
+    const validId = this.http.validatePathParam(id, 'asset ID');
+    return this.http.getBinary(`/api/platform/assets/${validId}/file`);
+  }
+
+  /**
+   * Fetch the raw file for an asset.
+   * @deprecated Use {@link download}, which is typed. (Before 4.3 this resolved to `undefined` for
+   * any file that wasn't JSON; it now returns the same `BinaryResponse` as `download`.)
    */
   async getFile(id: string): Promise<unknown> {
-    const validId = this.http.validatePathParam(id, 'asset ID');
-    return this.http.get<unknown>(`/api/platform/assets/${validId}/file`);
+    return this.download(id);
   }
 
   /**

@@ -20,6 +20,7 @@ function createMockHttp() {
     patch: vi.fn().mockResolvedValue({}),
     delete: vi.fn().mockResolvedValue(undefined),
     request: vi.fn().mockResolvedValue({}),
+    getBinary: vi.fn().mockResolvedValue({ data: new Uint8Array([1]), contentType: 'image/png' }),
     validatePathParam: vi.fn((v: string) => v),
   }
 }
@@ -153,10 +154,16 @@ describe('AssetsModule', () => {
     expect((result as any).id).toBe('asset-1')
   })
 
-  it('getFile calls GET /api/platform/assets/:id/file', async () => {
-    await module.getFile('asset-1')
+  it('download reads /api/platform/assets/:id/file as bytes', async () => {
+    const file = await module.download('asset-1')
     expect(http.validatePathParam).toHaveBeenCalledWith('asset-1', 'asset ID')
-    expect(http.get).toHaveBeenCalledWith('/api/platform/assets/asset-1/file')
+    expect(http.getBinary).toHaveBeenCalledWith('/api/platform/assets/asset-1/file')
+    expect(file).toEqual({ data: new Uint8Array([1]), contentType: 'image/png' })
+  })
+
+  it('getFile (deprecated) returns the same bytes as download', async () => {
+    expect(await module.getFile('asset-1')).toEqual({ data: new Uint8Array([1]), contentType: 'image/png' })
+    expect(http.getBinary).toHaveBeenCalledWith('/api/platform/assets/asset-1/file')
   })
 
   it('delete calls DELETE /api/platform/assets/:id', async () => {
