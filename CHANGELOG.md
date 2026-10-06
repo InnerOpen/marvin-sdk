@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.3.0...v4.4.0) (2026-10-06)
+
+
+### Features
+
+* **platform:** events.getConnectionsSummary and events.getConnections ([eadbaf7](https://github.com/InnerOpen/marvin-sdk/commit/eadbaf7dbb6fb3fe2fd2981755524dd0b6577b2e))
+
 # [4.3.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.2.0...v4.3.0) (2026-10-06)
 
 
