@@ -1545,6 +1545,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/workspaces/{group_id}/email-templates/system-emails": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Marvin's Replaceable System Emails
+         * @description Marvin's own emails a workspace template can replace (welcome, password reset, invitation): the event each
+         *     is sent on, its variables (from the event catalog), whether it sends now and which workspace templates replace
+         *     it. The email template page offers "Replaces Marvin's … email" from this, so it never has to list platform
+         *     events. Workspace OWNER/ADMIN.
+         */
+        get: operations["list_system_emails_api_platform_workspaces__group_id__email_templates_system_emails_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/workspaces/{group_id}/email-templates/{template_id}": {
         parameters: {
             query?: never;
@@ -2986,7 +3009,7 @@ export interface paths {
         /**
          * What sends a platform event type and what reacts to it
          * @description A platform event type's senders, reactions (platform-wide, then by workspace) and newest `limit` events in
-         *     any workspace. 404 for an unknown type or a workspace one (the workspace API has those).
+         *     any workspace. 404 for an unknown or hidden type or a workspace one (the workspace API has those).
          */
         get: operations["detail_api_admin_event_types__event_type__connections_get"];
         put?: never;
@@ -10813,6 +10836,10 @@ export interface components {
         EventConnectionCounts: {
             /** Eventtype */
             eventType: string;
+            /** Name */
+            name: string;
+            /** Category */
+            category: string;
             /** Senders */
             senders: number;
             /** Reactions */
@@ -14069,6 +14096,53 @@ export interface components {
              * @default false
              */
             error: boolean;
+        };
+        /**
+         * SystemEmailRead
+         * @description One of Marvin's own emails (welcome, password reset, invitation) that a workspace template of the same type
+         *     can replace: `GET /api/platform/workspaces/{group_id}/email-templates/system-emails`.
+         */
+        SystemEmailRead: {
+            /** Templatetype */
+            templateType: string;
+            /** Label */
+            label: string;
+            /** Eventtype */
+            eventType: string;
+            /** Eventname */
+            eventName: string;
+            /** Recipienttype */
+            recipientType: string;
+            /** Recipientfield */
+            recipientField?: string | null;
+            /** Systemtemplateid */
+            systemTemplateId?: string | null;
+            /** Systemsends */
+            systemSends: boolean;
+            /**
+             * Replacedby
+             * @default []
+             */
+            replacedBy: string[];
+            /**
+             * Variables
+             * @default []
+             */
+            variables: components["schemas"]["SystemEmailVariable"][];
+        };
+        /**
+         * SystemEmailVariable
+         * @description A {{ variable }} the replaced email's event provides (from the event catalog).
+         */
+        SystemEmailVariable: {
+            /** Slug */
+            slug: string;
+            /** Description */
+            description: string;
+            /** Example */
+            example: string;
+            /** Type */
+            type: string;
         };
         /**
          * SystemStats
@@ -17744,6 +17818,37 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     }[];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_system_emails_api_platform_workspaces__group_id__email_templates_system_emails_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SystemEmailRead"][];
                 };
             };
             /** @description Validation Error */
