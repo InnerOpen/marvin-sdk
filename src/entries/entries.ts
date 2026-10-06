@@ -10,9 +10,22 @@ import { MarvinNotFoundError } from '../core/errors';
 export interface GetEntriesOptions {
   entryType?: string;
   collection?: string;
+  /** Only entries carrying any of these tag slugs. */
+  tag?: string | string[];
+  /** Only entries with these slugs. */
+  slug?: string | string[];
+  /** Only entries updated at or after this time (ISO 8601, or a Date). */
+  updatedSince?: string | Date;
   limit?: number;
   offset?: number;
   status?: string;
+}
+
+/** A comma-separated query value from one value or several. */
+function csv(value: string | string[] | undefined): string | undefined {
+  if (value === undefined) return undefined;
+  const joined = (Array.isArray(value) ? value : [value]).map((v) => v.trim()).filter(Boolean).join(',');
+  return joined || undefined;
 }
 
 function toListEntry(raw: MarvinEntryListItem): ListEntry {
@@ -45,6 +58,9 @@ export class EntriesModule {
     const queryString = this.http.buildQueryString({
       entry_type: options.entryType,
       collection: options.collection,
+      tag: csv(options.tag),
+      slug: csv(options.slug),
+      updated_since: options.updatedSince instanceof Date ? options.updatedSince.toISOString() : options.updatedSince,
       limit: options.limit,
       offset: options.offset,
       expand: options.expand,

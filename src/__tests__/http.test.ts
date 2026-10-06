@@ -221,3 +221,36 @@ describe('HttpClient Retry-After', () => {
     expect(await retriedAfter('soon', 1000)).toEqual({ early: 1, total: 2 })
   })
 })
+
+describe('HttpClient binary reads', () => {
+  it('returns the bytes and content type, whatever the type', async () => {
+    fetchMock.mockResolvedValueOnce(new Response(new Uint8Array([1, 2, 3]), { status: 200, headers: { 'content-type': 'application/pdf' } }))
+    const file = await client().getBinary('/files/a.pdf')
+    expect(Array.from(file.data)).toEqual([1, 2, 3])
+    expect(file.contentType).toBe('application/pdf')
+  })
+
+  it('a JSON body is returned as bytes, not parsed', async () => {
+    fetchMock.mockResolvedValueOnce(ok())
+    const file = await client().getBinary('/x')
+    expect(new TextDecoder().decode(file.data)).toBe('{"ok":true}')
+  })
+
+  it('a 204 is an empty array', async () => {
+    fetchMock.mockResolvedValueOnce(new Response(null, { status: 204 }))
+    expect((await client().getBinary('/x')).data).toHaveLength(0)
+  })
+
+  it('is retried on 503 like any GET', async () => {
+    fetchMock
+      .mockResolvedValueOnce(new Response('busy', { status: 503 }))
+      .mockResolvedValueOnce(new Response(new Uint8Array([9]), { status: 200 }))
+    expect(Array.from((await client().getBinary('/x')).data)).toEqual([9])
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('a 404 is still a not-found error', async () => {
+    fetchMock.mockResolvedValueOnce(new Response('{"detail":"Asset not found"}', { status: 404, headers: JSON_TYPE }))
+    await expect(client().getBinary('/x')).rejects.toMatchObject({ name: 'MarvinNotFoundError' })
+  })
+})

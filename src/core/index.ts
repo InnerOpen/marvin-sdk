@@ -6,7 +6,7 @@
 
 // HTTP Client
 export { HttpClient } from './http';
-export type { HttpClientConfig } from './http';
+export type { HttpClientConfig, BinaryResponse } from './http';
 
 // Authentication
 export type { AuthStrategy } from './auth';

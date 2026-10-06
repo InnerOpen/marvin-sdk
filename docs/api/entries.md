@@ -31,6 +31,10 @@ async list(options?: ListEntriesOptions): Promise<Entry[]>
 interface ListEntriesOptions {
   entryType?: string;    // Filter by entry type slug
   collection?: string;   // Filter by collection slug
+  tag?: string | string[];      // Entries carrying ANY of these tag slugs
+  slug?: string | string[];     // Only these slugs
+  updatedSince?: string | Date; // Updated at or after this time (ISO 8601)
+  expand?: 'full';       // Return full entries (assets, resources, memberships)
   status?: string;       // Filter by status (default: 'published')
   limit?: number;        // Max results
   offset?: number;       // Pagination offset
@@ -54,6 +58,11 @@ const featured = await marvin.entries.list({ collection: 'featured' });
 
 // Filter by status
 const drafts = await marvin.entries.list({ status: 'draft' });
+
+// Filter by tag, slug, or last update (e.g. an incremental sync)
+const news = await marvin.entries.list({ tag: ['news', 'events'] });
+const two = await marvin.entries.list({ slug: ['about', 'contact'] });
+const changed = await marvin.entries.list({ updatedSince: '2026-10-01T00:00:00Z' });
 
 // Pagination
 const page1 = await marvin.entries.list({ limit: 10, offset: 0 });

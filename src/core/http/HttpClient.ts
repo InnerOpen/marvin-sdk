@@ -34,6 +34,12 @@ const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
 /** The longest a `Retry-After` header may make a retry wait (ms). */
 const MAX_RETRY_AFTER_MS = 60000;
 
+/** A successful binary read: the body's bytes and the server's content type. */
+export interface BinaryResponse {
+  data: Uint8Array;
+  contentType: string | null;
+}
+
 export interface HttpClientConfig {
   baseUrl: string;
   auth: AuthStrategy;
@@ -277,6 +283,11 @@ export class HttpClient {
        * Still clamped to MAX_TIMEOUT.
        */
       timeout?: number;
+      /**
+       * `'binary'` hands back a {@link BinaryResponse} (the raw bytes) instead of parsing JSON. Retries,
+       * redirects and errors behave exactly as for a JSON read.
+       */
+      responseType?: 'json' | 'binary';
     },
     retryAttempt = 0
   ): Promise<T> {
@@ -403,6 +414,10 @@ export class HttpClient {
       );
     }
 
+    if (options?.responseType === 'binary') {
+      return (await this.readBinary(response, method, endpoint)) as T;
+    }
+
     const data = await this.readBody<T>(response, method, endpoint);
 
     // Log response data in debug mode (sanitized)
@@ -455,11 +470,35 @@ export class HttpClient {
     }
   }
 
+  /** A successful response's bytes; a 204/205 is an empty array. A failed read is a network error. */
+  private async readBinary(response: Response, method: string, endpoint: string): Promise<BinaryResponse> {
+    const contentType = response.headers.get('content-type');
+    if (response.status === 204 || response.status === 205) {
+      return { data: new Uint8Array(0), contentType };
+    }
+    try {
+      return { data: new Uint8Array(await response.arrayBuffer()), contentType };
+    } catch (error) {
+      const cause = error instanceof Error ? error : undefined;
+      throw new MarvinNetworkError(
+        `Reading the ${response.status} response to ${method} ${endpoint} failed: ${cause?.message ?? String(error)}`,
+        cause
+      );
+    }
+  }
+
   /**
    * GET request
    */
   async get<T>(endpoint: string, params?: Record<string, string | number | boolean | undefined>): Promise<T> {
     return this.request<T>('GET', endpoint, { params });
+  }
+
+  /**
+   * GET a binary body (a file download). Follows redirects; retried like any GET.
+   */
+  async getBinary(endpoint: string, params?: Record<string, string | number | boolean | undefined>): Promise<BinaryResponse> {
+    return this.request<BinaryResponse>('GET', endpoint, { params, responseType: 'binary' });
   }
 
   /**

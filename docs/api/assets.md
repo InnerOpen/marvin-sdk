@@ -53,6 +53,18 @@ const page1 = await marvin.assets.list({ limit: 20, offset: 0 });
 const page2 = await marvin.assets.list({ limit: 20, offset: 20 });
 ```
 
+### `download(slug)`
+
+Download a published asset's file. Returns `{ data: Uint8Array, contentType: string | null }`; the
+file route's redirect to storage is followed. Needs the `read:assets` permission.
+
+```typescript
+import { writeFile } from 'node:fs/promises';
+
+const { data, contentType } = await marvin.assets.download('logo');
+await writeFile('logo.png', data);
+```
+
 ### `images(options?)`
 
 Get all images (shortcut for `list({ type: 'image/' })`).

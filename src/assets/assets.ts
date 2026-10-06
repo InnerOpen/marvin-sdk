@@ -3,6 +3,7 @@
  */
 
 import type { MarvinHttpClient } from '../client/http';
+import type { BinaryResponse } from '../core';
 import type { MarvinAsset } from '../types';
 
 export interface GetAssetsOptions {
@@ -40,6 +41,15 @@ export class AssetsModule {
   async get(slugOrId: string): Promise<MarvinAsset> {
     const endpoint = `/api/publish/${this.workspaceSlug}/assets/${slugOrId}`;
     return this.http.fetch<MarvinAsset>(endpoint);
+  }
+
+  /**
+   * Download a published asset's file by slug: its bytes and content type. The file route
+   * redirects to storage; the redirect is followed. Needs the `read:assets` permission.
+   */
+  async download(slug: string): Promise<BinaryResponse> {
+    const validSlug = this.http.validatePathParam(slug, 'asset slug');
+    return this.http.getBinary(`/api/publish/${this.workspaceSlug}/assets/${validSlug}/file`);
   }
 
   /**

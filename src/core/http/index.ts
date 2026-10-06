@@ -3,4 +3,4 @@
  */
 
 export { HttpClient } from './HttpClient';
-export type { HttpClientConfig } from './HttpClient';
+export type { HttpClientConfig, BinaryResponse } from './HttpClient';
