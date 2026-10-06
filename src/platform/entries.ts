@@ -10,6 +10,7 @@ import type {
   PlatformEntryCreate,
   PlatformEntryUpdate,
   PlatformCollection,
+  PlatformEntryCounts,
 } from './types';
 
 export class EntriesModule {
@@ -20,6 +21,13 @@ export class EntriesModule {
    */
   async list(): Promise<PlatformEntry[]> {
     return this.http.get<PlatformEntry[]>('/api/platform/entries');
+  }
+
+  /**
+   * Entry counts by status, zero-filled, plus `total` (what the sidebar's inbox badge reads).
+   */
+  async counts(): Promise<PlatformEntryCounts> {
+    return this.http.get<PlatformEntryCounts>('/api/platform/entries/counts');
   }
 
   /**
@@ -80,5 +88,41 @@ export class EntriesModule {
     const validEntryId = this.http.validatePathParam(entryId, 'entry ID');
     const validCollectionId = this.http.validatePathParam(collectionId, 'collection ID');
     return this.http.delete(`/api/platform/entries/${validEntryId}/collections/${validCollectionId}`);
+  }
+
+  /**
+   * Apply the entry's staged AI suggestion (`suggestionJson`) and clear it — the approval half of
+   * AI write-back. Returns the updated entry.
+   */
+  async applySuggestion(id: string): Promise<PlatformEntry> {
+    const validId = this.http.validatePathParam(id, 'entry ID');
+    return this.http.post<PlatformEntry>(`/api/platform/entries/${validId}/apply-suggestion`, {});
+  }
+
+  /**
+   * Discard the entry's staged AI suggestion without applying it.
+   */
+  async rejectSuggestion(id: string): Promise<PlatformEntry> {
+    const validId = this.http.validatePathParam(id, 'entry ID');
+    return this.http.post<PlatformEntry>(`/api/platform/entries/${validId}/reject-suggestion`, {});
+  }
+
+  /**
+   * Approve an AI-suggested asset on an entry: it becomes a normal attached asset (and reaches
+   * published output).
+   */
+  async approveSuggestedAsset(entryId: string, assetId: string): Promise<PlatformEntry> {
+    const e = this.http.validatePathParam(entryId, 'entry ID');
+    const a = this.http.validatePathParam(assetId, 'asset ID');
+    return this.http.post<PlatformEntry>(`/api/platform/entries/${e}/suggested-assets/${a}/approve`, {});
+  }
+
+  /**
+   * Reject an AI-suggested asset: unlink it, and delete the asset if nothing else uses it.
+   */
+  async rejectSuggestedAsset(entryId: string, assetId: string): Promise<PlatformEntry> {
+    const e = this.http.validatePathParam(entryId, 'entry ID');
+    const a = this.http.validatePathParam(assetId, 'asset ID');
+    return this.http.post<PlatformEntry>(`/api/platform/entries/${e}/suggested-assets/${a}/reject`, {});
   }
 }

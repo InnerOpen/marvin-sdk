@@ -171,4 +171,20 @@ export class AssetsModule {
     const base = baseUrl || (typeof window !== 'undefined' && window.location ? window.location.origin : '');
     return `${base}/api/platform/assets/${validId}/file`;
   }
+
+  /**
+   * Apply the asset's staged AI suggestion (`suggestionJson`) and clear it. Needs EDITOR.
+   */
+  async applySuggestion(id: string): Promise<PlatformAsset> {
+    const validId = this.http.validatePathParam(id, 'asset ID');
+    return this.http.post<PlatformAsset>(`/api/platform/assets/${validId}/apply-suggestion`, {});
+  }
+
+  /**
+   * Discard the asset's staged AI suggestion without applying it. Needs EDITOR.
+   */
+  async rejectSuggestion(id: string): Promise<PlatformAsset> {
+    const validId = this.http.validatePathParam(id, 'asset ID');
+    return this.http.post<PlatformAsset>(`/api/platform/assets/${validId}/reject-suggestion`, {});
+  }
 }

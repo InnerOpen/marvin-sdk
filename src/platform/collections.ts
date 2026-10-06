@@ -11,6 +11,9 @@ import type {
   PlatformCollectionUpdate,
   PlatformEntry,
   SmartCollectionRules,
+  SmartRulesPreview,
+  SmartRulesPreviewRequest,
+  CollectionMember,
 } from './types';
 
 export class CollectionsModule {
@@ -54,6 +57,24 @@ export class CollectionsModule {
       isSmart: true,
       smartRules: rules,
     } as PlatformCollectionCreate);
+  }
+
+  /**
+   * Preview unsaved smart-collection rules: how many items they match (`total`) and the first
+   * `limit` of them (default 10, at most 50), evaluated by the same code that materializes
+   * membership on save. Saves nothing. Needs EDITOR.
+   */
+  async preview(request: SmartRulesPreviewRequest): Promise<SmartRulesPreview> {
+    return this.http.post<SmartRulesPreview>('/api/platform/collections/preview', request);
+  }
+
+  /**
+   * A collection's members, whatever it groups — entries, assets or resources — as
+   * `{id, label, slug, type}`, ordered by label.
+   */
+  async members(id: string): Promise<CollectionMember[]> {
+    const validId = this.http.validatePathParam(id, 'collection ID');
+    return this.http.get<CollectionMember[]>(`/api/platform/collections/${validId}/members`);
   }
 
   /**

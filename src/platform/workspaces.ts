@@ -6,6 +6,7 @@
 
 import type { HttpClient } from '../core';
 import type { components } from '../generated/schema';
+import type { PlatformDashboard } from './types';
 
 export type Workspace = components['schemas']['GroupRead'];
 export type WorkspaceCreate = components['schemas']['GroupCreate'];
@@ -138,6 +139,14 @@ export class WorkspacesModule {
    */
   async getStats(): Promise<unknown> {
     return this.http.get<unknown>('/api/platform/stats');
+  }
+
+  /**
+   * The current workspace's dashboard: recent activity and the "needs attention" counts (inbox,
+   * drafts, entries needing review, pending AI suggestions, failures in the last 7 days).
+   */
+  async getDashboard(): Promise<PlatformDashboard> {
+    return this.http.get<PlatformDashboard>('/api/platform/stats/dashboard');
   }
 
   /**

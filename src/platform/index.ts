@@ -20,6 +20,17 @@ export type {
   PlatformCollectionUpdate,
   SmartCollectionRules,
 
+  // Entry review + dashboard
+  PlatformEntryCounts,
+  PlatformDashboard,
+  PlatformAttentionCounts,
+  PlatformRecentEvent,
+
+  // Smart collections
+  SmartRulesPreviewRequest,
+  SmartRulesPreview,
+  CollectionMember,
+
   // Tags
   PlatformTag,
   PlatformTagCreate,
@@ -94,7 +105,17 @@ export type {
   IncomingWebhook,
   IncomingWebhookCreate,
   IncomingWebhookUpdate,
+  IncomingWebhookSignature,
+  IncomingWebhookSignatureScheme,
 } from './incomingWebhooks';
+export { BlueprintsModule } from './blueprints';
+export type {
+  Blueprint,
+  BlueprintApplyResult,
+  BlueprintParameter,
+  BlueprintListOptions,
+  BlueprintApplyOptions,
+} from './blueprints';
 export { EntriesModule } from './entries';
 export { CollectionsModule } from './collections';
 export { TagsModule } from './tags';

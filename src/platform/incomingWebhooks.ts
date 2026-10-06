@@ -11,7 +11,34 @@
 
 import type { HttpClient } from '../core';
 
-export interface IncomingWebhook {
+/**
+ * How a webhook verifies its sender. Unset = no verification, or the default HMAC check
+ * (`sha256=<hex>` in `X-Signature-256`) once `signingSecretRef` names the workspace secret
+ * holding the sender's key. `signatureScheme` picks a preset (see
+ * {@link IncomingWebhooksModule.signatureSchemes}) or `custom`, described by `signatureConfig`.
+ */
+export interface IncomingWebhookSignature {
+  /** Slug of the workspace secret holding the sender's signing key. */
+  signingSecretRef?: string | null;
+  /** The header carrying the signature (defaults to X-Signature-256). */
+  signatureHeader?: string | null;
+  /** A core preset, an integration's preset, or `custom`. */
+  signatureScheme?: string | null;
+  /** The URL the sender signs, for schemes that sign the URL (when it differs from the receiver's). */
+  signatureUrl?: string | null;
+  /** The construction for `custom`. */
+  signatureConfig?: Record<string, unknown> | null;
+}
+
+/** A scheme a webhook can verify with: core presets, then integration presets, then `custom`. */
+export interface IncomingWebhookSignatureScheme {
+  name: string;
+  notes: string;
+  /** `core`, or the slug of the integration that contributes it. */
+  source: string;
+}
+
+export interface IncomingWebhook extends IncomingWebhookSignature {
   id: string;
   groupId: string;
   name: string;
@@ -24,14 +51,14 @@ export interface IncomingWebhook {
   lastReceivedAt: string | null;
 }
 
-export interface IncomingWebhookCreate {
+export interface IncomingWebhookCreate extends IncomingWebhookSignature {
   name: string;
   slug?: string;
   description?: string;
   enabled?: boolean;
 }
 
-export interface IncomingWebhookUpdate {
+export interface IncomingWebhookUpdate extends IncomingWebhookSignature {
   name?: string;
   description?: string;
   enabled?: boolean;
@@ -43,6 +70,11 @@ export class IncomingWebhooksModule {
   /** List the workspace's incoming webhooks. */
   async list(): Promise<IncomingWebhook[]> {
     return this.http.get<IncomingWebhook[]>('/api/incoming-webhooks');
+  }
+
+  /** The signature schemes a webhook can pick (`signatureScheme`). */
+  async signatureSchemes(): Promise<IncomingWebhookSignatureScheme[]> {
+    return this.http.get<IncomingWebhookSignatureScheme[]>('/api/incoming-webhooks/signature-schemes');
   }
 
   async get(id: string): Promise<IncomingWebhook> {

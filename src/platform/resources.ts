@@ -58,4 +58,20 @@ export class ResourcesModule {
   async getEntries(id: string): Promise<PlatformEntry[]> {
     return this.http.get<PlatformEntry[]>(`/api/platform/resources/${id}/entries`);
   }
+
+  /**
+   * Apply the resource's staged AI suggestion (`suggestionJson`) and clear it. Needs EDITOR.
+   */
+  async applySuggestion(id: string): Promise<PlatformResource> {
+    const validId = this.http.validatePathParam(id, 'resource ID');
+    return this.http.post<PlatformResource>(`/api/platform/resources/${validId}/apply-suggestion`, {});
+  }
+
+  /**
+   * Discard the resource's staged AI suggestion without applying it. Needs EDITOR.
+   */
+  async rejectSuggestion(id: string): Promise<PlatformResource> {
+    const validId = this.http.validatePathParam(id, 'resource ID');
+    return this.http.post<PlatformResource>(`/api/platform/resources/${validId}/reject-suggestion`, {});
+  }
 }
