@@ -100,6 +100,26 @@ describe('EventsModule', () => {
     expect(http.get).toHaveBeenCalledWith('/api/event/types')
     expect(result).toEqual([{ value: 'entry.created', label: 'Entry Created' }])
   })
+
+  it('getConnectionsSummary calls GET /api/platform/event-types/connections', async () => {
+    const rows = [{ eventType: 'entry_published', senders: 2, reactions: 1, activeReactions: 1, builtinReactions: 4 }]
+    http.get.mockResolvedValueOnce(rows)
+    const result = await module.getConnectionsSummary()
+    expect(http.get).toHaveBeenCalledWith('/api/platform/event-types/connections')
+    expect(result).toEqual(rows)
+  })
+
+  it('getConnections calls GET /api/platform/event-types/{type}/connections', async () => {
+    http.get.mockResolvedValueOnce({ eventType: 'entry_published', senders: [], reactions: [] })
+    await module.getConnections('entry_published')
+    expect(http.get).toHaveBeenCalledWith('/api/platform/event-types/entry_published/connections')
+  })
+
+  it('getConnections passes limit and encodes the type', async () => {
+    http.get.mockResolvedValueOnce({})
+    await module.getConnections('a/b', { limit: 3 })
+    expect(http.get).toHaveBeenCalledWith('/api/platform/event-types/a%2Fb/connections', { limit: 3 })
+  })
 })
 
 // ---------------------------------------------------------------------------
