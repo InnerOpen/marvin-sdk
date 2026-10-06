@@ -1920,6 +1920,51 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/audit-settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List every event type's audit setting
+         * @description Every catalog event type: its default, what this workspace records, and whether it's locked.
+         */
+        get: operations["get_audit_settings_api_groups_audit_settings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Change event types' audit settings
+         * @description Record (`true`) or skip (`false`) event types, or put them back to the default (`null`). Types left
+         *     out keep their setting. An unknown type is a 422; a locked (security) type a 409; nothing is saved then.
+         */
+        patch: operations["update_audit_settings_api_groups_audit_settings_patch"];
+        trace?: never;
+    };
+    "/api/groups/audit-settings/excluded": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the event types the Event Log leaves out
+         * @description The event types this workspace's Event Log does not record. Any member.
+         */
+        get: operations["get_excluded_event_types_api_groups_audit_settings_excluded_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/users/register": {
         parameters: {
             query?: never;
@@ -8390,6 +8435,47 @@ export interface components {
              * @default 0
              */
             failures: number;
+        };
+        /**
+         * AuditEventSetting
+         * @description One catalog event type and whether this workspace's Event Log records it.
+         */
+        AuditEventSetting: {
+            /** Eventtype */
+            eventType: string;
+            /** Name */
+            name: string;
+            /** Category */
+            category: string;
+            /** Defaultaudited */
+            defaultAudited: boolean;
+            /** Audited */
+            audited: boolean;
+            /** Locked */
+            locked: boolean;
+        };
+        /**
+         * AuditExcludedEvent
+         * @description An event type this workspace's Event Log does not record.
+         */
+        AuditExcludedEvent: {
+            /** Eventtype */
+            eventType: string;
+            /** Name */
+            name: string;
+            /** Category */
+            category: string;
+        };
+        /**
+         * AuditSettingsUpdate
+         * @description Overrides to merge: `{event_type: true | false}` to record or skip a type, `null` for its default.
+         *     Types left out keep their current setting.
+         */
+        AuditSettingsUpdate: {
+            /** Overrides */
+            overrides?: {
+                [key: string]: boolean | null;
+            };
         };
         /**
          * AuthMethod
@@ -17903,6 +17989,79 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BubbleLinesState"];
+                };
+            };
+        };
+    };
+    get_audit_settings_api_groups_audit_settings_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditEventSetting"][];
+                };
+            };
+        };
+    };
+    update_audit_settings_api_groups_audit_settings_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuditSettingsUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditEventSetting"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_excluded_event_types_api_groups_audit_settings_excluded_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditExcludedEvent"][];
                 };
             };
         };
