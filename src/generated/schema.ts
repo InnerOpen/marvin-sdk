@@ -12549,6 +12549,10 @@ export interface components {
              * @default 0
              */
             workspaces: number;
+            /** Provides */
+            provides?: string[];
+            /** Inuse */
+            inUse?: string[];
         };
         /**
          * PluginRead
@@ -12565,7 +12569,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "integration" | "ai_provider";
+            kind: "integration" | "storage" | "ai_provider";
             /** Ok */
             ok: boolean;
             /** Error */
