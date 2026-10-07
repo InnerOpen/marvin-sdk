@@ -1482,6 +1482,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/{group_id}/preferences/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Trash auto-empty (platform default, workspace override, effective)
+         * @description How long the Trash keeps entries: `{platform_default_days, workspace_override_days, effective_days}`
+         *     (0 = until someone empties it; a null override inherits the platform default). Members read it; the
+         *     override is set through PATCH on the preferences (`trash_auto_empty_days`).
+         */
+        get: operations["get_trash_settings_api_groups__group_id__preferences_trash_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/workspaces/{group_id}/email-templates": {
         parameters: {
             query?: never;
@@ -4021,6 +4043,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Platform Trash Default */
+        get: operations["get_settings_api_admin_trash_get"];
+        /** Set Platform Trash Default */
+        put: operations["update_settings_api_admin_trash_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ai/providers": {
         parameters: {
             query?: never;
@@ -5215,7 +5255,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Entries */
+        /**
+         * List Entries
+         * @description Every entry but those in the Trash (the Trash collection lists those).
+         */
         get: operations["list_entries_api_platform_entries_get"];
         put?: never;
         /** Create Entry */
@@ -5246,6 +5289,48 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/entries/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Trash summary
+         * @description How many entries are in the Trash and how long it keeps them (`effective_days`, 0 = until
+         *     emptied; the platform default and this workspace's override beside it). Declared before `/{item_id}`.
+         */
+        get: operations["trash_summary_api_platform_entries_trash_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/trash/empty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Empty the Trash
+         * @description Delete every entry in the Trash forever (ADMIN/OWNER). Each goes through the normal delete, so
+         *     `entry_deleted` fires per entry. Returns `{deleted: n}`.
+         */
+        post: operations["empty_trash_api_platform_entries_trash_empty_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/entries/{item_id}": {
         parameters: {
             query?: never;
@@ -5257,7 +5342,11 @@ export interface paths {
         get: operations["get_entry_api_platform_entries__item_id__get"];
         put?: never;
         post?: never;
-        /** Delete Entry */
+        /**
+         * Move Entry to Trash (or delete a trashed entry forever)
+         * @description Move the entry to the Trash (`entry_trashed`; restorable). With `permanent=true`, delete an entry
+         *     that is already in the Trash forever (`entry_deleted`); any other entry gets a 409.
+         */
         delete: operations["delete_entry_api_platform_entries__item_id__delete"];
         options?: never;
         head?: never;
@@ -5343,6 +5432,27 @@ export interface paths {
          * @description Reject a pending AI-generated asset: unlink it, and delete the asset if it's now orphaned.
          */
         post: operations["reject_suggested_asset_api_platform_entries__item_id__suggested_assets__asset_id__reject_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/{item_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Restore Entry from Trash
+         * @description Take an entry out of the Trash, back to the status it had — a published entry comes back as a
+         *     draft, so a restore never puts anything on the site by itself. Emits `entry_restored`.
+         */
+        post: operations["restore_entry_api_platform_entries__item_id__restore_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5510,7 +5620,8 @@ export interface paths {
         };
         /**
          * Get Collection Entries
-         * @description Get all entries in a collection, ordered by sort_order.
+         * @description Get all entries in a collection, ordered by sort_order. Entries in the Trash are listed only by
+         *     the Trash collection (a manual collection keeps their membership, so a restore puts them back).
          */
         get: operations["get_collection_entries_api_platform_collections__item_id__entries_get"];
         put?: never;
@@ -11824,6 +11935,8 @@ export interface components {
              * @default false
              */
             scheduledPublishRequiresApproval: boolean;
+            /** Trashautoemptydays */
+            trashAutoEmptyDays?: number | null;
         };
         /**
          * GroupPreferencesUpdate
@@ -11873,6 +11986,8 @@ export interface components {
             submissionProtectionJson?: components["schemas"]["SubmissionProtectionOverride"] | null;
             /** Scheduledpublishrequiresapproval */
             scheduledPublishRequiresApproval?: boolean | null;
+            /** Trashautoemptydays */
+            trashAutoEmptyDays?: number | null;
         };
         /**
          * GroupRead
@@ -15249,6 +15364,11 @@ export interface components {
             /** Defaulttone */
             defaultTone?: string | null;
         };
+        /** TrashSettings */
+        TrashSettings: {
+            /** Auto Empty Days */
+            auto_empty_days: number;
+        };
         /**
          * UnlockResults
          * @description Schema for the response when an operation to unlock user accounts is performed.
@@ -18526,6 +18646,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SubmissionProtectionStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_trash_settings_api_groups__group_id__preferences_trash_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
@@ -22131,6 +22284,59 @@ export interface operations {
             };
         };
     };
+    get_settings_api_admin_trash_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrashSettings"];
+                };
+            };
+        };
+    };
+    update_settings_api_admin_trash_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TrashSettings"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrashSettings"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_providers_api_ai_providers_get: {
         parameters: {
             query?: never;
@@ -24726,6 +24932,50 @@ export interface operations {
             };
         };
     };
+    trash_summary_api_platform_entries_trash_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    empty_trash_api_platform_entries_trash_empty_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
     get_entry_api_platform_entries__item_id__get: {
         parameters: {
             query?: never;
@@ -24759,7 +25009,9 @@ export interface operations {
     };
     delete_entry_api_platform_entries__item_id__delete: {
         parameters: {
-            query?: never;
+            query?: {
+                permanent?: boolean;
+            };
             header?: never;
             path: {
                 item_id: string;
@@ -24926,6 +25178,37 @@ export interface operations {
             path: {
                 item_id: string;
                 asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_entry_api_platform_entries__item_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
             };
             cookie?: never;
         };
