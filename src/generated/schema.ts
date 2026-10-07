@@ -2580,6 +2580,51 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Get Platform Alert Settings
+         * @description Which platform events alert, and where they go besides the bell.
+         */
+        get: operations["get_alerts_api_admin_alerts_get"];
+        /**
+         * Admin: Replace Platform Alert Settings
+         * @description Replace the alert types, the email channel and the integration routes (audited).
+         */
+        put: operations["update_alerts_api_admin_alerts_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/alerts/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Send a Test Platform Alert
+         * @description Send "Test alert from Marvin admin" through one saved channel (``email`` or a route id), even
+         *     one that's turned off. The result is also its last delivery.
+         */
+        post: operations["test_channel_api_admin_alerts_test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/backup-health": {
         parameters: {
             query?: never;
@@ -12763,6 +12808,191 @@ export interface components {
             token: string;
         };
         /**
+         * PlatformAlertActionInput
+         * @description One of an action's own inputs the admin fills (the message itself is Marvin's).
+         */
+        PlatformAlertActionInput: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Required
+             * @default false
+             */
+            required: boolean;
+        };
+        /**
+         * PlatformAlertDelivery
+         * @description A channel's last delivery (an alert or a test).
+         */
+        PlatformAlertDelivery: {
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "sent" | "failed" | "skipped";
+            /** Detail */
+            detail: string;
+            /** Eventtype */
+            eventType?: string | null;
+            /**
+             * Test
+             * @default false
+             */
+            test: boolean;
+        };
+        /** PlatformAlertEmailRead */
+        PlatformAlertEmailRead: {
+            /** Enabled */
+            enabled: boolean;
+            /** Recipients */
+            recipients?: string[] | null;
+            /** Superadminemails */
+            superAdminEmails?: string[];
+            /** Smtpready */
+            smtpReady: boolean;
+            lastDelivery?: components["schemas"]["PlatformAlertDelivery"] | null;
+        };
+        /** PlatformAlertEmailUpdate */
+        PlatformAlertEmailUpdate: {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /** Recipients */
+            recipients?: string[] | null;
+        };
+        /** PlatformAlertKindRead */
+        PlatformAlertKindRead: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Description */
+            description: string;
+            /** Eventtype */
+            eventType: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Default */
+            default: boolean;
+        };
+        /** PlatformAlertRouteRead */
+        PlatformAlertRouteRead: {
+            /** Id */
+            id: string;
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Action */
+            action: string;
+            /** Args */
+            args?: {
+                [key: string]: unknown;
+            };
+            /** Enabled */
+            enabled: boolean;
+            /** Label */
+            label: string;
+            /** Problem */
+            problem?: string | null;
+            lastDelivery?: components["schemas"]["PlatformAlertDelivery"] | null;
+        };
+        /** PlatformAlertRouteUpdate */
+        PlatformAlertRouteUpdate: {
+            /** Id */
+            id?: string | null;
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Action */
+            action: string;
+            /** Args */
+            args?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+        };
+        /**
+         * PlatformAlertTarget
+         * @description A message-capable action on a connection in the platform workspace.
+         */
+        PlatformAlertTarget: {
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Integrationname */
+            integrationName: string;
+            /** Provider */
+            provider: string;
+            /** Providername */
+            providerName: string;
+            /** Connectionenabled */
+            connectionEnabled: boolean;
+            /** Action */
+            action: string;
+            /** Actionlabel */
+            actionLabel: string;
+            /** Inputs */
+            inputs?: components["schemas"]["PlatformAlertActionInput"][];
+        };
+        /** PlatformAlertTestRequest */
+        PlatformAlertTestRequest: {
+            /** Channel */
+            channel: string;
+        };
+        /** PlatformAlertTestResult */
+        PlatformAlertTestResult: {
+            /** Channel */
+            channel: string;
+            delivery: components["schemas"]["PlatformAlertDelivery"];
+        };
+        /** PlatformAlertsRead */
+        PlatformAlertsRead: {
+            /** Types */
+            types: components["schemas"]["PlatformAlertKindRead"][];
+            email: components["schemas"]["PlatformAlertEmailRead"];
+            /** Routes */
+            routes: components["schemas"]["PlatformAlertRouteRead"][];
+            /** Targets */
+            targets: components["schemas"]["PlatformAlertTarget"][];
+            platformWorkspace?: components["schemas"]["PlatformWorkspaceRef"] | null;
+            /** Integrationsavailable */
+            integrationsAvailable: boolean;
+        };
+        /** PlatformAlertsUpdate */
+        PlatformAlertsUpdate: {
+            /** Types */
+            types?: {
+                [key: string]: boolean;
+            };
+            email?: components["schemas"]["PlatformAlertEmailUpdate"];
+            /** Routes */
+            routes?: components["schemas"]["PlatformAlertRouteUpdate"][];
+        };
+        /**
          * PlatformRole
          * @description Platform-level roles for Marvin.
          *
@@ -12771,6 +13001,18 @@ export interface components {
          * @enum {string}
          */
         PlatformRole: "NONE" | "SUPER_ADMIN";
+        /** PlatformWorkspaceRef */
+        PlatformWorkspaceRef: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+        };
         /**
          * PluginProviderRead
          * @description One provider a plugin registers, and how many workspaces have connected it.
@@ -19658,6 +19900,92 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CheckAppConfig"];
+                };
+            };
+        };
+    };
+    get_alerts_api_admin_alerts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformAlertsRead"];
+                };
+            };
+        };
+    };
+    update_alerts_api_admin_alerts_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlatformAlertsUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformAlertsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    test_channel_api_admin_alerts_test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlatformAlertTestRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformAlertTestResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
