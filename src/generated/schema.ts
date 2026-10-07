@@ -3323,6 +3323,31 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/groups/platform": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the Platform Workspace
+         * @description The platform (admin's) workspace — platform alerts and shared services run from it.
+         *
+         *     Found by its marker, whatever it is called. Rename it with ``PUT /api/admin/groups/{id}``.
+         *
+         *     Raises:
+         *         HTTPException (404 Not Found): The database has no platform workspace yet.
+         */
+        get: operations["get_platform_api_admin_groups_platform_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/groups/{item_id}": {
         parameters: {
             query?: never;
@@ -3351,8 +3376,8 @@ export interface paths {
          * @description Updates an existing group's details, including its name and preferences.
          *
          *     If `data.preferences` is provided, the group's preferences are updated.
-         *     If `data.name` is provided and different from the current name, the group's
-         *     name (and consequently its slug, handled by the repository) is updated.
+         *     If `data.name` differs from the current name, or `data.slug` from the current slug, the
+         *     workspace is renamed (slug derived from the name unless given); the old slug keeps resolving.
          *     Accessible only by administrators.
          *
          *     Args:
@@ -3365,6 +3390,7 @@ export interface paths {
          *
          *     Raises:
          *         HTTPException (404 Not Found): If the group or its preferences are not found.
+         *         HTTPException (409 Conflict): The name or slug is taken (or was another workspace's slug).
          */
         put: operations["update_one_api_admin_groups__item_id__put"];
         post?: never;
@@ -3373,6 +3399,7 @@ export interface paths {
          * @description Deletes a workspace by its unique ID.
          *
          *     Safety checks:
+         *     - Never the platform (admin's) workspace (409), force or not
          *     - Cannot delete if workspace has users with it as their primary group_id
          *     - Cannot delete if workspace has workspace members (unless force=True)
          *     - Cannot delete if workspace has entries, collections, or assets (unless force=True)
@@ -11684,6 +11711,8 @@ export interface components {
              * Format: uuid4
              */
             id: string;
+            /** Slug */
+            slug?: string | null;
             preferences?: components["schemas"]["GroupPreferencesUpdate"] | null;
         };
         /**
@@ -11866,6 +11895,11 @@ export interface components {
             webhooks: components["schemas"]["WebhookRead"][];
             /** Slug */
             slug?: string | null;
+            /**
+             * Isplatform
+             * @default false
+             */
+            isPlatform: boolean;
             /** Users */
             users?: components["schemas"]["UserSummary"][] | null;
             preferences?: components["schemas"]["GroupPreferencesRead"] | null;
@@ -15265,7 +15299,6 @@ export interface components {
          *       "admin": false,
          *       "email": "newuser@example.com",
          *       "fullName": "New User Name",
-         *       "group": "Default",
          *       "password": "aSecurePassword123",
          *       "username": "NewUser"
          *     }
@@ -15379,7 +15412,6 @@ export interface components {
          *       "admin": false,
          *       "email": "newuser@example.com",
          *       "fullName": "New User Name",
-         *       "group": "Default",
          *       "password": "aSecurePassword123",
          *       "username": "NewUser"
          *     }
@@ -21166,6 +21198,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_platform_api_admin_groups_platform_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupRead"];
                 };
             };
         };
