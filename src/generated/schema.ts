@@ -3824,6 +3824,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/storage/workspaces/{workspace_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Admin: Set a Workspace's Public Asset Domain
+         * @description Serve a workspace's files on a remote provider (s3) from its own domain (null: the platform's,
+         *     STORAGE_REMOTE_PUBLIC_URL). The domain must serve the same bucket (DNS work: see the "Assets on R2"
+         *     runbook). Files on local disk keep the API host. 422 for a URL that isn't https://host[/path].
+         */
+        put: operations["update_workspace_storage_api_admin_storage_workspaces__workspace_id__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/submission-protection": {
         parameters: {
             query?: never;
@@ -14124,11 +14146,37 @@ export interface components {
             providers: components["schemas"]["StorageProviderOption"][];
             /** Workspaces */
             workspaces: components["schemas"]["StorageWorkspaceUsage"][];
+            /**
+             * Workspacesettings
+             * @default []
+             */
+            workspaceSettings: components["schemas"]["StorageWorkspaceSettings"][];
+            /** Remotepublicbaseurl */
+            remotePublicBaseUrl?: string | null;
         };
         /** StorageSettingsUpdate */
         StorageSettingsUpdate: {
             /** Uploadprovider */
             uploadProvider?: string | null;
+        };
+        /**
+         * StorageWorkspaceSettings
+         * @description A workspace's storage settings (platform admin).
+         */
+        StorageWorkspaceSettings: {
+            /** Workspaceid */
+            workspaceId: string;
+            /** Workspace */
+            workspace: string;
+            /** Storagecode */
+            storageCode?: string | null;
+            /** Assetpublicbaseurl */
+            assetPublicBaseUrl?: string | null;
+        };
+        /** StorageWorkspaceUpdate */
+        StorageWorkspaceUpdate: {
+            /** Assetpublicbaseurl */
+            assetPublicBaseUrl?: string | null;
         };
         /** StorageWorkspaceUsage */
         StorageWorkspaceUsage: {
@@ -21122,6 +21170,41 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["StorageSettingsUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorageSettingsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_workspace_storage_api_admin_storage_workspaces__workspace_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StorageWorkspaceUpdate"];
             };
         };
         responses: {
