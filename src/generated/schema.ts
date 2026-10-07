@@ -1044,27 +1044,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/groups/integrations/alert-routing": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Alert Routing
-         * @description Where integration alerts go besides the bell: admins by email, chat/notification connections.
-         */
-        get: operations["get_alert_routing_api_groups_integrations_alert_routing_get"];
-        /** Set Alert Routing */
-        put: operations["set_alert_routing_api_groups_integrations_alert_routing_put"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/groups/integrations/health": {
         parameters: {
             query?: never;
@@ -2005,6 +1984,41 @@ export interface paths {
         get: operations["get_excluded_event_types_api_groups_audit_settings_excluded_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the workspace's notification settings */
+        get: operations["get_notifications_api_groups_notifications_get"];
+        /** Replace the workspace's notification settings */
+        put: operations["update_notifications_api_groups_notifications_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/notifications/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send a test notification */
+        post: operations["test_channel_api_groups_notifications_test_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -8775,60 +8789,86 @@ export interface components {
             /** Handoffhint */
             handoffHint?: string | null;
         };
-        /**
-         * AlertRouting
-         * @description Where integration alerts go besides the bell (which always gets them).
-         */
-        AlertRouting: {
+        /** AlertActionInput */
+        AlertActionInput: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
             /**
-             * Emailadmins
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Required
              * @default false
              */
-            emailAdmins: boolean;
-            /** Targets */
-            targets?: components["schemas"]["AlertRoutingTarget"][];
-            /**
-             * Reminderhours
-             * @default 24
-             */
-            reminderHours: number;
+            required: boolean;
         };
-        /**
-         * AlertRoutingTarget
-         * @description A connection that can carry integration alerts (a chat or notification provider).
-         */
-        AlertRoutingTarget: {
+        /** AlertDelivery */
+        AlertDelivery: {
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "sent" | "failed" | "skipped";
+            /** Detail */
+            detail: string;
+            /** Eventtype */
+            eventType?: string | null;
+            /**
+             * Test
+             * @default false
+             */
+            test: boolean;
+        };
+        /** AlertKindRead */
+        AlertKindRead: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Description */
+            description: string;
+            /** Eventtype */
+            eventType: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Default */
+            default: boolean;
+        };
+        /** AlertTarget */
+        AlertTarget: {
             /**
              * Integrationid
              * Format: uuid4
              */
             integrationId: string;
-            /** Name */
-            name: string;
+            /** Integrationname */
+            integrationName: string;
             /** Provider */
             provider: string;
+            /** Providername */
+            providerName: string;
+            /** Connectionenabled */
+            connectionEnabled: boolean;
             /** Action */
             action: string;
-            /**
-             * Enabled
-             * @default false
-             */
-            enabled: boolean;
+            /** Actionlabel */
+            actionLabel: string;
+            /** Inputs */
+            inputs?: components["schemas"]["AlertActionInput"][];
         };
-        /** AlertRoutingUpdate */
-        AlertRoutingUpdate: {
-            /**
-             * Emailadmins
-             * @default false
-             */
-            emailAdmins: boolean;
-            /** Integrationids */
-            integrationIds?: string[];
-            /**
-             * Reminderhours
-             * @default 24
-             */
-            reminderHours: number;
+        /** AlertTestRequest */
+        AlertTestRequest: {
+            /** Channel */
+            channel: string;
         };
         /**
          * AppInfo
@@ -13010,6 +13050,86 @@ export interface components {
              */
             done: boolean;
         };
+        /** NotificationEmailRead */
+        NotificationEmailRead: {
+            /** Enabled */
+            enabled: boolean;
+            /** Recipients */
+            recipients?: string[] | null;
+            /** Kinds */
+            kinds?: string[] | null;
+            /** Adminemails */
+            adminEmails?: string[];
+            /** Smtpready */
+            smtpReady: boolean;
+            lastDelivery?: components["schemas"]["AlertDelivery"] | null;
+        };
+        /** NotificationEmailUpdate */
+        NotificationEmailUpdate: {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /** Recipients */
+            recipients?: string[] | null;
+            /** Kinds */
+            kinds?: string[] | null;
+        };
+        /** NotificationRouteRead */
+        NotificationRouteRead: {
+            /** Id */
+            id: string;
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Action */
+            action: string;
+            /** Args */
+            args?: {
+                [key: string]: unknown;
+            };
+            /** Enabled */
+            enabled: boolean;
+            /** Kinds */
+            kinds?: string[] | null;
+            /** Label */
+            label: string;
+            /** Problem */
+            problem?: string | null;
+            lastDelivery?: components["schemas"]["AlertDelivery"] | null;
+        };
+        /** NotificationRouteUpdate */
+        NotificationRouteUpdate: {
+            /** Id */
+            id?: string | null;
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Action */
+            action: string;
+            /** Args */
+            args?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /** Kinds */
+            kinds?: string[] | null;
+        };
+        /** NotificationTestResult */
+        NotificationTestResult: {
+            /** Channel */
+            channel: string;
+            delivery: components["schemas"]["AlertDelivery"];
+        };
         /**
          * OrderByNullPosition
          * @description Enumeration for specifying how NULL values should be positioned in ordered results.
@@ -16091,6 +16211,32 @@ export interface components {
             groupId: string;
             workspaceRole: components["schemas"]["WorkspaceRole"];
         };
+        /** WorkspaceNotificationsRead */
+        WorkspaceNotificationsRead: {
+            /** Types */
+            types: components["schemas"]["AlertKindRead"][];
+            email: components["schemas"]["NotificationEmailRead"];
+            /** Routes */
+            routes: components["schemas"]["NotificationRouteRead"][];
+            /** Targets */
+            targets: components["schemas"]["AlertTarget"][];
+            /** Integrationsavailable */
+            integrationsAvailable: boolean;
+            /** Integrationreminderhours */
+            integrationReminderHours: number;
+        };
+        /** WorkspaceNotificationsUpdate */
+        WorkspaceNotificationsUpdate: {
+            /** Types */
+            types?: {
+                [key: string]: boolean;
+            };
+            email?: components["schemas"]["NotificationEmailUpdate"];
+            /** Routes */
+            routes?: components["schemas"]["NotificationRouteUpdate"][];
+            /** Integrationreminderhours */
+            integrationReminderHours?: number | null;
+        };
         /**
          * WorkspaceRole
          * @description Workspace-level roles for workspace members.
@@ -17875,59 +18021,6 @@ export interface operations {
             };
         };
     };
-    get_alert_routing_api_groups_integrations_alert_routing_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AlertRouting"];
-                };
-            };
-        };
-    };
-    set_alert_routing_api_groups_integrations_alert_routing_put: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AlertRoutingUpdate"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AlertRouting"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
     get_health_api_groups_integrations_health_get: {
         parameters: {
             query?: never;
@@ -19568,6 +19661,92 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuditExcludedEvent"][];
+                };
+            };
+        };
+    };
+    get_notifications_api_groups_notifications_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceNotificationsRead"];
+                };
+            };
+        };
+    };
+    update_notifications_api_groups_notifications_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceNotificationsUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceNotificationsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    test_channel_api_groups_notifications_test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AlertTestRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationTestResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
