@@ -4363,6 +4363,27 @@ export interface paths {
         patch: operations["update_agent_api_ai_agents__slug__patch"];
         trace?: never;
     };
+    "/api/ai/agents/{slug}/tool-policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Reset an agent's permission matrix to its default
+         * @description Drop every matrix override: a built-in agent goes back to its code matrix, a workspace agent to the
+         *     defaults its Allow writes setting gives. ADMIN+.
+         */
+        delete: operations["reset_agent_tool_policy_api_ai_agents__slug__tool_policy_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ai/agents/{slug}/character": {
         parameters: {
             query?: never;
@@ -8305,6 +8326,11 @@ export interface components {
              * @default false
              */
             isSystem: boolean;
+            /**
+             * Toolpolicyoverridden
+             * @default false
+             */
+            toolPolicyOverridden: boolean;
             character?: components["schemas"]["AssistantCharacter"] | null;
         };
         /** AgentToolCategory */
@@ -22076,6 +22102,37 @@ export interface operations {
                 "application/json": components["schemas"]["AgentUpdate"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_agent_tool_policy_api_ai_agents__slug__tool_policy_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
