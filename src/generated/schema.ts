@@ -3799,6 +3799,31 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/storage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Get Asset Storage Settings
+         * @description Where new uploads go, the providers that could take them, and the files stored on each.
+         */
+        get: operations["get_storage_api_admin_storage_get"];
+        /**
+         * Admin: Choose Where New Uploads Are Stored
+         * @description Choose the provider for new uploads (null: follow STORAGE_PROVIDER). Only an installed,
+         *     configured provider is accepted (422 otherwise). Existing files are not moved.
+         */
+        put: operations["update_storage_api_admin_storage_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/submission-protection": {
         parameters: {
             query?: never;
@@ -14051,6 +14076,74 @@ export interface components {
             limit: number;
         };
         /**
+         * StorageProviderOption
+         * @description An asset storage provider: whether it can take uploads now, and what is stored on it.
+         */
+        StorageProviderOption: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Source */
+            source: string;
+            /** Available */
+            available: boolean;
+            /** Error */
+            error?: string | null;
+            /**
+             * Assets
+             * @default 0
+             */
+            assets: number;
+            /**
+             * Bytes
+             * @default 0
+             */
+            bytes: number;
+            /**
+             * Libraryfiles
+             * @default 0
+             */
+            libraryFiles: number;
+        };
+        /**
+         * StorageSettingsRead
+         * @description Where new uploads go. Existing files stay on the provider each row names; moving them is
+         *     `python -m marvin.scripts.storage_migrate`.
+         */
+        StorageSettingsRead: {
+            /** Envdefault */
+            envDefault: string;
+            /** Uploadprovider */
+            uploadProvider?: string | null;
+            /** Effectiveprovider */
+            effectiveProvider: string;
+            /** Warning */
+            warning?: string | null;
+            /** Providers */
+            providers: components["schemas"]["StorageProviderOption"][];
+            /** Workspaces */
+            workspaces: components["schemas"]["StorageWorkspaceUsage"][];
+        };
+        /** StorageSettingsUpdate */
+        StorageSettingsUpdate: {
+            /** Uploadprovider */
+            uploadProvider?: string | null;
+        };
+        /** StorageWorkspaceUsage */
+        StorageWorkspaceUsage: {
+            /** Workspaceid */
+            workspaceId: string;
+            /** Workspace */
+            workspace: string;
+            /** Provider */
+            provider: string;
+            /** Assets */
+            assets: number;
+            /** Bytes */
+            bytes: number;
+        };
+        /**
          * SubmissionProtectionOverride
          * @description Workspace-level override: every field optional, ``None`` inherits the platform default.
          */
@@ -20986,6 +21079,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ScheduledTaskExecutionLogRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_storage_api_admin_storage_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorageSettingsRead"];
+                };
+            };
+        };
+    };
+    update_storage_api_admin_storage_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StorageSettingsUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorageSettingsRead"];
                 };
             };
             /** @description Validation Error */
