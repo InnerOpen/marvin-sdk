@@ -4084,6 +4084,27 @@ export interface paths {
         patch: operations["update_model_api_ai_providers__provider_id__models__model_id__patch"];
         trace?: never;
     };
+    "/api/ai/provider-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List AI Provider Types
+         * @description The AI providers this platform can use (built in or installed as plugins), what each can do,
+         *     the credentials it needs and the models it suggests. Nothing here is secret.
+         */
+        get: operations["list_provider_types_api_ai_provider_types_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ai/installed-models": {
         parameters: {
             query?: never;
@@ -7440,6 +7461,37 @@ export interface components {
              */
             source: string;
         };
+        /**
+         * AICredentialRead
+         * @description One credential a provider type needs. ``api_key`` comes from a secret; ``base_url`` and any option
+         *     (``api_version``) from the provider row (options in its metadata).
+         */
+        AICredentialRead: {
+            /** Key */
+            key: string;
+            /**
+             * Label
+             * @default
+             */
+            label: string;
+            /**
+             * Secret
+             * @default false
+             */
+            secret: boolean;
+            /**
+             * Required
+             * @default false
+             */
+            required: boolean;
+            /** Default */
+            default?: string | null;
+            /**
+             * Help
+             * @default
+             */
+            help: string;
+        };
         /** AIExecutionRead */
         AIExecutionRead: {
             /**
@@ -7694,6 +7746,49 @@ export interface components {
              * @default []
              */
             availableModels: string[];
+        };
+        /**
+         * AIProviderTypeRead
+         * @description An AI provider this platform can use: built into core, or an installed plugin.
+         */
+        AIProviderTypeRead: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Source */
+            source: string;
+            /** Package */
+            package?: string | null;
+            /** Version */
+            version?: string | null;
+            /**
+             * Capabilities
+             * @default []
+             */
+            capabilities: string[];
+            /**
+             * Credentials
+             * @default []
+             */
+            credentials: components["schemas"]["AICredentialRead"][];
+            /** Defaultmodel */
+            defaultModel?: string | null;
+            /**
+             * Suggestedmodels
+             * @default []
+             */
+            suggestedModels: string[];
+            /**
+             * Selfhosted
+             * @default false
+             */
+            selfHosted: boolean;
         };
         /** AIProviderUpdate */
         AIProviderUpdate: {
@@ -22304,6 +22399,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_provider_types_api_ai_provider_types_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIProviderTypeRead"][];
                 };
             };
         };
