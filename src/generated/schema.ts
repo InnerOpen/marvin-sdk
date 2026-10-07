@@ -1576,7 +1576,7 @@ export interface paths {
         };
         /**
          * List Marvin's Replaceable System Emails
-         * @description Marvin's own emails a workspace template can replace (welcome, password reset, invitation): the event each
+         * @description Marvin's own emails a workspace template can replace (welcome, invitation): the event each
          *     is sent on, its variables (from the event catalog), whether it sends now and which workspace templates replace
          *     it. The email template page offers "Replaces Marvin's … email" from this, so it never has to list platform
          *     events. Workspace OWNER/ADMIN.
@@ -11993,7 +11993,9 @@ export interface components {
          * GroupRead
          * @description Schema for representing a group when read from the system, including detailed information.
          *     This typically serves as a response model for GET requests.
-         *     Inherits `id`, `name`, and `webhooks` (as `WebhookRead`) from `GroupUpdate`.
+         *     Inherits `id` and `name` from `GroupUpdate`. No webhooks: their URLs, headers and payloads are credentials, and
+         *     every member reads their workspace through this schema (/api/self/workspaces); workspace admins read them from
+         *     /api/groups/webhooks.
          */
         GroupRead: {
             /** Name */
@@ -12003,11 +12005,6 @@ export interface components {
              * Format: uuid4
              */
             id: string;
-            /**
-             * Webhooks
-             * @default []
-             */
-            webhooks: components["schemas"]["WebhookRead"][];
             /** Slug */
             slug?: string | null;
             /**
