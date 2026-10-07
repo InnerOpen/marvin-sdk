@@ -15292,9 +15292,8 @@ export interface components {
         };
         /**
          * UserCreate
-         * @description Schema for creating a new user.
-         *     Includes essential user details, authentication method, admin status,
-         *     group assignment, permissions, and password.
+         * @description Schema for creating a new user: the shared user fields plus a plaintext password.
+         *     Input only — never use it (or anything derived from it) as a response model.
          * @example {
          *       "admin": false,
          *       "email": "newuser@example.com",
@@ -15333,8 +15332,6 @@ export interface components {
              * @default false
              */
             advanced: boolean;
-            /** Password */
-            password: string;
             /**
              * Caninvite
              * @default false
@@ -15350,6 +15347,8 @@ export interface components {
              * @default false
              */
             canOrganize: boolean;
+            /** Password */
+            password: string;
         };
         /**
          * UserPagination
@@ -15400,21 +15399,11 @@ export interface components {
         };
         /**
          * UserRead
-         * @description Schema for representing a user when read from the system.
-         *     Extends `UserCreate` (which includes password), and adds system-generated fields
-         *     like `id`, group details, and `cache_key`.
+         * @description Schema for representing a user when read from the system — the shape API responses use.
+         *     Adds system-generated fields like `id`, group details, and `cache_key` to the shared user fields.
          *
-         *     NOTE: Inheriting from `UserCreate` means this schema will include `password`.
-         *     For public user representations, `password` should typically be excluded.
-         *     Consider having a different base or explicitly excluding password here if this
-         *     is for general-purpose reading. `PrivateUser` below handles sensitive data.
-         * @example {
-         *       "admin": false,
-         *       "email": "newuser@example.com",
-         *       "fullName": "New User Name",
-         *       "password": "aSecurePassword123",
-         *       "username": "NewUser"
-         *     }
+         *     It has no `password`: it builds on `_UserBase`, not `UserCreate`. The stored hash lives only on
+         *     `PrivateUser`, which must never be a response model.
          */
         UserRead: {
             /**
@@ -15448,8 +15437,6 @@ export interface components {
              * @default false
              */
             advanced: boolean;
-            /** Password */
-            password: string;
             /**
              * Caninvite
              * @default false
