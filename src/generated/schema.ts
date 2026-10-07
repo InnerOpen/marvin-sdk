@@ -2580,6 +2580,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/backup-health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Backup Health
+         * @description Every backup target that has recorded a run, with its state (ok, partial, failed, overdue), and the
+         *     newest runs, newest first. Times are UTC.
+         */
+        get: operations["get_backup_health_api_admin_backup_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/backups/workspaces/{workspace_id}": {
         parameters: {
             query?: never;
@@ -2971,6 +2992,28 @@ export interface paths {
          * @description Every platform-scope event type, in category display order, for the Events page's filter.
          */
         get: operations["list_event_types_api_admin_events_catalog_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/events/feed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Platform events since a time (the activity bell)
+         * @description Platform events since `since` (UTC), oldest first, at most the newest 50: what a super admin's
+         *     activity bell polls next to its workspace's feed (a failed or overdue backup). Pass the previous
+         *     response's `now` as the next `since`; with none, only the last few seconds.
+         */
+        get: operations["event_feed_api_admin_events_feed_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3840,6 +3883,31 @@ export interface paths {
          */
         put: operations["update_workspace_storage_api_admin_storage_workspaces__workspace_id__put"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/storage/providers/{slug}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Test a Storage Provider's Connection
+         * @description Test connection: list, put, get and delete a tiny object under `_marvin-healthcheck/` through the
+         *     provider as this backend builds it (its settings come from the backend's environment), timing each
+         *     step. The object is deleted whatever happens. Errors come back as plain messages (a revoked key, a
+         *     bucket the key can't reach, a missing bucket, DNS or timeouts), never as a failed request. 404 for a
+         *     provider that isn't installed. Backup targets can't be tested from here (the backend doesn't have
+         *     their credentials): run `python -m marvin.scripts.backup test` as a Job (offsite-backup runbook).
+         */
+        post: operations["test_provider_connection_api_admin_storage_providers__slug__test_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9398,6 +9466,117 @@ export interface components {
              */
             method: string;
         };
+        /** BackupHealthRead */
+        BackupHealthRead: {
+            /**
+             * Now
+             * Format: date-time
+             */
+            now: string;
+            /** Targets */
+            targets: components["schemas"]["BackupTargetRead"][];
+            /** Runs */
+            runs: components["schemas"]["BackupRunRead"][];
+        };
+        /** BackupRunRead */
+        BackupRunRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Targetname */
+            targetName: string;
+            /** Targettype */
+            targetType: string;
+            /** Status */
+            status: string;
+            /**
+             * Startedat
+             * Format: date-time
+             */
+            startedAt: string;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /** Durationseconds */
+            durationSeconds?: number | null;
+            /** Dbengine */
+            dbEngine?: string | null;
+            /** Dbkey */
+            dbKey?: string | null;
+            /** Dbbytes */
+            dbBytes?: number | null;
+            /** Dbgzbytes */
+            dbGzBytes?: number | null;
+            /** Configitems */
+            configItems?: number | null;
+            /** Assetsuploaded */
+            assetsUploaded?: number | null;
+            /** Assetsuploadedbytes */
+            assetsUploadedBytes?: number | null;
+            /** Assetsunchanged */
+            assetsUnchanged?: number | null;
+            /** Pruned */
+            pruned?: number | null;
+            /**
+             * Failures
+             * @default 0
+             */
+            failures: number;
+            /** Errorsummary */
+            errorSummary?: string | null;
+            /** Host */
+            host?: string | null;
+            /** Notifiedat */
+            notifiedAt?: string | null;
+        };
+        /** BackupTargetRead */
+        BackupTargetRead: {
+            /** Name */
+            name: string;
+            /** Type */
+            type: string;
+            /** State */
+            state: string;
+            /** Schedule */
+            schedule?: string | null;
+            /** Timezone */
+            timeZone?: string | null;
+            /** Scheduleerror */
+            scheduleError?: string | null;
+            /** Intervalseconds */
+            intervalSeconds?: number | null;
+            /** Keephourly */
+            keepHourly?: number | null;
+            /** Keepdaily */
+            keepDaily?: number | null;
+            /** Keepweekly */
+            keepWeekly?: number | null;
+            /** Location */
+            location?: string | null;
+            /**
+             * Settings
+             * @default {}
+             */
+            settings: {
+                [key: string]: unknown;
+            };
+            lastRun?: components["schemas"]["BackupRunRead"] | null;
+            lastSuccess?: components["schemas"]["BackupRunRead"] | null;
+            /** Firstseen */
+            firstSeen?: string | null;
+            /** Nextrunat */
+            nextRunAt?: string | null;
+            /** Dueby */
+            dueBy?: string | null;
+            /**
+             * Overdue
+             * @default false
+             */
+            overdue: boolean;
+            /** Overduesince */
+            overdueSince?: string | null;
+        };
         /**
          * BlueprintApplyResult
          * @description What applying one blueprint did.
@@ -10990,11 +11169,8 @@ export interface components {
              * Format: date-time
              */
             occurredAt: string;
-            /**
-             * Workspaceid
-             * Format: uuid4
-             */
-            workspaceId: string;
+            /** Workspaceid */
+            workspaceId?: string | null;
             /** Userid */
             userId?: string | null;
             /** Entityid */
@@ -11109,11 +11285,8 @@ export interface components {
              * Format: date-time
              */
             occurredAt: string;
-            /**
-             * Workspaceid
-             * Format: uuid4
-             */
-            workspaceId: string;
+            /** Workspaceid */
+            workspaceId?: string | null;
             /** Userid */
             userId?: string | null;
             /** Entityid */
@@ -14098,6 +14271,62 @@ export interface components {
             limit: number;
         };
         /**
+         * StorageBackupTarget
+         * @description A backup target as its runs report it. The backend doesn't have the targets' environment (each
+         *     CronJob has its own), so this is what the latest run recorded: never a key.
+         */
+        StorageBackupTarget: {
+            /** Name */
+            name: string;
+            /** Type */
+            type: string;
+            /** Location */
+            location?: string | null;
+            /**
+             * Settings
+             * @default []
+             */
+            settings: components["schemas"]["StorageSettingValue"][];
+            /** State */
+            state: string;
+            /** Lastrunat */
+            lastRunAt?: string | null;
+        };
+        /**
+         * StorageCheckResult
+         * @description Test connection: a tiny object listed, written, read back and deleted under `_marvin-healthcheck/`.
+         */
+        StorageCheckResult: {
+            /** Provider */
+            provider: string;
+            /** Ok */
+            ok: boolean;
+            /** Key */
+            key: string;
+            /** Location */
+            location?: string | null;
+            /**
+             * Checkedat
+             * Format: date-time
+             */
+            checkedAt: string;
+            /** Steps */
+            steps: components["schemas"]["StorageCheckStep"][];
+        };
+        /** StorageCheckStep */
+        StorageCheckStep: {
+            /** Name */
+            name: string;
+            /** Ok */
+            ok: boolean;
+            /** Ms */
+            ms: number;
+            /** Error */
+            error?: string | null;
+            /** Code */
+            code?: string | null;
+        };
+        /**
          * StorageProviderOption
          * @description An asset storage provider: whether it can take uploads now, and what is stored on it.
          */
@@ -14127,6 +14356,42 @@ export interface components {
              * @default 0
              */
             libraryFiles: number;
+            /**
+             * Settings
+             * @default []
+             */
+            settings: components["schemas"]["StorageSettingValue"][];
+        };
+        /**
+         * StorageSettingValue
+         * @description One setting a provider or target reads, as it is in effect: secrets masked (`****`), key ids cut to
+         *     their last four characters. Read-only: settings come from the environment (the chart), not from here.
+         */
+        StorageSettingValue: {
+            /** Env */
+            env: string;
+            /**
+             * Label
+             * @default
+             */
+            label: string;
+            /** Value */
+            value?: string | null;
+            /**
+             * Isset
+             * @default false
+             */
+            isSet: boolean;
+            /**
+             * Secret
+             * @default false
+             */
+            secret: boolean;
+            /**
+             * Help
+             * @default
+             */
+            help: string;
         };
         /**
          * StorageSettingsRead
@@ -14153,6 +14418,11 @@ export interface components {
             workspaceSettings: components["schemas"]["StorageWorkspaceSettings"][];
             /** Remotepublicbaseurl */
             remotePublicBaseUrl?: string | null;
+            /**
+             * Backuptargets
+             * @default []
+             */
+            backupTargets: components["schemas"]["StorageBackupTarget"][];
         };
         /** StorageSettingsUpdate */
         StorageSettingsUpdate: {
@@ -19392,6 +19662,40 @@ export interface operations {
             };
         };
     };
+    get_backup_health_api_admin_backup_health_get: {
+        parameters: {
+            query?: {
+                /** @description Only this target's runs */
+                target?: string | null;
+                /** @description How many recent runs */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BackupHealthRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     create_backup_api_admin_backups_workspaces__workspace_id__post: {
         parameters: {
             query?: never;
@@ -20041,6 +20345,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminEventType"][];
+                };
+            };
+        };
+    };
+    event_feed_api_admin_events_feed_get: {
+        parameters: {
+            query?: {
+                since?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventFeed"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -21215,6 +21550,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StorageSettingsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    test_provider_connection_api_admin_storage_providers__slug__test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorageCheckResult"];
                 };
             };
             /** @description Validation Error */
