@@ -7886,6 +7886,11 @@ export interface components {
             version: string;
             /** Demostatus */
             demoStatus: boolean;
+            /**
+             * Environmentlabel
+             * @default
+             */
+            environmentLabel: string;
             /** Allowsignup */
             allowSignup: boolean;
             /** Defaultgroupslug */
@@ -12218,6 +12223,11 @@ export interface components {
              * @default false
              */
             isDemo: boolean;
+            /**
+             * Environmentlabel
+             * @default
+             */
+            environmentLabel: string;
         };
         /**
          * LongLiveTokenCreate
