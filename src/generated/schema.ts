@@ -9856,11 +9856,17 @@ export interface components {
         };
         /**
          * AutomationPreviewMatch
-         * @description One entity a `target` selector resolved to (dry-run preview).
+         * @description One entity a `target` selector resolved to (dry-run preview): an entry (entry_type, status, title) or an
+         *     asset / resource (name, asset_type / resource_type, trashed).
          */
         AutomationPreviewMatch: {
             /** Id */
             id: string;
+            /**
+             * Entity
+             * @default entry
+             */
+            entity: string;
             /** Entrytype */
             entryType?: string | null;
             /** Status */
@@ -9869,6 +9875,14 @@ export interface components {
             title?: string | null;
             /** Slug */
             slug?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Assettype */
+            assetType?: string | null;
+            /** Resourcetype */
+            resourceType?: string | null;
+            /** Trashed */
+            trashed?: boolean | null;
         };
         /** AutomationPreviewRequest */
         AutomationPreviewRequest: {
@@ -10009,6 +10023,8 @@ export interface components {
             where: string;
             /** Index */
             index?: number | null;
+            /** Path */
+            path?: string | null;
         };
         /**
          * AutomationWebhookOption
