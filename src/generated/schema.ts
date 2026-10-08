@@ -5909,7 +5909,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Resources */
+        /**
+         * List Resources
+         * @description Every resource but those in the Trash.
+         */
         get: operations["list_resources_api_platform_resources_get"];
         put?: never;
         /** Create Resource */
@@ -5931,7 +5934,11 @@ export interface paths {
         get: operations["get_resource_api_platform_resources__item_id__get"];
         put?: never;
         post?: never;
-        /** Delete Resource */
+        /**
+         * Move Resource to Trash (or delete a trashed resource forever)
+         * @description Move the resource to the Trash (`resource_trashed`). With `permanent=true`, delete a resource
+         *     already in the Trash forever (`resource_deleted`); any other resource gets a 409.
+         */
         delete: operations["delete_resource_api_platform_resources__item_id__delete"];
         options?: never;
         head?: never;
@@ -5979,6 +5986,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/resources/{item_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Restore Resource from Trash
+         * @description Take a resource out of the Trash (`resource_restored`).
+         */
+        post: operations["restore_resource_api_platform_resources__item_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/assets": {
         parameters: {
             query?: never;
@@ -5986,7 +6013,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Assets */
+        /**
+         * List Assets
+         * @description Every asset but those in the Trash.
+         */
         get: operations["list_assets_api_platform_assets_get"];
         put?: never;
         post?: never;
@@ -6041,8 +6071,9 @@ export interface paths {
         put?: never;
         post?: never;
         /**
-         * Delete Asset
-         * @description Delete asset from storage and database.
+         * Move Asset to Trash (or delete a trashed asset forever)
+         * @description Move the asset to the Trash (`asset_trashed`; its file stays in storage). With `permanent=true`,
+         *     delete an asset already in the Trash forever, file included (`asset_deleted`); any other asset gets a 409.
          */
         delete: operations["delete_asset_api_platform_assets__item_id__delete"];
         options?: never;
@@ -6096,6 +6127,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/assets/{item_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Restore Asset from Trash
+         * @description Take an asset out of the Trash (`asset_restored`).
+         */
+        post: operations["restore_asset_api_platform_assets__item_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/assets/{item_id}/file": {
         parameters: {
             query?: never;
@@ -6113,6 +6164,83 @@ export interface paths {
         get: operations["serve_asset_file_api_platform_assets__item_id__file_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Trash summary
+         * @description How many entries, assets and resources are in the Trash (`total` beside them) and how long it keeps
+         *     them (`effective_days`, 0 = until emptied; the platform default and this workspace's override beside it).
+         */
+        get: operations["summary_api_platform_trash_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/trash/assets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Trashed Assets */
+        get: operations["trashed_assets_api_platform_trash_assets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/trash/resources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Trashed Resources */
+        get: operations["trashed_resources_api_platform_trash_resources_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/trash/empty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Empty the Trash
+         * @description Delete everything in the Trash forever — entries, assets (their files too) and resources (ADMIN/OWNER).
+         *     Each goes through its normal delete, so `entry_deleted` / `asset_deleted` / `resource_deleted` fire.
+         *     Returns `{deleted: total, entries, assets, resources}`.
+         */
+        post: operations["empty_api_platform_trash_empty_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9058,6 +9186,10 @@ export interface components {
              * @default []
              */
             tags: string[];
+            /** Trashedat */
+            trashedAt?: string | null;
+            /** Trashedby */
+            trashedBy?: string | null;
             /**
              * Suggestionjson
              * @description Pending AI-proposed changes staged for review (write-back)
@@ -10890,6 +11022,10 @@ export interface components {
              * @default []
              */
             tags: string[];
+            /** Trashedat */
+            trashedAt?: string | null;
+            /** Trashedby */
+            trashedBy?: string | null;
             /**
              * Suggestionjson
              * @description Pending AI-proposed changes staged for review (write-back)
@@ -14184,6 +14320,10 @@ export interface components {
              * @default []
              */
             tags: string[];
+            /** Trashedat */
+            trashedAt?: string | null;
+            /** Trashedby */
+            trashedBy?: string | null;
             /**
              * Suggestionjson
              * @description Pending AI-proposed changes staged for review (write-back)
@@ -26529,7 +26669,9 @@ export interface operations {
     };
     delete_resource_api_platform_resources__item_id__delete: {
         parameters: {
-            query?: never;
+            query?: {
+                permanent?: boolean;
+            };
             header?: never;
             path: {
                 item_id: string;
@@ -26657,6 +26799,37 @@ export interface operations {
             };
         };
     };
+    restore_resource_api_platform_resources__item_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_assets_api_platform_assets_get: {
         parameters: {
             query?: never;
@@ -26743,7 +26916,9 @@ export interface operations {
     };
     delete_asset_api_platform_assets__item_id__delete: {
         parameters: {
-            query?: never;
+            query?: {
+                permanent?: boolean;
+            };
             header?: never;
             path: {
                 item_id: string;
@@ -26871,6 +27046,37 @@ export interface operations {
             };
         };
     };
+    restore_asset_api_platform_assets__item_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssetRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     serve_asset_file_api_platform_assets__item_id__file_get: {
         parameters: {
             query?: never;
@@ -26898,6 +27104,90 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    summary_api_platform_trash_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    trashed_assets_api_platform_trash_assets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssetRead"][];
+                };
+            };
+        };
+    };
+    trashed_resources_api_platform_trash_resources_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceRead"][];
+                };
+            };
+        };
+    };
+    empty_api_platform_trash_empty_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };
