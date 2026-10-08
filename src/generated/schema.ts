@@ -2398,6 +2398,92 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/self/push": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get My Push Settings */
+        get: operations["get_push_api_self_push_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/self/push/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Choose Which Pushes I Get */
+        put: operations["update_preferences_api_self_push_preferences_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/self/push/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Turn On Push for This Device */
+        post: operations["subscribe_api_self_push_subscriptions_post"];
+        /** Turn Off Push for This Device */
+        delete: operations["unsubscribe_endpoint_api_self_push_subscriptions_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/self/push/subscriptions/{subscription_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove One of My Devices */
+        delete: operations["unsubscribe_api_self_push_subscriptions__subscription_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/self/push/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send a Test Push to My Devices */
+        post: operations["send_test_api_self_push_test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/self/workspaces/current": {
         parameters: {
             query?: never;
@@ -13212,6 +13298,28 @@ export interface components {
             /** Kinds */
             kinds?: string[] | null;
         };
+        /** NotificationPushRead */
+        NotificationPushRead: {
+            /** Configured */
+            configured: boolean;
+            /** Enabled */
+            enabled: boolean;
+            /** Kinds */
+            kinds?: string[] | null;
+            /** People */
+            people?: string[];
+            lastDelivery?: components["schemas"]["AlertDelivery"] | null;
+        };
+        /** NotificationPushUpdate */
+        NotificationPushUpdate: {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /** Kinds */
+            kinds?: string[] | null;
+        };
         /** NotificationRouteRead */
         NotificationRouteRead: {
             /** Id */
@@ -13386,6 +13494,24 @@ export interface components {
             /** Default */
             default: boolean;
         };
+        /** PlatformAlertPushRead */
+        PlatformAlertPushRead: {
+            /** Configured */
+            configured: boolean;
+            /** Enabled */
+            enabled: boolean;
+            /** People */
+            people?: string[];
+            lastDelivery?: components["schemas"]["PlatformAlertDelivery"] | null;
+        };
+        /** PlatformAlertPushUpdate */
+        PlatformAlertPushUpdate: {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+        };
         /** PlatformAlertRouteRead */
         PlatformAlertRouteRead: {
             /** Id */
@@ -13471,6 +13597,7 @@ export interface components {
             /** Types */
             types: components["schemas"]["PlatformAlertKindRead"][];
             email: components["schemas"]["PlatformAlertEmailRead"];
+            push: components["schemas"]["PlatformAlertPushRead"];
             /** Routes */
             routes: components["schemas"]["PlatformAlertRouteRead"][];
             /** Targets */
@@ -13486,6 +13613,7 @@ export interface components {
                 [key: string]: boolean;
             };
             email?: components["schemas"]["PlatformAlertEmailUpdate"];
+            push?: components["schemas"]["PlatformAlertPushUpdate"] | null;
             /** Routes */
             routes?: components["schemas"]["PlatformAlertRouteUpdate"][];
         };
@@ -14171,6 +14299,87 @@ export interface components {
             /** Data */
             data: components["schemas"]["PublishedResourceSummary"][];
             meta: components["schemas"]["PaginationMeta"];
+        };
+        /** PushCategoryRead */
+        PushCategoryRead: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Description */
+            description: string;
+            /** Enabled */
+            enabled: boolean;
+        };
+        /** PushDeviceRead */
+        PushDeviceRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Label */
+            label?: string | null;
+            /** Endpoint */
+            endpoint: string;
+            /** Useragent */
+            userAgent?: string | null;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Lastusedat */
+            lastUsedAt?: string | null;
+            /** Lastsuccessat */
+            lastSuccessAt?: string | null;
+            /**
+             * Failurecount
+             * @default 0
+             */
+            failureCount: number;
+        };
+        /** PushPreferencesUpdate */
+        PushPreferencesUpdate: {
+            /** Categories */
+            categories: {
+                [key: string]: boolean;
+            };
+        };
+        /** PushSettingsRead */
+        PushSettingsRead: {
+            /** Enabled */
+            enabled: boolean;
+            /** Publickey */
+            publicKey?: string | null;
+            /** Categories */
+            categories?: components["schemas"]["PushCategoryRead"][];
+            /** Devices */
+            devices?: components["schemas"]["PushDeviceRead"][];
+        };
+        /**
+         * PushSubscriptionCreate
+         * @description A browser's PushSubscription (``subscription.toJSON()``) plus what to call the device.
+         */
+        PushSubscriptionCreate: {
+            /** Endpoint */
+            endpoint: string;
+            keys: components["schemas"]["PushSubscriptionKeys"];
+            /** Useragent */
+            userAgent?: string | null;
+            /** Label */
+            label?: string | null;
+            /** Replaces */
+            replaces?: string | null;
+        };
+        /** PushSubscriptionKeys */
+        PushSubscriptionKeys: {
+            /** P256Dh */
+            p256dh: string;
+            /** Auth */
+            auth: string;
+        };
+        /** PushTestResult */
+        PushTestResult: {
+            /** Devices */
+            devices: number;
         };
         /** RecentEvent */
         RecentEvent: {
@@ -16356,6 +16565,7 @@ export interface components {
             /** Types */
             types: components["schemas"]["AlertKindRead"][];
             email: components["schemas"]["NotificationEmailRead"];
+            push: components["schemas"]["NotificationPushRead"];
             /** Routes */
             routes: components["schemas"]["NotificationRouteRead"][];
             /** Targets */
@@ -16372,6 +16582,7 @@ export interface components {
                 [key: string]: boolean;
             };
             email?: components["schemas"]["NotificationEmailUpdate"];
+            push?: components["schemas"]["NotificationPushUpdate"] | null;
             /** Routes */
             routes?: components["schemas"]["NotificationRouteUpdate"][];
             /** Integrationreminderhours */
@@ -20286,6 +20497,170 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_push_api_self_push_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushSettingsRead"];
+                };
+            };
+        };
+    };
+    update_preferences_api_self_push_preferences_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushPreferencesUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushSettingsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    subscribe_api_self_push_subscriptions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushSubscriptionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushDeviceRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unsubscribe_endpoint_api_self_push_subscriptions_delete: {
+        parameters: {
+            query: {
+                endpoint: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unsubscribe_api_self_push_subscriptions__subscription_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscription_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    send_test_api_self_push_test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushTestResult"];
                 };
             };
         };
