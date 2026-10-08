@@ -2484,6 +2484,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/self/push/approvals/{approval_id}/{decision}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Approve or Deny from a Notification
+         * @description The Approve / Deny buttons of an AI-approval notification: the token it carries, no session. Runs the
+         *     Ask page's resume as the approval's owner; results land in the conversation.
+         */
+        post: operations["decide_from_notification_api_self_push_approvals__approval_id___decision__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/self/workspaces/current": {
         parameters: {
             query?: never;
@@ -6137,6 +6158,8 @@ export interface paths {
          *     - MIME type, file size, checksum
          *     - Image dimensions (width, height, orientation)
          *     - Asset type classification
+         *
+         *     Refused when bigger than ASSET_MAX_FILE_SIZE (413) or of a type ASSET_ALLOWED_MIME_TYPES leaves out (415).
          */
         post: operations["upload_asset_api_platform_assets_upload_post"];
         delete?: never;
@@ -9056,6 +9079,11 @@ export interface components {
             enabled: boolean;
             /** Default */
             default: boolean;
+            /**
+             * Push
+             * @default true
+             */
+            push: boolean;
         };
         /** AlertTarget */
         AlertTarget: {
@@ -13493,6 +13521,11 @@ export interface components {
             enabled: boolean;
             /** Default */
             default: boolean;
+            /**
+             * Push
+             * @default true
+             */
+            push: boolean;
         };
         /** PlatformAlertPushRead */
         PlatformAlertPushRead: {
@@ -14299,6 +14332,22 @@ export interface components {
             /** Data */
             data: components["schemas"]["PublishedResourceSummary"][];
             meta: components["schemas"]["PaginationMeta"];
+        };
+        /** PushApprovalAction */
+        PushApprovalAction: {
+            /** Token */
+            token: string;
+        };
+        /** PushApprovalResult */
+        PushApprovalResult: {
+            /** Decision */
+            decision: string;
+            /** Message */
+            message: string;
+            /** Url */
+            url: string;
+            /** Badge */
+            badge?: number | null;
         };
         /** PushCategoryRead */
         PushCategoryRead: {
@@ -20661,6 +20710,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PushTestResult"];
+                };
+            };
+        };
+    };
+    decide_from_notification_api_self_push_approvals__approval_id___decision__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                approval_id: string;
+                decision: "approve" | "deny";
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushApprovalAction"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushApprovalResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
