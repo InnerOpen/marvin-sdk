@@ -457,13 +457,13 @@ export interface paths {
          * @description Deletes (revokes) an invitation token.
          *
          *     This allows administrators to manually revoke invitation tokens before they
-         *     are exhausted or expire. The token_id can be either the UUID or the token string.
+         *     are exhausted or expire.
          *
          *     Args:
-         *         token_id: The UUID or token string of the invitation to delete
+         *         token_id: The invitation's id (UUID), as the invitations list returns it
          *
          *     Raises:
-         *         HTTPException (404 Not Found): If the token does not exist
+         *         HTTPException (404 Not Found): If no invitation has that id
          *         HTTPException (403 Forbidden): If the user lacks permission to delete tokens
          */
         delete: operations["delete_invite_token_api_groups_invitations__token_id__delete"];
