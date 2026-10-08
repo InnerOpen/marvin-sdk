@@ -2415,6 +2415,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/self/push/badge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My App Icon Count
+         * @description What the installed app's icon shows: the current workspace's inbox plus my approvals waiting anywhere.
+         */
+        get: operations["get_badge_api_self_push_badge_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/self/push/preferences": {
         parameters: {
             query?: never;
@@ -4918,7 +4938,10 @@ export interface paths {
         get: operations["get_thread_api_ai_threads__thread_id__get"];
         put?: never;
         post?: never;
-        /** Delete a thread */
+        /**
+         * Delete a thread
+         * @description Delete a thread; the Ask files only it carried go to the Trash (restorable), library assets stay.
+         */
         delete: operations["delete_thread_api_ai_threads__thread_id__delete"];
         options?: never;
         head?: never;
@@ -6122,7 +6145,7 @@ export interface paths {
         };
         /**
          * List Assets
-         * @description Every asset but those in the Trash.
+         * @description The library's assets, by name; with `scope=ask`, the Ask files, newest first. Never those in the Trash.
          */
         get: operations["list_assets_api_platform_assets_get"];
         put?: never;
@@ -6250,6 +6273,27 @@ export interface paths {
          * @description Take an asset out of the Trash (`asset_restored`).
          */
         post: operations["restore_asset_api_platform_assets__item_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/assets/{item_id}/move-to-library": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Move an Ask File to the Assets Library
+         * @description File an Ask file (a chat attachment) in the Assets library. It then lists, counts and publishes like any
+         *     asset, and `asset_uploaded` fires for it. AUTHOR and above, like uploading straight to the library.
+         */
+        post: operations["move_to_library_api_platform_assets__item_id__move_to_library_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9307,6 +9351,11 @@ export interface components {
             /** Trashedby */
             trashedBy?: string | null;
             /**
+             * Scope
+             * @default library
+             */
+            scope: string;
+            /**
              * Suggestionjson
              * @description Pending AI-proposed changes staged for review (write-back)
              */
@@ -11158,6 +11207,11 @@ export interface components {
             trashedAt?: string | null;
             /** Trashedby */
             trashedBy?: string | null;
+            /**
+             * Scope
+             * @default library
+             */
+            scope: string;
             /**
              * Suggestionjson
              * @description Pending AI-proposed changes staged for review (write-back)
@@ -14366,6 +14420,20 @@ export interface components {
             url: string;
             /** Badge */
             badge?: number | null;
+            /** Workspace */
+            workspace?: string | null;
+        };
+        /**
+         * PushBadgeRead
+         * @description The installed app's icon count and what it's made of.
+         */
+        PushBadgeRead: {
+            /** Inbox */
+            inbox: number;
+            /** Approvals */
+            approvals: number;
+            /** Count */
+            count: number;
         };
         /** PushCategoryRead */
         PushCategoryRead: {
@@ -20584,6 +20652,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PushSettingsRead"];
+                };
+            };
+        };
+    };
+    get_badge_api_self_push_badge_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushBadgeRead"];
                 };
             };
         };
@@ -27310,7 +27398,10 @@ export interface operations {
     };
     list_assets_api_platform_assets_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description 'library' (the Assets library) or 'ask' (files attached to chat questions) */
+                scope?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -27324,6 +27415,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AssetRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -27525,6 +27625,37 @@ export interface operations {
         };
     };
     restore_asset_api_platform_assets__item_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssetRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    move_to_library_api_platform_assets__item_id__move_to_library_post: {
         parameters: {
             query?: never;
             header?: never;
