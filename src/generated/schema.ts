@@ -7798,6 +7798,8 @@ export interface components {
             entityType?: string | null;
             /** Entityid */
             entityId?: string | null;
+            /** Attachments */
+            attachments?: string[];
             /**
              * History
              * @default []
