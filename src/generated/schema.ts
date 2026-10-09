@@ -9521,6 +9521,8 @@ export interface components {
              * @default []
              */
             cleared: string[];
+            /** Builtfrom */
+            builtFrom?: string | null;
         };
         /** AttentionCounts */
         AttentionCounts: {
@@ -10662,6 +10664,8 @@ export interface components {
              * @default []
              */
             cleared: string[];
+            /** Builtfrom */
+            builtFrom?: string | null;
             /** Id */
             id: string;
             /** Slug */
