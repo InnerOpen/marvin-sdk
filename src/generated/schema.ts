@@ -16833,6 +16833,15 @@ export interface components {
                     [key: string]: string;
                 };
             };
+            /**
+             * Characterinsets
+             * @default {}
+             */
+            characterInsets: {
+                [key: string]: {
+                    [key: string]: number;
+                };
+            };
         };
         /** WorkspaceAISettingsUpdate */
         WorkspaceAISettingsUpdate: {
