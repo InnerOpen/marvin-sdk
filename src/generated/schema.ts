@@ -5100,6 +5100,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/automations/library": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Workflow Library
+         * @description Every Library recipe, with what this workspace is missing to use it (`missing` empty → ready here), the
+         *     capabilities the ideas wait on, and the workspace's names the setup pickers offer.
+         */
+        get: operations["library_api_automations_library_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/library/{recipe_id}/configure": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fill in a Library recipe
+         * @description The recipe filled in with `vars` for this workspace, for the workflow editor to load — nothing is saved (the
+         *     editor's Save creates it, switched off). 404 unknown recipe; 409 not usable here (`detail` says why); 422 a
+         *     setup value missing or of the wrong type.
+         */
+        post: operations["configure_recipe_api_automations_library__recipe_id__configure_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/automations/validate": {
         parameters: {
             query?: never;
@@ -14529,6 +14572,33 @@ export interface components {
             /** Occurredat */
             occurredAt?: string | null;
         };
+        /** RecipeConfigureRequest */
+        RecipeConfigureRequest: {
+            /**
+             * Vars
+             * @default {}
+             */
+            vars: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * RecipeConfigureResult
+         * @description A recipe filled in for this workspace — not saved. `issues` are what the builder would flag (shown, not blocking).
+         */
+        RecipeConfigureResult: {
+            /** Name */
+            name: string;
+            /** Definition */
+            definition: {
+                [key: string]: unknown;
+            };
+            /**
+             * Issues
+             * @default []
+             */
+            issues: components["schemas"]["AutomationValidationIssue"][];
+        };
         /**
          * RecipientType
          * @enum {string}
@@ -16420,6 +16490,251 @@ export interface components {
              * Format: uuid4
              */
             id: string;
+        };
+        /** WorkflowCapability */
+        WorkflowCapability: {
+            /** Name */
+            name: string;
+            /**
+             * Priority
+             * @default
+             */
+            priority: string;
+            /**
+             * Acceptance
+             * @default
+             */
+            acceptance: string;
+        };
+        /** WorkflowLibraryEntryType */
+        WorkflowLibraryEntryType: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Fields
+             * @default []
+             */
+            fields: string[];
+        };
+        /** WorkflowLibraryIntegration */
+        WorkflowLibraryIntegration: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Provider */
+            provider: string;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+        };
+        /** WorkflowLibraryRead */
+        WorkflowLibraryRead: {
+            /**
+             * Recipes
+             * @default []
+             */
+            recipes: components["schemas"]["WorkflowRecipe"][];
+            /**
+             * Capabilities
+             * @default {}
+             */
+            capabilities: {
+                [key: string]: components["schemas"]["WorkflowCapability"];
+            };
+            /**
+             * @default {
+             *       "entryTypes": [],
+             *       "integrations": [],
+             *       "collections": [],
+             *       "outgoingWebhooks": [],
+             *       "incomingWebhooks": [],
+             *       "statuses": []
+             *     }
+             */
+            refs: components["schemas"]["WorkflowLibraryRefs"];
+        };
+        /**
+         * WorkflowLibraryRef
+         * @description A collection, an outgoing webhook (`id`) or an incoming one (`slug`) — what a picker offers.
+         */
+        WorkflowLibraryRef: {
+            /** Id */
+            id?: string | null;
+            /** Slug */
+            slug?: string | null;
+            /** Name */
+            name: string;
+            /** Enabled */
+            enabled?: boolean | null;
+        };
+        /**
+         * WorkflowLibraryRefs
+         * @description The workspace's names every setup picker draws from, in one fetch.
+         */
+        WorkflowLibraryRefs: {
+            /**
+             * Entrytypes
+             * @default []
+             */
+            entryTypes: components["schemas"]["WorkflowLibraryEntryType"][];
+            /**
+             * Integrations
+             * @default []
+             */
+            integrations: components["schemas"]["WorkflowLibraryIntegration"][];
+            /**
+             * Collections
+             * @default []
+             */
+            collections: components["schemas"]["WorkflowLibraryRef"][];
+            /**
+             * Outgoingwebhooks
+             * @default []
+             */
+            outgoingWebhooks: components["schemas"]["WorkflowLibraryRef"][];
+            /**
+             * Incomingwebhooks
+             * @default []
+             */
+            incomingWebhooks: components["schemas"]["WorkflowLibraryRef"][];
+            /**
+             * Statuses
+             * @default []
+             */
+            statuses: string[];
+        };
+        /**
+         * WorkflowRecipe
+         * @description One catalogue entry, and whether this workspace can use it: `missing` empty → ready here.
+         */
+        WorkflowRecipe: {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /** Outcome */
+            outcome: string;
+            /** Category */
+            category: string;
+            /** Categoryslug */
+            categorySlug: string;
+            /**
+             * Tags
+             * @default []
+             */
+            tags: string[];
+            trigger: components["schemas"]["WorkflowRecipeTrigger"];
+            /** Status */
+            status: string;
+            /** Shape */
+            shape: string;
+            /**
+             * Providers
+             * @default []
+             */
+            providers: string[];
+            /**
+             * Sideeffects
+             * @default []
+             */
+            sideEffects: components["schemas"]["WorkflowRecipeSideEffect"][];
+            /**
+             * Setupvariables
+             * @default []
+             */
+            setupVariables: components["schemas"]["WorkflowRecipeVariable"][];
+            /**
+             * Supportingobjects
+             * @default []
+             */
+            supportingObjects: components["schemas"]["WorkflowRecipeSupportingObject"][];
+            /**
+             * Dependencies
+             * @default []
+             */
+            dependencies: components["schemas"]["WorkflowRecipeDependency"][];
+            /**
+             * Missing
+             * @default []
+             */
+            missing: string[];
+        };
+        /**
+         * WorkflowRecipeDependency
+         * @description An idea's gap: the capability it waits on (a key of `WorkflowLibraryRead.capabilities`) and why.
+         */
+        WorkflowRecipeDependency: {
+            /** Capability */
+            capability: string;
+            /**
+             * Why
+             * @default
+             */
+            why: string;
+        };
+        /** WorkflowRecipeSideEffect */
+        WorkflowRecipeSideEffect: {
+            /** Kind */
+            kind: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+        };
+        /**
+         * WorkflowRecipeSupportingObject
+         * @description Something set up alongside the recipe — for a configuration recipe, the whole of it.
+         */
+        WorkflowRecipeSupportingObject: {
+            /** Kind */
+            kind: string;
+            /**
+             * Name
+             * @default
+             */
+            name: string;
+            /**
+             * Purpose
+             * @default
+             */
+            purpose: string;
+            /**
+             * Required
+             * @default false
+             */
+            required: boolean;
+        };
+        /** WorkflowRecipeTrigger */
+        WorkflowRecipeTrigger: {
+            /** Type */
+            type: string;
+            /** Event */
+            event?: string | null;
+            /** Note */
+            note?: string | null;
+        };
+        /**
+         * WorkflowRecipeVariable
+         * @description A setup placeholder the person fills: its `type` says which picker (entry_type_slug, field_key, webhook_id…).
+         */
+        WorkflowRecipeVariable: {
+            /** Name */
+            name: string;
+            /** Type */
+            type: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Example */
+            example?: unknown;
         };
         /** WorkspaceAISettingsRead */
         WorkspaceAISettingsRead: {
@@ -25016,6 +25331,61 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AutomationOptions"];
+                };
+            };
+        };
+    };
+    library_api_automations_library_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowLibraryRead"];
+                };
+            };
+        };
+    };
+    configure_recipe_api_automations_library__recipe_id__configure_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                recipe_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecipeConfigureRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecipeConfigureResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
