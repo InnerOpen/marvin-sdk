@@ -2744,6 +2744,69 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/ai-prices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * AI price list
+         * @description Every model with a price or recent runs, per provider: the price used, where it comes from (override,
+         *     provider, core, self_hosted, none), the last 90 days' runs and how many have no cost; and the overrides.
+         */
+        get: operations["get_prices_api_admin_ai_prices_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/ai-prices/overrides": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set AI price overrides
+         * @description Replace the overrides (USD per million tokens, input and output). An override wins over every other
+         *     price for that model; remove it to fall back.
+         */
+        put: operations["set_overrides_api_admin_ai_prices_overrides_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/ai-prices/backfill": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Price a model's past unpriced runs
+         * @description Give this model's completed runs that have no cost the cost its price now gives them (all retained runs,
+         *     every workspace). 0 when the model still has no price.
+         */
+        post: operations["backfill_api_admin_ai_prices_backfill_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/alerts": {
         parameters: {
             query?: never;
@@ -8006,6 +8069,84 @@ export interface components {
              * @default editor
              */
             source: string;
+        };
+        /** AIPriceBackfill */
+        AIPriceBackfill: {
+            /** Provider */
+            provider: string;
+            /** Model */
+            model: string;
+        };
+        /** AIPriceBackfillResult */
+        AIPriceBackfillResult: {
+            /** Provider */
+            provider: string;
+            /** Model */
+            model: string;
+            /** Updated */
+            updated: number;
+        };
+        /** AIPriceList */
+        AIPriceList: {
+            /**
+             * Prices
+             * @default []
+             */
+            prices: components["schemas"]["AIPriceRow"][];
+            /**
+             * Overrides
+             * @default []
+             */
+            overrides: components["schemas"]["AIPriceOverride"][];
+        };
+        /** AIPriceOverride */
+        AIPriceOverride: {
+            /** Provider */
+            provider: string;
+            /** Model */
+            model: string;
+            /** Inputper1M */
+            inputPer1m: number;
+            /** Outputper1M */
+            outputPer1m: number;
+            /** Updatedat */
+            updatedAt?: string | null;
+        };
+        /** AIPriceOverridesUpdate */
+        AIPriceOverridesUpdate: {
+            /**
+             * Prices
+             * @default []
+             */
+            prices: components["schemas"]["AIPriceOverride"][];
+        };
+        /** AIPriceRow */
+        AIPriceRow: {
+            /** Provider */
+            provider: string;
+            /** Model */
+            model: string;
+            /** Source */
+            source: string;
+            /** Inputper1M */
+            inputPer1m?: number | null;
+            /** Outputper1M */
+            outputPer1m?: number | null;
+            /**
+             * Overridden
+             * @default false
+             */
+            overridden: boolean;
+            /**
+             * Runs
+             * @default 0
+             */
+            runs: number;
+            /**
+             * Unpricedruns
+             * @default 0
+             */
+            unpricedRuns: number;
         };
         /** AIProviderCreate */
         AIProviderCreate: {
@@ -21309,6 +21450,92 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CheckAppConfig"];
+                };
+            };
+        };
+    };
+    get_prices_api_admin_ai_prices_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIPriceList"];
+                };
+            };
+        };
+    };
+    set_overrides_api_admin_ai_prices_overrides_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIPriceOverridesUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIPriceList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    backfill_api_admin_ai_prices_backfill_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIPriceBackfill"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIPriceBackfillResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
