@@ -8348,6 +8348,20 @@ export interface components {
              */
             source: string;
         };
+        /**
+         * AIUnpricedModel
+         * @description A provider/model this month's runs used with no price: their cost counts as unknown, not $0.
+         */
+        AIUnpricedModel: {
+            /** Provider */
+            provider: string;
+            /** Model */
+            model: string;
+            /** Runs */
+            runs: number;
+            /** Tokens */
+            tokens: number;
+        };
         /** AIUsageLimits */
         AIUsageLimits: {
             /** Maxcostpermonthusd */
@@ -16837,6 +16851,16 @@ export interface components {
              * @default []
              */
             byOperation: components["schemas"]["AIUsageOperation"][];
+            /**
+             * Unpricedruns
+             * @default 0
+             */
+            unpricedRuns: number;
+            /**
+             * Unpricedmodels
+             * @default []
+             */
+            unpricedModels: components["schemas"]["AIUnpricedModel"][];
         };
         /**
          * WorkspaceActivationRequest
