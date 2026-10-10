@@ -1,3 +1,10 @@
+# [4.5.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.4.0...v4.5.0) (2026-10-10)
+
+
+### Features
+
+* **automations:** workflow provenance and capability steps ([8a484af](https://github.com/InnerOpen/marvin-sdk/commit/8a484afd9c2871ffbf89ce8ee1b28a14ffb8cef1))
+
 # [4.4.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.3.0...v4.4.0) (2026-10-06)
 
 
