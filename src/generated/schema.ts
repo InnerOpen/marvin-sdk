@@ -219,8 +219,9 @@ export interface paths {
          * @description Authenticates a user with username and password (form data) and returns an access token.
          *
          *     It sets the access token as an HTTPOnly cookie and also returns it in the response body.
-         *     Handles potential `UserLockedOut` exceptions and general authentication failures.
-         *     Client IP address is logged for security purposes.
+         *     Repeated failures are refused for a while, per account and per client IP, before any password is
+         *     checked (services/security/login_throttle.py): 429 with Retry-After, the same whether or not the
+         *     account exists.
          *
          *     Args:
          *         request (Request): The incoming HTTP request.
@@ -232,7 +233,7 @@ export interface paths {
          *         dict[str, str]: A dictionary containing the `access_token` and `token_type`.
          *
          *     Raises:
-         *         HTTPException (423 Locked): If the user account is locked.
+         *         HTTPException (429 Too Many Requests): Too many recent failures for this account or IP.
          *         HTTPException (401 Unauthorized): If authentication fails (incorrect credentials).
          */
         post: operations["get_token_api_auth_token_post"];
