@@ -13,7 +13,7 @@ The Platform API includes three admin modules:
 |--------|---------|
 | `adminUsers` | Global user management |
 | `adminSystem` | System configuration |
-| `adminMaintenance` | Maintenance operations |
+| `adminMaintenance` | Storage and system statistics |
 
 ## User Management
 
@@ -92,37 +92,22 @@ console.log(`Total entries: ${stats.entryCount}`);
 
 ## Maintenance Operations
 
-### Database Maintenance
+`adminMaintenance` is read-only: storage use and system statistics.
 
 ```typescript
-// Vacuum database
-await platform.adminMaintenance.vacuum();
-
-// Rebuild indexes
-await platform.adminMaintenance.rebuildIndexes();
-
-// Analyze database
-await platform.adminMaintenance.analyze();
+const summary = await platform.adminMaintenance.getSummary(); // data directory size
+const storage = await platform.adminMaintenance.getStorage(); // temp, backups, seeds, plugins
+const stats = await platform.adminMaintenance.getStats();     // counts and sizes
 ```
 
-### Cache Management
+Cleanup runs as **system scheduled tasks**, which keep a run history: `cleanup_temp_files`,
+`prune_revoked_tokens`, `prune_event_logs`, `prune_ai_executions`, `prune_scheduled_task_executions`, and
+`optimize_database` (VACUUM + ANALYZE; disabled, for on-demand runs). Run one now:
 
 ```typescript
-// Clear all caches
-await platform.adminMaintenance.clearCache();
-
-// Clear specific cache
-await platform.adminMaintenance.clearCache('entries');
-```
-
-### Data Cleanup
-
-```typescript
-// Clean up deleted entries
-await platform.adminMaintenance.cleanupDeletedEntries();
-
-// Remove orphaned assets
-await platform.adminMaintenance.cleanupOrphanedAssets();
+const tasks = await platform.adminScheduledTasks.list();
+const vacuum = tasks.find((t) => t.slug === 'optimize_database');
+if (vacuum) await platform.adminScheduledTasks.execute(vacuum.id);
 ```
 
 ## Examples

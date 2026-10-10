@@ -208,11 +208,6 @@ This document analyzes which Marvin server API endpoints are covered by the Type
 | **Maintenance** | | |
 | `GET /admin/maintenance/stats` | `platform.adminMaintenance.getStats()` | ✅ |
 | `GET /admin/maintenance/storage` | `platform.adminMaintenance.getStorage()` | ✅ |
-| `POST /admin/maintenance/clear-cache` | `platform.adminMaintenance.clearCache()` | ✅ |
-| `POST /admin/maintenance/optimize-db` | `platform.adminMaintenance.optimizeDb()` | ✅ |
-| `POST /admin/maintenance/cleanup-tokens` | `platform.adminMaintenance.cleanupTokens()` | ✅ |
-| `POST /admin/maintenance/cleanup-events` | `platform.adminMaintenance.cleanupEvents()` | ✅ |
-| `POST /admin/maintenance/clean/temp` | `platform.adminMaintenance.cleanTemp()` | ✅ |
 
 ### ❌ Missing
 

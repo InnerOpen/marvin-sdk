@@ -1,7 +1,8 @@
 /**
  * Admin Maintenance Module - Platform API
  *
- * System maintenance operations for administrators
+ * System maintenance information for administrators. Cleanup actions (temp files, revoked tokens,
+ * VACUUM) are system scheduled tasks: run one with `adminScheduledTasks.execute(id)`.
  */
 
 import type { HttpClient } from '../../core';
@@ -19,41 +20,6 @@ export class AdminMaintenanceModule {
    */
   async getSummary(): Promise<MaintenanceSummary> {
     return this.http.get<MaintenanceSummary>('/api/admin/maintenance');
-  }
-
-  /**
-   * Clean temporary files
-   */
-  async cleanTemp(): Promise<{ message: string }> {
-    return this.http.post<{ message: string }>('/api/admin/maintenance/clean/temp', {});
-  }
-
-  /**
-   * Clean up old events
-   */
-  async cleanupEvents(): Promise<{ message: string; deleted: number }> {
-    return this.http.post<{ message: string; deleted: number }>('/api/admin/maintenance/cleanup-events', {});
-  }
-
-  /**
-   * Clean up expired tokens
-   */
-  async cleanupTokens(): Promise<{ message: string; deleted: number }> {
-    return this.http.post<{ message: string; deleted: number }>('/api/admin/maintenance/cleanup-tokens', {});
-  }
-
-  /**
-   * Clear application cache
-   */
-  async clearCache(): Promise<{ message: string }> {
-    return this.http.post<{ message: string }>('/api/admin/maintenance/clear-cache', {});
-  }
-
-  /**
-   * Optimize database
-   */
-  async optimizeDatabase(): Promise<{ message: string }> {
-    return this.http.post<{ message: string }>('/api/admin/maintenance/optimize-db', {});
   }
 
   /**
