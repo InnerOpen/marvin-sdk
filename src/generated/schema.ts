@@ -11878,6 +11878,8 @@ export interface components {
             name: string;
             /** Enabled */
             enabled: boolean;
+            /** Switchedon */
+            switchedOn?: boolean | null;
             /** Detail */
             detail?: string | null;
             /** Triggertype */
