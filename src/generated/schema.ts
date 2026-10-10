@@ -9698,6 +9698,8 @@ export interface components {
             definition: {
                 [key: string]: unknown;
             };
+            /** Sourcerecipe */
+            sourceRecipe?: string | null;
         };
         /**
          * AutomationExecutionDetail
@@ -10062,6 +10064,10 @@ export interface components {
             sourceIntegrationId?: string | null;
             /** Sourceblueprint */
             sourceBlueprint?: string | null;
+            /** Sourcerecipe */
+            sourceRecipe?: string | null;
+            /** Sourcerecipeversion */
+            sourceRecipeVersion?: string | null;
         };
         /**
          * AutomationTargetOption
@@ -16536,6 +16542,11 @@ export interface components {
              * @default false
              */
             enabled: boolean;
+            /**
+             * Capabilities
+             * @default []
+             */
+            capabilities: string[];
         };
         /** WorkflowLibraryRead */
         WorkflowLibraryRead: {
@@ -16644,6 +16655,16 @@ export interface components {
              */
             providers: string[];
             /**
+             * Capabilities
+             * @default []
+             */
+            capabilities: string[];
+            /**
+             * Inuse
+             * @default []
+             */
+            inUse: components["schemas"]["WorkflowRecipeUse"][];
+            /**
              * Sideeffects
              * @default []
              */
@@ -16723,6 +16744,28 @@ export interface components {
             event?: string | null;
             /** Note */
             note?: string | null;
+        };
+        /**
+         * WorkflowRecipeUse
+         * @description A workflow in this workspace made from a recipe.
+         */
+        WorkflowRecipeUse: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Enabled */
+            enabled: boolean;
+            /**
+             * Outdated
+             * @default false
+             */
+            outdated: boolean;
         };
         /**
          * WorkflowRecipeVariable

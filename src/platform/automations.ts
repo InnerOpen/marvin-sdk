@@ -65,6 +65,12 @@ export interface AutomationAction {
   url?: string;
   body?: Record<string, unknown>;
   secret_ref?: string;
+  // integration: the connection's slug, and the provider action key — or a capability it offers instead
+  // (`notify` with args `title` and `body` sends through whatever message action it has: Slack, Apprise…).
+  integration?: string;
+  action?: string;
+  capability?: string;
+  args?: Record<string, unknown>;
 }
 
 /** Trigger config (snake_case — literal keys the engine reads, not aliased API fields). */
@@ -118,6 +124,9 @@ export interface Automation {
   enabled: boolean;
   definition: AutomationDefinition;
   createdBy: string | null;
+  /** The Workflow Library recipe it was made from, if any, and that recipe's version then. */
+  sourceRecipe?: string | null;
+  sourceRecipeVersion?: string | null;
 }
 
 export interface AutomationCreate {
@@ -125,6 +134,8 @@ export interface AutomationCreate {
   slug?: string;
   enabled?: boolean;
   definition?: AutomationDefinition;
+  /** Made from a Workflow Library recipe (its id): recorded with the recipe's version, so the Library shows it in use. */
+  sourceRecipe?: string;
 }
 
 export interface AutomationUpdate {
