@@ -1,3 +1,16 @@
+# [5.0.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.5.0...v5.0.0) (2026-10-10)
+
+
+### Features
+
+* **admin:** remove the maintenance cleanup methods ([868687c](https://github.com/InnerOpen/marvin-sdk/commit/868687c13aef50649b1a61a7f429cb2a11cb639d))
+
+
+### BREAKING CHANGES
+
+* **admin:** adminMaintenance.cleanTemp(), cleanupEvents(), cleanupTokens(), clearCache() and
+optimizeDatabase() are removed; run the matching system scheduled task instead.
+
 # [4.5.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.4.0...v4.5.0) (2026-10-10)
 
 
