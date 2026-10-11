@@ -2807,6 +2807,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/ai-prices/feed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set the AI price feed URL
+         * @description Where the daily price feed is fetched from (LiteLLM's format, https): null = the default
+         *     (AI_PRICE_FEED_URL), "" = off. Takes effect at the next refresh.
+         */
+        put: operations["set_feed_api_admin_ai_prices_feed_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/ai-prices/feed/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refresh the AI price feed now
+         * @description Fetch the price feed now. A failure keeps the last good prices; the error is in the status.
+         */
+        post: operations["refresh_feed_api_admin_ai_prices_feed_refresh_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/alerts": {
         parameters: {
             query?: never;
@@ -8086,6 +8127,33 @@ export interface components {
             /** Updated */
             updated: number;
         };
+        /** AIPriceFeedStatus */
+        AIPriceFeedStatus: {
+            /** Url */
+            url: string;
+            /** Customurl */
+            customUrl?: string | null;
+            /** Defaulturl */
+            defaultUrl: string;
+            /** Fetchedfrom */
+            fetchedFrom?: string | null;
+            /** Fetchedat */
+            fetchedAt?: string | null;
+            /**
+             * Models
+             * @default 0
+             */
+            models: number;
+            /** Error */
+            error?: string | null;
+            /** Errorat */
+            errorAt?: string | null;
+        };
+        /** AIPriceFeedUpdate */
+        AIPriceFeedUpdate: {
+            /** Url */
+            url?: string | null;
+        };
         /** AIPriceList */
         AIPriceList: {
             /**
@@ -8098,6 +8166,7 @@ export interface components {
              * @default []
              */
             overrides: components["schemas"]["AIPriceOverride"][];
+            feed?: components["schemas"]["AIPriceFeedStatus"] | null;
         };
         /** AIPriceOverride */
         AIPriceOverride: {
@@ -21536,6 +21605,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_feed_api_admin_ai_prices_feed_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AIPriceFeedUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIPriceFeedStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    refresh_feed_api_admin_ai_prices_feed_refresh_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AIPriceFeedStatus"];
                 };
             };
         };
