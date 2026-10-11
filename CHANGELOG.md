@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.0.0...v5.1.0) (2026-10-11)
+
+
+### Features
+
+* **types:** WorkflowRecipe.source — recipes shipped by an installed integration ([153c31a](https://github.com/InnerOpen/marvin-sdk/commit/153c31a0570d4e1aebd468a627faefa914b1dc23))
+
 # [5.0.0](https://github.com/InnerOpen/marvin-sdk/compare/v4.5.0...v5.0.0) (2026-10-10)
 
 
