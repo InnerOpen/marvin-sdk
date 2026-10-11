@@ -16777,6 +16777,7 @@ export interface components {
              * @default []
              */
             missing: string[];
+            source?: components["schemas"]["WorkflowRecipeSource"] | null;
         };
         /**
          * WorkflowRecipeDependency
@@ -16800,6 +16801,20 @@ export interface components {
              * @default
              */
             description: string;
+        };
+        /**
+         * WorkflowRecipeSource
+         * @description Where a recipe came from when an installed integration ships it (absent for Marvin's own).
+         */
+        WorkflowRecipeSource: {
+            /** Provider */
+            provider: string;
+            /** Name */
+            name: string;
+            /** Package */
+            package?: string | null;
+            /** Version */
+            version?: string | null;
         };
         /**
          * WorkflowRecipeSupportingObject
