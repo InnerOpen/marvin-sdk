@@ -1,3 +1,10 @@
+# [5.6.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.5.0...v5.6.0) (2026-10-12)
+
+
+### Features
+
+* **automations:** run(id, inputs) — a manual workflow's run inputs ([e3b499f](https://github.com/InnerOpen/marvin-sdk/commit/e3b499fbaf5ace81ace7fc104e418122e7242b57))
+
 # [5.5.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.4.0...v5.5.0) (2026-10-12)
 
 
