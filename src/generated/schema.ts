@@ -5110,6 +5110,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/automations/approvals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Workflow runs waiting for approval
+         * @description The runs in this workspace waiting at an Approval step that you may decide (your role is at least the step's
+         *     `approvers`), oldest first. EDITOR and above.
+         */
+        get: operations["list_approvals_api_automations_approvals_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/approvals/{approval_id}/decide": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Approve or deny a waiting run
+         * @description Approve or deny; the run goes on from the next step with `${steps.<id>.output.decision}` (approved, denied — or
+         *     stale when the entry changed after it was asked). 403 below the step's role; 404 unknown; 409 already decided
+         *     or expired.
+         */
+        post: operations["decide_approval_api_automations_approvals__approval_id__decide_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/automations/validate": {
         parameters: {
             query?: never;
@@ -16590,6 +16633,59 @@ export interface components {
              */
             id: string;
         };
+        /** WorkflowApprovalDecision */
+        WorkflowApprovalDecision: {
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "approve" | "deny";
+            /** Note */
+            note?: string | null;
+        };
+        /**
+         * WorkflowApprovalRead
+         * @description A workflow run waiting at an Approval step (or the decision on one).
+         */
+        WorkflowApprovalRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Automationid
+             * Format: uuid4
+             */
+            automationId: string;
+            /** Automationname */
+            automationName?: string | null;
+            /** Automationslug */
+            automationSlug?: string | null;
+            /** Message */
+            message: string;
+            /** Approvers */
+            approvers: string;
+            /** Status */
+            status: string;
+            /** Entryid */
+            entryId?: string | null;
+            /** Entrytitle */
+            entryTitle?: string | null;
+            /** Createdat */
+            createdAt?: string | null;
+            /**
+             * Expiresat
+             * Format: date-time
+             */
+            expiresAt: string;
+            /** Decidedby */
+            decidedBy?: string | null;
+            /** Decidedat */
+            decidedAt?: string | null;
+            /** Note */
+            note?: string | null;
+        };
         /** WorkflowCapability */
         WorkflowCapability: {
             /** Name */
@@ -25586,6 +25682,61 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RecipeConfigureResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_approvals_api_automations_approvals_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowApprovalRead"][];
+                };
+            };
+        };
+    };
+    decide_approval_api_automations_approvals__approval_id__decide_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                approval_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkflowApprovalDecision"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowApprovalRead"];
                 };
             };
             /** @description Validation Error */
