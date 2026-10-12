@@ -1,3 +1,10 @@
+# [5.5.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.4.0...v5.5.0) (2026-10-12)
+
+
+### Features
+
+* **assets:** list filters — origin, versions, source, tags, collection, sort; versionsCount ([f5f3c21](https://github.com/InnerOpen/marvin-sdk/commit/f5f3c218a267d3d2b7c4db9ad00b50bb3eca3e36))
+
 # [5.4.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.3.0...v5.4.0) (2026-10-12)
 
 
