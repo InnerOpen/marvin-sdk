@@ -1,3 +1,10 @@
+# [5.3.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.2.0...v5.3.0) (2026-10-12)
+
+
+### Features
+
+* **types:** one-tap Approve/Deny on a waiting workflow's push — POST /api/self/push/workflow-approvals/{id}/{decision} ([71c5719](https://github.com/InnerOpen/marvin-sdk/commit/71c5719ab016d124856e3e87bdd3562db2bac787))
+
 # [5.2.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.1.0...v5.2.0) (2026-10-12)
 
 
