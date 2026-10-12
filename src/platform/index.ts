@@ -44,6 +44,7 @@ export type {
   // Assets
   PlatformAsset,
   PlatformAssetUpdate,
+  PlatformAssetListParams,
 
   // API Clients
   PlatformAPIClient,

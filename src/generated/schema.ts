@@ -6223,7 +6223,8 @@ export interface paths {
         };
         /**
          * List Assets
-         * @description The library's assets, by name; with `scope=ask`, the Ask files, newest first. Never those in the Trash.
+         * @description The library's assets (filtered as the workflow and agent asset queries are), each with how many versions
+         *     were made from it; with `scope=ask`, the Ask files, newest first. Never those in the Trash.
          */
         get: operations["list_assets_api_platform_assets_get"];
         put?: never;
@@ -9554,6 +9555,19 @@ export interface components {
              */
             scope: string;
             /**
+             * Origin
+             * @default upload
+             * @enum {string}
+             */
+            origin: "upload" | "derived" | "generated";
+            /** Sourceassetid */
+            sourceAssetId?: string | null;
+            /**
+             * Versionscount
+             * @default 0
+             */
+            versionsCount: number;
+            /**
              * Suggestionjson
              * @description Pending AI-proposed changes staged for review (write-back)
              */
@@ -11420,6 +11434,19 @@ export interface components {
              * @default library
              */
             scope: string;
+            /**
+             * Origin
+             * @default upload
+             * @enum {string}
+             */
+            origin: "upload" | "derived" | "generated";
+            /** Sourceassetid */
+            sourceAssetId?: string | null;
+            /**
+             * Versionscount
+             * @default 0
+             */
+            versionsCount: number;
             /**
              * Suggestionjson
              * @description Pending AI-proposed changes staged for review (write-back)
@@ -28193,6 +28220,23 @@ export interface operations {
             query?: {
                 /** @description 'library' (the Assets library) or 'ask' (files attached to chat questions) */
                 scope?: string;
+                /** @description Name, slug or filename contains */
+                q?: string | null;
+                /** @description image, svg, document, video, audio, archive, other */
+                asset_type?: string[];
+                /** @description upload, derived (made from another asset), generated */
+                origin?: string[];
+                /** @description Carrying any of these tags (slug or name) */
+                tag?: string[];
+                /** @description In this collection (slug or name) */
+                collection?: string | null;
+                /** @description true: on no entry; false: on at least one */
+                unattached?: boolean | null;
+                /** @description false: fold versions under their original; true: only versions */
+                versions?: boolean | null;
+                /** @description The versions made from this asset (id or slug) */
+                source?: string | null;
+                sort?: "name" | "newest" | "oldest" | "largest";
             };
             header?: never;
             path?: never;

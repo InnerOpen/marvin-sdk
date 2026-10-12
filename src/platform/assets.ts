@@ -8,6 +8,7 @@ import { HttpClient, MarvinValidationError } from '../core';
 import type { BinaryResponse } from '../core';
 import type {
   PlatformAsset,
+  PlatformAssetListParams,
   PlatformAssetUpdate,
   PlatformAssetUpload,
 } from './types';
@@ -77,10 +78,28 @@ export class AssetsModule {
   }
 
   /**
-   * List all assets
+   * List the library's assets, optionally filtered (the same keys workflows and the agent query assets by):
+   * `q`, `asset_type`, `origin` (upload | derived | generated), `tag`, `collection`, `unattached`,
+   * `versions` (false: versions folded under their original; true: only versions), `source` (the versions made
+   * from this asset), `sort` (name | newest | oldest | largest). Each asset carries its `versionsCount`.
+   *
+   * @example
+   * ```typescript
+   * // Originals only, newest first
+   * const originals = await marvin.platform.assets.list({ versions: false, sort: 'newest' });
+   * // The crops and sizes made from one picture
+   * const versions = await marvin.platform.assets.list({ source: 'harbour' });
+   * ```
    */
-  async list(): Promise<PlatformAsset[]> {
-    return this.http.get<PlatformAsset[]>('/api/platform/assets');
+  async list(params?: PlatformAssetListParams): Promise<PlatformAsset[]> {
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(params ?? {})) {
+      for (const v of Array.isArray(value) ? value : [value]) {
+        if (v !== undefined && v !== null && v !== '') query.append(key, String(v));
+      }
+    }
+    const qs = query.toString();
+    return this.http.get<PlatformAsset[]>(qs ? `/api/platform/assets?${qs}` : '/api/platform/assets');
   }
 
   /**

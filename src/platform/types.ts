@@ -5,7 +5,7 @@
  * with better naming for public API consumption
  */
 
-import type { components } from '../generated/schema';
+import type { components, operations } from '../generated/schema';
 
 /**
  * Entry (Platform API - full CRUD)
@@ -105,6 +105,8 @@ export type PlatformResourceUpdate = components['schemas']['ResourceUpdate'];
  */
 export type PlatformAsset = components['schemas']['AssetRead'];
 export type PlatformAssetUpdate = components['schemas']['AssetUpdate'];
+/** Filters for `assets.list()` — the query GET /api/platform/assets takes (the library's filter bar). */
+export type PlatformAssetListParams = NonNullable<operations['list_assets_api_platform_assets_get']['parameters']['query']>;
 // AssetUploadRequest not in OpenAPI (used as Form parameters)
 export type PlatformAssetUpload = {
   slug: string;
