@@ -5308,6 +5308,9 @@ export interface paths {
          *     by default the latest matching event (see ``GET /samples``). The result adds ``sample``,
          *     ``trigger_matched``, per-condition ``conditions`` with the values compared, and
          *     ``would_fire``.
+         *
+         *     The body's ``inputs`` are the run's inputs (the manual trigger's ``inputs``: ${input.<name>}); a missing
+         *     required one, an unknown name or a value that doesn't fit is a 400 saying which.
          */
         post: operations["run_automation_api_automations__automation_id__run_post"];
         delete?: never;
@@ -10236,6 +10239,16 @@ export interface components {
             sourceRecipe?: string | null;
             /** Sourcerecipeversion */
             sourceRecipeVersion?: string | null;
+        };
+        /**
+         * AutomationRunRequest
+         * @description A run's inputs, by name — the workflow's manual trigger declares them (`trigger.inputs`).
+         */
+        AutomationRunRequest: {
+            /** Inputs */
+            inputs?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * AutomationTargetOption
@@ -26018,7 +26031,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AutomationRunRequest"] | null;
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {

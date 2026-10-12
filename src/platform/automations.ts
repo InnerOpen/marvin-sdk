@@ -416,10 +416,14 @@ export class AutomationsModule {
     await this.http.delete<void>(`/api/automations/${validId}`);
   }
 
-  /** Run an automation now (the Manual trigger). Skips the trigger + condition gates. */
-  async run(id: string): Promise<AutomationRunResult> {
+  /**
+   * Run an automation now (the Manual trigger). Skips the trigger + condition gates. `inputs` are the run's inputs, by
+   * name — the workflow's manual trigger declares them (`trigger.inputs`; steps read `${input.<name>}`); a missing
+   * required one, an unknown name or a value that doesn't fit is a 400 saying which.
+   */
+  async run(id: string, inputs?: Record<string, unknown>): Promise<AutomationRunResult> {
     const validId = this.http.validatePathParam(id, 'automation id');
-    return this.http.post<AutomationRunResult>(`/api/automations/${validId}/run`, {});
+    return this.http.post<AutomationRunResult>(`/api/automations/${validId}/run`, inputs ? { inputs } : {});
   }
 
   /**
