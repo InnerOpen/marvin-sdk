@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.1.0...v5.2.0) (2026-10-12)
+
+
+### Features
+
+* **types:** workflow approvals — GET /api/automations/approvals, POST …/{id}/decide ([3971bda](https://github.com/InnerOpen/marvin-sdk/commit/3971bda9fcc44c92478a4b147dcfc20a219656e5))
+
 # [5.1.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.0.0...v5.1.0) (2026-10-11)
 
 
