@@ -5295,6 +5295,10 @@ export interface paths {
          * @description Run the automation's steps immediately — the Manual trigger / Run button. Skips the
          *     trigger + condition gates (the caller asked for it explicitly).
          *
+         *     ``background=true`` starts the run after answering (``{"status": "started"}``) instead of waiting for it — for a
+         *     run over many entries (re-listing a shop) that would outlast the request. Its progress is the usual
+         *     automation_started / automation_ran events (the activity toasts) and the workflow's Runs.
+         *
          *     ``dry_run=true`` resolves the target + each action's inputs but executes nothing (no AI call,
          *     no mutation, no webhook POST) and records nothing — it returns ``plan``, the resolved per-step
          *     preview. A disabled draft can be dry-run (that's when you most want to preview it).
@@ -25979,6 +25983,7 @@ export interface operations {
                 dry_run?: boolean;
                 entry_id?: string | null;
                 event_id?: string | null;
+                background?: boolean;
             };
             header?: never;
             path: {
