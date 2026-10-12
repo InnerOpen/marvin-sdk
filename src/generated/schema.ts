@@ -2526,6 +2526,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/self/push/workflow-approvals/{approval_id}/{decision}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Approve or Deny a Waiting Workflow from a Notification
+         * @description The Approve / Deny buttons of a waiting workflow run's notification: the token it carries, no session. Decides
+         *     as the person it was sent to, at their role now — the same decision Automation → Approvals makes.
+         */
+        post: operations["decide_workflow_from_notification_api_self_push_workflow_approvals__approval_id___decision__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/self/workspaces/current": {
         parameters: {
             query?: never;
@@ -21402,6 +21423,42 @@ export interface operations {
         };
     };
     decide_from_notification_api_self_push_approvals__approval_id___decision__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                approval_id: string;
+                decision: "approve" | "deny";
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushApprovalAction"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushApprovalResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    decide_workflow_from_notification_api_self_push_workflow_approvals__approval_id___decision__post: {
         parameters: {
             query?: never;
             header?: never;
