@@ -1,3 +1,10 @@
+## [5.6.3](https://github.com/InnerOpen/marvin-sdk/compare/v5.6.2...v5.6.3) (2026-10-13)
+
+
+### Bug Fixes
+
+* **types:** asset and resource type counts (GET /assets/types, /resources/types) ([c5e35f7](https://github.com/InnerOpen/marvin-sdk/commit/c5e35f7ef524dfb0dabf85bd5949254cf861d534))
+
 ## [5.6.2](https://github.com/InnerOpen/marvin-sdk/compare/v5.6.1...v5.6.2) (2026-10-13)
 
 
