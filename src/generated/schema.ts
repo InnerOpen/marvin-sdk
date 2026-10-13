@@ -16777,6 +16777,11 @@ export interface components {
              * @default []
              */
             fields: string[];
+            /**
+             * Datefields
+             * @default []
+             */
+            dateFields: string[];
         };
         /** WorkflowLibraryIntegration */
         WorkflowLibraryIntegration: {
