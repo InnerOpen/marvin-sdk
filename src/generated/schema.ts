@@ -6156,6 +6156,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/resources/types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Resource types in use
+         * @description Each resource type and how many resources it has (most first) — never the Trash.
+         */
+        get: operations["resource_types_api_platform_resources_types_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/resources/{item_id}": {
         parameters: {
             query?: never;
@@ -6289,6 +6309,26 @@ export interface paths {
          *     Refused when bigger than ASSET_MAX_FILE_SIZE (413) or of a type ASSET_ALLOWED_MIME_TYPES leaves out (415).
          */
         post: operations["upload_asset_api_platform_assets_upload_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/assets/types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Asset types in use
+         * @description Each asset type in the library and how many assets it has (most first) — never the Trash or Ask files.
+         */
+        get: operations["asset_types_api_platform_assets_types_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -16268,6 +16308,16 @@ export interface components {
         TrashSettings: {
             /** Auto Empty Days */
             auto_empty_days: number;
+        };
+        /**
+         * TypeCount
+         * @description How many of a kind there are (an asset type, a resource type): the sidebar's folds.
+         */
+        TypeCount: {
+            /** Type */
+            type: string;
+            /** Count */
+            count: number;
         };
         /**
          * UnlockResults
@@ -28103,6 +28153,26 @@ export interface operations {
             };
         };
     };
+    resource_types_api_platform_resources_types_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypeCount"][];
+                };
+            };
+        };
+    };
     get_resource_api_platform_resources__item_id__get: {
         parameters: {
             query?: never;
@@ -28375,6 +28445,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    asset_types_api_platform_assets_types_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypeCount"][];
                 };
             };
         };
