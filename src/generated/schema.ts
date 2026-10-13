@@ -9533,6 +9533,23 @@ export interface components {
             /** Darkerror */
             darkError: string;
         };
+        /** ApprovalBrief */
+        ApprovalBrief: {
+            /** Id */
+            id: string;
+            /** Automationid */
+            automationId?: string | null;
+            /** Automationname */
+            automationName?: string | null;
+            /** Message */
+            message: string;
+            /** Choices */
+            choices?: string[] | null;
+            /** Entrytitle */
+            entryTitle?: string | null;
+            /** Createdat */
+            createdAt?: string | null;
+        };
         /** AssetAttachment */
         AssetAttachment: {
             /**
@@ -9785,6 +9802,20 @@ export interface components {
              * @default 0
              */
             failures: number;
+            /**
+             * Approvals
+             * @default 0
+             */
+            approvals: number;
+            /**
+             * Parkedruns
+             * @default 0
+             */
+            parkedRuns: number;
+            /** Oldestdraftdays */
+            oldestDraftDays?: number | null;
+            /** Oldestinboxdays */
+            oldestInboxDays?: number | null;
         };
         /**
          * AuditEventSetting
@@ -11142,10 +11173,38 @@ export interface components {
              *       "drafts": 0,
              *       "needsReview": 0,
              *       "aiSuggestions": 0,
-             *       "failures": 0
+             *       "failures": 0,
+             *       "approvals": 0,
+             *       "parkedRuns": 0
              *     }
              */
             attention: components["schemas"]["AttentionCounts"];
+            /**
+             * Approvals
+             * @default []
+             */
+            approvals: components["schemas"]["ApprovalBrief"][];
+            /**
+             * Upcoming
+             * @default []
+             */
+            upcoming: components["schemas"]["UpcomingItem"][];
+            /**
+             * @default {
+             *       "integrationsTotal": 0,
+             *       "integrationsFailing": 0,
+             *       "webhookFailures24h": 0,
+             *       "workflowFailures7d": 0,
+             *       "emailReady": false,
+             *       "pushReady": false
+             *     }
+             */
+            health: components["schemas"]["HealthStrip"];
+            /**
+             * Runsbyday
+             * @default []
+             */
+            runsByDay: components["schemas"]["RunsDay"][];
         };
         /** EmailEventSubscriptionCreate */
         EmailEventSubscriptionCreate: {
@@ -12786,6 +12845,43 @@ export interface components {
              * @default ok
              */
             status: string;
+        };
+        /** HealthStrip */
+        HealthStrip: {
+            /** Backupstate */
+            backupState?: string | null;
+            /** Backuplastsuccess */
+            backupLastSuccess?: string | null;
+            /**
+             * Integrationstotal
+             * @default 0
+             */
+            integrationsTotal: number;
+            /**
+             * Integrationsfailing
+             * @default 0
+             */
+            integrationsFailing: number;
+            /**
+             * Webhookfailures24H
+             * @default 0
+             */
+            webhookFailures24h: number;
+            /**
+             * Workflowfailures7D
+             * @default 0
+             */
+            workflowFailures7d: number;
+            /**
+             * Emailready
+             * @default false
+             */
+            emailReady: boolean;
+            /**
+             * Pushready
+             * @default false
+             */
+            pushReady: boolean;
         };
         /** IncomingWebhookCreate */
         IncomingWebhookCreate: {
@@ -15039,6 +15135,24 @@ export interface components {
             /** Tag Ids */
             tag_ids?: string[] | null;
         };
+        /** RunsDay */
+        RunsDay: {
+            /**
+             * Day
+             * Format: date
+             */
+            day: string;
+            /**
+             * Ok
+             * @default 0
+             */
+            ok: number;
+            /**
+             * Failed
+             * @default 0
+             */
+            failed: number;
+        };
         /** SMTPProfileCreate */
         SMTPProfileCreate: {
             /** Name */
@@ -16330,6 +16444,24 @@ export interface components {
              * @default 0
              */
             unlocked: number;
+        };
+        /** UpcomingItem */
+        UpcomingItem: {
+            /** Kind */
+            kind: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /** Title */
+            title: string;
+            /** Entityid */
+            entityId?: string | null;
+            /** Automationid */
+            automationId?: string | null;
+            /** Executionid */
+            executionId?: string | null;
         };
         /**
          * UpdateEntryCollectionRequest
