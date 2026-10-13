@@ -1,3 +1,10 @@
+## [5.6.2](https://github.com/InnerOpen/marvin-sdk/compare/v5.6.1...v5.6.2) (2026-10-13)
+
+
+### Bug Fixes
+
+* **types:** approval choices (choices/choice on approvals, choice on decide) and the cancel-execution route ([89bc901](https://github.com/InnerOpen/marvin-sdk/commit/89bc9016e6ee878a572ba012f9855396f3af3ac5))
+
 ## [5.6.1](https://github.com/InnerOpen/marvin-sdk/compare/v5.6.0...v5.6.1) (2026-10-13)
 
 
