@@ -5164,8 +5164,8 @@ export interface paths {
         /**
          * Approve or deny a waiting run
          * @description Approve or deny; the run goes on from the next step with `${steps.<id>.output.decision}` (approved, denied — or
-         *     stale when the entry changed after it was asked). 403 below the step's role; 404 unknown; 409 already decided
-         *     or expired.
+         *     stale when the entry changed after it was asked). One with `choices` is approved with one of them (`choice`:
+         *     the label or its index; 422 without). 403 below the step's role; 404 unknown; 409 already decided or expired.
          */
         post: operations["decide_approval_api_automations_approvals__approval_id__decide_post"];
         delete?: never;
@@ -5233,6 +5233,28 @@ export interface paths {
         get: operations["list_executions_api_automations__automation_id__executions_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/{automation_id}/executions/{execution_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel a waiting run
+         * @description Stop a run parked at a Wait step: it won't go on when its time comes (the steps after the wait never run;
+         *     what ran before it stays). The run's status becomes `cancelled`. 409 when the run isn't waiting at a Wait step
+         *     (a run waiting for an approval is decided on Automation → Approvals).
+         */
+        post: operations["cancel_execution_api_automations__automation_id__executions__execution_id__cancel_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -16707,6 +16729,8 @@ export interface components {
             decision: "approve" | "deny";
             /** Note */
             note?: string | null;
+            /** Choice */
+            choice?: string | number | null;
         };
         /**
          * WorkflowApprovalRead
@@ -16750,6 +16774,10 @@ export interface components {
             decidedAt?: string | null;
             /** Note */
             note?: string | null;
+            /** Choices */
+            choices?: string[] | null;
+            /** Choice */
+            choice?: string | null;
         };
         /** WorkflowCapability */
         WorkflowCapability: {
@@ -25942,6 +25970,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AutomationExecutionRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_execution_api_automations__automation_id__executions__execution_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                automation_id: string;
+                execution_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationExecutionRead"];
                 };
             };
             /** @description Validation Error */
