@@ -1,3 +1,10 @@
+## [5.6.1](https://github.com/InnerOpen/marvin-sdk/compare/v5.6.0...v5.6.1) (2026-10-13)
+
+
+### Bug Fixes
+
+* **types:** WorkflowLibraryEntryType.dateFields — an entry type's date fields for recipe date pickers ([d810031](https://github.com/InnerOpen/marvin-sdk/commit/d810031c5b4be0839b9a50382f12b053fccafc30))
+
 # [5.6.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.5.0...v5.6.0) (2026-10-12)
 
 
