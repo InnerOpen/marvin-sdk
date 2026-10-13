@@ -1,3 +1,10 @@
+# [5.7.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.6.3...v5.7.0) (2026-10-13)
+
+
+### Features
+
+* **types:** dashboard panels — approvals, parked runs, upcoming, health strip, runs by day ([2c11424](https://github.com/InnerOpen/marvin-sdk/commit/2c11424e042b8409f980ce177d4fe3ff946f03d2))
+
 ## [5.6.3](https://github.com/InnerOpen/marvin-sdk/compare/v5.6.2...v5.6.3) (2026-10-13)
 
 
