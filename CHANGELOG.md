@@ -1,3 +1,10 @@
+## [5.11.1](https://github.com/InnerOpen/marvin-sdk/compare/v5.11.0...v5.11.1) (2026-10-14)
+
+
+### Bug Fixes
+
+* **http:** a 5xx error carries the server's detail, not just "Server error: 502" ([4d2ee30](https://github.com/InnerOpen/marvin-sdk/commit/4d2ee3013a18506f8fce9f274754a79aeab795ff))
+
 # [5.11.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.10.0...v5.11.0) (2026-10-14)
 
 
