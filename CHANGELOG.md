@@ -1,3 +1,10 @@
+# [5.12.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.11.1...v5.12.0) (2026-10-14)
+
+
+### Features
+
+* **types:** AI executions carry cachedPromptTokens / cacheWriteTokens ([c302f2e](https://github.com/InnerOpen/marvin-sdk/commit/c302f2e31386a3f3d7a6fd1df3734a46c9d0347e))
+
 ## [5.11.1](https://github.com/InnerOpen/marvin-sdk/compare/v5.11.0...v5.11.1) (2026-10-14)
 
 
