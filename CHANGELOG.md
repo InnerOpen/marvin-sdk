@@ -1,3 +1,10 @@
+# [5.14.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.13.0...v5.14.0) (2026-10-14)
+
+
+### Features
+
+* **types:** admin overview, security policy and email branding; workflow and agent limits ([dccdcba](https://github.com/InnerOpen/marvin-sdk/commit/dccdcbabd255dd157cae5cda46afdd60c7e7c261))
+
 # [5.13.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.12.0...v5.13.0) (2026-10-14)
 
 
