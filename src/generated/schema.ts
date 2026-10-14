@@ -17792,6 +17792,10 @@ export interface components {
             id?: string | null;
             /** Groupid */
             groupId?: string | null;
+            /** Agentstepsdefault */
+            agentStepsDefault?: number;
+            /** Agentstepscap */
+            agentStepsCap?: number;
             /**
              * Allowworkspacecredentials
              * @default true
