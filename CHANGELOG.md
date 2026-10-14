@@ -1,3 +1,10 @@
+# [5.9.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.8.0...v5.9.0) (2026-10-14)
+
+
+### Features
+
+* **types:** site.privacy — controller, processors, cookies, consent, banner_required ([6df9a51](https://github.com/InnerOpen/marvin-sdk/commit/6df9a51a6a8c4464a0aa64de3e23efee709309f7))
+
 # [5.8.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.7.0...v5.8.0) (2026-10-14)
 
 
