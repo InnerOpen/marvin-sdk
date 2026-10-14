@@ -8111,6 +8111,10 @@ export interface components {
             completionTokens?: number | null;
             /** Totaltokens */
             totalTokens?: number | null;
+            /** Cachedprompttokens */
+            cachedPromptTokens?: number | null;
+            /** Cachewritetokens */
+            cacheWriteTokens?: number | null;
             /** Estimatedcostusd */
             estimatedCostUsd?: number | null;
             /** Durationms */
