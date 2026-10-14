@@ -14245,6 +14245,73 @@ export interface components {
             providers?: components["schemas"]["PluginProviderRead"][];
         };
         /**
+         * PrivacyConsent
+         * @description Where the policy pages live and when the disclosures were last checked.
+         */
+        PrivacyConsent: {
+            /** Policyentryslug */
+            policyEntrySlug?: string | null;
+            /** Cookiepolicyentryslug */
+            cookiePolicyEntrySlug?: string | null;
+            /** Lastreviewed */
+            lastReviewed?: string | null;
+        };
+        /**
+         * PrivacyController
+         * @description Who is responsible for the site's data (the GDPR "controller").
+         */
+        PrivacyController: {
+            /** Legalname */
+            legalName: string;
+            /** Contactemail */
+            contactEmail: string;
+            /** Address */
+            address?: string | null;
+            /** Eurepresentative */
+            euRepresentative?: string | null;
+            /** Dpoemail */
+            dpoEmail?: string | null;
+        };
+        /**
+         * PrivacyCookie
+         * @description A cookie (or similar storage entry) the site sets.
+         */
+        PrivacyCookie: {
+            /** Name */
+            name: string;
+            /** Provider */
+            provider: string;
+            /** Purpose */
+            purpose: string;
+            /** Duration */
+            duration?: string | null;
+            /**
+             * Category
+             * @enum {string}
+             */
+            category: "necessary" | "preferences" | "analytics" | "marketing";
+        };
+        /**
+         * PrivacyProcessor
+         * @description A third party that handles visitor data on the site's behalf (analytics, email, hosting...).
+         */
+        PrivacyProcessor: {
+            /** Name */
+            name: string;
+            /** Purpose */
+            purpose: string;
+            /** Datacategories */
+            dataCategories?: string[];
+            /** Region */
+            region?: string | null;
+            /** Transferbasis */
+            transferBasis?: string | null;
+            /** Dpaurl */
+            dpaUrl?: string | null;
+            /** Privacyurl */
+            privacyUrl?: string | null;
+        };
+        /**
          * ProviderActionInfo
          * @description An action a provider exposes to automations.
          */
@@ -15567,6 +15634,7 @@ export interface components {
                 [key: string]: unknown;
             } | null;
             seo?: components["schemas"]["SiteSeo"] | null;
+            privacy?: components["schemas"]["SitePrivacy"] | null;
             embeds?: components["schemas"]["SiteEmbeds"];
             /** Metadatajson */
             metadataJson?: {
@@ -15592,6 +15660,27 @@ export interface components {
             consentText: string;
             /** Framesources */
             frameSources?: string[];
+        };
+        /**
+         * SitePrivacy
+         * @description Structured privacy & cookie disclosures for a workspace's published site.
+         *
+         *     Stored under ``group_preferences.site_metadata_json['privacy']`` and surfaced here, typed,
+         *     as ``site.privacy``. Disclosure only: Marvin serves the facts a privacy/cookie policy page
+         *     needs; it does not run a consent banner. ``banner_required`` is derived, never stored.
+         */
+        SitePrivacy: {
+            controller: components["schemas"]["PrivacyController"];
+            /** Processors */
+            processors?: components["schemas"]["PrivacyProcessor"][];
+            /** Cookies */
+            cookies?: components["schemas"]["PrivacyCookie"][];
+            consent?: components["schemas"]["PrivacyConsent"];
+            /**
+             * Bannerrequired
+             * @description True when any cookie is not strictly necessary: those need prior consent.
+             */
+            readonly bannerRequired: boolean;
         };
         /**
          * SiteRebuildChange
