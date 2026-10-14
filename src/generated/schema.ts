@@ -9549,6 +9549,8 @@ export interface components {
             entryTitle?: string | null;
             /** Createdat */
             createdAt?: string | null;
+            /** Imageurl */
+            imageUrl?: string | null;
         };
         /** AssetAttachment */
         AssetAttachment: {
@@ -17166,6 +17168,8 @@ export interface components {
             choices?: string[] | null;
             /** Choice */
             choice?: string | null;
+            /** Imageurl */
+            imageUrl?: string | null;
         };
         /** WorkflowCapability */
         WorkflowCapability: {
