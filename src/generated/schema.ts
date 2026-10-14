@@ -28720,6 +28720,8 @@ export interface operations {
                 asset_type?: string[];
                 /** @description upload, derived (made from another asset), generated */
                 origin?: string[];
+                /** @description what an approval that showed the picture decided: approved, denied, expired, stale, or none */
+                decision?: string | null;
                 /** @description Carrying any of these tags (slug or name) */
                 tag?: string[];
                 /** @description In this collection (slug or name) */
