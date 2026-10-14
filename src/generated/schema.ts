@@ -3709,6 +3709,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/maintenance/database": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Database size, its largest tables and what trims each
+         * @description The database's size, its largest tables (size, estimated rows, share of the whole) and, for each, the system
+         *     task that trims it with its retention and last/next run — or none, for a table that only grows. Also the
+         *     cleanup tasks that don't trim a table (temporary files, the planner's statistics).
+         */
+        get: operations["get_database_report_api_admin_maintenance_database_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/maintenance": {
         parameters: {
             query?: never;
@@ -4905,6 +4927,10 @@ export interface paths {
          *     `children=true` adds the specialist threads opened by hand-offs (each with `parentThreadId` and
          *     `parentTitle`) under the listed ones; `limit` counts the listed threads, not their children.
          *     With `agent`, that agent's hand-off threads count as listed too.
+         *
+         *     `q` searches instead: the threads whose title or any message contains it (case-insensitive, two characters
+         *     at least), hand-offs included, newest first, each with `match` — the words around the first hit in its
+         *     messages (null when only the title matched).
          */
         get: operations["list_threads_api_ai_threads_get"];
         put?: never;
@@ -8564,6 +8590,8 @@ export interface components {
             parentThreadId?: string | null;
             /** Parenttitle */
             parentTitle?: string | null;
+            /** Match */
+            match?: string | null;
             /** Status */
             status: string;
             /**
@@ -8638,6 +8666,8 @@ export interface components {
             parentThreadId?: string | null;
             /** Parenttitle */
             parentTitle?: string | null;
+            /** Match */
+            match?: string | null;
             /** Status */
             status: string;
             /**
@@ -10996,6 +11026,31 @@ export interface components {
             /** Isuptodate */
             isUpToDate: boolean;
         };
+        /**
+         * CleanupTaskRead
+         * @description A system scheduled task that cleans something up, as Database & cleanup shows it.
+         */
+        CleanupTaskRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Retention */
+            retention?: string | null;
+            /** Lastrunat */
+            lastRunAt?: string | null;
+            /** Nextrunat */
+            nextRunAt?: string | null;
+            /** Laststatus */
+            lastStatus?: string | null;
+        };
         /** CollectionAttachment */
         CollectionAttachment: {
             /**
@@ -11229,6 +11284,40 @@ export interface components {
              * @default []
              */
             byType: components["schemas"]["TypeStatusRow"][];
+        };
+        /**
+         * DatabaseReport
+         * @description Admin → Database & cleanup.
+         */
+        DatabaseReport: {
+            /** Sizebytes */
+            sizeBytes: number;
+            /** Tables */
+            tables: components["schemas"]["DatabaseTableRead"][];
+            /** Othercleanup */
+            otherCleanup: components["schemas"]["CleanupTaskRead"][];
+        };
+        /**
+         * DatabaseTableRead
+         * @description One of the database's largest tables.
+         */
+        DatabaseTableRead: {
+            /** Name */
+            name: string;
+            /** Label */
+            label?: string | null;
+            /** Sizebytes */
+            sizeBytes: number;
+            /** Rows */
+            rows: number;
+            /** Share */
+            share: number;
+            keptBy?: components["schemas"]["CleanupTaskRead"] | null;
+            /**
+             * Kind
+             * @default content
+             */
+            kind: string;
         };
         /** EmailEventSubscriptionCreate */
         EmailEventSubscriptionCreate: {
@@ -23595,6 +23684,26 @@ export interface operations {
             };
         };
     };
+    get_database_report_api_admin_maintenance_database_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DatabaseReport"];
+                };
+            };
+        };
+    };
     get_maintenance_summary_api_admin_maintenance_get: {
         parameters: {
             query?: never;
@@ -25724,6 +25833,7 @@ export interface operations {
                 agent?: string | null;
                 limit?: number;
                 children?: boolean;
+                q?: string | null;
             };
             header?: never;
             path?: never;
