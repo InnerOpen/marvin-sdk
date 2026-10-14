@@ -159,12 +159,12 @@ describe('HttpClient retry policy', () => {
   it('a 5xx carries the server\'s detail as the message, and the raw body', async () => {
     const body = JSON.stringify({ detail: 'Agent failed: 404 model gemini-2.5-flash is no longer available' })
     fetchMock.mockResolvedValue(new Response(body, { status: 502, headers: { 'content-type': 'application/json' } }))
-    const err = await client().post('/api/ai/agent', {}).catch((e) => e)
+    const err = (await client().post('/api/ai/agent', {}).catch((e: unknown) => e)) as MarvinServerError
     expect(err).toBeInstanceOf(MarvinServerError)
     expect(err.message).toBe('Agent failed: 404 model gemini-2.5-flash is no longer available (502)')
     expect(err.body).toBe(body)
     fetchMock.mockResolvedValue(new Response('<html>bad gateway</html>', { status: 502 }))
-    const plain = await client().post('/api/ai/agent', {}).catch((e) => e)
+    const plain = (await client().post('/api/ai/agent', {}).catch((e: unknown) => e)) as MarvinServerError
     expect(plain.message).toMatch(/^Server error: 502/)
   })
 
