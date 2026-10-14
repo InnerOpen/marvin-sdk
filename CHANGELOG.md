@@ -1,3 +1,10 @@
+# [5.8.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.7.0...v5.8.0) (2026-10-14)
+
+
+### Features
+
+* **types:** dashboard — publishing by week, recent-for-you, content by type ([9f7f98b](https://github.com/InnerOpen/marvin-sdk/commit/9f7f98b7c0d695c4df3249c90d6449396cc4f51c))
+
 # [5.7.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.6.3...v5.7.0) (2026-10-13)
 
 
