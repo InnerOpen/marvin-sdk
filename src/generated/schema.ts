@@ -9132,6 +9132,16 @@ export interface components {
             workspaces: components["schemas"]["WorkspaceOverviewRead"][];
             /** Spend */
             spend: components["schemas"]["SpendDayRead"][];
+            /**
+             * Signins
+             * @default []
+             */
+            signIns: components["schemas"]["SignInRead"][];
+            /**
+             * Pluginupdates
+             * @default []
+             */
+            pluginUpdates: components["schemas"]["PluginUpdateRead"][];
         };
         /** AgentCreate */
         AgentCreate: {
@@ -14438,6 +14448,17 @@ export interface components {
             /** Providers */
             providers?: components["schemas"]["PluginProviderRead"][];
         };
+        /** PluginUpdateRead */
+        PluginUpdateRead: {
+            /** Package */
+            package: string;
+            /** Installed */
+            installed: string;
+            /** Latest */
+            latest: string;
+            /** Repo */
+            repo: string;
+        };
         /**
          * PrivacyConsent
          * @description Where the policy pages live and when the disclosures were last checked.
@@ -15782,6 +15803,20 @@ export interface components {
             values: {
                 [key: string]: number | null;
             };
+        };
+        /** SignInRead */
+        SignInRead: {
+            /** Userid */
+            userId: string;
+            /** Name */
+            name: string;
+            /** Username */
+            username: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
         };
         /**
          * SiteBuildStatus
