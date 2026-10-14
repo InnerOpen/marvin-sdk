@@ -1,3 +1,10 @@
+# [5.16.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.15.0...v5.16.0) (2026-10-14)
+
+
+### Features
+
+* **types:** admin overview carries signIns and pluginUpdates ([c78a9ec](https://github.com/InnerOpen/marvin-sdk/commit/c78a9ec0ebd8bf7cac4e9c24a60dc38ac7822f6c))
+
 # [5.15.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.14.0...v5.15.0) (2026-10-14)
 
 
