@@ -1945,6 +1945,130 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/storage-settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the Workspace's Storage
+         * @description Where new uploads go, the workspace's bucket connections (keys as secret slugs only) and the files on each.
+         */
+        get: operations["get_storage_api_groups_storage_settings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/storage-settings/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Add a Bucket Connection
+         * @description Add a bucket (unverified until checked). Keys are workspace secret slugs. 422 for a setting the provider
+         *     doesn't declare, a missing required one, an unknown secret or an endpoint the platform's policy refuses.
+         */
+        post: operations["create_connection_api_groups_storage_settings_connections_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/storage-settings/connections/{connection_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Change a Bucket Connection
+         * @description Change the label, the keys (secret slugs) or the public URL. The bucket, endpoint and prefix can't change
+         *     (422): another bucket is a new connection. Any change makes it unverified until checked again.
+         */
+        patch: operations["update_connection_api_groups_storage_settings_connections__connection_id__patch"];
+        trace?: never;
+    };
+    "/api/groups/storage-settings/connections/{connection_id}/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check a Bucket Connection
+         * @description List, put, get and delete a tiny object under `_marvin-healthcheck/`, then fetch one from the public URL.
+         *     Every step's outcome comes back as a plain message, never as a failed request. Success verifies the connection.
+         */
+        post: operations["check_connection_api_groups_storage_settings_connections__connection_id__check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/storage-settings/connections/{connection_id}/retire": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retire a Bucket Connection
+         * @description No new uploads through it; files already in it keep serving. 422 while the workspace uploads through it.
+         */
+        post: operations["retire_connection_api_groups_storage_settings_connections__connection_id__retire_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/storage-settings/mode": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Choose Where the Workspace's Uploads Go
+         * @description `platform`, or `workspace` with a verified `connection_id`. Only new uploads change place: nothing moves.
+         *     422 when the platform doesn't allow workspace storage or the connection isn't verified.
+         */
+        put: operations["set_mode_api_groups_storage_settings_mode_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/audit-settings": {
         parameters: {
             query?: never;
@@ -4180,6 +4304,32 @@ export interface paths {
          *     runbook). Files on local disk keep the API host. 422 for a URL that isn't https://host[/path].
          */
         put: operations["update_workspace_storage_api_admin_storage_workspaces__workspace_id__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/storage/workspace-policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Get the Workspace Storage Policy
+         * @description Whether workspaces may keep their files in their own bucket, and which endpoints they may use.
+         */
+        get: operations["get_workspace_policy_api_admin_storage_workspace_policy_get"];
+        /**
+         * Admin: Set the Workspace Storage Policy
+         * @description Allow (or stop) workspaces keeping their files in their own bucket; `endpoint_policy` is `known` (R2, AWS
+         *     S3, Backblaze B2), `public` (any public address) or `any`. Turned off, workspaces that opted in can't upload
+         *     until it is back on or they switch to the platform's storage; their files keep serving.
+         */
+        put: operations["update_workspace_policy_api_admin_storage_workspace_policy_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -18259,6 +18409,207 @@ export interface components {
              */
             aiCostUsd: number;
         };
+        /** WorkspaceStorageCheckStep */
+        WorkspaceStorageCheckStep: {
+            /** Name */
+            name: string;
+            /** Ok */
+            ok: boolean;
+            /**
+             * Ms
+             * @default 0
+             */
+            ms: number;
+            /** Error */
+            error?: string | null;
+            /** Code */
+            code?: string | null;
+        };
+        /** WorkspaceStorageConnectionCheck */
+        WorkspaceStorageConnectionCheck: {
+            /** Ok */
+            ok: boolean;
+            /**
+             * Steps
+             * @default []
+             */
+            steps: components["schemas"]["WorkspaceStorageCheckStep"][];
+            /** Checkedat */
+            checkedAt: string;
+        };
+        /** WorkspaceStorageConnectionCreate */
+        WorkspaceStorageConnectionCreate: {
+            /**
+             * Pluginslug
+             * @default s3
+             */
+            pluginSlug: string;
+            /** Label */
+            label?: string | null;
+            /**
+             * Settings
+             * @default {}
+             */
+            settings: {
+                [key: string]: string;
+            };
+            /**
+             * Secretrefs
+             * @default {}
+             */
+            secretRefs: {
+                [key: string]: string;
+            };
+        };
+        /** WorkspaceStorageConnectionRead */
+        WorkspaceStorageConnectionRead: {
+            /** Id */
+            id: string;
+            /** Pluginslug */
+            pluginSlug: string;
+            /** Label */
+            label?: string | null;
+            /** Location */
+            location: string;
+            /**
+             * Settings
+             * @default {}
+             */
+            settings: {
+                [key: string]: string;
+            };
+            /**
+             * Secretrefs
+             * @default {}
+             */
+            secretRefs: {
+                [key: string]: string;
+            };
+            /** Status */
+            status: string;
+            /** Verifiedat */
+            verifiedAt?: string | null;
+            /** Lastcheckedat */
+            lastCheckedAt?: string | null;
+            /** Lasterror */
+            lastError?: string | null;
+            /** Retiredat */
+            retiredAt?: string | null;
+            /**
+             * Files
+             * @default 0
+             */
+            files: number;
+        };
+        /** WorkspaceStorageConnectionUpdate */
+        WorkspaceStorageConnectionUpdate: {
+            /** Label */
+            label?: string | null;
+            /** Settings */
+            settings?: {
+                [key: string]: string;
+            } | null;
+            /** Secretrefs */
+            secretRefs?: {
+                [key: string]: string;
+            } | null;
+        };
+        /** WorkspaceStorageField */
+        WorkspaceStorageField: {
+            /** Env */
+            env: string;
+            /** Label */
+            label: string;
+            /**
+             * Help
+             * @default
+             */
+            help: string;
+            /**
+             * Required
+             * @default false
+             */
+            required: boolean;
+            /**
+             * Secret
+             * @default false
+             */
+            secret: boolean;
+            /**
+             * Fixed
+             * @default false
+             */
+            fixed: boolean;
+        };
+        /** WorkspaceStorageModeUpdate */
+        WorkspaceStorageModeUpdate: {
+            /** Mode */
+            mode: string;
+            /** Connectionid */
+            connectionId?: string | null;
+        };
+        /** WorkspaceStoragePolicyRead */
+        WorkspaceStoragePolicyRead: {
+            /** Allowed */
+            allowed: boolean;
+            /** Endpointpolicy */
+            endpointPolicy: string;
+        };
+        /** WorkspaceStoragePolicyUpdate */
+        WorkspaceStoragePolicyUpdate: {
+            /** Allowed */
+            allowed: boolean;
+            /**
+             * Endpointpolicy
+             * @default known
+             */
+            endpointPolicy: string;
+        };
+        /** WorkspaceStorageProvider */
+        WorkspaceStorageProvider: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Fields
+             * @default []
+             */
+            fields: components["schemas"]["WorkspaceStorageField"][];
+        };
+        /** WorkspaceStorageRead */
+        WorkspaceStorageRead: {
+            policy: components["schemas"]["WorkspaceStoragePolicyRead"];
+            /** Mode */
+            mode: string;
+            /** Activeconnectionid */
+            activeConnectionId?: string | null;
+            /**
+             * Bundleincludesownbucket
+             * @default false
+             */
+            bundleIncludesOwnBucket: boolean;
+            /**
+             * Providers
+             * @default []
+             */
+            providers: components["schemas"]["WorkspaceStorageProvider"][];
+            /**
+             * Connections
+             * @default []
+             */
+            connections: components["schemas"]["WorkspaceStorageConnectionRead"][];
+            /**
+             * Platformfiles
+             * @default 0
+             */
+            platformFiles: number;
+            /**
+             * Canedit
+             * @default false
+             */
+            canEdit: boolean;
+        };
         /** WorkspaceVariableCreate */
         WorkspaceVariableCreate: {
             /** Name */
@@ -21448,6 +21799,189 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BubbleLinesState"];
+                };
+            };
+        };
+    };
+    get_storage_api_groups_storage_settings_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageRead"];
+                };
+            };
+        };
+    };
+    create_connection_api_groups_storage_settings_connections_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceStorageConnectionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageConnectionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_connection_api_groups_storage_settings_connections__connection_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceStorageConnectionUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageConnectionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_connection_api_groups_storage_settings_connections__connection_id__check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageConnectionCheck"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retire_connection_api_groups_storage_settings_connections__connection_id__retire_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageConnectionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_mode_api_groups_storage_settings_mode_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceStorageModeUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -24642,6 +25176,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StorageSettingsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_workspace_policy_api_admin_storage_workspace_policy_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStoragePolicyRead"];
+                };
+            };
+        };
+    };
+    update_workspace_policy_api_admin_storage_workspace_policy_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceStoragePolicyUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStoragePolicyRead"];
                 };
             };
             /** @description Validation Error */
