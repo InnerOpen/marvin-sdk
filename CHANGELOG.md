@@ -1,3 +1,10 @@
+# [5.15.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.14.0...v5.15.0) (2026-10-14)
+
+
+### Features
+
+* **types:** AI settings carry agentStepsDefault / agentStepsCap ([b4a8f89](https://github.com/InnerOpen/marvin-sdk/commit/b4a8f89ca4ebcf30768e4a2afb1fe316153b2e40))
+
 # [5.14.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.13.0...v5.14.0) (2026-10-14)
 
 
