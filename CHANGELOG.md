@@ -1,3 +1,10 @@
+# [5.18.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.17.0...v5.18.0) (2026-10-14)
+
+
+### Features
+
+* **types:** workspace storage settings (WorkspaceStorage*) and the admin workspace-storage policy ([eed4b81](https://github.com/InnerOpen/marvin-sdk/commit/eed4b818068f862ee7b3b6d19a84b6f2e393558f))
+
 # [5.17.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.16.0...v5.17.0) (2026-10-14)
 
 
