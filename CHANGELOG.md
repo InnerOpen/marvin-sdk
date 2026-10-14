@@ -1,3 +1,10 @@
+# [5.13.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.12.0...v5.13.0) (2026-10-14)
+
+
+### Features
+
+* **types:** Ask thread search (q, match) and the admin database report ([1c415a9](https://github.com/InnerOpen/marvin-sdk/commit/1c415a9cbb5467f512a3a577adea5824cf1c0e6d))
+
 # [5.12.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.11.1...v5.12.0) (2026-10-14)
 
 
