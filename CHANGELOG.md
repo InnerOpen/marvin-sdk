@@ -1,3 +1,10 @@
+# [5.17.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.16.0...v5.17.0) (2026-10-14)
+
+
+### Features
+
+* **types:** collections carry inSidebar ([9ac089b](https://github.com/InnerOpen/marvin-sdk/commit/9ac089bf95c01d6c5ef2327e6a98d8714ca92212))
+
 # [5.16.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.15.0...v5.16.0) (2026-10-14)
 
 
