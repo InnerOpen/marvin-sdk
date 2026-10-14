@@ -11235,6 +11235,11 @@ export interface components {
              * @default true
              */
             isPublic: boolean;
+            /**
+             * Insidebar
+             * @default true
+             */
+            inSidebar: boolean;
             /** Entrycount */
             entryCount?: number | null;
             /** Createdat */
@@ -11286,6 +11291,8 @@ export interface components {
             targetType?: string | null;
             /** Ispublic */
             isPublic?: boolean | null;
+            /** Insidebar */
+            inSidebar?: boolean | null;
             /** Metadatajson */
             metadataJson?: {
                 [key: string]: unknown;
