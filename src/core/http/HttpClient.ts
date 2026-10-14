@@ -3,6 +3,17 @@
  */
 
 import type { AuthStrategy } from '../auth';
+
+/** The `detail` of a JSON error body when it is a string (FastAPI's shape), else null. */
+function errorDetail(body: string): string | null {
+  if (!body) return null;
+  try {
+    const parsed = JSON.parse(body);
+    return typeof parsed?.detail === 'string' && parsed.detail.trim() ? parsed.detail.trim() : null;
+  } catch {
+    return null;
+  }
+}
 import {
   MarvinApiError,
   MarvinNotFoundError,
@@ -398,10 +409,14 @@ export class HttpClient {
       }
 
       if (response.status >= 500) {
+        // The server's own explanation (FastAPI's `detail`) is the useful part of a 502 from an AI provider or
+        // an integration ("404 model gemini-2.5-flash is no longer available…"), so it leads the message.
+        const detail = errorDetail(errorText);
         throw new MarvinServerError(
-          `Server error: ${response.status} ${response.statusText}`,
+          detail ? `${detail} (${response.status})` : `Server error: ${response.status} ${response.statusText}`,
           response.status,
-          endpoint
+          endpoint,
+          errorText
         );
       }
 

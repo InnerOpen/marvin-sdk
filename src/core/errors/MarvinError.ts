@@ -110,7 +110,9 @@ export class MarvinServerError extends MarvinError {
   constructor(
     message: string,
     statusCode: number,
-    public readonly endpoint: string
+    public readonly endpoint: string,
+    /** The raw response body, when the server sent one. */
+    public readonly body?: string
   ) {
     super(message, 'SERVER_ERROR', statusCode);
     this.name = 'MarvinServerError';
