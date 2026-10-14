@@ -1,3 +1,10 @@
+# [5.10.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.9.0...v5.10.0) (2026-10-14)
+
+
+### Features
+
+* **types:** an approval's picture (imageUrl on approvals and dashboard briefs) ([a3036b7](https://github.com/InnerOpen/marvin-sdk/commit/a3036b7841af8ce975cf20b8b934ac00f34dd241))
+
 # [5.9.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.8.0...v5.9.0) (2026-10-14)
 
 
