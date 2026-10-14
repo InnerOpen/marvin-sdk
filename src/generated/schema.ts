@@ -2765,6 +2765,59 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/platform-policy/security": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Security policy */
+        get: operations["get_security_api_admin_platform_policy_security_get"];
+        /** Set the security policy */
+        put: operations["put_security_api_admin_platform_policy_security_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/platform-policy/email-branding": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Email branding */
+        get: operations["get_branding_api_admin_platform_policy_email_branding_get"];
+        /** Set the email branding */
+        put: operations["put_branding_api_admin_platform_policy_email_branding_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Admin overview: health, workspaces, AI spend */
+        get: operations["get_overview_api_admin_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/ai-prices": {
         parameters: {
             query?: never;
@@ -9071,6 +9124,15 @@ export interface components {
             /** Category */
             category: string;
         };
+        /** AdminOverviewRead */
+        AdminOverviewRead: {
+            /** Health */
+            health: components["schemas"]["HealthDotRead"][];
+            /** Workspaces */
+            workspaces: components["schemas"]["WorkspaceOverviewRead"][];
+            /** Spend */
+            spend: components["schemas"]["SpendDayRead"][];
+        };
         /** AgentCreate */
         AgentCreate: {
             /** Name */
@@ -11319,6 +11381,24 @@ export interface components {
              */
             kind: string;
         };
+        /** EmailBranding */
+        EmailBranding: {
+            /**
+             * Productname
+             * @default
+             */
+            productName: string;
+            /**
+             * Footertext
+             * @default
+             */
+            footerText: string;
+            /**
+             * Accentcolor
+             * @default
+             */
+            accentColor: string;
+        };
         /** EmailEventSubscriptionCreate */
         EmailEventSubscriptionCreate: {
             /** Groupid */
@@ -12794,6 +12874,10 @@ export interface components {
              * @default false
              */
             scheduledPublishRequiresApproval: boolean;
+            /** Workflowmaxsteps */
+            workflowMaxSteps?: number | null;
+            /** Approvalexpireshours */
+            approvalExpiresHours?: number | null;
             /** Trashautoemptydays */
             trashAutoEmptyDays?: number | null;
         };
@@ -12845,6 +12929,10 @@ export interface components {
             submissionProtectionJson?: components["schemas"]["SubmissionProtectionOverride"] | null;
             /** Scheduledpublishrequiresapproval */
             scheduledPublishRequiresApproval?: boolean | null;
+            /** Workflowmaxsteps */
+            workflowMaxSteps?: number | null;
+            /** Approvalexpireshours */
+            approvalExpiresHours?: number | null;
             /** Trashautoemptydays */
             trashAutoEmptyDays?: number | null;
         };
@@ -12963,6 +13051,17 @@ export interface components {
              * @default OK
              */
             status: string;
+        };
+        /** HealthDotRead */
+        HealthDotRead: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Tone */
+            tone: string;
+            /** Href */
+            href: string;
         };
         /** HealthStatus */
         HealthStatus: {
@@ -15656,6 +15755,34 @@ export interface components {
                 [key: string]: unknown;
             } | null;
         };
+        /** SecuritySettingRead */
+        SecuritySettingRead: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Help */
+            help: string;
+            /** Unit */
+            unit: string;
+            /** Min */
+            min: number;
+            /** Max */
+            max: number;
+            /** Default */
+            default: number;
+            /** Value */
+            value: number;
+            /** Overridden */
+            overridden: boolean;
+        };
+        /** SecurityUpdate */
+        SecurityUpdate: {
+            /** Values */
+            values: {
+                [key: string]: number | null;
+            };
+        };
         /**
          * SiteBuildStatus
          * @description The newest build or deploy event a host reported (`site_build_*` / `site_deployment_*`).
@@ -16045,6 +16172,22 @@ export interface components {
              * @default 10
              */
             limit: number;
+        };
+        /** SpendDayRead */
+        SpendDayRead: {
+            /**
+             * Day
+             * Format: date
+             */
+            day: string;
+            /** Cost */
+            cost: number;
+            /** Runs */
+            runs: number;
+            /** Prompttokens */
+            promptTokens: number;
+            /** Cachedtokens */
+            cachedTokens: number;
         };
         /**
          * StorageBackupTarget
@@ -17886,6 +18029,27 @@ export interface components {
             routes?: components["schemas"]["NotificationRouteUpdate"][];
             /** Integrationreminderhours */
             integrationReminderHours?: number | null;
+        };
+        /** WorkspaceOverviewRead */
+        WorkspaceOverviewRead: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Entries */
+            entries: number;
+            /** Members */
+            members: number;
+            /** Aispendmonth */
+            aiSpendMonth: number;
+            /** Ailimitmonth */
+            aiLimitMonth?: number | null;
+            /** Openalerts */
+            openAlerts: number;
+            /** Lastactivity */
+            lastActivity?: string | null;
         };
         /**
          * WorkspaceRole
@@ -22249,6 +22413,132 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CheckAppConfig"];
+                };
+            };
+        };
+    };
+    get_security_api_admin_platform_policy_security_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SecuritySettingRead"][];
+                };
+            };
+        };
+    };
+    put_security_api_admin_platform_policy_security_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SecurityUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SecuritySettingRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_branding_api_admin_platform_policy_email_branding_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailBranding"];
+                };
+            };
+        };
+    };
+    put_branding_api_admin_platform_policy_email_branding_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailBranding"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailBranding"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_overview_api_admin_overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminOverviewRead"];
                 };
             };
         };
