@@ -11205,6 +11205,24 @@ export interface components {
              * @default []
              */
             runsByDay: components["schemas"]["RunsDay"][];
+            /**
+             * @default {
+             *       "weeks": [],
+             *       "types": [],
+             *       "total": 0
+             *     }
+             */
+            publishing: components["schemas"]["PublishingPulse"];
+            /**
+             * Recentforyou
+             * @default []
+             */
+            recentForYou: components["schemas"]["EntryBrief"][];
+            /**
+             * Bytype
+             * @default []
+             */
+            byType: components["schemas"]["TypeStatusRow"][];
         };
         /** EmailEventSubscriptionCreate */
         EmailEventSubscriptionCreate: {
@@ -11588,6 +11606,19 @@ export interface components {
             suggestionJson?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /** EntryBrief */
+        EntryBrief: {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status: string;
+            /** Typeslug */
+            typeSlug?: string | null;
+            /** Touchedat */
+            touchedAt?: string | null;
         };
         /**
          * EntryCollectionRead
@@ -14813,6 +14844,27 @@ export interface components {
             data: components["schemas"]["PublishedResourceSummary"][];
             meta: components["schemas"]["PaginationMeta"];
         };
+        /**
+         * PublishingPulse
+         * @description Entries published per week, by type: what the workspace shipped.
+         */
+        PublishingPulse: {
+            /**
+             * Weeks
+             * @default []
+             */
+            weeks: components["schemas"]["WeekPublished"][];
+            /**
+             * Types
+             * @default []
+             */
+            types: components["schemas"]["TypeBrief"][];
+            /**
+             * Total
+             * @default 0
+             */
+            total: number;
+        };
         /** PushApprovalAction */
         PushApprovalAction: {
             /** Token */
@@ -16423,6 +16475,17 @@ export interface components {
             /** Auto Empty Days */
             auto_empty_days: number;
         };
+        /** TypeBrief */
+        TypeBrief: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Icon */
+            icon?: string | null;
+            /** Color */
+            color?: string | null;
+        };
         /**
          * TypeCount
          * @description How many of a kind there are (an asset type, a resource type): the sidebar's folds.
@@ -16432,6 +16495,45 @@ export interface components {
             type: string;
             /** Count */
             count: number;
+        };
+        /**
+         * TypeStatusRow
+         * @description One entry type's pipeline: how many entries sit in each status.
+         */
+        TypeStatusRow: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Icon */
+            icon?: string | null;
+            /** Color */
+            color?: string | null;
+            /**
+             * Inbox
+             * @default 0
+             */
+            inbox: number;
+            /**
+             * Draft
+             * @default 0
+             */
+            draft: number;
+            /**
+             * Needsreview
+             * @default 0
+             */
+            needsReview: number;
+            /**
+             * Approved
+             * @default 0
+             */
+            approved: number;
+            /**
+             * Published
+             * @default 0
+             */
+            published: number;
         };
         /**
          * UnlockResults
@@ -16901,6 +17003,21 @@ export interface components {
              * Format: uuid4
              */
             id: string;
+        };
+        /** WeekPublished */
+        WeekPublished: {
+            /**
+             * Week
+             * Format: date
+             */
+            week: string;
+            /**
+             * Bytype
+             * @default {}
+             */
+            byType: {
+                [key: string]: number;
+            };
         };
         /** WorkflowApprovalDecision */
         WorkflowApprovalDecision: {
