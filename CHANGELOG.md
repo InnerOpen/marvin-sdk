@@ -1,3 +1,10 @@
+# [5.11.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.10.0...v5.11.0) (2026-10-14)
+
+
+### Features
+
+* **types:** assets list takes `decision` (what an approval that showed the picture said) ([dc600d5](https://github.com/InnerOpen/marvin-sdk/commit/dc600d5fd2be3b6cfc9714d711f35e4e9f578394))
+
 # [5.10.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.9.0...v5.10.0) (2026-10-14)
 
 
