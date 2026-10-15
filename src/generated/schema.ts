@@ -2048,6 +2048,33 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/storage-settings/connections/{connection_id}/copy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Plan Copying Files into a Bucket
+         * @description A dry run: how many of the workspace's files would be copied into the bucket (by where they are now), and
+         *     how many entries embed links to them (those keep working: originals are never deleted).
+         */
+        get: operations["copy_plan_api_groups_storage_settings_connections__connection_id__copy_get"];
+        put?: never;
+        /**
+         * Copy Files into a Bucket
+         * @description Copy the workspace's existing files into a verified bucket, in the background: a workspace scheduled task
+         *     ("Copy files to …") whose history shows the result. Each copy's sha256 is checked before its file is
+         *     repointed; originals are kept. Safe to start again: files already copied are skipped.
+         */
+        post: operations["start_copy_api_groups_storage_settings_connections__connection_id__copy_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/storage-settings/mode": {
         parameters: {
             query?: never;
@@ -18514,6 +18541,53 @@ export interface components {
                 [key: string]: string;
             } | null;
         };
+        /**
+         * WorkspaceStorageCopyPlan
+         * @description What copying the workspace's existing files into a bucket would do (nothing is copied to answer).
+         */
+        WorkspaceStorageCopyPlan: {
+            /** Connectionid */
+            connectionId: string;
+            /**
+             * Files
+             * @default 0
+             */
+            files: number;
+            /**
+             * Bytes
+             * @default 0
+             */
+            bytes: number;
+            /**
+             * Bylocation
+             * @default []
+             */
+            byLocation: components["schemas"]["WorkspaceStorageLocationCount"][];
+            /**
+             * Entrieswithlinks
+             * @default 0
+             */
+            entriesWithLinks: number;
+            /**
+             * Uploadsgohere
+             * @default false
+             */
+            uploadsGoHere: boolean;
+            /**
+             * Ready
+             * @default false
+             */
+            ready: boolean;
+        };
+        /** WorkspaceStorageCopyStarted */
+        WorkspaceStorageCopyStarted: {
+            /** Taskid */
+            taskId: string;
+            /** Taskslug */
+            taskSlug: string;
+            /** Message */
+            message: string;
+        };
         /** WorkspaceStorageField */
         WorkspaceStorageField: {
             /** Env */
@@ -18540,6 +18614,21 @@ export interface components {
              * @default false
              */
             fixed: boolean;
+        };
+        /** WorkspaceStorageLocationCount */
+        WorkspaceStorageLocationCount: {
+            /** Location */
+            location: string;
+            /**
+             * Files
+             * @default 0
+             */
+            files: number;
+            /**
+             * Bytes
+             * @default 0
+             */
+            bytes: number;
         };
         /** WorkspaceStorageModeUpdate */
         WorkspaceStorageModeUpdate: {
@@ -21940,6 +22029,68 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkspaceStorageConnectionRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    copy_plan_api_groups_storage_settings_connections__connection_id__copy_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageCopyPlan"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    start_copy_api_groups_storage_settings_connections__connection_id__copy_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageCopyStarted"];
                 };
             };
             /** @description Validation Error */
