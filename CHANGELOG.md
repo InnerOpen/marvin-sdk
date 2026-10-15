@@ -1,3 +1,10 @@
+# [5.20.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.19.0...v5.20.0) (2026-10-15)
+
+
+### Features
+
+* **types:** workspace storage bundle switch and admin workspace-buckets list ([9e5db87](https://github.com/InnerOpen/marvin-sdk/commit/9e5db87361a6b045adfbd68f3ea4e1d992d49ed4))
+
 # [5.19.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.18.0...v5.19.0) (2026-10-15)
 
 
