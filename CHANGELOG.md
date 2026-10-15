@@ -1,3 +1,10 @@
+# [5.21.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.20.0...v5.21.0) (2026-10-15)
+
+
+### Features
+
+* **types:** the admin remote MCP policy (RemoteMcpRead, RemoteMcpUpdate) ([93b8534](https://github.com/InnerOpen/marvin-sdk/commit/93b85340460b4bd1b31cd3bbf13686e38e6017c9))
+
 # [5.20.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.19.0...v5.20.0) (2026-10-15)
 
 
