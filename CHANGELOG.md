@@ -1,3 +1,10 @@
+# [5.19.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.18.0...v5.19.0) (2026-10-15)
+
+
+### Features
+
+* **types:** workspace storage copy plan and copy start ([daa4fb8](https://github.com/InnerOpen/marvin-sdk/commit/daa4fb86de41b910475560ec9e46496fe13bfc02))
+
 # [5.18.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.17.0...v5.18.0) (2026-10-14)
 
 
