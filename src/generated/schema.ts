@@ -2096,6 +2096,73 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/storage-settings/backup-bucket": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Choose the Workspace's Own Backup Bucket
+         * @description Where the workspace's own backups go: a verified backup bucket (never one its files are served from), or
+         *     null to stop them; ``keep`` sets how many stay there. The daily bundle task then saves one there each day.
+         */
+        put: operations["set_backup_bucket_api_groups_storage_settings_backup_bucket_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/storage-settings/backups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the Workspace's Own Backups
+         * @description The backups in the workspace's own backup bucket, newest first.
+         */
+        get: operations["list_backups_api_groups_storage_settings_backups_get"];
+        put?: never;
+        /**
+         * Back Up Now
+         * @description Make the workspace's backup bundle and save it to its own backup bucket, in the background (a workspace
+         *     task, "Back up to the workspace's bucket", whose history shows the result).
+         */
+        post: operations["back_up_now_api_groups_storage_settings_backups_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/storage-settings/backups/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download One of the Workspace's Own Backups
+         * @description Stream one backup from the workspace's own bucket (checked against the sha256 it was saved with). Import it
+         *     from Admin → Backups, with the workspace's backup key.
+         */
+        get: operations["download_backup_api_groups_storage_settings_backups_download_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/storage-settings/mode": {
         parameters: {
             query?: never;
@@ -18236,6 +18303,34 @@ export interface components {
             /** Workspace */
             workspace: string;
         };
+        /** WorkspaceBackupBucketUpdate */
+        WorkspaceBackupBucketUpdate: {
+            /** Connectionid */
+            connectionId?: string | null;
+            /** Keep */
+            keep?: number | null;
+        };
+        /** WorkspaceBackupRead */
+        WorkspaceBackupRead: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /**
+             * Size
+             * @default 0
+             */
+            size: number;
+        };
+        /** WorkspaceBackupStarted */
+        WorkspaceBackupStarted: {
+            /** Taskid */
+            taskId: string;
+            /** Taskslug */
+            taskSlug: string;
+            /** Message */
+            message: string;
+        };
         /**
          * WorkspaceBucketRead
          * @description A workspace's bucket, for platform admins.
@@ -18245,6 +18340,11 @@ export interface components {
             id: string;
             /** Pluginslug */
             pluginSlug: string;
+            /**
+             * Purpose
+             * @default assets
+             */
+            purpose: string;
             /** Label */
             label?: string | null;
             /** Location */
@@ -18631,6 +18731,11 @@ export interface components {
              * @default s3
              */
             pluginSlug: string;
+            /**
+             * Purpose
+             * @default assets
+             */
+            purpose: string;
             /** Label */
             label?: string | null;
             /**
@@ -18654,6 +18759,11 @@ export interface components {
             id: string;
             /** Pluginslug */
             pluginSlug: string;
+            /**
+             * Purpose
+             * @default assets
+             */
+            purpose: string;
             /** Label */
             label?: string | null;
             /** Location */
@@ -18843,6 +18953,18 @@ export interface components {
              * @default []
              */
             providers: components["schemas"]["WorkspaceStorageProvider"][];
+            /**
+             * Backupproviders
+             * @default []
+             */
+            backupProviders: components["schemas"]["WorkspaceStorageProvider"][];
+            /** Backupconnectionid */
+            backupConnectionId?: string | null;
+            /**
+             * Backupkeep
+             * @default 7
+             */
+            backupKeep: number;
             /**
              * Connections
              * @default []
@@ -22284,6 +22406,110 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkspaceStorageRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_backup_bucket_api_groups_storage_settings_backup_bucket_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceBackupBucketUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_backups_api_groups_storage_settings_backups_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceBackupRead"][];
+                };
+            };
+        };
+    };
+    back_up_now_api_groups_storage_settings_backups_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceBackupStarted"];
+                };
+            };
+        };
+    };
+    download_backup_api_groups_storage_settings_backups_download_get: {
+        parameters: {
+            query: {
+                key: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
