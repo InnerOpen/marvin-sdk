@@ -1,3 +1,10 @@
+# [5.22.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.21.0...v5.22.0) (2026-10-15)
+
+
+### Features
+
+* **types:** workspace storage — backup buckets, own backups (list, back up now, download) ([1834b9c](https://github.com/InnerOpen/marvin-sdk/commit/1834b9c6e17459c6336249cb448efe0a1f708e84))
+
 # [5.21.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.20.0...v5.21.0) (2026-10-15)
 
 
