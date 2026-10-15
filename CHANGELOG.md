@@ -1,3 +1,45 @@
+# [5.20.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.19.0...v5.20.0) (2026-10-15)
+
+
+### Features
+
+* **types:** workspace storage bundle switch and admin workspace-buckets list ([9e5db87](https://github.com/InnerOpen/marvin-sdk/commit/9e5db87361a6b045adfbd68f3ea4e1d992d49ed4))
+
+# [5.19.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.18.0...v5.19.0) (2026-10-15)
+
+
+### Features
+
+* **types:** workspace storage copy plan and copy start ([daa4fb8](https://github.com/InnerOpen/marvin-sdk/commit/daa4fb86de41b910475560ec9e46496fe13bfc02))
+
+# [5.18.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.17.0...v5.18.0) (2026-10-14)
+
+
+### Features
+
+* **types:** workspace storage settings (WorkspaceStorage*) and the admin workspace-storage policy ([eed4b81](https://github.com/InnerOpen/marvin-sdk/commit/eed4b818068f862ee7b3b6d19a84b6f2e393558f))
+
+# [5.17.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.16.0...v5.17.0) (2026-10-14)
+
+
+### Features
+
+* **types:** collections carry inSidebar ([9ac089b](https://github.com/InnerOpen/marvin-sdk/commit/9ac089bf95c01d6c5ef2327e6a98d8714ca92212))
+
+# [5.16.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.15.0...v5.16.0) (2026-10-14)
+
+
+### Features
+
+* **types:** admin overview carries signIns and pluginUpdates ([c78a9ec](https://github.com/InnerOpen/marvin-sdk/commit/c78a9ec0ebd8bf7cac4e9c24a60dc38ac7822f6c))
+
+# [5.15.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.14.0...v5.15.0) (2026-10-14)
+
+
+### Features
+
+* **types:** AI settings carry agentStepsDefault / agentStepsCap ([b4a8f89](https://github.com/InnerOpen/marvin-sdk/commit/b4a8f89ca4ebcf30768e4a2afb1fe316153b2e40))
+
 # [5.14.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.13.0...v5.14.0) (2026-10-14)
 
 
