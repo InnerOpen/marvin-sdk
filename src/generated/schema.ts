@@ -2075,6 +2075,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/storage-settings/bundle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Include the Bucket's Files in Backup Bundles
+         * @description Whether this workspace's backup bundles include the files in its own bucket (off by default: they can be
+         *     large, and the bucket is its owner's to back up). Files on the platform's storage are always included.
+         */
+        put: operations["set_bundle_api_groups_storage_settings_bundle_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/storage-settings/mode": {
         parameters: {
             query?: never;
@@ -4331,6 +4352,28 @@ export interface paths {
          *     runbook). Files on local disk keep the API host. 422 for a URL that isn't https://host[/path].
          */
         put: operations["update_workspace_storage_api_admin_storage_workspaces__workspace_id__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/storage/workspace-buckets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: List Workspaces' Own Buckets
+         * @description Every bucket a workspace connected for its own files: its status and last check, whether uploads go there,
+         *     how many files are in it, and whether the workspace's bundles include them. These buckets aren't in the
+         *     platform's asset backups.
+         */
+        get: operations["list_workspace_buckets_api_admin_storage_workspace_buckets_get"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -18140,6 +18183,65 @@ export interface components {
             /** Workspace */
             workspace: string;
         };
+        /**
+         * WorkspaceBucketRead
+         * @description A workspace's bucket, for platform admins.
+         */
+        WorkspaceBucketRead: {
+            /** Id */
+            id: string;
+            /** Pluginslug */
+            pluginSlug: string;
+            /** Label */
+            label?: string | null;
+            /** Location */
+            location: string;
+            /**
+             * Settings
+             * @default {}
+             */
+            settings: {
+                [key: string]: string;
+            };
+            /**
+             * Secretrefs
+             * @default {}
+             */
+            secretRefs: {
+                [key: string]: string;
+            };
+            /** Status */
+            status: string;
+            /** Verifiedat */
+            verifiedAt?: string | null;
+            /** Lastcheckedat */
+            lastCheckedAt?: string | null;
+            /** Lasterror */
+            lastError?: string | null;
+            /** Retiredat */
+            retiredAt?: string | null;
+            /**
+             * Files
+             * @default 0
+             */
+            files: number;
+            /** Workspaceid */
+            workspaceId: string;
+            /** Workspace */
+            workspace: string;
+            /** Workspaceslug */
+            workspaceSlug: string;
+            /**
+             * Inuse
+             * @default false
+             */
+            inUse: boolean;
+            /**
+             * Inbundles
+             * @default false
+             */
+            inBundles: boolean;
+        };
         /** WorkspaceEventReactions */
         WorkspaceEventReactions: {
             /**
@@ -18435,6 +18537,11 @@ export interface components {
              * @default 0
              */
             aiCostUsd: number;
+        };
+        /** WorkspaceStorageBundleUpdate */
+        WorkspaceStorageBundleUpdate: {
+            /** Include */
+            include: boolean;
         };
         /** WorkspaceStorageCheckStep */
         WorkspaceStorageCheckStep: {
@@ -22104,6 +22211,39 @@ export interface operations {
             };
         };
     };
+    set_bundle_api_groups_storage_settings_bundle_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceStorageBundleUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceStorageRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     set_mode_api_groups_storage_settings_mode_put: {
         parameters: {
             query?: never;
@@ -25336,6 +25476,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_workspace_buckets_api_admin_storage_workspace_buckets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceBucketRead"][];
                 };
             };
         };
