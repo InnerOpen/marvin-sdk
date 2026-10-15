@@ -1,3 +1,10 @@
+# [5.23.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.22.0...v5.23.0) (2026-10-15)
+
+
+### Features
+
+* **types:** connected MCP apps (self and admin) ([f340eb0](https://github.com/InnerOpen/marvin-sdk/commit/f340eb05e3d7581d7c4f77372c014d506f42297b))
+
 # [5.22.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.21.0...v5.22.0) (2026-10-15)
 
 
