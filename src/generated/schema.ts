@@ -2973,6 +2973,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/platform-policy/remote-mcp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Remote MCP policy */
+        get: operations["get_remote_mcp_api_admin_platform_policy_remote_mcp_get"];
+        /** Set the remote MCP policy */
+        put: operations["put_remote_mcp_api_admin_platform_policy_remote_mcp_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/overview": {
         parameters: {
             query?: never;
@@ -15530,6 +15548,41 @@ export interface components {
          * @enum {string}
          */
         RecipientType: "event_field" | "admins" | "specific";
+        /** RemoteMcpRead */
+        RemoteMcpRead: {
+            /** Enabled */
+            enabled: boolean;
+            /** Enableddefault */
+            enabledDefault: boolean;
+            /** Unavailablereason */
+            unavailableReason?: string | null;
+            /** Issuer */
+            issuer?: string | null;
+            /** Resource */
+            resource?: string | null;
+            /** Fields */
+            fields: components["schemas"]["SecuritySettingRead"][];
+            /** Extraredirecturis */
+            extraRedirectUris: string[];
+            /** Allowdynamicregistration */
+            allowDynamicRegistration: boolean;
+        };
+        /** RemoteMcpUpdate */
+        RemoteMcpUpdate: {
+            /** Enabled */
+            enabled?: boolean | null;
+            /**
+             * Values
+             * @default {}
+             */
+            values: {
+                [key: string]: number | null;
+            };
+            /** Extraredirecturis */
+            extraRedirectUris?: string[] | null;
+            /** Allowdynamicregistration */
+            allowDynamicRegistration?: boolean | null;
+        };
         /**
          * ReorderCollectionsRequest
          * @description Schema for bulk reordering collections in the workspace.
@@ -23381,6 +23434,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EmailBranding"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_remote_mcp_api_admin_platform_policy_remote_mcp_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RemoteMcpRead"];
+                };
+            };
+        };
+    };
+    put_remote_mcp_api_admin_platform_policy_remote_mcp_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RemoteMcpUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RemoteMcpRead"];
                 };
             };
             /** @description Validation Error */
