@@ -8355,6 +8355,83 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/users/self/connected-apps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List My Connected MCP Apps
+         * @description The MCP apps (claude.ai, ChatGPT, Claude Code…) the caller let use Marvin, still connected.
+         */
+        get: operations["my_connected_apps_api_users_self_connected_apps_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/self/connected-apps/{grant_id}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Disconnect One of My MCP Apps
+         * @description Revoke the app's access at once: its tokens stop working; it has to be approved again to reconnect.
+         */
+        post: operations["revoke_my_app_api_users_self_connected_apps__grant_id__revoke_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/connected-apps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: List Connected MCP Apps
+         * @description Every user's connected MCP apps (and, with include_revoked, the revoked ones and why).
+         */
+        get: operations["all_connected_apps_api_admin_connected_apps_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/connected-apps/{grant_id}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Admin: Disconnect an MCP App */
+        post: operations["admin_revoke_app_api_admin_connected_apps__grant_id__revoke_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -11604,6 +11681,33 @@ export interface components {
             } | null;
             /** Entryids */
             entryIds?: string[] | null;
+        };
+        /** ConnectedAppRead */
+        ConnectedAppRead: {
+            /** Id */
+            id: string;
+            /** Clientname */
+            clientName: string;
+            /** Redirecthost */
+            redirectHost: string;
+            /** Access */
+            access: string;
+            /** Workspaceid */
+            workspaceId: string;
+            /** Workspace */
+            workspace: string;
+            /** Userid */
+            userId: string;
+            /** User */
+            user: string;
+            /** Createdat */
+            createdAt?: unknown | null;
+            /** Lastusedat */
+            lastUsedAt?: unknown | null;
+            /** Revokedat */
+            revokedAt?: unknown | null;
+            /** Revokedreason */
+            revokedReason?: string | null;
         };
         /** DashboardData */
         DashboardData: {
@@ -32814,6 +32918,119 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthStatus"];
+                };
+            };
+        };
+    };
+    my_connected_apps_api_users_self_connected_apps_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectedAppRead"][];
+                };
+            };
+        };
+    };
+    revoke_my_app_api_users_self_connected_apps__grant_id__revoke_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                grant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectedAppRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    all_connected_apps_api_admin_connected_apps_get: {
+        parameters: {
+            query?: {
+                include_revoked?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectedAppRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    admin_revoke_app_api_admin_connected_apps__grant_id__revoke_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                grant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectedAppRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
