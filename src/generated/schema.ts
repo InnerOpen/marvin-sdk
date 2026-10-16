@@ -1841,10 +1841,33 @@ export interface paths {
         get: operations["character_library_api_groups_ai_settings_character_library_get"];
         /**
          * Use a library character
-         * @description The bubble plays a library pack; the workspace's own uploaded character, if any, is deleted.
+         * @description The bubble plays a library pack, and the assistant becomes that character: the pack's name, Character,
+         *     bubble lines, tone and icon are copied into the workspace's own settings, to edit from there. The
+         *     workspace's own uploaded character, if any, is deleted.
          */
         put: operations["use_library_character_api_groups_ai_settings_character_library_put"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/ai-settings/character/reset-persona": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reset the persona to the library character's
+         * @description Copy the current library pack's persona in again — name, Character, bubble lines, tone and icon —
+         *     replacing the workspace's edits. 409 when the character isn't a library pack, or the pack has none.
+         */
+        post: operations["reset_persona_api_groups_ai_settings_character_reset_persona_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3393,7 +3416,9 @@ export interface paths {
         put?: never;
         /**
          * Admin: Add Character Pack
-         * @description A new pack from a .zip or loose GIF/WebP/PNG files, one per state by name (as a workspace upload).
+         * @description A new pack from a .zip or loose GIF/WebP/PNG files, one per state by name (as a workspace upload) — or
+         *     from a complete pack's .zip (one this library downloaded), whose character.json gives its name, states
+         *     and persona.
          */
         post: operations["create_pack_api_admin_character_packs_post"];
         delete?: never;
@@ -3413,7 +3438,8 @@ export interface paths {
         put?: never;
         /**
          * Admin: Replace a Character Pack's Files
-         * @description New animations for an existing pack; everyone using it gets them. Its old files are deleted.
+         * @description New animations for an existing pack; everyone using it gets them. Its old files are deleted. A complete
+         *     pack's .zip also brings its name and persona (its slug stays).
          */
         post: operations["replace_pack_files_api_admin_character_packs__pack_ref__post"];
         /**
@@ -3427,10 +3453,55 @@ export interface paths {
         options?: never;
         head?: never;
         /**
-         * Admin: Rename a Character Pack
-         * @description Its slug stays, so nothing referring to it breaks.
+         * Admin: Update a Character Pack
+         * @description Rename it (its slug stays, so nothing referring to it breaks) and/or save its character sheet — the
+         *     persona a workspace or agent copies when it picks the pack (null clears it). Those already using the
+         *     pack keep their copy until they pick it again or reset to it.
          */
-        patch: operations["rename_pack_api_admin_character_packs__pack_ref__patch"];
+        patch: operations["update_pack_api_admin_character_packs__pack_ref__patch"];
+        trace?: never;
+    };
+    "/api/admin/character-packs/{pack_ref}/bubble-lines/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Write a Character Pack's Bubble Lines
+         * @description Write the pack's bubble lines from its Character with one model call, billed to your current workspace,
+         *     and return them unsaved — the character sheet fills them in for you to edit and save. `personaPrompt` /
+         *     `assistantName` stand in for the stored ones (the sheet's unsaved fields).
+         */
+        post: operations["generate_pack_lines_api_admin_character_packs__pack_ref__bubble_lines_generate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/character-packs/{pack_ref}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Download a Character Pack
+         * @description The whole pack as one .zip — its images and a character.json with its states and persona — which
+         *     Add (or Replace) takes back as is, here or in another Marvin.
+         */
+        get: operations["download_pack_api_admin_character_packs__pack_ref__download_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/admin/character-packs/{pack_ref}/states": {
@@ -5212,10 +5283,53 @@ export interface paths {
         get?: never;
         /**
          * Give an agent a library character
-         * @description The agent plays a library pack; its own uploaded character, if any, is deleted.
+         * @description The agent plays a library pack and becomes that character: the pack's name, Character, bubble lines,
+         *     tone and icon are copied onto the agent, to edit from there. Its own uploaded character, if any, is deleted.
          */
         put: operations["use_agent_library_character_api_ai_agents__slug__character_library_put"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/agents/{slug}/character/reset-persona": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reset an agent's persona to its library character's
+         * @description Copy the agent's library pack's persona in again — name, Character, bubble lines, tone and icon —
+         *     replacing the agent's edits. 409 when its character isn't a library pack, or the pack has none.
+         */
+        post: operations["reset_agent_persona_api_ai_agents__slug__character_reset_persona_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/agents/{slug}/bubble-lines/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Write an agent's bubble lines
+         * @description Write the agent's bubble lines from its Character with one model call, and return them unsaved — the
+         *     Edit form fills them in to edit and save. `personaPrompt` / `name` stand in for the stored ones.
+         */
+        post: operations["generate_agent_lines_api_ai_agents__slug__bubble_lines_generate_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9619,6 +9733,10 @@ export interface components {
             suggestions?: string[] | null;
             /** Handoffhint */
             handoffHint?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
             /** Slug */
             slug: string;
         };
@@ -9673,8 +9791,22 @@ export interface components {
             suggestions?: string[] | null;
             /** Handoffhint */
             handoffHint?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
             /** Slug */
             slug?: string | null;
+        };
+        /**
+         * AgentLinesRequest
+         * @description The Edit form's unsaved Character and name to write bubble lines from; one left out is the stored one.
+         */
+        AgentLinesRequest: {
+            /** Name */
+            name?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
         };
         /**
          * AgentPromptPreview
@@ -9763,6 +9895,10 @@ export interface components {
             suggestions?: string[] | null;
             /** Handoffhint */
             handoffHint?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
         };
         /** AgentRead */
         AgentRead: {
@@ -9811,6 +9947,10 @@ export interface components {
             suggestions?: string[] | null;
             /** Handoffhint */
             handoffHint?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
             /** Id */
             id?: string | null;
             /** Slug */
@@ -9826,6 +9966,8 @@ export interface components {
              */
             toolPolicyOverridden: boolean;
             character?: components["schemas"]["AssistantCharacter"] | null;
+            /** Bubblelinessource */
+            bubbleLinesSource?: string | null;
         };
         /** AgentToolCategory */
         AgentToolCategory: {
@@ -9870,6 +10012,19 @@ export interface components {
             suggestions?: string[] | null;
             /** Handoffhint */
             handoffHint?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
+        };
+        /**
+         * AgentVoice
+         * @description An agent's name and bubble lines, as the bubble shows them while it talks.
+         */
+        AgentVoice: {
+            /** Name */
+            name: string;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
         };
         /** AlertActionInput */
         AlertActionInput: {
@@ -11386,6 +11541,50 @@ export interface components {
              */
             items: components["schemas"]["ChangelogItem"][];
         };
+        /**
+         * CharacterPackLinesRequest
+         * @description The character sheet's unsaved fields to write lines from; one left out is the stored one.
+         */
+        CharacterPackLinesRequest: {
+            /** Assistantname */
+            assistantName?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+        };
+        /**
+         * CharacterPackPersona
+         * @description Who a library character is — its character sheet. Picking the pack copies it into the workspace's (or
+         *     the agent's) own fields, which are then theirs to edit; see services/ai/character_library.py.
+         */
+        "CharacterPackPersona-Input": {
+            /** Assistantname */
+            assistantName?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            /** Defaultregister */
+            defaultRegister?: string | null;
+            /** Icon */
+            icon?: string | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
+        };
+        /**
+         * CharacterPackPersona
+         * @description Who a library character is — its character sheet. Picking the pack copies it into the workspace's (or
+         *     the agent's) own fields, which are then theirs to edit; see services/ai/character_library.py.
+         */
+        "CharacterPackPersona-Output": {
+            /** Assistantname */
+            assistantName?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            /** Defaultregister */
+            defaultRegister?: string | null;
+            /** Icon */
+            icon?: string | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
+        };
         /** CharacterPackRead */
         CharacterPackRead: {
             /** Library */
@@ -11417,6 +11616,7 @@ export interface components {
              * @default []
              */
             usedBy: components["schemas"]["CharacterPackUser"][];
+            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
         };
         /**
          * CharacterPackSummary
@@ -11438,11 +11638,16 @@ export interface components {
              * @default []
              */
             missing: string[];
+            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
         };
-        /** CharacterPackUpdate */
+        /**
+         * CharacterPackUpdate
+         * @description Either or both: a new name (its slug stays), and its character sheet (null clears it).
+         */
         CharacterPackUpdate: {
             /** Name */
-            name: string;
+            name?: string | null;
+            persona?: components["schemas"]["CharacterPackPersona-Input"] | null;
         };
         /**
          * CharacterPackUploadRead
@@ -11495,6 +11700,7 @@ export interface components {
              * @default []
              */
             usedBy: components["schemas"]["CharacterPackUser"][];
+            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
         };
         /**
          * CharacterPackUser
@@ -14527,6 +14733,38 @@ export interface components {
              * @default false
              */
             done: boolean;
+        };
+        /**
+         * MoodBandLines
+         * @description What the bubble says in one mood band, in place of its usual greetings and taglines.
+         */
+        MoodBandLines: {
+            /**
+             * Greetings
+             * @default []
+             */
+            greetings: string[];
+            /**
+             * Taglines
+             * @default []
+             */
+            taglines: string[];
+        };
+        /**
+         * MoodSettings
+         * @description How a character's mood meter works — each choice null until it's made. Not active yet.
+         */
+        MoodSettings: {
+            /** Drains */
+            drains?: ("use" | "treatment") | null;
+            /** Meter */
+            meter?: ("visible" | "hidden") | null;
+            /** Memory */
+            memory?: ("daily" | "weeks") | null;
+            /** Absence */
+            absence?: ("recharges" | "cools" | "neutral") | null;
+            low?: components["schemas"]["MoodBandLines"] | null;
+            high?: components["schemas"]["MoodBandLines"] | null;
         };
         /** NotificationEmailRead */
         NotificationEmailRead: {
@@ -18359,6 +18597,7 @@ export interface components {
              * @default auto
              */
             defaultRegister: string;
+            mood?: components["schemas"]["MoodSettings"] | null;
             bubbleLines?: components["schemas"]["BubbleLines"] | null;
             /** Bubblelinessource */
             bubbleLinesSource?: string | null;
@@ -18392,6 +18631,13 @@ export interface components {
                 [key: string]: {
                     [key: string]: string;
                 };
+            };
+            /**
+             * Agentvoices
+             * @default {}
+             */
+            agentVoices: {
+                [key: string]: components["schemas"]["AgentVoice"];
             };
             /**
              * Characterinsets
@@ -18455,6 +18701,7 @@ export interface components {
             personaPrompt?: string | null;
             /** Defaultregister */
             defaultRegister?: string | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
         };
         /**
          * WorkspaceAIUsage
@@ -22198,6 +22445,26 @@ export interface operations {
             };
         };
     };
+    reset_persona_api_groups_ai_settings_character_reset_persona_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceAISettingsRead"];
+                };
+            };
+        };
+    };
     upload_character_api_groups_ai_settings_character_post: {
         parameters: {
             query?: never;
@@ -24493,7 +24760,7 @@ export interface operations {
             };
         };
     };
-    rename_pack_api_admin_character_packs__pack_ref__patch: {
+    update_pack_api_admin_character_packs__pack_ref__patch: {
         parameters: {
             query?: never;
             header?: never;
@@ -24516,6 +24783,70 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["CharacterPackRead"];
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_pack_lines_api_admin_character_packs__pack_ref__bubble_lines_generate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pack_ref: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["CharacterPackLinesRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BubbleLines"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_pack_api_admin_character_packs__pack_ref__download_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pack_ref: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
@@ -27423,6 +27754,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AssistantCharacterUpload"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_agent_persona_api_ai_agents__slug__character_reset_persona_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_agent_lines_api_ai_agents__slug__bubble_lines_generate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AgentLinesRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BubbleLines"];
                 };
             };
             /** @description Validation Error */
