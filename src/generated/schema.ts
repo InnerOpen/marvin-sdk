@@ -11667,6 +11667,8 @@ export interface components {
             sourceIntegrationId?: string | null;
             /** Sourceblueprint */
             sourceBlueprint?: string | null;
+            /** Sourceintegrationname */
+            sourceIntegrationName?: string | null;
         };
         /**
          * CollectionUpdate
