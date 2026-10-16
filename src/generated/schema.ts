@@ -11669,6 +11669,15 @@ export interface components {
             sourceBlueprint?: string | null;
             /** Sourceintegrationname */
             sourceIntegrationName?: string | null;
+            /** Sourceintegrationprovider */
+            sourceIntegrationProvider?: string | null;
+            /** Sourceintegrationicon */
+            sourceIntegrationIcon?: string | null;
+            /**
+             * Sourceintegrationhaslogo
+             * @default false
+             */
+            sourceIntegrationHasLogo: boolean;
         };
         /**
          * CollectionUpdate
