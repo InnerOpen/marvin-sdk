@@ -1,3 +1,10 @@
+# [5.27.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.26.0...v5.27.0) (2026-10-16)
+
+
+### Features
+
+* **types:** AI provider logos (hasLogo, GET /api/ai/provider-types/{slug}/logo) ([021b346](https://github.com/InnerOpen/marvin-sdk/commit/021b3468700a6ecac620edc03ef3a17e327f9405))
+
 # [5.26.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.25.0...v5.26.0) (2026-10-16)
 
 
