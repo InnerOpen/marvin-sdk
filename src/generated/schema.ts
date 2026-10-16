@@ -11556,24 +11556,7 @@ export interface components {
          * @description Who a library character is — its character sheet. Picking the pack copies it into the workspace's (or
          *     the agent's) own fields, which are then theirs to edit; see services/ai/character_library.py.
          */
-        "CharacterPackPersona-Input": {
-            /** Assistantname */
-            assistantName?: string | null;
-            /** Personaprompt */
-            personaPrompt?: string | null;
-            bubbleLines?: components["schemas"]["BubbleLines"] | null;
-            /** Defaultregister */
-            defaultRegister?: string | null;
-            /** Icon */
-            icon?: string | null;
-            mood?: components["schemas"]["MoodSettings"] | null;
-        };
-        /**
-         * CharacterPackPersona
-         * @description Who a library character is — its character sheet. Picking the pack copies it into the workspace's (or
-         *     the agent's) own fields, which are then theirs to edit; see services/ai/character_library.py.
-         */
-        "CharacterPackPersona-Output": {
+        CharacterPackPersona: {
             /** Assistantname */
             assistantName?: string | null;
             /** Personaprompt */
@@ -11616,7 +11599,7 @@ export interface components {
              * @default []
              */
             usedBy: components["schemas"]["CharacterPackUser"][];
-            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
+            persona?: components["schemas"]["CharacterPackPersona"] | null;
         };
         /**
          * CharacterPackSummary
@@ -11638,7 +11621,7 @@ export interface components {
              * @default []
              */
             missing: string[];
-            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
+            persona?: components["schemas"]["CharacterPackPersona"] | null;
         };
         /**
          * CharacterPackUpdate
@@ -11647,7 +11630,7 @@ export interface components {
         CharacterPackUpdate: {
             /** Name */
             name?: string | null;
-            persona?: components["schemas"]["CharacterPackPersona-Input"] | null;
+            persona?: components["schemas"]["CharacterPackPersona"] | null;
         };
         /**
          * CharacterPackUploadRead
@@ -11700,7 +11683,7 @@ export interface components {
              * @default []
              */
             usedBy: components["schemas"]["CharacterPackUser"][];
-            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
+            persona?: components["schemas"]["CharacterPackPersona"] | null;
         };
         /**
          * CharacterPackUser
@@ -27767,72 +27750,6 @@ export interface operations {
             };
         };
     };
-    reset_agent_persona_api_ai_agents__slug__character_reset_persona_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AgentRead"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    generate_agent_lines_api_ai_agents__slug__bubble_lines_generate_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["AgentLinesRequest"] | null;
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BubbleLines"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
     delete_agent_character_api_ai_agents__slug__character_delete: {
         parameters: {
             query?: never;
@@ -27919,6 +27836,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AssistantCharacter"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_agent_persona_api_ai_agents__slug__character_reset_persona_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgentRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_agent_lines_api_ai_agents__slug__bubble_lines_generate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AgentLinesRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BubbleLines"];
                 };
             };
             /** @description Validation Error */
