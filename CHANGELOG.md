@@ -1,3 +1,10 @@
+# [5.26.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.25.0...v5.26.0) (2026-10-16)
+
+
+### Features
+
+* **types:** a collection's integration provider, icon and logo flag (the sidebar shows the provider's mark) ([893dc55](https://github.com/InnerOpen/marvin-sdk/commit/893dc55d893a66371aaa5f4bccca9e4b253035cb))
+
 # [5.25.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.24.0...v5.25.0) (2026-10-16)
 
 
