@@ -1,3 +1,10 @@
+# [5.28.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.27.0...v5.28.0) (2026-10-16)
+
+
+### Features
+
+* **types:** character pack persona — pack sheet, pick/reset, pack download, agent persona and mood ([f5351f3](https://github.com/InnerOpen/marvin-sdk/commit/f5351f3b9765441e5b8882ad8a9b2a11ae185828))
+
 # [5.27.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.26.0...v5.27.0) (2026-10-16)
 
 
