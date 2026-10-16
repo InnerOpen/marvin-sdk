@@ -1,3 +1,10 @@
+# [5.24.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.23.0...v5.24.0) (2026-10-16)
+
+
+### Features
+
+* **types:** structured entry search (POST /api/platform/entries/query) ([639c5ae](https://github.com/InnerOpen/marvin-sdk/commit/639c5aee06549cdbf70c058f796a5890253c0dcc))
+
 # [5.23.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.22.0...v5.23.0) (2026-10-15)
 
 
