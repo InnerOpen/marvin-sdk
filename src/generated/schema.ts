@@ -4681,6 +4681,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ai/provider-types/{slug}/logo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Provider Type Logo
+         * @description An AI provider's validated logo. Public, like an integration's: 404 → the UI shows the provider's name alone.
+         */
+        get: operations["provider_type_logo_api_ai_provider_types__slug__logo_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ai/installed-models": {
         parameters: {
             query?: never;
@@ -8961,6 +8981,11 @@ export interface components {
              * @default false
              */
             selfHosted: boolean;
+            /**
+             * Haslogo
+             * @default false
+             */
+            hasLogo: boolean;
         };
         /** AIProviderUpdate */
         AIProviderUpdate: {
@@ -26547,6 +26572,52 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AIProviderTypeRead"][];
+                };
+            };
+        };
+    };
+    provider_type_logo_api_ai_provider_types__slug__logo_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/svg+xml": unknown;
+                    "image/png": unknown;
+                };
+            };
+            /** @description Not Modified */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
