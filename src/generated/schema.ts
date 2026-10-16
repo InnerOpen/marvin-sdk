@@ -5900,6 +5900,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/entries/query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Search entries by conditions
+         * @description A structured search: the conditions in `spec`, all ANDed, through the same engine the assistants'
+         *     find_entries uses (so the Entries page and the AI find the same entries). Read-only; the Trash is left out
+         *     unless `status` asks for it. Declared before `/{item_id}`.
+         */
+        post: operations["query_entries_api_platform_entries_query_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/entries/counts": {
         parameters: {
             query?: never;
@@ -12324,6 +12346,45 @@ export interface components {
             entryId: string;
             /** Sortorder */
             sortOrder: number;
+        };
+        /**
+         * EntryQueryRequest
+         * @description A structured search: `spec` takes the keys the assistants' find_entries takes (entry_types, status, tags,
+         *     collection, where [{field, op, value}], query, has_images, created_/updated_/published_ after|before, sort…),
+         *     all ANDed. See services/entries/query.py.
+         */
+        EntryQueryRequest: {
+            /**
+             * Spec
+             * @default {}
+             */
+            spec: {
+                [key: string]: unknown;
+            };
+            /**
+             * Limit
+             * @default 200
+             */
+            limit: number;
+            /**
+             * Offset
+             * @default 0
+             */
+            offset: number;
+        };
+        /** EntryQueryResult */
+        EntryQueryResult: {
+            /** Entries */
+            entries: components["schemas"]["EntryRead"][];
+            /** Total */
+            total: number;
+            /** Note */
+            note?: string | null;
+            /**
+             * Unknownops
+             * @default []
+             */
+            unknownOps: string[];
         };
         /**
          * EntryRead
@@ -28856,6 +28917,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EntryRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    query_entries_api_platform_entries_query_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntryQueryRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryQueryResult"];
                 };
             };
             /** @description Validation Error */
