@@ -1,3 +1,10 @@
+## [5.28.1](https://github.com/InnerOpen/marvin-sdk/compare/v5.28.0...v5.28.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **types:** character pack persona types as CI generates them (pydantic 2.14: one CharacterPackPersona, not -Input/-Output) ([7814e16](https://github.com/InnerOpen/marvin-sdk/commit/7814e16bfd36db229074d2bfea7239f19644b49e))
+
 # [5.28.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.27.0...v5.28.0) (2026-10-16)
 
 
