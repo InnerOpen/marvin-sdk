@@ -1,3 +1,10 @@
+# [5.25.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.24.0...v5.25.0) (2026-10-16)
+
+
+### Features
+
+* **types:** a collection's sourceIntegrationName (the sidebar groups integration collections under it) ([3fd076d](https://github.com/InnerOpen/marvin-sdk/commit/3fd076da534b93b7db8c9809cdd613620f6f3526))
+
 # [5.24.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.23.0...v5.24.0) (2026-10-16)
 
 
