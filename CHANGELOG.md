@@ -1,3 +1,15 @@
+# [5.29.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.28.1...v5.29.0) (2026-10-17)
+
+
+### Features
+
+* **types:** AI provider logos again (hasLogo, GET /api/ai/provider-types/{slug}/logo) ([30e1c44](https://github.com/InnerOpen/marvin-sdk/commit/30e1c44cc46dab78fd0eabdff58a9ae671ca39d0))
+
+
+### Reverts
+
+* **types:** drop the AI provider logo types until core has the route ([3f120f4](https://github.com/InnerOpen/marvin-sdk/commit/3f120f497aed0d76a0b752a521f4c89bb495e3c2))
+
 ## [5.28.1](https://github.com/InnerOpen/marvin-sdk/compare/v5.28.0...v5.28.1) (2026-10-16)
 
 
