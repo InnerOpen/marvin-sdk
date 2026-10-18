@@ -21,15 +21,11 @@ import type {
 import type {
   EntriesModule,
   CollectionsModule,
-  AssetsModule,
-  ResourcesModule,
 } from '@inneropen/marvin-sdk';
 
 // Options types
 import type {
   GetEntriesOptions,
-  GetAssetsOptions,
-  GetResourcesOptions,
 } from '@inneropen/marvin-sdk';
 ```
 
@@ -411,32 +407,6 @@ interface CollectionsModule {
 }
 ```
 
-### `AssetsModule`
-
-Assets module interface.
-
-```typescript
-interface AssetsModule {
-  list(options?: GetAssetsOptions): Promise<Asset[]>;
-  get(slug: string): Promise<Asset>;
-  images(options?: GetAssetsOptions): Promise<Asset[]>;
-  videos(options?: GetAssetsOptions): Promise<Asset[]>;
-  documents(options?: GetAssetsOptions): Promise<Asset[]>;
-}
-```
-
-### `ResourcesModule`
-
-Resources module interface.
-
-```typescript
-interface ResourcesModule {
-  list(options?: GetResourcesOptions): Promise<Resource[]>;
-  get(slug: string): Promise<Resource>;
-  entries(slug: string): Promise<Entry[]>;
-}
-```
-
 ## Options Types
 
 ### `GetEntriesOptions`
@@ -473,62 +443,6 @@ const options: GetEntriesOptions = {
 };
 
 const entries = await marvin.entries.list(options);
-```
-
-### `GetAssetsOptions`
-
-Options for listing assets.
-
-```typescript
-interface GetAssetsOptions {
-  /** Filter by asset type */
-  type?: 'image' | 'document' | 'video' | 'audio' | 'archive' | 'svg' | 'other';
-  
-  /** Maximum number of results */
-  limit?: number;
-  
-  /** Number of results to skip */
-  offset?: number;
-}
-```
-
-**Example:**
-
-```typescript
-const options: GetAssetsOptions = {
-  type: 'image',
-  limit: 20,
-};
-
-const images = await marvin.assets.list(options);
-```
-
-### `GetResourcesOptions`
-
-Options for listing resources.
-
-```typescript
-interface GetResourcesOptions {
-  /** Filter by resource type */
-  resourceType?: string;
-  
-  /** Maximum number of results */
-  limit?: number;
-  
-  /** Number of results to skip */
-  offset?: number;
-}
-```
-
-**Example:**
-
-```typescript
-const options: GetResourcesOptions = {
-  resourceType: 'fabric',
-  limit: 50,
-};
-
-const fabrics = await marvin.resources.list(options);
 ```
 
 ## Helper Types
@@ -633,7 +547,8 @@ interface FabricResource extends MarvinResource {
   };
 }
 
-const fabric = await marvin.resource('kuroki-s022') as FabricResource;
+const entry = await marvin.entry('my-post');
+const fabric = entry.resources[0] as unknown as FabricResource;
 const weight = fabric.metadata.weight; // Type-safe!
 ```
 

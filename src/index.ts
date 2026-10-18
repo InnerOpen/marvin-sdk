@@ -76,15 +76,12 @@ export type {
   PublishedEntryAsset,
   PublishedAssetRead,
   GetEntriesOptions,
-  GetAssetsOptions,
-  GetResourcesOptions,
 } from './types';
 
 // Workspace & Modules
 export { Workspace } from './workspaces/workspace';
 export { Entry, isFullEntryData } from './entries/entry';
 export { Collection } from './collections/collection';
-export { Resource } from './resources/resource';
 
 // Auth & Registration (public, no auth required)
 export { AuthClient, createAuthClient } from './auth';

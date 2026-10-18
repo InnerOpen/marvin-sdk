@@ -210,13 +210,16 @@ const entries = await collection.entries();
 
 ### Image Gallery
 
+Assets come inline on each entry, so build a gallery from an entry's `assets`.
+
 Create `src/pages/gallery.astro`:
 
 ```astro
 ---
 import { marvin } from '@/lib/marvin';
 
-const images = await marvin.assets.images();
+const post = await marvin.entry('my-gallery-post');
+const images = post.assets.filter((a) => a.mimeType.startsWith('image/'));
 ---
 
 <html>
@@ -265,55 +268,6 @@ const pages = await marvin.pages();
     ))}
   </ul>
 </nav>
-```
-
-## Resources
-
-### Resources Directory
-
-Create `src/pages/resources/[slug].astro`:
-
-```astro
----
-import { marvin } from '@/lib/marvin';
-
-export async function getStaticPaths() {
-  const resources = await marvin.resources.list();
-  
-  return resources.map((resource) => ({
-    params: { slug: resource.slug },
-    props: { resource },
-  }));
-}
-
-const { resource } = Astro.props;
-const entries = await resource.entries();
----
-
-<html>
-  <head>
-    <title>{resource.name}</title>
-  </head>
-  <body>
-    <article>
-      <h1>{resource.name}</h1>
-      <p class="type">{resource.resourceType}</p>
-      {resource.description && <p>{resource.description}</p>}
-      {resource.url && <a href={resource.url}>Visit Website</a>}
-      
-      {entries.length > 0 && (
-        <section>
-          <h2>Used in {entries.length} projects</h2>
-          <ul>
-            {entries.map((entry) => (
-              <li><a href={`/${entry.slug}`}>{entry.title}</a></li>
-            ))}
-          </ul>
-        </section>
-      )}
-    </article>
-  </body>
-</html>
 ```
 
 ## TypeScript Support

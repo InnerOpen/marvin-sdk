@@ -347,5 +347,4 @@ interface ListEntriesOptions {
 
 - [Entries Concept](../concepts/entries.md)
 - [Collections Module](collections.md)
-- [Assets Module](assets.md)
-- [Resources Module](resources.md)
+- [Assets and Resources](../concepts/assets.md)

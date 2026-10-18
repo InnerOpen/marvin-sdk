@@ -105,48 +105,6 @@ app.get('/api/collections/:slug', async (req, res) => {
 });
 ```
 
-### List Assets
-
-```typescript
-app.get('/api/assets', async (req, res) => {
-  try {
-    const { type, limit, offset } = req.query;
-    
-    const assets = await marvin.assets.list({
-      type: type as string,
-      limit: limit ? parseInt(limit as string) : undefined,
-      offset: offset ? parseInt(offset as string) : undefined,
-    });
-    
-    res.json(assets);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch assets' });
-  }
-});
-```
-
-### List Resources
-
-```typescript
-app.get('/api/resources', async (req, res) => {
-  try {
-    const { resourceType, limit, offset } = req.query;
-    
-    const resources = await marvin.resources.list({
-      resourceType: resourceType as string,
-      limit: limit ? parseInt(limit as string) : undefined,
-      offset: offset ? parseInt(offset as string) : undefined,
-    });
-    
-    res.json(resources);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch resources' });
-  }
-});
-```
-
 ## Server-Side Rendering
 
 ### Render Entry Page

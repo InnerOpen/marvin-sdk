@@ -454,13 +454,13 @@ const marvin = createMarvinClient({
 // ❌ Bad: Sequential
 const entries = await marvin.entries.list();
 const collections = await marvin.collections.list();
-const assets = await marvin.assets.list();
+const posts = await marvin.posts();
 
 // ✅ Good: Parallel
-const [entries, collections, assets] = await Promise.all([
+const [entries, collections, posts] = await Promise.all([
   marvin.entries.list(),
   marvin.collections.list(),
-  marvin.assets.list(),
+  marvin.posts(),
 ]);
 ```
 

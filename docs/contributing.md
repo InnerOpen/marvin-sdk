@@ -57,8 +57,6 @@ marvin-sdk/
 │   ├── workspaces/   # Workspace object
 │   ├── entries/      # Entries module
 │   ├── collections/  # Collections module
-│   ├── assets/       # Assets module
-│   ├── resources/    # Resources module
 │   ├── platform/     # Platform API
 │   ├── types/        # TypeScript types
 │   ├── core/         # Cache & utilities

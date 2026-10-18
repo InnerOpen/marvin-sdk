@@ -71,7 +71,6 @@ console.log(data);
 
 Coming soon:
 
-- `collection.assets()` - Get collection assets
 - `collection.metadata()` - Get collection metadata
 
 ## Fetching Collections
@@ -269,5 +268,4 @@ app.get('/api/collections/:slug/entries', async (req, res) => {
 
 - [Entries Concept](entries.md)
 - [Assets Concept](assets.md)
-- [Resources Concept](resources.md)
 - [API Reference](../api/collections.md)

@@ -349,7 +349,8 @@ const html = DOMPurify.sanitize(marked(body));
 Asset URLs from Marvin are safe to use but validate them if you allow user uploads:
 
 ```typescript
-const asset = await marvin.assets.get('user-upload');
+const entry = await marvin.entry('user-post');
+const asset = entry.assets[0];
 
 // Validate asset type
 if (asset.assetType !== 'image') {

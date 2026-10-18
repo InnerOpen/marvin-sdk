@@ -165,7 +165,6 @@ const workspace = await marvin.getWorkspace();
 // Access workspace modules
 workspace.entries     // Entries module
 workspace.collections // Collections module
-workspace.assets      // Assets module
 workspace.renderers   // Renderers module (entry type rendering metadata)
 workspace.site        // Site configuration (cached)
 ```
@@ -180,7 +179,6 @@ The SDK is organized into focused modules:
 ├── workspaces/   → Workspace object
 ├── entries/      → Entries module
 ├── collections/  → Collections module
-├── assets/       → Assets module
 ├── renderers/    → Renderers module (entry type rendering metadata)
 ├── auth/         → Authentication (future)
 ├── types/        → TypeScript types
@@ -232,8 +230,6 @@ workspace.site?.description
 // Access modules
 workspace.entries.list()
 workspace.collections.get('slug')
-workspace.assets.images()
-workspace.resources.list()
 ```
 
 ### Content Primitives
@@ -242,8 +238,8 @@ Marvin has four first-class content primitives:
 
 - **Entries** - Content you create (pages, blog posts, projects)
 - **Collections** - Organize and group entries
-- **Assets** - Binary files and media (images, videos, documents)
-- **Resources** - Reusable structured objects (fabrics, tools, suppliers, APIs)
+- **Assets** - Binary files and media (images, videos, documents). Delivered inline on entries
+- **Resources** - Reusable structured objects (fabrics, tools, suppliers, APIs). Delivered inline on entries
 
 ### Entries
 
@@ -285,32 +281,16 @@ collection.smartRules
 const entries = await collection.entries();
 
 // Future
-await collection.assets()
 await collection.metadata()
 ```
 
-### Resources
+### Assets and Resources
 
-Resources are reusable structured objects referenced by entries:
-
-```ts
-const resource = await marvin.resource('kuroki-s022');
-
-// Properties
-resource.name
-resource.slug
-resource.resourceType    // 'fabric', 'tool', 'supplier', etc.
-resource.description
-resource.externalId
-resource.url
-resource.metadata
-
-// Methods
-const entries = await resource.entries();  // Entries that reference this resource
-
-// Future
-await resource.assets()
-```
+The publishing API no longer has asset or resource endpoints. A single entry
+(`marvin.entry(slug)`) carries full `assets` and `resources` objects; list endpoints return
+`assetSlugs`/`resourceSlugs` plus a resolved `featuredAsset`. The site config (`getSite()`)
+returns the logo, favicon and SEO image as resolved URLs.
+Entries carry public asset URLs, so there is no separate download call.
 
 **Examples of Resources:**
 - Fabrics (denim, canvas, etc.)
@@ -472,14 +452,10 @@ const projects = await marvin.projects();
 const featured = await marvin.collection('featured');
 const entries = await featured.entries();
 
-// Assets
-const images = await marvin.assets.images();
-const videos = await marvin.assets.videos();
-
-// Resources
-const resources = await marvin.resources.list();
-const fabric = await marvin.resource('kuroki-s022');
-const entries = await fabric.entries();
+// Assets and resources are carried inline on entries
+const entry = await marvin.entry('about-us');
+const assets = entry.assets;
+const resources = entry.resources;
 ```
 
 ## API Reference
@@ -563,10 +539,6 @@ Entries module.
 
 Collections module.
 
-#### `workspace.assets`
-
-Assets module.
-
 ### Entries Module
 
 #### `entries.list(options?)`
@@ -636,61 +608,6 @@ Methods:
 - `collection.entries()` - Get entries in collection
 - `collection.toJSON()` - Get raw collection data
 
-### Assets Module
-
-#### `assets.list(options?)`
-
-Get all assets.
-
-**Options:**
-- `type?: string` - Filter by type
-- `limit?: number` - Max results
-- `offset?: number` - Pagination offset
-
-#### `assets.images(options?)`
-
-Get all images.
-
-#### `assets.videos(options?)`
-
-Get all videos.
-
-#### `assets.documents(options?)`
-
-Get all documents.
-
-### Resources Module
-
-#### `resources.list(options?)`
-
-Get all resources.
-
-**Options:**
-- `resourceType?: string` - Filter by resource type
-- `limit?: number` - Max results
-- `offset?: number` - Pagination offset
-
-#### `resources.get(slug)`
-
-Get a single resource (returns `Resource` object).
-
-#### `resources.entries(slug)`
-
-Get entries that reference a resource.
-
-### Resource Object
-
-Properties:
-- `id`, `name`, `slug`
-- `resourceType` - Type of resource (fabric, tool, supplier, etc.)
-- `description`, `externalId`, `url`
-- `metadata` - Custom metadata object
-- `createdAt`, `updatedAt`
-
-Methods:
-- `resource.entries()` - Get entries that reference this resource
-- `resource.toJSON()` - Get raw resource data
-
 ### Renderers Module
 
 #### `renderers.list()`
@@ -741,18 +658,11 @@ The SDK uses these Marvin publishing API endpoints:
 | `/api/publish/{workspace}/collections` | GET | List collections | ✅ Implemented |
 | `/api/publish/{workspace}/collections/{slug}` | GET | Get collection | ✅ Implemented |
 | `/api/publish/{workspace}/collections/{slug}/entries` | GET | Collection entries | ✅ Implemented |
-| `/api/publish/{workspace}/assets` | GET | List assets | ✅ Implemented |
-| `/api/publish/{workspace}/assets/{slug}` | GET | Get asset metadata | ✅ Implemented |
-| `/api/publish/{workspace}/resources` | GET | List resources | ✅ Implemented |
-| `/api/publish/{workspace}/resources/{slug}` | GET | Get resource | ✅ Implemented |
-| `/api/publish/{workspace}/resources/{slug}/entries` | GET | Resource entries | ✅ Implemented |
 | `/api/publish/{workspace}/entry-types` | GET | List entry types (renderers) | ✅ Implemented |
 
 **Query Parameters:**
 
 - **Entries**: `entry_type`, `collection`, `slug`, `updated_since`, `page`, `limit`
-- **Assets**: `type` (MIME type prefix), `limit`, `offset`
-- **Resources**: `resource_type`, `limit`, `offset`
 
 ## Security
 

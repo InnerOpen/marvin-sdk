@@ -56,7 +56,6 @@ export function createMarvinClient(config?: Partial<_MarvinConfig>): _MarvinClie
 export { Workspace } from './workspaces/workspace';
 export { Entry, isFullEntryData } from './entries/entry';
 export { Collection } from './collections/collection';
-export { Resource } from './resources/resource';
 
 // Types
 export type {
@@ -77,8 +76,6 @@ export type {
   PublishedEntryAsset,
   PublishedAssetRead,
   GetEntriesOptions,
-  GetAssetsOptions,
-  GetResourcesOptions,
 } from './types';
 
 // Core utilities (for advanced usage)

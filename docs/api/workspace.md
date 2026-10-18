@@ -66,26 +66,6 @@ workspace.collections: CollectionsModule
 
 See [Collections Module](collections.md) for details.
 
-### `assets`
-
-Assets module instance.
-
-```typescript
-workspace.assets: AssetsModule
-```
-
-See [Assets Module](assets.md) for details.
-
-### `resources`
-
-Resources module instance.
-
-```typescript
-workspace.resources: ResourcesModule
-```
-
-See [Resources Module](resources.md) for details.
-
 ## Methods
 
 ### `getInfo()`
@@ -155,11 +135,7 @@ const entries = await workspace.entries.list();
 // Collections
 const collections = await workspace.collections.list();
 
-// Assets
-const images = await workspace.assets.images();
-
-// Resources
-const resources = await workspace.resources.list();
+// Assets and resources are carried inline on entries (entry.assets, entry.resources)
 ```
 
 ### Reload Site Configuration
@@ -196,8 +172,6 @@ interface Workspace {
   site: Site | null;
   entries: EntriesModule;
   collections: CollectionsModule;
-  assets: AssetsModule;
-  resources: ResourcesModule;
   
   getInfo(): Promise<WorkspaceInfo>;
   loadSite(): Promise<void>;
@@ -229,5 +203,4 @@ interface Site {
 - [Client API](client.md)
 - [Entries Module](entries.md)
 - [Collections Module](collections.md)
-- [Assets Module](assets.md)
-- [Resources Module](resources.md)
+- [Assets and Resources](../concepts/assets.md)

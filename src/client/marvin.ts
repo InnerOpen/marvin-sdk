@@ -10,13 +10,10 @@ import type {
   MarvinSite,
   MarvinEntry,
   ListEntry,
-  MarvinAsset,
-  MarvinResource,
   PublishedCollectionSummary,
   CollectionEntry,
 } from '../types';
 import type { GetEntriesOptions } from '../entries/entries';
-import type { GetAssetsOptions } from '../assets/assets';
 
 export class MarvinClient {
   private http: MarvinHttpClient;
@@ -91,20 +88,6 @@ export class MarvinClient {
   }
 
   /**
-   * Get assets module
-   */
-  get assets() {
-    return this.workspace.assets;
-  }
-
-  /**
-   * Get resources module
-   */
-  get resources() {
-    return this.workspace.resources;
-  }
-
-  /**
    * Get renderers module
    */
   get renderers() {
@@ -148,13 +131,6 @@ export class MarvinClient {
    */
   async projects(options?: GetEntriesOptions) {
     return this.workspace.entries.projects(options);
-  }
-
-  /**
-   * Get a single resource by slug
-   */
-  async resource(slug: string) {
-    return this.workspace.resources.get(slug);
   }
 
   /**
@@ -220,34 +196,5 @@ export class MarvinClient {
    */
   async getCollectionEntries(slug: string): Promise<CollectionEntry[]> {
     return this.workspace.collections.entries(slug);
-  }
-
-  /**
-   * @deprecated Use workspace.assets.list() instead
-   */
-  async getAssets(options?: GetAssetsOptions): Promise<MarvinAsset[]> {
-    return this.workspace.assets.list(options);
-  }
-
-  /**
-   * @deprecated Use workspace.resources.list() instead
-   */
-  async getResources(options?: import('../types').GetResourcesOptions): Promise<MarvinResource[]> {
-    return this.workspace.resources.list(options);
-  }
-
-  /**
-   * @deprecated Use workspace.resources.get() instead
-   */
-  async getResource(slug: string): Promise<MarvinResource> {
-    const resource = await this.workspace.resources.get(slug);
-    return resource.toJSON();
-  }
-
-  /**
-   * @deprecated Use workspace.resources.entries() instead
-   */
-  async getResourceEntries(slug: string): Promise<string[]> {
-    return this.workspace.resources.entries(slug);
   }
 }

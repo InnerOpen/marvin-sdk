@@ -53,25 +53,12 @@ workspace.collections.entries('slug')
 
 [Learn more about Collections](collections.md)
 
-### Assets Module
+### Assets and Resources
 
-```typescript
-workspace.assets.list()
-workspace.assets.images()
-workspace.assets.videos()
-```
+The publishing API has no asset or resource modules: assets and resources are delivered inline on
+entries (`entry.assets`, `entry.resources`), with public URLs.
 
-[Learn more about Assets](assets.md)
-
-### Resources Module
-
-```typescript
-workspace.resources.list()
-workspace.resources.get('slug')
-workspace.resources.entries('slug')
-```
-
-[Learn more about Resources](resources.md)
+[Learn more](assets.md)
 
 ## Workspace Methods
 
