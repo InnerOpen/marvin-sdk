@@ -1,3 +1,21 @@
+# [6.0.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.29.0...v6.0.0) (2026-10-18)
+
+
+### Features
+
+* drop publishing client assets/resources listing methods ([2a5cd72](https://github.com/InnerOpen/marvin-sdk/commit/2a5cd72b4feaa1a980871572da2d7ef94c0a2a82))
+* remove the publishing AssetsModule ([b59deca](https://github.com/InnerOpen/marvin-sdk/commit/b59decaf5b52659e27b59364b6409027a8ef5acd))
+* **types:** regenerate from Marvin develop — embeddings, plugin updates, custom events, new workflow steps ([a0f288d](https://github.com/InnerOpen/marvin-sdk/commit/a0f288daca6f9d78d0412ee264d7f36ce0b9958e))
+
+
+### BREAKING CHANGES
+
+* workspace.assets, marvin.assets and assets.download(slug) are removed from the
+publishing client. Use the public asset URLs on entry.assets instead.
+* the publishing client no longer has assets.list/get/images/videos/documents,
+resources.*, resource(), getAssets(), getResources(), getResource() or getResourceEntries().
+Read assets and resources from entry.assets / entry.resources; use assets.download(slug) for files.
+
 # [5.29.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.28.1...v5.29.0) (2026-10-17)
 
 
