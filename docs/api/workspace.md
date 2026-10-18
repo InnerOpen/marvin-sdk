@@ -71,20 +71,10 @@ See [Collections Module](collections.md) for details.
 Assets module instance.
 
 ```typescript
-workspace.assets: AssetsModule
+workspace.assets: AssetsModule  // download(slug) only
 ```
 
-See [Assets Module](assets.md) for details.
-
-### `resources`
-
-Resources module instance.
-
-```typescript
-workspace.resources: ResourcesModule
-```
-
-See [Resources Module](resources.md) for details.
+See [Assets and Resources](../concepts/assets.md) for details.
 
 ## Methods
 
@@ -155,11 +145,8 @@ const entries = await workspace.entries.list();
 // Collections
 const collections = await workspace.collections.list();
 
-// Assets
-const images = await workspace.assets.images();
-
-// Resources
-const resources = await workspace.resources.list();
+// Assets (file download only; entries carry their assets and resources inline)
+const file = await workspace.assets.download('logo');
 ```
 
 ### Reload Site Configuration
@@ -197,7 +184,6 @@ interface Workspace {
   entries: EntriesModule;
   collections: CollectionsModule;
   assets: AssetsModule;
-  resources: ResourcesModule;
   
   getInfo(): Promise<WorkspaceInfo>;
   loadSite(): Promise<void>;
@@ -229,5 +215,4 @@ interface Site {
 - [Client API](client.md)
 - [Entries Module](entries.md)
 - [Collections Module](collections.md)
-- [Assets Module](assets.md)
-- [Resources Module](resources.md)
+- [Assets and Resources](../concepts/assets.md)

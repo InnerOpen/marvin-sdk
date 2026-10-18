@@ -101,19 +101,6 @@ const collection = await marvin.collection('projects');
 
 **Returns:** `Promise<Collection>`
 
-### `resource(slug)`
-
-Get a single resource by slug.
-
-```typescript
-const resource = await marvin.resource('kuroki-s022');
-```
-
-**Parameters:**
-- `slug: string` - Resource slug
-
-**Returns:** `Promise<Resource>`
-
 ### `pages(options?)`
 
 Get all pages.
@@ -186,23 +173,11 @@ See [Collections Module](collections.md) for details.
 
 ### `assets`
 
-Assets module.
+Assets module. Only `download(slug)` remains; entries carry their assets inline.
 
 ```typescript
-const images = await marvin.assets.images();
+const file = await marvin.assets.download('logo');
 ```
-
-See [Assets Module](assets.md) for details.
-
-### `resources`
-
-Resources module.
-
-```typescript
-const resources = await marvin.resources.list();
-```
-
-See [Resources Module](resources.md) for details.
 
 ## Backwards-Compatible Methods
 
@@ -250,5 +225,4 @@ See [TypeScript Types](../reference/types.md) for complete type definitions.
 - [Workspace API](workspace.md)
 - [Entries Module](entries.md)
 - [Collections Module](collections.md)
-- [Assets Module](assets.md)
-- [Resources Module](resources.md)
+- [Assets and Resources](../concepts/assets.md)

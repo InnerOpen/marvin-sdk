@@ -343,7 +343,6 @@ async function warmCache() {
   await Promise.all([
     marvin.entries.list().then(data => cache.set('entries', data)),
     marvin.collections.list().then(data => cache.set('collections', data)),
-    marvin.assets.images().then(data => cache.set('images', data)),
   ]);
   
   console.log('Cache warmed!');

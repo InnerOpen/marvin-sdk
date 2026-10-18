@@ -107,23 +107,17 @@ for (const page of pages) {
 }
 ```
 
-### Assets
+### Assets and Resources
+
+Assets and resources come inline on entries:
 
 ```typescript
-const images = await marvin.assets.images();
+const entry = await marvin.entry('about-us');
 
-for (const image of images) {
-  console.log(`${image.filename} - ${image.url}`);
+for (const asset of entry.assets) {
+  console.log(`${asset.name} - ${asset.publicUrl}`);
 }
-```
-
-### Resources
-
-```typescript
-const resources = await marvin.resources.list();
-
-const fabric = await marvin.resource('kuroki-s022');
-const entries = await fabric.entries();
+console.log(entry.resources.map((r) => r.name));
 ```
 
 ## Next Steps

@@ -153,18 +153,6 @@ export interface GetEntriesOptions {
   status?: string;
 }
 
-export interface GetAssetsOptions {
-  type?: string;
-  limit?: number;
-  offset?: number;
-}
-
-export interface GetResourcesOptions {
-  resourceType?: string;
-  limit?: number;
-  offset?: number;
-}
-
 export interface AuthToken {
   accessToken: string;
   tokenType: string;

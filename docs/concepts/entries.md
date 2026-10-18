@@ -314,5 +314,4 @@ app.get('/api/entries/:slug', async (req, res) => {
 
 - [Collections Concept](collections.md)
 - [Assets Concept](assets.md)
-- [Resources Concept](resources.md)
 - [API Reference](../api/entries.md)

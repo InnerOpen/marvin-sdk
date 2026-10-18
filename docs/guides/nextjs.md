@@ -199,7 +199,8 @@ import { marvin } from '@/lib/marvin';
 import Image from 'next/image';
 
 export default async function GalleryPage() {
-  const images = await marvin.assets.images();
+  const post = await marvin.entry('my-gallery-post');
+  const images = post.assets.filter((a) => a.mimeType.startsWith('image/'));
   
   return (
     <div>

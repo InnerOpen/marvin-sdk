@@ -76,8 +76,7 @@ workspace.site?.description
 // Access modules
 workspace.entries.list()
 workspace.collections.get('slug')
-workspace.assets.images()
-workspace.resources.list()
+workspace.assets.download('slug')
 ```
 
 ### 3. Module Layer
@@ -135,26 +134,17 @@ const entries = await collection.entries();
 
 [Learn more about Collections](collections.md)
 
-### Assets
+### Assets and Resources
 
-Binary files and media:
+Binary files and reusable structured objects. Both are delivered inline on entries:
 
 ```typescript
-const images = await marvin.assets.images();
+const entry = await marvin.entry('about-us');
+entry.assets;
+entry.resources;
 ```
 
 [Learn more about Assets](assets.md)
-
-### Resources
-
-Reusable structured objects:
-
-```typescript
-const resource = await marvin.resource('kuroki-s022');
-const entries = await resource.entries();
-```
-
-[Learn more about Resources](resources.md)
 
 ## API Styles
 

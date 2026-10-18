@@ -87,15 +87,12 @@ nav:
       - Workspace: concepts/workspace.md
       - Entries: concepts/entries.md
       - Collections: concepts/collections.md
-      - Assets: concepts/assets.md
-      - Resources: concepts/resources.md
+      - Assets and Resources: concepts/assets.md
   - API Reference:
       - Client: api/client.md
       - Workspace API: api/workspace.md
       - Entries Module: api/entries.md
       - Collections Module: api/collections.md
-      - Assets Module: api/assets.md
-      - Resources Module: api/resources.md
       - Platform API: api/platform.md
   - Guides:
       - Astro Integration: guides/astro.md
