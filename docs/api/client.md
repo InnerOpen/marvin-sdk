@@ -171,14 +171,6 @@ const collections = await marvin.collections.list();
 
 See [Collections Module](collections.md) for details.
 
-### `assets`
-
-Assets module. Only `download(slug)` remains; entries carry their assets inline.
-
-```typescript
-const file = await marvin.assets.download('logo');
-```
-
 ## Backwards-Compatible Methods
 
 These methods are deprecated but still supported:

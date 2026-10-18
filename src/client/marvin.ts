@@ -88,13 +88,6 @@ export class MarvinClient {
   }
 
   /**
-   * Get assets module (file download only; entries carry their assets inline)
-   */
-  get assets() {
-    return this.workspace.assets;
-  }
-
-  /**
    * Get renderers module
    */
   get renderers() {

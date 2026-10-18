@@ -21,7 +21,6 @@ import type {
 import type {
   EntriesModule,
   CollectionsModule,
-  AssetsModule,
 } from '@inneropen/marvin-sdk';
 
 // Options types
@@ -405,16 +404,6 @@ interface CollectionsModule {
   list(): Promise<Collection[]>;
   get(slug: string): Promise<Collection>;
   entries(slug: string): Promise<Entry[]>;
-}
-```
-
-### `AssetsModule`
-
-Assets module interface.
-
-```typescript
-interface AssetsModule {
-  download(slug: string): Promise<BinaryResponse>;
 }
 ```
 

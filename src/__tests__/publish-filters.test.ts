@@ -6,7 +6,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { MarvinHttpClient } from '../client/http'
 import { EntriesModule } from '../entries/entries'
-import { AssetsModule } from '../assets/assets'
 
 describe('publishing', () => {
   let fetchMock: ReturnType<typeof vi.fn>
@@ -40,13 +39,5 @@ describe('publishing', () => {
     fetchMock.mockResolvedValueOnce(new Response('{"data":[]}', { status: 200, headers: { 'content-type': 'application/json' } }))
     await new EntriesModule(http, 'acme').list({ tag: [] })
     expect(fetchMock.mock.calls[0]![0]).toBe('https://api.example.test/api/publish/acme/entries')
-  })
-
-  it('assets.download returns the bytes and content type', async () => {
-    fetchMock.mockResolvedValueOnce(new Response(new Uint8Array([137, 80, 78, 71]), { status: 200, headers: { 'content-type': 'image/png' } }))
-    const file = await new AssetsModule(http, 'acme').download('logo')
-    expect(fetchMock.mock.calls[0]![0]).toBe('https://api.example.test/api/publish/acme/assets/logo/file')
-    expect(file.contentType).toBe('image/png')
-    expect(Array.from(file.data)).toEqual([137, 80, 78, 71])
   })
 })

@@ -39,7 +39,6 @@ The SDK is organized into focused modules:
 ├── workspaces/   → Workspace object
 ├── entries/      → Entries module
 ├── collections/  → Collections module
-├── assets/       → Assets module
 ├── resources/    → Resources module
 ├── platform/     → Platform API (admin, webhooks, etc.)
 ├── types/        → TypeScript types
@@ -76,7 +75,6 @@ workspace.site?.description
 // Access modules
 workspace.entries.list()
 workspace.collections.get('slug')
-workspace.assets.download('slug')
 ```
 
 ### 3. Module Layer

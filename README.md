@@ -165,7 +165,6 @@ const workspace = await marvin.getWorkspace();
 // Access workspace modules
 workspace.entries     // Entries module
 workspace.collections // Collections module
-workspace.assets      // Assets module (file download only)
 workspace.renderers   // Renderers module (entry type rendering metadata)
 workspace.site        // Site configuration (cached)
 ```
@@ -180,7 +179,6 @@ The SDK is organized into focused modules:
 ├── workspaces/   → Workspace object
 ├── entries/      → Entries module
 ├── collections/  → Collections module
-├── assets/       → Assets module (file download)
 ├── renderers/    → Renderers module (entry type rendering metadata)
 ├── auth/         → Authentication (future)
 ├── types/        → TypeScript types
@@ -283,7 +281,6 @@ collection.smartRules
 const entries = await collection.entries();
 
 // Future
-await collection.assets()
 await collection.metadata()
 ```
 
@@ -292,8 +289,8 @@ await collection.metadata()
 The publishing API no longer has asset or resource endpoints. A single entry
 (`marvin.entry(slug)`) carries full `assets` and `resources` objects; list endpoints return
 `assetSlugs`/`resourceSlugs` plus a resolved `featuredAsset`. The site config (`getSite()`)
-returns the logo, favicon and SEO image as resolved URLs. Use `workspace.assets.download(slug)`
-to fetch an asset's file bytes.
+returns the logo, favicon and SEO image as resolved URLs.
+Entries carry public asset URLs, so there is no separate download call.
 
 **Examples of Resources:**
 - Fabrics (denim, canvas, etc.)
@@ -542,10 +539,6 @@ Entries module.
 
 Collections module.
 
-#### `workspace.assets`
-
-Assets module (`download(slug)` only).
-
 ### Entries Module
 
 #### `entries.list(options?)`
@@ -615,12 +608,6 @@ Methods:
 - `collection.entries()` - Get entries in collection
 - `collection.toJSON()` - Get raw collection data
 
-### Assets Module
-
-#### `assets.download(slug)`
-
-Download a published asset's file: its bytes and content type. Needs the `read:assets` permission.
-
 ### Renderers Module
 
 #### `renderers.list()`
@@ -671,7 +658,6 @@ The SDK uses these Marvin publishing API endpoints:
 | `/api/publish/{workspace}/collections` | GET | List collections | ✅ Implemented |
 | `/api/publish/{workspace}/collections/{slug}` | GET | Get collection | ✅ Implemented |
 | `/api/publish/{workspace}/collections/{slug}/entries` | GET | Collection entries | ✅ Implemented |
-| `/api/publish/{workspace}/assets/{slug}/file` | GET | Download asset file | ✅ Implemented |
 | `/api/publish/{workspace}/entry-types` | GET | List entry types (renderers) | ✅ Implemented |
 
 **Query Parameters:**

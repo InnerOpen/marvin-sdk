@@ -25,10 +25,4 @@ List endpoints (`marvin.posts()`, `workspace.entries.list()`) return `assetSlugs
 
 `marvin.getSite()` returns the logo, favicon and SEO image as resolved URLs, ready to use as-is.
 
-## Downloading a file
-
-```typescript
-const { data, contentType } = await marvin.assets.download('logo');
-```
-
-Needs the `read:assets` permission.
+Entries carry public asset URLs (`publicUrl`), so there is no download endpoint on the publishing API.

@@ -71,7 +71,6 @@ console.log(data);
 
 Coming soon:
 
-- `collection.assets()` - Get collection assets
 - `collection.metadata()` - Get collection metadata
 
 ## Fetching Collections
