@@ -1,3 +1,11 @@
+# [6.1.0](https://github.com/InnerOpen/marvin-sdk/compare/v6.0.0...v6.1.0) (2026-10-18)
+
+
+### Features
+
+* **collections:** list() takes limit and offset ([2098fa6](https://github.com/InnerOpen/marvin-sdk/commit/2098fa60f9fda18c2a3c989998bc264f8af03af3))
+* **types:** the agent request's greeting (the line the bubble showed) ([dda430e](https://github.com/InnerOpen/marvin-sdk/commit/dda430e5c04abce2499e2eb01fc9baffa4bc2c3f))
+
 # [6.0.0](https://github.com/InnerOpen/marvin-sdk/compare/v5.29.0...v6.0.0) (2026-10-18)
 
 
