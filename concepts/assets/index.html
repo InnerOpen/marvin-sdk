@@ -18,7 +18,7 @@
         <link rel="prev" href="../collections/">
       
       
-        <link rel="next" href="../resources/">
+        <link rel="next" href="../../api/client/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Assets - Marvin SDK Documentation</title>
+        <title>Assets and Resources - Marvin SDK Documentation</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#assets" class="md-skip">
+        <a href="#assets-and-resources" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Assets
+              Assets and Resources
             
           </span>
         </div>
@@ -829,7 +829,7 @@
   <span class="md-ellipsis">
     
   
-    Assets
+    Assets and Resources
   
 
     
@@ -847,7 +847,7 @@
   <span class="md-ellipsis">
     
   
-    Assets
+    Assets and Resources
   
 
     
@@ -884,299 +884,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#asset-properties" class="md-nav__link">
+  <a href="#on-entries" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Asset Properties
+        On entries
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Asset Properties">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#basic-properties" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Basic Properties
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#file-properties" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        File Properties
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#metadata" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Metadata
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#fetching-assets" class="md-nav__link">
+  <a href="#site-config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fetching Assets
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Fetching Assets">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#list-all-assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        List All Assets
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filter-by-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter by Type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filter-by-mime-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter by MIME Type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#pagination" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pagination
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#working-with-assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Working with Assets
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Working with Assets">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#display-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Display Images
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get-asset-metadata" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Get Asset Metadata
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filter-entry-assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter Entry Assets
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#asset-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Asset Types
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Asset Types">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Images
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#videos" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Videos
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documents" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documents
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example Usage
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Example Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#astro-image-gallery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Astro Image Gallery
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nextjs-asset-grid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next.js Asset Grid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#express-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Express API
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#responsive-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Responsive Images
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Responsive Images">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#generate-srcset" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Generate Srcset
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps
+        Site config
       
     </span>
   </a>
@@ -1187,34 +909,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../resources/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Resources
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1380,62 +1074,6 @@
     
   
     Collections Module
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/assets/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Assets Module
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/resources/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Resources Module
   
 
     
@@ -2296,299 +1934,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#asset-properties" class="md-nav__link">
+  <a href="#on-entries" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Asset Properties
+        On entries
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Asset Properties">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#basic-properties" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Basic Properties
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#file-properties" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        File Properties
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#metadata" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Metadata
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#fetching-assets" class="md-nav__link">
+  <a href="#site-config" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fetching Assets
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Fetching Assets">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#list-all-assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        List All Assets
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filter-by-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter by Type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filter-by-mime-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter by MIME Type
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#pagination" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pagination
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#working-with-assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Working with Assets
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Working with Assets">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#display-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Display Images
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get-asset-metadata" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Get Asset Metadata
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filter-entry-assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filter Entry Assets
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#asset-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Asset Types
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Asset Types">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Images
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#videos" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Videos
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documents" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documents
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example Usage
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Example Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#astro-image-gallery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Astro Image Gallery
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nextjs-asset-grid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next.js Asset Grid
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#express-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Express API
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#responsive-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Responsive Images
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Responsive Images">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#generate-srcset" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Generate Srcset
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next Steps
+        Site config
       
     </span>
   </a>
@@ -2663,323 +2023,24 @@
   
 
 
-<h1 id="assets">Assets<a class="headerlink" href="#assets" title="Permanent link">&para;</a></h1>
+<h1 id="assets-and-resources">Assets and Resources<a class="headerlink" href="#assets-and-resources" title="Permanent link">&para;</a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p><strong>Assets</strong> are binary files and media in Marvin: images, videos, documents, and more.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">images</span><span class="p">();</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">videos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">videos</span><span class="p">();</span>
+<p><strong>Assets</strong> are binary files and media in Marvin (images, videos, documents). <strong>Resources</strong> are
+reusable structured objects (fabrics, tools, suppliers). The publishing API has no asset or
+resource listing endpoints: both are delivered inline on entries.</p>
+<h2 id="on-entries">On entries<a class="headerlink" href="#on-entries" title="Permanent link">&para;</a></h2>
+<p>A single entry (<code>marvin.entry(slug)</code>) carries full asset and resource objects:</p>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">entry</span><span class="p">(</span><span class="s1">'about-us'</span><span class="p">);</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">entry</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">filter</span><span class="p">((</span><span class="nx">a</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">mimeType</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">'image/'</span><span class="p">));</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">featured</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">entry</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">find</span><span class="p">((</span><span class="nx">a</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">metadata</span><span class="o">?</span><span class="p">.</span><span class="nx">featured</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kd">const</span><span class="w"> </span><span class="nx">fabrics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">entry</span><span class="p">.</span><span class="nx">resources</span><span class="p">.</span><span class="nx">filter</span><span class="p">((</span><span class="nx">r</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">resourceType</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">'fabric'</span><span class="p">);</span>
 </span></code></pre></div>
-<h2 id="asset-properties">Asset Properties<a class="headerlink" href="#asset-properties" title="Permanent link">&para;</a></h2>
-<h3 id="basic-properties">Basic Properties<a class="headerlink" href="#basic-properties" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>id</code></td>
-<td><code>number</code></td>
-<td>Unique asset ID</td>
-</tr>
-<tr>
-<td><code>filename</code></td>
-<td><code>string</code></td>
-<td>Original filename</td>
-</tr>
-<tr>
-<td><code>slug</code></td>
-<td><code>string</code></td>
-<td>URL-friendly slug</td>
-</tr>
-<tr>
-<td><code>title</code></td>
-<td><code>string \| null</code></td>
-<td>Asset title</td>
-</tr>
-<tr>
-<td><code>altText</code></td>
-<td><code>string \| null</code></td>
-<td>Alternative text</td>
-</tr>
-</tbody>
-</table>
-<h3 id="file-properties">File Properties<a class="headerlink" href="#file-properties" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>url</code></td>
-<td><code>string</code></td>
-<td>Public URL</td>
-</tr>
-<tr>
-<td><code>mimeType</code></td>
-<td><code>string</code></td>
-<td>MIME type (e.g., <code>image/jpeg</code>)</td>
-</tr>
-<tr>
-<td><code>fileSize</code></td>
-<td><code>number</code></td>
-<td>File size in bytes</td>
-</tr>
-<tr>
-<td><code>width</code></td>
-<td><code>number \| null</code></td>
-<td>Image/video width</td>
-</tr>
-<tr>
-<td><code>height</code></td>
-<td><code>number \| null</code></td>
-<td>Image/video height</td>
-</tr>
-</tbody>
-</table>
-<h3 id="metadata">Metadata<a class="headerlink" href="#metadata" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>metadata</code></td>
-<td><code>object</code></td>
-<td>Custom metadata</td>
-</tr>
-<tr>
-<td><code>createdAt</code></td>
-<td><code>Date</code></td>
-<td>Upload date</td>
-</tr>
-<tr>
-<td><code>updatedAt</code></td>
-<td><code>Date</code></td>
-<td>Last update date</td>
-</tr>
-</tbody>
-</table>
-<h2 id="fetching-assets">Fetching Assets<a class="headerlink" href="#fetching-assets" title="Permanent link">&para;</a></h2>
-<h3 id="list-all-assets">List All Assets<a class="headerlink" href="#list-all-assets" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">assets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">list</span><span class="p">();</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">asset</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">assets</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">asset</span><span class="p">.</span><span class="nx">filename</span><span class="p">,</span><span class="w"> </span><span class="nx">asset</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
-</span></code></pre></div>
-<h3 id="filter-by-type">Filter by Type<a class="headerlink" href="#filter-by-type" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Get images</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">images</span><span class="p">();</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1">// Get videos</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="kd">const</span><span class="w"> </span><span class="nx">videos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">videos</span><span class="p">();</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1">// Get documents</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="kd">const</span><span class="w"> </span><span class="nx">documents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">documents</span><span class="p">();</span>
-</span></code></pre></div>
-<h3 id="filter-by-mime-type">Filter by MIME Type<a class="headerlink" href="#filter-by-mime-type" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// Get specific MIME types</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">jpegImages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="s1">'image/jpeg'</span><span class="p">,</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">});</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="kd">const</span><span class="w"> </span><span class="nx">pdfDocuments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="s1">'application/pdf'</span><span class="p">,</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">});</span>
-</span></code></pre></div>
-<h3 id="pagination">Pagination<a class="headerlink" href="#pagination" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">page1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nx">limit</span><span class="o">:</span><span class="w"> </span><span class="kt">20</span><span class="p">,</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nx">offset</span><span class="o">:</span><span class="w"> </span><span class="kt">0</span><span class="p">,</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">});</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="kd">const</span><span class="w"> </span><span class="nx">page2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="nx">limit</span><span class="o">:</span><span class="w"> </span><span class="kt">20</span><span class="p">,</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nx">offset</span><span class="o">:</span><span class="w"> </span><span class="kt">20</span><span class="p">,</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">});</span>
-</span></code></pre></div>
-<h2 id="working-with-assets">Working with Assets<a class="headerlink" href="#working-with-assets" title="Permanent link">&para;</a></h2>
-<h3 id="display-images">Display Images<a class="headerlink" href="#display-images" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">images</span><span class="p">();</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">images</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`&lt;img src="</span><span class="si">${</span><span class="nx">image</span><span class="p">.</span><span class="nx">url</span><span class="si">}</span><span class="sb">" alt="</span><span class="si">${</span><span class="nx">image</span><span class="p">.</span><span class="nx">altText</span><span class="si">}</span><span class="sb">" /&gt;`</span><span class="p">);</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span>
-</span></code></pre></div>
-<h3 id="get-asset-metadata">Get Asset Metadata<a class="headerlink" href="#get-asset-metadata" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span><span class="w"> </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="s1">'image/jpeg'</span><span class="w"> </span><span class="p">});</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">firstImage</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">;</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Filename: </span><span class="si">${</span><span class="nx">firstImage</span><span class="p">.</span><span class="nx">filename</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Size: </span><span class="si">${</span><span class="nx">firstImage</span><span class="p">.</span><span class="nx">fileSize</span><span class="si">}</span><span class="sb"> bytes`</span><span class="p">);</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Dimensions: </span><span class="si">${</span><span class="nx">firstImage</span><span class="p">.</span><span class="nx">width</span><span class="si">}</span><span class="sb">x</span><span class="si">${</span><span class="nx">firstImage</span><span class="p">.</span><span class="nx">height</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`URL: </span><span class="si">${</span><span class="nx">firstImage</span><span class="p">.</span><span class="nx">url</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
-</span></code></pre></div>
-<h3 id="filter-entry-assets">Filter Entry Assets<a class="headerlink" href="#filter-entry-assets" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">entry</span><span class="p">(</span><span class="s1">'gallery'</span><span class="p">);</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1">// Get all assets</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">allAssets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">entry</span><span class="p">.</span><span class="nx">assets</span><span class="p">;</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1">// Filter images</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">entry</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">mimeType</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">'image/'</span><span class="p">));</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1">// Filter videos</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="kd">const</span><span class="w"> </span><span class="nx">videos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">entry</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">mimeType</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">'video/'</span><span class="p">));</span>
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
-</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="c1">// Get featured image</span>
-</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="kd">const</span><span class="w"> </span><span class="nx">featuredImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">entry</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">metadata</span><span class="o">?</span><span class="p">.</span><span class="nx">featured</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
-</span></code></pre></div>
-<h2 id="asset-types">Asset Types<a class="headerlink" href="#asset-types" title="Permanent link">&para;</a></h2>
-<h3 id="images">Images<a class="headerlink" href="#images" title="Permanent link">&para;</a></h3>
-<p>Common image MIME types:</p>
-<ul>
-<li><code>image/jpeg</code> - JPEG images</li>
-<li><code>image/png</code> - PNG images</li>
-<li><code>image/gif</code> - GIF images</li>
-<li><code>image/webp</code> - WebP images</li>
-<li><code>image/svg+xml</code> - SVG images</li>
-</ul>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">images</span><span class="p">();</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">images</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">url</span><span class="p">,</span><span class="w"> </span><span class="nx">altText</span><span class="p">,</span><span class="w"> </span><span class="nx">width</span><span class="p">,</span><span class="w"> </span><span class="nx">height</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">image</span><span class="p">;</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`&lt;img src="</span><span class="si">${</span><span class="nx">url</span><span class="si">}</span><span class="sb">" alt="</span><span class="si">${</span><span class="nx">altText</span><span class="si">}</span><span class="sb">" width="</span><span class="si">${</span><span class="nx">width</span><span class="si">}</span><span class="sb">" height="</span><span class="si">${</span><span class="nx">height</span><span class="si">}</span><span class="sb">" /&gt;`</span><span class="p">);</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
-</span></code></pre></div>
-<h3 id="videos">Videos<a class="headerlink" href="#videos" title="Permanent link">&para;</a></h3>
-<p>Common video MIME types:</p>
-<ul>
-<li><code>video/mp4</code> - MP4 videos</li>
-<li><code>video/webm</code> - WebM videos</li>
-<li><code>video/ogg</code> - Ogg videos</li>
-</ul>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">videos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">videos</span><span class="p">();</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">video</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">videos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`&lt;video src="</span><span class="si">${</span><span class="nx">video</span><span class="p">.</span><span class="nx">url</span><span class="si">}</span><span class="sb">" controls&gt;&lt;/video&gt;`</span><span class="p">);</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">}</span>
-</span></code></pre></div>
-<h3 id="documents">Documents<a class="headerlink" href="#documents" title="Permanent link">&para;</a></h3>
-<p>Common document MIME types:</p>
-<ul>
-<li><code>application/pdf</code> - PDF documents</li>
-<li><code>application/msword</code> - Word documents</li>
-<li><code>text/plain</code> - Plain text files</li>
-</ul>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">documents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">documents</span><span class="p">();</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">doc</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">documents</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`&lt;a href="</span><span class="si">${</span><span class="nx">doc</span><span class="p">.</span><span class="nx">url</span><span class="si">}</span><span class="sb">" download&gt;</span><span class="si">${</span><span class="nx">doc</span><span class="p">.</span><span class="nx">filename</span><span class="si">}</span><span class="sb">&lt;/a&gt;`</span><span class="p">);</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="p">}</span>
-</span></code></pre></div>
-<h2 id="example-usage">Example Usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h2>
-<h3 id="astro-image-gallery">Astro Image Gallery<a class="headerlink" href="#astro-image-gallery" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="o">---</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createMarvinClient</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@inneropen/marvin-sdk'</span><span class="p">;</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">marvin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createMarvinClient</span><span class="p">();</span>
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">images</span><span class="p">();</span>
-</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="o">---</span>
-</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
-</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="o">&lt;</span><span class="nx">div</span><span class="w"> </span><span class="kd">class</span><span class="o">=</span><span class="s2">"gallery"</span><span class="o">&gt;</span>
-</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="p">{</span><span class="nx">images</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">image</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">(</span>
-</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">    </span><span class="o">&lt;</span><span class="nx">figure</span><span class="o">&gt;</span>
-</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">      </span><span class="o">&lt;</span><span class="nx">img</span><span class="w"> </span>
-</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">        </span><span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">url</span><span class="p">}</span><span class="w"> </span>
-</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">        </span><span class="nx">alt</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">altText</span><span class="p">}</span><span class="w"> </span>
-</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">        </span><span class="nx">width</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="p">}</span><span class="w"> </span>
-</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">        </span><span class="nx">height</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="p">}</span><span class="w"> </span>
-</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">      </span><span class="o">/&gt;</span>
-</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">      </span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">title</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">figcaption</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">title</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/figcaption&gt;}</span>
-</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">    </span><span class="o">&lt;</span><span class="err">/figure&gt;</span>
-</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">  </span><span class="p">))}</span>
-</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span></code></pre></div>
-<h3 id="nextjs-asset-grid">Next.js Asset Grid<a class="headerlink" href="#nextjs-asset-grid" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1">// app/gallery/page.tsx</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createMarvinClient</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@inneropen/marvin-sdk'</span><span class="p">;</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">import</span><span class="w"> </span><span class="nx">Image</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'next/image'</span><span class="p">;</span>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="kd">const</span><span class="w"> </span><span class="nx">marvin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createMarvinClient</span><span class="p">();</span>
-</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
-</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">GalleryPage</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">images</span><span class="p">();</span>
-</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
-</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
-</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">    </span><span class="o">&lt;</span><span class="nx">div</span><span class="w"> </span><span class="nx">className</span><span class="o">=</span><span class="s2">"grid grid-cols-3 gap-4"</span><span class="o">&gt;</span>
-</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">      </span><span class="p">{</span><span class="nx">images</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">image</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">(</span>
-</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">        </span><span class="o">&lt;</span><span class="nx">div</span><span class="w"> </span><span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">id</span><span class="p">}</span><span class="o">&gt;</span>
-</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">          </span><span class="o">&lt;</span><span class="nx">Image</span>
-</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">            </span><span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">url</span><span class="p">}</span>
-</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">            </span><span class="nx">alt</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">altText</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">''</span><span class="p">}</span>
-</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="w">            </span><span class="nx">width</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="mf">300</span><span class="p">}</span>
-</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="w">            </span><span class="nx">height</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="mf">300</span><span class="p">}</span>
-</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="w">          </span><span class="o">/&gt;</span>
-</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="w">        </span><span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="w">      </span><span class="p">))}</span>
-</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a><span class="w">    </span><span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a><span class="w">  </span><span class="p">);</span>
-</span><span id="__span-12-24"><a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a><span class="p">}</span>
-</span></code></pre></div>
-<h3 id="express-api">Express API<a class="headerlink" href="#express-api" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">import</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'express'</span><span class="p">;</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createMarvinClient</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@inneropen/marvin-sdk'</span><span class="p">;</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="kd">const</span><span class="w"> </span><span class="nx">marvin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createMarvinClient</span><span class="p">();</span>
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
-</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/assets'</span><span class="p">,</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kr">type</span><span class="p">,</span><span class="w"> </span><span class="nx">limit</span><span class="p">,</span><span class="w"> </span><span class="nx">offset</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">;</span>
-</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
-</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">assets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">list</span><span class="p">({</span>
-</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
-</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="nx">limit</span><span class="o">:</span><span class="w"> </span><span class="kt">parseInt</span><span class="p">(</span><span class="nx">limit</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="mf">20</span><span class="p">,</span>
-</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">    </span><span class="nx">offset</span><span class="o">:</span><span class="w"> </span><span class="kt">parseInt</span><span class="p">(</span><span class="nx">offset</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
-</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">  </span><span class="p">});</span>
-</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
-</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="w">  </span><span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">assets</span><span class="p">);</span>
-</span><span id="__span-13-17"><a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="p">});</span>
-</span><span id="__span-13-18"><a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>
-</span><span id="__span-13-19"><a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/assets/images'</span><span class="p">,</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-13-20"><a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">images</span><span class="p">();</span>
-</span><span id="__span-13-21"><a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="w">  </span><span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="nx">images</span><span class="p">);</span>
-</span><span id="__span-13-22"><a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="p">});</span>
-</span></code></pre></div>
-<h2 id="responsive-images">Responsive Images<a class="headerlink" href="#responsive-images" title="Permanent link">&para;</a></h2>
-<h3 id="generate-srcset">Generate Srcset<a class="headerlink" href="#generate-srcset" title="Permanent link">&para;</a></h3>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">entry</span><span class="p">(</span><span class="s1">'gallery'</span><span class="p">);</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">entry</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">mimeType</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s1">'image/'</span><span class="p">));</span>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">image</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">images</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span><span class="c1">// Marvin may provide image transformations in the future</span>
-</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`&lt;img </span>
-</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="sb">    src="</span><span class="si">${</span><span class="nx">image</span><span class="p">.</span><span class="nx">url</span><span class="si">}</span><span class="sb">" </span>
-</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="sb">    alt="</span><span class="si">${</span><span class="nx">image</span><span class="p">.</span><span class="nx">altText</span><span class="si">}</span><span class="sb">"</span>
-</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="sb">    width="</span><span class="si">${</span><span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="si">}</span><span class="sb">"</span>
-</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="sb">    height="</span><span class="si">${</span><span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="si">}</span><span class="sb">"</span>
-</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="sb">  /&gt;`</span><span class="p">);</span>
-</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="p">}</span>
-</span></code></pre></div>
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../entries/">Entries Concept</a></li>
-<li><a href="../collections/">Collections Concept</a></li>
-<li><a href="../resources/">Resources Concept</a></li>
-<li><a href="../../api/assets/">API Reference</a></li>
-</ul>
+<p>List endpoints (<code>marvin.posts()</code>, <code>workspace.entries.list()</code>) return <code>assetSlugs</code> and
+<code>resourceSlugs</code> plus a resolved <code>featuredAsset</code>; fetch the entry for the full objects.</p>
+<h2 id="site-config">Site config<a class="headerlink" href="#site-config" title="Permanent link">&para;</a></h2>
+<p><code>marvin.getSite()</code> returns the logo, favicon and SEO image as resolved URLs, ready to use as-is.</p>
+<p>Entries carry public asset URLs (<code>publicUrl</code>), so there is no download endpoint on the publishing API.</p>
 
 
 

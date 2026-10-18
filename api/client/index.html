@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://inneropen.github.io/marvin-sdk/api/client/">
       
       
-        <link rel="prev" href="../../concepts/resources/">
+        <link rel="prev" href="../../concepts/assets/">
       
       
         <link rel="next" href="../workspace/">
@@ -817,35 +817,7 @@
   <span class="md-ellipsis">
     
   
-    Assets
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../concepts/resources/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Resources
+    Assets and Resources
   
 
     
@@ -1124,17 +1096,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#resourceslug" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        resource(slug)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#pagesoptions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1211,28 +1172,6 @@
     <span class="md-ellipsis">
       
         collections
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        assets
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#resources" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        resources
       
     </span>
   </a>
@@ -1396,62 +1335,6 @@
     
   
     Collections Module
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../assets/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Assets Module
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../resources/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Resources Module
   
 
     
@@ -2435,17 +2318,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#resourceslug" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        resource(slug)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#pagesoptions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2522,28 +2394,6 @@
     <span class="md-ellipsis">
       
         collections
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        assets
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#resources" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        resources
       
     </span>
   </a>
@@ -2799,30 +2649,23 @@
 <p><strong>Parameters:</strong>
 - <code>slug: string</code> - Collection slug</p>
 <p><strong>Returns:</strong> <code>Promise&lt;Collection&gt;</code></p>
-<h3 id="resourceslug"><code>resource(slug)</code><a class="headerlink" href="#resourceslug" title="Permanent link">&para;</a></h3>
-<p>Get a single resource by slug.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">resource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">resource</span><span class="p">(</span><span class="s1">'kuroki-s022'</span><span class="p">);</span>
-</span></code></pre></div>
-<p><strong>Parameters:</strong>
-- <code>slug: string</code> - Resource slug</p>
-<p><strong>Returns:</strong> <code>Promise&lt;Resource&gt;</code></p>
 <h3 id="pagesoptions"><code>pages(options?)</code><a class="headerlink" href="#pagesoptions" title="Permanent link">&para;</a></h3>
 <p>Get all pages.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">pages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">pages</span><span class="p">();</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">pages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">pages</span><span class="p">();</span>
 </span></code></pre></div>
 <p><strong>Parameters:</strong>
 - <code>options?: ListOptions</code> - Optional filter options</p>
 <p><strong>Returns:</strong> <code>Promise&lt;Entry[]&gt;</code></p>
 <h3 id="postsoptions"><code>posts(options?)</code><a class="headerlink" href="#postsoptions" title="Permanent link">&para;</a></h3>
 <p>Get all blog posts.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">posts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">posts</span><span class="p">({</span><span class="w"> </span><span class="nx">limit</span><span class="o">:</span><span class="w"> </span><span class="kt">10</span><span class="w"> </span><span class="p">});</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">posts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">posts</span><span class="p">({</span><span class="w"> </span><span class="nx">limit</span><span class="o">:</span><span class="w"> </span><span class="kt">10</span><span class="w"> </span><span class="p">});</span>
 </span></code></pre></div>
 <p><strong>Parameters:</strong>
 - <code>options?: ListOptions</code> - Optional filter options</p>
 <p><strong>Returns:</strong> <code>Promise&lt;Entry[]&gt;</code></p>
 <h3 id="projectsoptions"><code>projects(options?)</code><a class="headerlink" href="#projectsoptions" title="Permanent link">&para;</a></h3>
 <p>Get all projects.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">projects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">projects</span><span class="p">();</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">projects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">projects</span><span class="p">();</span>
 </span></code></pre></div>
 <p><strong>Parameters:</strong>
 - <code>options?: ListOptions</code> - Optional filter options</p>
@@ -2830,34 +2673,24 @@
 <h2 id="client-properties">Client Properties<a class="headerlink" href="#client-properties" title="Permanent link">&para;</a></h2>
 <h3 id="site"><code>site</code><a class="headerlink" href="#site" title="Permanent link">&para;</a></h3>
 <p>Site configuration (cached after <code>initialize()</code>).</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">marvin</span><span class="p">.</span><span class="nx">site</span><span class="o">?</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">marvin</span><span class="p">.</span><span class="nx">site</span><span class="o">?</span><span class="p">.</span><span class="nx">description</span><span class="p">);</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">marvin</span><span class="p">.</span><span class="nx">site</span><span class="o">?</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">marvin</span><span class="p">.</span><span class="nx">site</span><span class="o">?</span><span class="p">.</span><span class="nx">description</span><span class="p">);</span>
 </span></code></pre></div>
 <h3 id="entries"><code>entries</code><a class="headerlink" href="#entries" title="Permanent link">&para;</a></h3>
 <p>Entries module.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">list</span><span class="p">();</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">list</span><span class="p">();</span>
 </span></code></pre></div>
 <p>See <a href="../entries/">Entries Module</a> for details.</p>
 <h3 id="collections"><code>collections</code><a class="headerlink" href="#collections" title="Permanent link">&para;</a></h3>
 <p>Collections module.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">collections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">collections</span><span class="p">.</span><span class="nx">list</span><span class="p">();</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">collections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">collections</span><span class="p">.</span><span class="nx">list</span><span class="p">();</span>
 </span></code></pre></div>
 <p>See <a href="../collections/">Collections Module</a> for details.</p>
-<h3 id="assets"><code>assets</code><a class="headerlink" href="#assets" title="Permanent link">&para;</a></h3>
-<p>Assets module.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">assets</span><span class="p">.</span><span class="nx">images</span><span class="p">();</span>
-</span></code></pre></div>
-<p>See <a href="../assets/">Assets Module</a> for details.</p>
-<h3 id="resources"><code>resources</code><a class="headerlink" href="#resources" title="Permanent link">&para;</a></h3>
-<p>Resources module.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">resources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">resources</span><span class="p">.</span><span class="nx">list</span><span class="p">();</span>
-</span></code></pre></div>
-<p>See <a href="../resources/">Resources Module</a> for details.</p>
 <h2 id="backwards-compatible-methods">Backwards-Compatible Methods<a class="headerlink" href="#backwards-compatible-methods" title="Permanent link">&para;</a></h2>
 <p>These methods are deprecated but still supported:</p>
 <h3 id="getsite"><code>getSite()</code><a class="headerlink" href="#getsite" title="Permanent link">&para;</a></h3>
 <p>Get site configuration.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">site</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">getSite</span><span class="p">();</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">site</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">getSite</span><span class="p">();</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Deprecated</p>
@@ -2865,7 +2698,7 @@
 </div>
 <h3 id="getentriesoptions"><code>getEntries(options?)</code><a class="headerlink" href="#getentriesoptions" title="Permanent link">&para;</a></h3>
 <p>Get all entries.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">getEntries</span><span class="p">();</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">getEntries</span><span class="p">();</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Deprecated</p>
@@ -2873,7 +2706,7 @@
 </div>
 <h3 id="getentryslug"><code>getEntry(slug)</code><a class="headerlink" href="#getentryslug" title="Permanent link">&para;</a></h3>
 <p>Get a single entry.</p>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">getEntry</span><span class="p">(</span><span class="s1">'about'</span><span class="p">);</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">marvin</span><span class="p">.</span><span class="nx">getEntry</span><span class="p">(</span><span class="s1">'about'</span><span class="p">);</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Deprecated</p>
@@ -2886,8 +2719,7 @@
 <li><a href="../workspace/">Workspace API</a></li>
 <li><a href="../entries/">Entries Module</a></li>
 <li><a href="../collections/">Collections Module</a></li>
-<li><a href="../assets/">Assets Module</a></li>
-<li><a href="../resources/">Resources Module</a></li>
+<li><a href="../../concepts/assets/">Assets and Resources</a></li>
 </ul>
 
 
