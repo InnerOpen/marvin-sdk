@@ -2253,6 +2253,52 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/custom-events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the workspace's custom events
+         * @description The registered events, by name, with their fields and the workflows that name each.
+         */
+        get: operations["list_custom_events_api_groups_custom_events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/custom-events/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Register or change a custom event
+         * @description Register `custom.<name>` (`name` is the slug after the prefix) or replace the one of that name: its title,
+         *     description and fields. 422 for a bad name or field; 409 past the workspace's limit.
+         */
+        put: operations["save_custom_event_api_groups_custom_events__name__put"];
+        post?: never;
+        /**
+         * Remove a custom event
+         * @description Unregister it. 404 if there is none of that name; 409 while a workflow still starts on it or sends it. What
+         *     the Event Log recorded stays; a subscription that names it just never fires again.
+         */
+        delete: operations["delete_custom_event_api_groups_custom_events__name__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/notifications": {
         parameters: {
             query?: never;
@@ -2283,6 +2329,69 @@ export interface paths {
         /** Send a test notification */
         post: operations["test_channel_api_groups_notifications_test_post"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The metrics this workspace has observations for
+         * @description Each metric name with how many observations it has and the first and last window. EDITOR and above.
+         */
+        get: operations["list_metrics_api_groups_metrics_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/metrics/observations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List metric observations
+         * @description Observations, newest window first (then metric, variant, subject). Each is a number a workflow recorded for a
+         *     metric, variant and window — observations, not conclusions: nothing here compares variants or says what caused
+         *     a number. 422 for a window that isn't a day, week or month. EDITOR and above.
+         */
+        get: operations["list_observations_api_groups_metrics_observations_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/metrics/observations/{observation_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove an observation
+         * @description Remove one observation (a wrong number, a test run). A workflow that records that window again writes it
+         *     afresh. 404 if there is none. ADMIN and above.
+         */
+        delete: operations["delete_observation_api_groups_metrics_observations__observation_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8181,206 +8290,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/publish/{workspace_slug}/assets": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Assets
-         * @description List all assets in the workspace.
-         *
-         *     Returns asset metadata for external sites to reference.
-         *
-         *     **Filters:**
-         *     - `type`: Filter by MIME type prefix (image, video, audio, application)
-         *     - Scoped to the workspace associated with the API client
-         *
-         *     **Use cases:**
-         *     - `?type=image` - Get all images
-         *     - `?type=video` - Get all videos
-         *     - Build asset galleries, media libraries
-         *
-         *     **Authentication**: Requires API client token (marvin_sk_*)
-         *     **Permissions**: read:assets
-         */
-        get: operations["list_published_assets_api_publish__workspace_slug__assets_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/publish/{workspace_slug}/assets/{asset_slug}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Published Asset Metadata
-         * @description Get asset metadata for published content.
-         *
-         *     Returns asset information (name, mime_type, dimensions, alt_text) for consumption
-         *     by external sites.
-         *
-         *     **Use case**: Astro site fetches asset metadata to build <img> tags with proper
-         *     dimensions and alt text.
-         *
-         *     **Authentication**: Requires API client token (marvin_sk_*)
-         *     **Permissions**: read:assets
-         *
-         *     **Raises:**
-         *     - 404: Asset not found
-         *
-         *     **Note**: Actual file serving (GET /assets/{slug}/file) is deferred to Phase 7.
-         */
-        get: operations["get_published_asset_api_publish__workspace_slug__assets__asset_slug__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/publish/{workspace_slug}/assets/{asset_slug}/file": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Serve Asset File
-         * @description Serve the actual asset file content.
-         *
-         *     This endpoint proxies through to the storage provider to serve the asset file.
-         *     For local storage, it redirects to the static file path.
-         *     For S3 storage, it could generate a signed URL or proxy the content.
-         *
-         *     **Use case**: Browsers fetching images, PDFs, videos via their public URL.
-         *
-         *     **Authentication**: Requires API client token (marvin_sk_*)
-         *     **Permissions**: read:assets
-         *
-         *     **Raises:**
-         *     - 404: Asset not found
-         */
-        get: operations["serve_asset_file_api_publish__workspace_slug__assets__asset_slug__file_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/publish/{workspace_slug}/resources": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Resources
-         * @description List all resources in the workspace.
-         *
-         *     Returns resource metadata for external sites to reference.
-         *
-         *     **Filters:**
-         *     - `resource_type`: Filter by resource type (fabric, tool, supplier, etc.)
-         *     - Scoped to the workspace associated with the API client
-         *
-         *     **Use cases:**
-         *     - `?resource_type=fabric` - Get all fabrics
-         *     - `?resource_type=tool` - Get all tools
-         *     - Build resource directories, material libraries
-         *
-         *     **Authentication**: Requires API client token (marvin_sk_*)
-         *     **Permissions**: read:resources
-         */
-        get: operations["list_published_resources_api_publish__workspace_slug__resources_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/publish/{workspace_slug}/resources/{resource_slug}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Resource
-         * @description Get a single resource by slug.
-         *
-         *     Returns resource metadata for external sites to reference.
-         *
-         *     **Use case**: Resource detail pages, material information displays.
-         *
-         *     **Authentication**: Requires API client token (marvin_sk_*)
-         *     **Permissions**: read:resources
-         *
-         *     **Raises:**
-         *     - 404: Resource not found
-         */
-        get: operations["get_published_resource_api_publish__workspace_slug__resources__resource_slug__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/publish/{workspace_slug}/resources/{resource_slug}/entries": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Resource Entries
-         * @description Get all published entries that reference a resource.
-         *
-         *     Returns entries that use this resource (e.g., projects using a fabric).
-         *
-         *     **Filters:**
-         *     - Only returns entries with `status = 'published'`
-         *
-         *     **Use case**: "View projects using this fabric" links on resource pages.
-         *
-         *     **Expand:** `?expand=full` returns each entry in the single-read shape. Honoured up to
-         *     `PUBLISHING_MAX_EXPANDED_ENTRIES` (500) entries; past that the response is unexpanded.
-         *
-         *     **Authentication**: Requires API client token (marvin_sk_*)
-         *     **Permissions**: read:resources (plus read:published_entries OR read:all_entries with `expand=full`)
-         *
-         *     **Raises:**
-         *     - 404: Resource not found
-         */
-        get: operations["get_resource_entries_api_publish__workspace_slug__resources__resource_slug__entries_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/publish/{workspace_slug}/forms/{form_slug}": {
         parameters: {
             query?: never;
@@ -9505,6 +9414,7 @@ export interface components {
             defaultGroup: string;
             /** Buildid */
             buildId: string;
+            embeddings?: components["schemas"]["EmbeddingsInfo"] | null;
         };
         /**
          * AdminEventConnections
@@ -11556,7 +11466,24 @@ export interface components {
          * @description Who a library character is — its character sheet. Picking the pack copies it into the workspace's (or
          *     the agent's) own fields, which are then theirs to edit; see services/ai/character_library.py.
          */
-        CharacterPackPersona: {
+        "CharacterPackPersona-Input": {
+            /** Assistantname */
+            assistantName?: string | null;
+            /** Personaprompt */
+            personaPrompt?: string | null;
+            bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            /** Defaultregister */
+            defaultRegister?: string | null;
+            /** Icon */
+            icon?: string | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
+        };
+        /**
+         * CharacterPackPersona
+         * @description Who a library character is — its character sheet. Picking the pack copies it into the workspace's (or
+         *     the agent's) own fields, which are then theirs to edit; see services/ai/character_library.py.
+         */
+        "CharacterPackPersona-Output": {
             /** Assistantname */
             assistantName?: string | null;
             /** Personaprompt */
@@ -11599,7 +11526,7 @@ export interface components {
              * @default []
              */
             usedBy: components["schemas"]["CharacterPackUser"][];
-            persona?: components["schemas"]["CharacterPackPersona"] | null;
+            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
         };
         /**
          * CharacterPackSummary
@@ -11621,7 +11548,7 @@ export interface components {
              * @default []
              */
             missing: string[];
-            persona?: components["schemas"]["CharacterPackPersona"] | null;
+            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
         };
         /**
          * CharacterPackUpdate
@@ -11630,7 +11557,7 @@ export interface components {
         CharacterPackUpdate: {
             /** Name */
             name?: string | null;
-            persona?: components["schemas"]["CharacterPackPersona"] | null;
+            persona?: components["schemas"]["CharacterPackPersona-Input"] | null;
         };
         /**
          * CharacterPackUploadRead
@@ -11683,7 +11610,7 @@ export interface components {
              * @default []
              */
             usedBy: components["schemas"]["CharacterPackUser"][];
-            persona?: components["schemas"]["CharacterPackPersona"] | null;
+            persona?: components["schemas"]["CharacterPackPersona-Output"] | null;
         };
         /**
          * CharacterPackUser
@@ -11955,6 +11882,49 @@ export interface components {
             revokedAt?: unknown | null;
             /** Revokedreason */
             revokedReason?: string | null;
+        };
+        /**
+         * CustomEventField
+         * @description One value an event carries, in `payload.<key>` (a workflow reads `${event.payload.<key>}`).
+         */
+        CustomEventField: {
+            /** Key */
+            key: string;
+            /**
+             * Type
+             * @default string
+             * @enum {string}
+             */
+            type: "string" | "number" | "boolean" | "date";
+            /** Description */
+            description?: string | null;
+        };
+        /** CustomEventRead */
+        CustomEventRead: {
+            /** Name */
+            name: string;
+            /** Title */
+            title?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Fields */
+            fields?: components["schemas"]["CustomEventField"][];
+            /** Eventtype */
+            eventType: string;
+            /** Usedby */
+            usedBy?: string[];
+        };
+        /**
+         * CustomEventSave
+         * @description The body of PUT /groups/custom-events/{name}: everything but the name, which is in the path.
+         */
+        CustomEventSave: {
+            /** Title */
+            title?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Fields */
+            fields?: components["schemas"]["CustomEventField"][];
         };
         /** DashboardData */
         DashboardData: {
@@ -12352,6 +12322,34 @@ export interface components {
             providers: components["schemas"]["EmbedProviderInfo"][];
             /** Framesources */
             frameSources: string[];
+        };
+        /**
+         * EmbeddingsInfo
+         * @description The built-in embedding engine and what the search indexes were built with (read without loading the model).
+         */
+        EmbeddingsInfo: {
+            /** Builtinenabled */
+            builtinEnabled: boolean;
+            /** Builtinavailable */
+            builtinAvailable: boolean;
+            /** Model */
+            model?: string | null;
+            /** Dimensions */
+            dimensions?: number | null;
+            /**
+             * Engine
+             * @default fastembed
+             */
+            engine: string;
+            /** Engineversion */
+            engineVersion?: string | null;
+            /** Onnxruntimeversion */
+            onnxruntimeVersion?: string | null;
+            /**
+             * Indexedmodels
+             * @default []
+             */
+            indexedModels: components["schemas"]["IndexedEmbeddingModel"][];
         };
         /**
          * EntryAssetRead
@@ -13914,6 +13912,16 @@ export interface components {
             } | null;
         };
         /**
+         * IndexedEmbeddingModel
+         * @description One embedding model that has vectors stored, and how many chunks.
+         */
+        IndexedEmbeddingModel: {
+            /** Modelid */
+            modelId: string;
+            /** Chunks */
+            chunks: number;
+        };
+        /**
          * InstalledBy
          * @description The integration whose blueprint created a workflow, task, incoming webhook or integration action.
          */
@@ -14673,6 +14681,70 @@ export interface components {
             /** Allowedtools */
             allowedTools?: string[] | null;
         };
+        /** MetricObservationList */
+        MetricObservationList: {
+            /** Items */
+            items: components["schemas"]["MetricObservationRead"][];
+            /** Total */
+            total: number;
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /**
+             * Note
+             * @default Observations, not conclusions: these are numbers a workflow recorded, with nothing said about what caused them.
+             */
+            note: string;
+        };
+        /** MetricObservationRead */
+        MetricObservationRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Metric */
+            metric: string;
+            /** Variant */
+            variant: string;
+            /** Subject */
+            subject: string;
+            /** Window */
+            window: string;
+            /** Granularity */
+            granularity: string;
+            /**
+             * Windowstart
+             * Format: date
+             */
+            windowStart: string;
+            /** Value */
+            value: number;
+            /** Workflowname */
+            workflowName?: string | null;
+            /** Workflowslug */
+            workflowSlug?: string | null;
+            /** Updatedat */
+            updatedAt?: string | null;
+        };
+        /** MetricSummary */
+        MetricSummary: {
+            /** Metric */
+            metric: string;
+            /** Count */
+            count: number;
+            /**
+             * Firstwindow
+             * Format: date
+             */
+            firstWindow: string;
+            /**
+             * Lastwindow
+             * Format: date
+             */
+            lastWindow: string;
+        };
         /** ModelPullRequest */
         ModelPullRequest: {
             /** Name */
@@ -15170,6 +15242,8 @@ export interface components {
             package?: string | null;
             /** Version */
             version?: string | null;
+            /** Latestversion */
+            latestVersion?: string | null;
             /**
              * Kind
              * @enum {string}
@@ -15373,15 +15447,6 @@ export interface components {
              * @default []
              */
             tags: string[];
-        };
-        /**
-         * PublishedAssetsResponse
-         * @description Paginated response for listing published assets.
-         */
-        PublishedAssetsResponse: {
-            /** Data */
-            data: components["schemas"]["PublishedAssetRead"][];
-            meta: components["schemas"]["PaginationMeta"];
         };
         /**
          * PublishedCollectionExpandedRead
@@ -15818,10 +15883,7 @@ export interface components {
         };
         /**
          * PublishedResourceSummary
-         * @description Schema for published resources in standalone context.
-         *
-         *     Provides resource metadata without entry-specific placement info.
-         *     Used for listing resources and getting individual resource details.
+         * @description A published resource: its metadata without entry-specific placement info.
          */
         PublishedResourceSummary: {
             /** Slug */
@@ -15841,24 +15903,10 @@ export interface components {
                 [key: string]: unknown;
             } | null;
             /**
-             * Entries
-             * @default []
-             */
-            entries: string[];
-            /**
              * Tags
              * @default []
              */
             tags: string[];
-        };
-        /**
-         * PublishedResourcesResponse
-         * @description Paginated response for listing published resources.
-         */
-        PublishedResourcesResponse: {
-            /** Data */
-            data: components["schemas"]["PublishedResourceSummary"][];
-            meta: components["schemas"]["PaginationMeta"];
         };
         /**
          * PublishingPulse
@@ -23080,6 +23128,90 @@ export interface operations {
             };
         };
     };
+    list_custom_events_api_groups_custom_events_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomEventRead"][];
+                };
+            };
+        };
+    };
+    save_custom_event_api_groups_custom_events__name__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CustomEventSave"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomEventRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_custom_event_api_groups_custom_events__name__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_notifications_api_groups_notifications_get: {
         parameters: {
             query?: never;
@@ -23154,6 +23286,97 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["NotificationTestResult"];
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_metrics_api_groups_metrics_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricSummary"][];
+                };
+            };
+        };
+    };
+    list_observations_api_groups_metrics_observations_get: {
+        parameters: {
+            query?: {
+                /** @description One metric (its slug). */
+                metric?: string | null;
+                /** @description One variant label; an empty value means the observations with none. */
+                variant?: string | null;
+                /** @description One subject label; an empty value means the observations with none. */
+                subject?: string | null;
+                /** @description Windows starting on or after this one: a day (2026-10-18), week (2026-W42) or month (2026-10). */
+                window_from?: string | null;
+                /** @description Windows starting on or before this one (same forms). */
+                window_to?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricObservationList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_observation_api_groups_metrics_observations__observation_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
@@ -33108,213 +33331,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PublishedCollectionRead"] | components["schemas"]["PublishedCollectionExpandedRead"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_published_assets_api_publish__workspace_slug__assets_get: {
-        parameters: {
-            query?: {
-                /** @description Filter by MIME type prefix (image, video, audio, application) */
-                type?: string | null;
-                /** @description Max results */
-                limit?: number;
-                /** @description Pagination offset */
-                offset?: number;
-            };
-            header?: never;
-            path: {
-                workspace_slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PublishedAssetsResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_published_asset_api_publish__workspace_slug__assets__asset_slug__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                asset_slug: string;
-                workspace_slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PublishedAssetRead"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    serve_asset_file_api_publish__workspace_slug__assets__asset_slug__file_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                asset_slug: string;
-                workspace_slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_published_resources_api_publish__workspace_slug__resources_get: {
-        parameters: {
-            query?: {
-                /** @description Filter by resource type */
-                resource_type?: string | null;
-                /** @description Max results */
-                limit?: number;
-                /** @description Pagination offset */
-                offset?: number;
-            };
-            header?: never;
-            path: {
-                workspace_slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PublishedResourcesResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_published_resource_api_publish__workspace_slug__resources__resource_slug__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                resource_slug: string;
-                workspace_slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PublishedResourceSummary"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_resource_entries_api_publish__workspace_slug__resources__resource_slug__entries_get: {
-        parameters: {
-            query?: {
-                /** @description `full` returns each entry in the shape of the single-entry read (`PublishedEntryRead`: `assets[]`, `resources[]`, full collection memberships, `data`, `embeds`) instead of a list item, so a site needs no per-entry reads. Only published entries are included, and the token needs `read:published_entries` or `read:all_entries`, as for the single read. */
-                expand?: "full" | null;
-            };
-            header?: never;
-            path: {
-                resource_slug: string;
-                workspace_slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PublishedEntryListItem"][] | components["schemas"]["PublishedEntryRead"][];
                 };
             };
             /** @description Validation Error */
