@@ -584,9 +584,9 @@ Methods:
 
 ### Collections Module
 
-#### `collections.list()`
+#### `collections.list({ limit?, offset? })`
 
-Get all collections.
+Get collections. The server returns 20 per request by default (at most 100); pass `limit` and `offset` to page through more.
 
 #### `collections.get(slug)`
 

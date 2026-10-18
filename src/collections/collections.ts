@@ -9,6 +9,7 @@ import type {
   PublishedCollectionSummary,
   CollectionEntry,
   ExpandOptions,
+  GetCollectionsOptions,
 } from '../types';
 import { Collection } from './collection';
 import { Entry, isFullEntryData } from '../entries/entry';
@@ -21,10 +22,12 @@ export class CollectionsModule {
   ) {}
 
   /**
-   * Get all collections
+   * Get collections. The server returns 20 per request by default (at most 100), so pass
+   * `limit` and `offset` to read further, the same as `entries.list()`.
    */
-  async list(): Promise<PublishedCollectionSummary[]> {
-    const endpoint = `/api/publish/${this.workspaceSlug}/collections`;
+  async list(options: GetCollectionsOptions = {}): Promise<PublishedCollectionSummary[]> {
+    const queryString = this.http.buildQueryString({ limit: options.limit, offset: options.offset });
+    const endpoint = `/api/publish/${this.workspaceSlug}/collections${queryString}`;
     const response = await this.http.fetch<{ data: PublishedCollectionSummary[] }>(endpoint);
 
     return response.data || [];

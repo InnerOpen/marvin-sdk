@@ -11,6 +11,7 @@ import type {
   MarvinEntry,
   ListEntry,
   PublishedCollectionSummary,
+  GetCollectionsOptions,
   CollectionEntry,
 } from '../types';
 import type { GetEntriesOptions } from '../entries/entries';
@@ -176,8 +177,8 @@ export class MarvinClient {
   /**
    * @deprecated Use workspace.collections.list() instead
    */
-  async getCollections(): Promise<PublishedCollectionSummary[]> {
-    return this.workspace.collections.list();
+  async getCollections(options?: GetCollectionsOptions): Promise<PublishedCollectionSummary[]> {
+    return this.workspace.collections.list(options);
   }
 
   /**

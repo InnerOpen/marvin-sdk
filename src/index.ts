@@ -76,6 +76,7 @@ export type {
   PublishedEntryAsset,
   PublishedAssetRead,
   GetEntriesOptions,
+  GetCollectionsOptions,
 } from './types';
 
 // Workspace & Modules
