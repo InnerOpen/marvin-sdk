@@ -92,6 +92,13 @@ for (const collection of collections) {
 }
 ```
 
+The server returns 20 collections per request by default (at most 100). Page with `limit` and `offset`:
+
+```typescript
+const page1 = await marvin.collections.list({ limit: 50 });
+const page2 = await marvin.collections.list({ limit: 50, offset: 50 });
+```
+
 ### Get Collection Entries
 
 ```typescript

@@ -153,6 +153,14 @@ export interface GetEntriesOptions {
   status?: string;
 }
 
+/** Paging for `collections.list()`. The server returns 20 by default, at most 100 per request. */
+export interface GetCollectionsOptions {
+  /** Max collections to return (server default 20, maximum 100). */
+  limit?: number;
+  /** Collections to skip, for the next page. */
+  offset?: number;
+}
+
 export interface AuthToken {
   accessToken: string;
   tokenType: string;

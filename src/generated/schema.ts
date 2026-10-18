@@ -8534,6 +8534,8 @@ export interface components {
             threadId?: string | null;
             /** Clientrunid */
             clientRunId?: string | null;
+            /** Greeting */
+            greeting?: string | null;
         };
         /**
          * AIAgentTurn
