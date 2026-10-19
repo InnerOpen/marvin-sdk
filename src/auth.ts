@@ -24,9 +24,11 @@ export interface ForgotPasswordRequest {
   email: string;
 }
 
+/** POST /api/users/reset-password: the token from the reset email (it names the user) and the new password twice. */
 export interface ResetPasswordRequest {
   token: string;
-  newPassword: string;
+  password: string;
+  passwordConfirm: string;
 }
 
 export interface LoginRequest {

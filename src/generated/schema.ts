@@ -16802,16 +16802,14 @@ export interface components {
         };
         /**
          * ResetPassword
-         * @description Schema for the actual password reset operation.
-         *     Requires the reset token, the user's email (for verification, though token
-         *     should be sufficient if unique and mapped to user), and the new password
-         *     with confirmation.
+         * @description Schema for the actual password reset operation: the reset token (it names the user) and the new password with
+         *     confirmation.
          */
         ResetPassword: {
             /** Token */
             token: string;
             /** Email */
-            email: string;
+            email?: string | null;
             /** Password */
             password: string;
             /** Passwordconfirm */
