@@ -1,3 +1,10 @@
+## [7.3.1](https://github.com/InnerOpen/marvin-sdk/compare/v7.3.0...v7.3.1) (2026-10-19)
+
+
+### Bug Fixes
+
+* **auth:** resetPassword sends what the API takes ([74fb479](https://github.com/InnerOpen/marvin-sdk/commit/74fb47963eb6faa338fb12d424202a9257fd1b44))
+
 # [7.3.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.2.0...v7.3.0) (2026-10-19)
 
 
