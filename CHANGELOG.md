@@ -1,3 +1,10 @@
+# [7.3.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.2.0...v7.3.0) (2026-10-19)
+
+
+### Features
+
+* **types:** workspace email branding ([1b80756](https://github.com/InnerOpen/marvin-sdk/commit/1b807567955166b5b6a6e484cf7bc9d00734863b))
+
 # [7.2.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.1.0...v7.2.0) (2026-10-19)
 
 
