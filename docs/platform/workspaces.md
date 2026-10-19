@@ -115,17 +115,29 @@ const workspace = await platform.workspaces.update('ws-123', {
     Deleting a workspace permanently deletes all entries, collections, assets, and resources.
 
 ```typescript
-// Safe delete (fails if workspace has content)
-await platform.workspaces.delete('ws-123');
+// The server requires the workspace's name as confirmation, and a backup
+// bundle from the last 24 hours (or skipBackup)
+await platform.workspaces.delete('ws-123', { confirmName: 'My Workspace' });
 
-// Force delete (deletes all content)
+// Delete a workspace that still has members or entries
+await platform.workspaces.delete('ws-123', { confirmName: 'My Workspace', force: true });
+
+// Delete without a recent backup
+await platform.workspaces.delete('ws-123', { confirmName: 'My Workspace', skipBackup: true });
+
+// Legacy form: a boolean second argument means { force }
 await platform.workspaces.delete('ws-123', true);
 ```
+
+| Option        | Query param    | Meaning                                                                  |
+| ------------- | -------------- | ------------------------------------------------------------------------ |
+| `confirmName` | `confirm_name` | Must equal the workspace's name, otherwise 400 `confirm_name_mismatch`   |
+| `skipBackup`  | `skip_backup`  | Delete without a backup bundle from the last 24 hours (else 409 `backup_required`) |
+| `force`       | `force`        | Also delete when the workspace has members or entries                    |
 
 **Permissions:**
 
 - Requires `SUPER_ADMIN` role
-- Force delete requires confirmation
 
 ## Workspace Preferences
 
