@@ -1,3 +1,16 @@
+# [7.0.0](https://github.com/InnerOpen/marvin-sdk/compare/v6.2.0...v7.0.0) (2026-10-19)
+
+
+### Features
+
+* **types:** regenerate — platform SMTP/alert channels, no-workspace users, retired platform workspace, SQLite ([2c96429](https://github.com/InnerOpen/marvin-sdk/commit/2c96429f51cb54a24d6a6f9af344c15deeafafed))
+
+
+### BREAKING CHANGES
+
+* **types:** `Workspace.isPlatform` and `AdminAboutInfo.defaultGroup` are gone (the platform workspace
+marker was retired); `StartupInfo.default_group` removed.
+
 # [6.2.0](https://github.com/InnerOpen/marvin-sdk/compare/v6.1.0...v6.2.0) (2026-10-19)
 
 
