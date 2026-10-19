@@ -1646,6 +1646,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/email-branding": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Workspace email branding */
+        get: operations["get_branding_api_groups_email_branding_get"];
+        /** Set the workspace email branding */
+        put: operations["put_branding_api_groups_email_branding_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/email-event-subscriptions": {
         parameters: {
             query?: never;
@@ -12386,6 +12404,24 @@ export interface components {
             /** Lasterror */
             lastError?: string | null;
         };
+        /** EmailBrandValues */
+        EmailBrandValues: {
+            /**
+             * Productname
+             * @default
+             */
+            productName: string;
+            /**
+             * Footertext
+             * @default
+             */
+            footerText: string;
+            /**
+             * Accentcolor
+             * @default
+             */
+            accentColor: string;
+        };
         /** EmailBranding */
         EmailBranding: {
             /**
@@ -12543,7 +12579,7 @@ export interface components {
             subject: string;
             /**
              * Bodymarkdown
-             * @description Markdown body rendered via default.html template
+             * @description Markdown body, placed in the email layout with the workspace's brand
              */
             bodyMarkdown?: string | null;
             /**
@@ -19547,6 +19583,49 @@ export interface components {
             /** Storagepurgeafter */
             storagePurgeAfter?: string | null;
         };
+        /**
+         * WorkspaceEmailBrandingRead
+         * @description The workspace's own values (blank where unset) and what its emails show with them.
+         */
+        WorkspaceEmailBrandingRead: {
+            /**
+             * Productname
+             * @default
+             */
+            productName: string;
+            /**
+             * Footertext
+             * @default
+             */
+            footerText: string;
+            /**
+             * Accentcolor
+             * @default
+             */
+            accentColor: string;
+            effective: components["schemas"]["EmailBrandValues"];
+        };
+        /**
+         * WorkspaceEmailBrandingUpdate
+         * @description The workspace's own values; a blank one falls back.
+         */
+        WorkspaceEmailBrandingUpdate: {
+            /**
+             * Productname
+             * @default
+             */
+            productName: string;
+            /**
+             * Footertext
+             * @default
+             */
+            footerText: string;
+            /**
+             * Accentcolor
+             * @default
+             */
+            accentColor: string;
+        };
         /** WorkspaceEventReactions */
         WorkspaceEventReactions: {
             /**
@@ -22769,6 +22848,59 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_branding_api_groups_email_branding_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceEmailBrandingRead"];
+                };
+            };
+        };
+    };
+    put_branding_api_groups_email_branding_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkspaceEmailBrandingUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceEmailBrandingRead"];
                 };
             };
             /** @description Validation Error */
