@@ -1,3 +1,10 @@
+# [7.2.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.1.0...v7.2.0) (2026-10-19)
+
+
+### Features
+
+* **types:** Admin features status (effective state and source) ([9248ef4](https://github.com/InnerOpen/marvin-sdk/commit/9248ef48a9e89e615e53f72222ba5a88100e20da))
+
 # [7.1.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.0.0...v7.1.0) (2026-10-19)
 
 
