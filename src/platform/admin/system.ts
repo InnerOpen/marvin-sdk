@@ -58,7 +58,6 @@ export interface StartupInfo {
   api_docs: boolean;
   database_url: string;
   database_provider: string;
-  default_group?: string;
   allow_signup: boolean;
   theme?: string;
   custom_middleware?: string[];
