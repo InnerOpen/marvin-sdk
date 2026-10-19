@@ -6400,6 +6400,93 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/entries/{entry_id}/snapshots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List an entry's snapshots
+         * @description The entry's snapshots, newest first (what each holds in brief). AUTHOR and above.
+         */
+        get: operations["list_snapshots_api_platform_entries__entry_id__snapshots_get"];
+        put?: never;
+        /**
+         * Keep a snapshot of an entry
+         * @description Keep the entry as it is now. When its latest snapshot is already identical, that one is returned
+         *     (`created: false`). The oldest beyond 20 are dropped.
+         */
+        post: operations["capture_snapshot_api_platform_entries__entry_id__snapshots_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/{entry_id}/snapshots/{snapshot_id}/diff": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What restoring a snapshot would change
+         * @description The change a restore of these parts (default content, collections, assets) would make — nothing is written.
+         */
+        get: operations["diff_snapshot_api_platform_entries__entry_id__snapshots__snapshot_id__diff_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/{entry_id}/snapshots/{snapshot_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Put a snapshot back
+         * @description Put these parts of the snapshot back on the entry (default content, collections, assets; `status` only when
+         *     listed, and through the publish gate). Fires the normal events. 409 for an entry in the Trash, 422 when the entry's
+         *     type or the publish gate refuses what the snapshot holds.
+         */
+        post: operations["restore_snapshot_api_platform_entries__entry_id__snapshots__snapshot_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/{entry_id}/snapshots/{snapshot_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove a snapshot
+         * @description Remove one snapshot. The entry itself is untouched.
+         */
+        delete: operations["delete_snapshot_api_platform_entries__entry_id__snapshots__snapshot_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/collections": {
         parameters: {
             query?: never;
@@ -11862,6 +11949,11 @@ export interface components {
         ConnectedAppRead: {
             /** Id */
             id: string;
+            /**
+             * Pinned
+             * @default false
+             */
+            pinned: boolean;
             /** Clientname */
             clientName: string;
             /** Redirecthost */
@@ -12736,6 +12828,85 @@ export interface components {
             url?: string | null;
             /** Externalid */
             externalId?: string | null;
+        };
+        /** EntrySnapshotCreate */
+        EntrySnapshotCreate: {
+            /**
+             * Label
+             * @default
+             */
+            label: string;
+        };
+        /** EntrySnapshotDiff */
+        EntrySnapshotDiff: {
+            /**
+             * Snapshotid
+             * Format: uuid4
+             */
+            snapshotId: string;
+            /**
+             * Entryid
+             * Format: uuid4
+             */
+            entryId: string;
+            /** Parts */
+            parts: string[];
+            /** Changed */
+            changed: boolean;
+            /** Restored */
+            restored?: boolean | null;
+            /** Content */
+            content?: {
+                [key: string]: unknown;
+            } | null;
+            /** Status */
+            status?: {
+                [key: string]: unknown;
+            } | null;
+            /** Collections */
+            collections?: {
+                [key: string]: string[];
+            } | null;
+            /** Assets */
+            assets?: {
+                [key: string]: string[];
+            } | null;
+        };
+        /** EntrySnapshotRead */
+        EntrySnapshotRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Entryid
+             * Format: uuid4
+             */
+            entryId: string;
+            /** Label */
+            label: string;
+            /** Source */
+            source: string;
+            /** Createdat */
+            createdAt?: string | null;
+            /** Title */
+            title?: string | null;
+            /** Status */
+            status?: string | null;
+            /** Fields */
+            fields: number;
+            /** Collections */
+            collections: string[];
+            /** Assets */
+            assets: number;
+            /** Created */
+            created?: boolean | null;
+        };
+        /** EntrySnapshotRestore */
+        EntrySnapshotRestore: {
+            /** Parts */
+            parts?: ("content" | "collections" | "assets" | "status")[] | null;
         };
         /**
          * EntryTypeCapabilities
@@ -30061,6 +30232,172 @@ export interface operations {
                         [key: string]: unknown;
                     };
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_snapshots_api_platform_entries__entry_id__snapshots_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntrySnapshotRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    capture_snapshot_api_platform_entries__entry_id__snapshots_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["EntrySnapshotCreate"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntrySnapshotRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    diff_snapshot_api_platform_entries__entry_id__snapshots__snapshot_id__diff_get: {
+        parameters: {
+            query?: {
+                parts?: string[] | null;
+            };
+            header?: never;
+            path: {
+                entry_id: string;
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntrySnapshotDiff"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_snapshot_api_platform_entries__entry_id__snapshots__snapshot_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["EntrySnapshotRestore"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntrySnapshotDiff"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_snapshot_api_platform_entries__entry_id__snapshots__snapshot_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
