@@ -3111,6 +3111,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/about/features-status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Features as they are in force (Admin)
+         * @description Each feature's EFFECTIVE state, where it comes from and, when it is off, why.
+         *
+         *     `startup-info` is the raw settings dump (what the environment says). A feature an admin can switch in the UI
+         *     (remote MCP, the platform SMTP server) can differ from it, so the Features Status card reads this instead.
+         *     Accessible only by administrators.
+         */
+        get: operations["get_features_status_api_admin_about_features_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/about/check": {
         parameters: {
             query?: never;
@@ -13706,6 +13730,24 @@ export interface components {
             eventType: string;
             /** Name */
             name: string;
+        };
+        /**
+         * FeatureStatusRead
+         * @description One row of Admin → Site Settings → Features Status: a feature as it is in force.
+         */
+        FeatureStatusRead: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Source */
+            source: string;
+            /** Reason */
+            reason?: string | null;
+            /** Managepath */
+            managePath?: string | null;
         };
         /**
          * ForgotPassword
@@ -24848,6 +24890,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+        };
+    };
+    get_features_status_api_admin_about_features_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeatureStatusRead"][];
                 };
             };
         };
