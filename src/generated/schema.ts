@@ -2927,10 +2927,13 @@ export interface paths {
         };
         /**
          * Get Current Workspace
-         * @description Get the user's currently active workspace.
+         * @description Get the workspace the user is working in.
+         *
+         *     The active workspace if they can still reach it, else their home workspace (a member, or a super admin), else
+         *     the first workspace they are a member of by name.
          *
          *     Returns:
-         *         The active workspace details.
+         *         The current workspace, or null when the user has none (no home, no membership).
          */
         get: operations["get_current_workspace_api_self_workspaces_current_get"];
         /**
@@ -3356,6 +3359,72 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/alerts/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Add a Platform Channel
+         * @description Add a platform channel: an installed plugin that can send messages (Apprise first), with its credential
+         *     (Apprise: the notification URLs, one per line — stored as a platform secret, never returned). Audited.
+         */
+        post: operations["create_connection_api_admin_alerts_connections_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/alerts/connections/{connection_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Admin: Change a Platform Channel
+         * @description Rename, turn on or off, change the settings of, or rotate the credential of a platform channel. Audited.
+         */
+        put: operations["update_connection_api_admin_alerts_connections__connection_id__put"];
+        post?: never;
+        /**
+         * Admin: Remove a Platform Channel
+         * @description Remove a platform channel, its credential and the alert routes that used it. Audited.
+         */
+        delete: operations["delete_connection_api_admin_alerts_connections__connection_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/alerts/connections/{connection_id}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Send a Test Alert Through a Platform Channel
+         * @description Send "Test alert from Marvin admin" through the channel's message action, even one that's turned off. A
+         *     channel whose action needs more than the message (a channel name…) is tested through a route instead.
+         */
+        post: operations["test_connection_api_admin_alerts_connections__connection_id__test_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/backup-health": {
         parameters: {
             query?: never;
@@ -3581,9 +3650,10 @@ export interface paths {
         put?: never;
         /**
          * Admin: Write a Character Pack's Bubble Lines
-         * @description Write the pack's bubble lines from its Character with one model call, billed to your current workspace,
-         *     and return them unsaved — the character sheet fills them in for you to edit and save. `personaPrompt` /
-         *     `assistantName` stand in for the stored ones (the sheet's unsaved fields).
+         * @description Write the pack's bubble lines from its Character with one model call, billed to `workspaceId` (else your
+         *     current workspace; with neither, 409 `no_workspace`: pick one to bill), and return them unsaved — the character
+         *     sheet fills them in for you to edit and save. `personaPrompt` / `assistantName` stand in for the stored ones
+         *     (the sheet's unsaved fields).
          */
         post: operations["generate_pack_lines_api_admin_character_packs__pack_ref__bubble_lines_generate_post"];
         delete?: never;
@@ -3671,6 +3741,57 @@ export interface paths {
          *                       successfully and any error message if it failed.
          */
         post: operations["send_test_email_api_admin_email_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/email/platform-smtp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Get Platform SMTP Settings
+         * @description The SMTP server platform mail goes through: the environment's settings, each field overridden by an
+         *     admin's value when one is set. The password is never returned, only whether one is in force.
+         */
+        get: operations["get_platform_smtp_api_admin_email_platform_smtp_get"];
+        /**
+         * Admin: Save Platform SMTP Settings
+         * @description Replace the admin's fields: a blank or missing one goes back to the environment's. The password is write-only
+         *     and left alone when blank (audited as ``platform_settings_changed``).
+         */
+        put: operations["update_platform_smtp_api_admin_email_platform_smtp_put"];
+        post?: never;
+        /**
+         * Admin: Use the Environment's SMTP Settings
+         * @description Clear every admin field and the admin password: the environment's settings apply again (audited).
+         */
+        delete: operations["reset_platform_smtp_api_admin_email_platform_smtp_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/email/platform-smtp/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Send a Test Email Through the Platform SMTP
+         * @description Send a test email to the signed-in admin through the platform SMTP server as it is saved now, and say what the
+         *     server answered.
+         */
+        post: operations["test_platform_smtp_api_admin_email_platform_smtp_test_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4102,31 +4223,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/admin/groups/platform": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get the Platform Workspace
-         * @description The platform (admin's) workspace — platform alerts and shared services run from it.
-         *
-         *     Found by its marker, whatever it is called. Rename it with ``PUT /api/admin/groups/{id}``.
-         *
-         *     Raises:
-         *         HTTPException (404 Not Found): The database has no platform workspace yet.
-         */
-        get: operations["get_platform_api_admin_groups_platform_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/admin/groups/{item_id}": {
         parameters: {
             query?: never;
@@ -4178,22 +4274,53 @@ export interface paths {
          * @description Deletes a workspace by its unique ID.
          *
          *     Safety checks:
-         *     - Never the platform (admin's) workspace (409), force or not
-         *     - Cannot delete if workspace has users with it as their primary group_id
+         *     - ``confirm_name`` must equal the workspace's name (400 ``confirm_name_mismatch``)
+         *     - A backup bundle of it from the last 24 hours must exist (409 ``backup_required``) unless
+         *       ``skip_backup=true`` ("delete without a backup")
          *     - Cannot delete if workspace has workspace members (unless force=True)
          *     - Cannot delete if workspace has entries, collections, or assets (unless force=True)
+         *
+         *     The workspace's stored files are not deleted now: they are recorded and purged after a 30-day grace period
+         *     (Admin → Storage lists them; "purge now" or "keep"). Platform events that mention the workspace (sign-ins,
+         *     backups, storage changes) stay in the audit trail without a workspace; the rest of its events go with it.
+         *     ``workspace_deleted`` is sent after the delete, with no workspace and the workspace's name in its data.
          *
          *     Accessible only by administrators.
          *
          *     Args:
          *         item_id (UUID4): The ID of the workspace to delete.
+         *         confirm_name (str): The workspace's name, typed.
+         *         skip_backup (bool): Delete without a recent backup bundle.
          *         force (bool): If True, cascade delete all related content. Defaults to False.
          *
          *     Raises:
          *         HTTPException (404 Not Found): If the workspace doesn't exist.
-         *         HTTPException (400 Bad Request): If workspace has content and force=False.
+         *         HTTPException (400 Bad Request): The name doesn't match, or the workspace has content and force=False.
+         *         HTTPException (409 Conflict): No backup bundle from the last 24 hours and skip_backup=false.
          */
         delete: operations["delete_one_api_admin_groups__item_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/groups/{item_id}/delete-preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Preview Deleting a Workspace
+         * @description What deleting the workspace removes (members, entries, files and their size, integrations, scheduled tasks,
+         *     SMTP profiles, users whose home it is) and when its newest backup bundle was made. A delete needs a bundle from
+         *     the last 24 hours, or ``skip_backup=true``.
+         */
+        get: operations["delete_preview_api_admin_groups__item_id__delete_preview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -4666,6 +4793,67 @@ export interface paths {
          */
         put: operations["update_workspace_policy_api_admin_storage_workspace_policy_put"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/storage/deleted-workspaces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: Files of Deleted Workspaces Awaiting a Purge
+         * @description Where the files of deleted workspaces are: each is purged 30 days after the delete by the daily task, unless
+         *     kept. Purged records are not listed.
+         */
+        get: operations["list_deleted_workspaces_api_admin_storage_deleted_workspaces_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/storage/deleted-workspaces/{record_id}/purge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Purge a Deleted Workspace's Files Now
+         * @description Delete the recorded files now, without waiting out the grace period. They can't be recovered.
+         */
+        post: operations["purge_deleted_workspace_api_admin_storage_deleted_workspaces__record_id__purge_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/storage/deleted-workspaces/{record_id}/keep": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin: Keep a Deleted Workspace's Files
+         * @description Never purge these files: the daily task skips them, and they stay in storage as they are.
+         */
+        post: operations["keep_deleted_workspace_api_admin_storage_deleted_workspaces__record_id__keep_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9499,8 +9687,6 @@ export interface components {
             dbType: string;
             /** Dburl */
             dbUrl?: string | null;
-            /** Defaultgroup */
-            defaultGroup: string;
             /** Buildid */
             buildId: string;
             embeddings?: components["schemas"]["EmbeddingsInfo"] | null;
@@ -11549,6 +11735,8 @@ export interface components {
             assistantName?: string | null;
             /** Personaprompt */
             personaPrompt?: string | null;
+            /** Workspaceid */
+            workspaceId?: string | null;
         };
         /**
          * CharacterPackPersona
@@ -12117,6 +12305,62 @@ export interface components {
              * @default content
              */
             kind: string;
+        };
+        /** DeletedWorkspaceStorageList */
+        DeletedWorkspaceStorageList: {
+            /** Items */
+            items: components["schemas"]["DeletedWorkspaceStorageRead"][];
+            /** Gracedays */
+            graceDays: number;
+        };
+        /**
+         * DeletedWorkspaceStorageRead
+         * @description One storage location of a deleted workspace, waiting for its purge.
+         */
+        DeletedWorkspaceStorageRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Workspaceid
+             * Format: uuid4
+             */
+            workspaceId: string;
+            /** Workspacename */
+            workspaceName: string;
+            /** Workspaceslug */
+            workspaceSlug?: string | null;
+            /** Location */
+            location: string;
+            /** Label */
+            label?: string | null;
+            /** Objectcount */
+            objectCount: number;
+            /** Totalbytes */
+            totalBytes: number;
+            /**
+             * Deletedat
+             * Format: date-time
+             */
+            deletedAt: string;
+            /**
+             * Purgeafter
+             * Format: date-time
+             */
+            purgeAfter: string;
+            /** State */
+            state: string;
+            /** Purgedobjects */
+            purgedObjects?: number | null;
+            /**
+             * Canpurge
+             * @default true
+             */
+            canPurge: boolean;
+            /** Lasterror */
+            lastError?: string | null;
         };
         /** EmailBranding */
         EmailBranding: {
@@ -13837,11 +14081,6 @@ export interface components {
             id: string;
             /** Slug */
             slug?: string | null;
-            /**
-             * Isplatform
-             * @default false
-             */
-            isPlatform: boolean;
             /** Users */
             users?: components["schemas"]["UserSummary"][] | null;
             preferences?: components["schemas"]["GroupPreferencesRead"] | null;
@@ -15285,7 +15524,7 @@ export interface components {
         };
         /**
          * PlatformAlertTarget
-         * @description A message-capable action on a connection in the platform workspace.
+         * @description A message-capable action on a platform channel.
          */
         PlatformAlertTarget: {
             /**
@@ -15329,7 +15568,10 @@ export interface components {
             routes: components["schemas"]["PlatformAlertRouteRead"][];
             /** Targets */
             targets: components["schemas"]["PlatformAlertTarget"][];
-            platformWorkspace?: components["schemas"]["PlatformWorkspaceRef"] | null;
+            /** Connections */
+            connections?: components["schemas"]["PlatformConnectionRead"][];
+            /** Providers */
+            providers?: components["schemas"]["PlatformConnectionProvider"][];
             /** Integrationsavailable */
             integrationsAvailable: boolean;
         };
@@ -15344,6 +15586,115 @@ export interface components {
             /** Routes */
             routes?: components["schemas"]["PlatformAlertRouteUpdate"][];
         };
+        /** PlatformConnectionConfigField */
+        PlatformConnectionConfigField: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /**
+             * Required
+             * @default false
+             */
+            required: boolean;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+        };
+        /** PlatformConnectionCreate */
+        PlatformConnectionCreate: {
+            /** Provider */
+            provider: string;
+            /** Name */
+            name: string;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            };
+            /** Credential */
+            credential?: string | null;
+        };
+        /**
+         * PlatformConnectionProvider
+         * @description An installed plugin that can carry a message — what a new platform channel can be.
+         */
+        PlatformConnectionProvider: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Credentiallabel */
+            credentialLabel?: string | null;
+            /**
+             * Credentialhelp
+             * @default
+             */
+            credentialHelp: string;
+            /**
+             * Credentialrequired
+             * @default false
+             */
+            credentialRequired: boolean;
+            /** Configfields */
+            configFields?: components["schemas"]["PlatformConnectionConfigField"][];
+        };
+        /**
+         * PlatformConnectionRead
+         * @description A platform channel. The credential (Apprise URLs…) is never returned, only whether there is one.
+         */
+        PlatformConnectionRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Provider */
+            provider: string;
+            /** Providername */
+            providerName: string;
+            /** Name */
+            name: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            };
+            /** Hascredential */
+            hasCredential: boolean;
+            /** Available */
+            available: boolean;
+            /**
+             * Needsrouteinputs
+             * @default false
+             */
+            needsRouteInputs: boolean;
+            /**
+             * Routes
+             * @default 0
+             */
+            routes: number;
+        };
+        /** PlatformConnectionUpdate */
+        PlatformConnectionUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            } | null;
+            /** Credential */
+            credential?: string | null;
+        };
         /**
          * PlatformRole
          * @description Platform-level roles for Marvin.
@@ -15353,17 +15704,79 @@ export interface components {
          * @enum {string}
          */
         PlatformRole: "NONE" | "SUPER_ADMIN";
-        /** PlatformWorkspaceRef */
-        PlatformWorkspaceRef: {
+        /**
+         * PlatformSMTPField
+         * @description One platform SMTP field: the value in force, the environment's, and which of the two it is.
+         */
+        PlatformSMTPField: {
+            /** Value */
+            value?: string | null;
+            /** Envvalue */
+            envValue?: string | null;
+            /** Source */
+            source?: ("admin" | "env") | null;
+        };
+        /**
+         * PlatformSMTPRead
+         * @description The platform SMTP server (Admin → Email): the environment's settings with the admin's per-field overrides.
+         */
+        PlatformSMTPRead: {
+            /** Ready */
+            ready: boolean;
+            /** Problem */
+            problem?: string | null;
+            /** Source */
+            source?: ("admin" | "env") | null;
+            host: components["schemas"]["PlatformSMTPField"];
+            port: components["schemas"]["PlatformSMTPField"];
+            username: components["schemas"]["PlatformSMTPField"];
+            authStrategy: components["schemas"]["PlatformSMTPField"];
+            fromName: components["schemas"]["PlatformSMTPField"];
+            fromEmail: components["schemas"]["PlatformSMTPField"];
+            /** Passwordset */
+            passwordSet: boolean;
+            /** Passwordsource */
+            passwordSource?: ("admin" | "env") | null;
             /**
-             * Id
-             * Format: uuid4
+             * Passwordmissing
+             * @default false
              */
-            id: string;
-            /** Name */
-            name: string;
-            /** Slug */
-            slug?: string | null;
+            passwordMissing: boolean;
+            /**
+             * Canstorepassword
+             * @default true
+             */
+            canStorePassword: boolean;
+            /** Envavailable */
+            envAvailable: boolean;
+            /** Envsummary */
+            envSummary?: string | null;
+        };
+        /**
+         * PlatformSMTPUpdate
+         * @description Replaces the admin's fields: a blank or missing one goes back to the environment's. The password is write-only
+         *     and left alone when blank.
+         */
+        PlatformSMTPUpdate: {
+            /** Host */
+            host?: string | null;
+            /** Port */
+            port?: number | null;
+            /** Username */
+            username?: string | null;
+            /** Authstrategy */
+            authStrategy?: string | null;
+            /** Fromname */
+            fromName?: string | null;
+            /** Fromemail */
+            fromEmail?: string | null;
+            /** Password */
+            password?: string | null;
+            /**
+             * Clearpassword
+             * @default false
+             */
+            clearPassword: boolean;
         };
         /**
          * PluginProviderRead
@@ -18087,7 +18500,7 @@ export interface components {
              */
             isSuperuser: boolean;
             /** Group */
-            group: string;
+            group?: string | null;
             /**
              * Advanced
              * @default false
@@ -18108,13 +18521,10 @@ export interface components {
              * @default false
              */
             canOrganize: boolean;
-            /**
-             * Groupid
-             * Format: uuid4
-             */
-            groupId: string;
+            /** Groupid */
+            groupId?: string | null;
             /** Groupslug */
-            groupSlug: string;
+            groupSlug?: string | null;
             /** Activegroupid */
             activeGroupId?: string | null;
             /**
@@ -18168,11 +18578,8 @@ export interface components {
              * Format: uuid4
              */
             id: string;
-            /**
-             * Groupid
-             * Format: uuid4
-             */
-            groupId: string;
+            /** Groupid */
+            groupId?: string | null;
             /** Username */
             username?: string | null;
             /** Email */
@@ -19046,6 +19453,57 @@ export interface components {
              * @default false
              */
             inBundles: boolean;
+        };
+        /**
+         * WorkspaceDeletePreview
+         * @description What deleting a workspace removes, and whether the backup rule is met (``GET /admin/groups/{id}/delete-preview``).
+         */
+        WorkspaceDeletePreview: {
+            /**
+             * Workspaceid
+             * Format: uuid4
+             */
+            workspaceId: string;
+            /** Workspacename */
+            workspaceName: string;
+            /** Members */
+            members: number;
+            /** Entries */
+            entries: number;
+            /** Assets */
+            assets: number;
+            /** Assetbytes */
+            assetBytes: number;
+            /** Integrations */
+            integrations: number;
+            /** Scheduledtasks */
+            scheduledTasks: number;
+            /** Smtpprofiles */
+            smtpProfiles: number;
+            /** Homeusers */
+            homeUsers: number;
+            /** Lastbackupat */
+            lastBackupAt?: string | null;
+            /** Backupisrecent */
+            backupIsRecent: boolean;
+            /** Backupmaxagehours */
+            backupMaxAgeHours: number;
+            /** Storagegracedays */
+            storageGraceDays: number;
+        };
+        /** WorkspaceDeleteResult */
+        WorkspaceDeleteResult: {
+            /** Status */
+            status: string;
+            /** Message */
+            message: string;
+            /**
+             * Storagelocations
+             * @default 0
+             */
+            storageLocations: number;
+            /** Storagepurgeafter */
+            storagePurgeAfter?: string | null;
         };
         /** WorkspaceEventReactions */
         WorkspaceEventReactions: {
@@ -24232,7 +24690,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["GroupRead"];
+                    "application/json": components["schemas"]["GroupRead"] | null;
                 };
             };
         };
@@ -24818,6 +25276,136 @@ export interface operations {
             };
         };
     };
+    create_connection_api_admin_alerts_connections_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlatformConnectionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformAlertsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_connection_api_admin_alerts_connections__connection_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlatformConnectionUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformAlertsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_connection_api_admin_alerts_connections__connection_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformAlertsRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    test_connection_api_admin_alerts_connections__connection_id__test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformAlertTestResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_backup_health_api_admin_backup_health_get: {
         parameters: {
             query?: {
@@ -25324,6 +25912,99 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_platform_smtp_api_admin_email_platform_smtp_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformSMTPRead"];
+                };
+            };
+        };
+    };
+    update_platform_smtp_api_admin_email_platform_smtp_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlatformSMTPUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformSMTPRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_platform_smtp_api_admin_email_platform_smtp_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlatformSMTPRead"];
+                };
+            };
+        };
+    };
+    test_platform_smtp_api_admin_email_platform_smtp_test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailSuccess"];
                 };
             };
         };
@@ -25967,26 +26648,6 @@ export interface operations {
             };
         };
     };
-    get_platform_api_admin_groups_platform_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GroupRead"];
-                };
-            };
-        };
-    };
     get_one_api_admin_groups__item_id__get: {
         parameters: {
             query?: never;
@@ -26056,6 +26717,8 @@ export interface operations {
     delete_one_api_admin_groups__item_id__delete: {
         parameters: {
             query?: {
+                confirm_name?: string | null;
+                skip_backup?: boolean;
                 force?: boolean;
             };
             header?: never;
@@ -26072,9 +26735,38 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["WorkspaceDeleteResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_preview_api_admin_groups__item_id__delete_preview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceDeletePreview"];
                 };
             };
             /** @description Validation Error */
@@ -26783,6 +27475,88 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkspaceStoragePolicyRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_deleted_workspaces_api_admin_storage_deleted_workspaces_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedWorkspaceStorageList"];
+                };
+            };
+        };
+    };
+    purge_deleted_workspace_api_admin_storage_deleted_workspaces__record_id__purge_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                record_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedWorkspaceStorageRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    keep_deleted_workspace_api_admin_storage_deleted_workspaces__record_id__keep_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                record_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedWorkspaceStorageRead"];
                 };
             };
             /** @description Validation Error */
