@@ -20,6 +20,15 @@ export interface WorkspaceActivationRequest {
   workspace: string;
 }
 
+export interface WorkspaceDeleteOptions {
+  /** Also delete a workspace that still has members or entries */
+  force?: boolean;
+  /** The workspace's name, typed to confirm the delete */
+  confirmName?: string;
+  /** Delete without a backup bundle from the last 24 hours */
+  skipBackup?: boolean;
+}
+
 export class WorkspacesModule {
   constructor(private http: HttpClient) {}
 
@@ -79,10 +88,23 @@ export class WorkspacesModule {
 
   /**
    * Delete a workspace (requires SUPER_ADMIN)
+   *
+   * The server requires `confirmName` to equal the workspace's name (400 `confirm_name_mismatch`)
+   * and a backup bundle from the last 24 hours unless `skipBackup` is set (409 `backup_required`).
+   *
+   * @param id - Workspace ID
+   * @param options - `force` also deletes a workspace that still has members or entries;
+   *   `confirmName` is the workspace's name; `skipBackup` deletes without a recent backup.
+   *   A plain boolean is still accepted and means `{ force }`.
    */
-  async delete(id: string, force: boolean = false): Promise<void> {
-    const url = `/api/admin/groups/${id}${force ? '?force=true' : ''}`;
-    await this.http.delete<void>(url);
+  async delete(id: string, options: boolean | WorkspaceDeleteOptions = {}): Promise<void> {
+    const opts: WorkspaceDeleteOptions = typeof options === 'boolean' ? { force: options } : options;
+    const params = new URLSearchParams();
+    if (opts.force) params.set('force', 'true');
+    if (opts.confirmName !== undefined) params.set('confirm_name', opts.confirmName);
+    if (opts.skipBackup) params.set('skip_backup', 'true');
+    const query = params.toString();
+    await this.http.delete<void>(`/api/admin/groups/${id}${query ? `?${query}` : ''}`);
   }
 
   /**

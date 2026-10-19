@@ -126,7 +126,7 @@ export { APIClientsModule } from './apiClients';
 export { EntryTypesModule } from './entryTypes';
 export { WorkspaceMembersModule } from './workspaceMembers';
 export { WorkspacesModule } from './workspaces';
-export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest, WorkspaceCreate, WorkspaceUpdate, WorkspacePreferences, WorkspacePreferencesUpdate, WorkspacePagination } from './workspaces';
+export type { Workspace, WorkspaceWithMembership, WorkspaceActivationRequest, WorkspaceCreate, WorkspaceUpdate, WorkspacePreferences, WorkspacePreferencesUpdate, WorkspacePagination, WorkspaceDeleteOptions } from './workspaces';
 export { InvitesModule } from './invites';
 export type { InviteTokenCreate, InviteTokenSummary, InviteTokenPagination, EmailInvitationRequest } from './invites';
 export { WebhooksModule } from './webhooks';

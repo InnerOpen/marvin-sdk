@@ -301,6 +301,32 @@ describe('WorkspacesModule', () => {
     await module.getCurrent()
     expect(http.get).toHaveBeenCalledWith('/api/self/workspaces/current')
   })
+
+  describe('delete', () => {
+    it('sends no query params when no options are given', async () => {
+      await module.delete('ws-1')
+      expect(http.delete).toHaveBeenCalledWith('/api/admin/groups/ws-1')
+    })
+
+    it('still accepts a boolean as force', async () => {
+      await module.delete('ws-1', true)
+      expect(http.delete).toHaveBeenCalledWith('/api/admin/groups/ws-1?force=true')
+      await module.delete('ws-1', false)
+      expect(http.delete).toHaveBeenLastCalledWith('/api/admin/groups/ws-1')
+    })
+
+    it('sends force, confirm_name and skip_backup when set', async () => {
+      await module.delete('ws-1', { force: true, confirmName: 'My Space', skipBackup: true })
+      expect(http.delete).toHaveBeenCalledWith(
+        '/api/admin/groups/ws-1?force=true&confirm_name=My+Space&skip_backup=true'
+      )
+    })
+
+    it('omits options that are unset or false, and encodes values', async () => {
+      await module.delete('ws-1', { confirmName: 'a&b', skipBackup: false })
+      expect(http.delete).toHaveBeenCalledWith('/api/admin/groups/ws-1?confirm_name=a%26b')
+    })
+  })
 })
 
 // ---------------------------------------------------------------------------
