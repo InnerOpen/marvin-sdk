@@ -1,3 +1,10 @@
+# [7.1.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.0.0...v7.1.0) (2026-10-19)
+
+
+### Features
+
+* **platform:** workspaces.delete accepts confirmName and skipBackup ([04a7b7a](https://github.com/InnerOpen/marvin-sdk/commit/04a7b7ac5f351d2defce5a40bb62262b946fa8ce))
+
 # [7.0.0](https://github.com/InnerOpen/marvin-sdk/compare/v6.2.0...v7.0.0) (2026-10-19)
 
 
