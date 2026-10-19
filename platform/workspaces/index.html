@@ -2713,16 +2713,48 @@
 <p class="admonition-title">Destructive Operation</p>
 <p>Deleting a workspace permanently deletes all entries, collections, assets, and resources.</p>
 </div>
-<div class="language-typescript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// Safe delete (fails if workspace has content)</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">await</span><span class="w"> </span><span class="nx">platform</span><span class="p">.</span><span class="nx">workspaces</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s1">'ws-123'</span><span class="p">);</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1">// Force delete (deletes all content)</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">await</span><span class="w"> </span><span class="nx">platform</span><span class="p">.</span><span class="nx">workspaces</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s1">'ws-123'</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+<div class="language-typescript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// The server requires the workspace's name as confirmation, and a backup</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1">// bundle from the last 24 hours (or skipBackup)</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">await</span><span class="w"> </span><span class="nx">platform</span><span class="p">.</span><span class="nx">workspaces</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s1">'ws-123'</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">confirmName</span><span class="o">:</span><span class="w"> </span><span class="s1">'My Workspace'</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1">// Delete a workspace that still has members or entries</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">await</span><span class="w"> </span><span class="nx">platform</span><span class="p">.</span><span class="nx">workspaces</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s1">'ws-123'</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">confirmName</span><span class="o">:</span><span class="w"> </span><span class="s1">'My Workspace'</span><span class="p">,</span><span class="w"> </span><span class="nx">force</span><span class="o">:</span><span class="w"> </span><span class="kt">true</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1">// Delete without a recent backup</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="k">await</span><span class="w"> </span><span class="nx">platform</span><span class="p">.</span><span class="nx">workspaces</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s1">'ws-123'</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">confirmName</span><span class="o">:</span><span class="w"> </span><span class="s1">'My Workspace'</span><span class="p">,</span><span class="w"> </span><span class="nx">skipBackup</span><span class="o">:</span><span class="w"> </span><span class="kt">true</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="c1">// Legacy form: a boolean second argument means { force }</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="k">await</span><span class="w"> </span><span class="nx">platform</span><span class="p">.</span><span class="nx">workspaces</span><span class="p">.</span><span class="ow">delete</span><span class="p">(</span><span class="s1">'ws-123'</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
 </span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Query param</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>confirmName</code></td>
+<td><code>confirm_name</code></td>
+<td>Must equal the workspace's name, otherwise 400 <code>confirm_name_mismatch</code></td>
+</tr>
+<tr>
+<td><code>skipBackup</code></td>
+<td><code>skip_backup</code></td>
+<td>Delete without a backup bundle from the last 24 hours (else 409 <code>backup_required</code>)</td>
+</tr>
+<tr>
+<td><code>force</code></td>
+<td><code>force</code></td>
+<td>Also delete when the workspace has members or entries</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Permissions:</strong></p>
 <ul>
 <li>Requires <code>SUPER_ADMIN</code> role</li>
-<li>Force delete requires confirmation</li>
 </ul>
 <h2 id="workspace-preferences">Workspace Preferences<a class="headerlink" href="#workspace-preferences" title="Permanent link">&para;</a></h2>
 <h3 id="get-preferences">Get Preferences<a class="headerlink" href="#get-preferences" title="Permanent link">&para;</a></h3>
