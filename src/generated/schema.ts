@@ -1398,10 +1398,11 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * What the Social inbox needs to show: new count, integrations, the task
-         * @description Whether this workspace has an inbox (an integration that reads comments, or items kept), how many items are new, the
-         *     integrations the filter offers, the Social engagement task's state (it fills the inbox), and what the caller's role may do.
-         *     EDITOR and above.
+         * What Social needs to show: is it available, new count, the networks
+         * @description Whether this workspace has Social at all (`show`: an enabled integration offers a `social.*` capability; it is hidden
+         *     otherwise), the new-item count, each connected network with its auto-reply mode (off | rehearsal | on), its capabilities
+         *     and its own new count, and what the caller's role may do. `visit=true` (the Social pages) first creates what is missing —
+         *     the rule type, and the engine's task while a network reads comments. EDITOR and above.
          */
         get: operations["summary_api_groups_social_inbox_summary_get"];
         put?: never;
@@ -1426,6 +1427,97 @@ export interface paths {
          */
         get: operations["list_items_api_groups_social_inbox_get"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/replies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the replies, latest first
+         * @description The Replies view: the items that have a reply recorded on them (an auto-reply rule's, live or rehearsal, or a person's
+         *     from the inbox), the latest reply first. Each item carries its `reply`: mode, text, the rule, when, and who. EDITOR and above.
+         */
+        get: operations["list_replies_api_groups_social_inbox_replies_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/integrations/{slug}/auto-reply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Switch a network's auto-reply
+         * @description off (the default: the network is still read for the inbox and the new-comment trigger, but never answered), rehearsal
+         *     (dry runs: the plugin is asked what it would send and the item records it) or on (live: published rules send).
+         *     409 when the network can't reply and the mode isn't off. ADMIN and above.
+         */
+        put: operations["set_auto_reply_api_groups_social_inbox_integrations__slug__auto_reply_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List auto-reply rules (a network's, plus the all-network ones)
+         * @description The rules (the internal `social-auto-reply` entries, and Instagram's older `ig-auto-reply` ones) that apply to the
+         *     network — those naming it and those naming no network (`all_networks`) — oldest first. Edit one with the entry editor at
+         *     its `path`. EDITOR and above.
+         */
+        get: operations["list_rules_api_groups_social_inbox_rules_get"];
+        put?: never;
+        /**
+         * Start a new auto-reply rule
+         * @description A new blank rule as a draft (it never fires), for the named network — its slug goes in `networks` — or for every
+         *     network when none is named. Write it with the entry editor at `path` and publish it. EDITOR and above.
+         */
+        post: operations["create_rule_api_groups_social_inbox_rules_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/rules/{rule_id}/published": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Publish or unpublish a rule
+         * @description Publish the rule (it then answers; publishing is the approval of its reply text, and needs its keywords and reply) or
+         *     take it back to a draft. The rule's own entry rules apply: the entry editor does the same. EDITOR and above.
+         */
+        put: operations["publish_rule_api_groups_social_inbox_rules__rule_id__published_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1466,8 +1558,8 @@ export interface paths {
         /**
          * Reply to an item (a person's approval)
          * @description Send a reply as the caller: private (to the commenter; the default) or public (in the thread), only when the item's
-         *     network offers it. The caller pressing Reply is the approval a workflow's Approval step would give. It is written to
-         *     the `social-reply-log` (live, by the caller), so the poll never answers this comment, and the item becomes `replied`.
+         *     network offers it. The caller pressing Reply is the approval a workflow's Approval step would give. It is recorded on the item
+         *     (live, by the caller), so the poll never answers this comment, and the item becomes `replied`.
          *     A network that refuses the mode or the text answers 422; a failure on the network 502. ADMIN and above.
          */
         post: operations["reply_api_groups_social_inbox__item_id__reply_post"];
@@ -1572,9 +1664,9 @@ export interface paths {
         put?: never;
         /**
          * Make an auto-reply rule from an item
-         * @description Create a draft `social-auto-reply` entry from the item: keywords suggested from its text, its network, private replies
-         *     and the given reply text. A draft never fires; the entry editor (`path`) is where to adjust and publish it. 409 when
-         *     the Social engagement set isn't applied. EDITOR and above.
+         * @description Create a draft `social-auto-reply` entry from the item: keywords suggested from its text, its integration (its slug in
+         *     `networks`), private replies and the given reply text. A draft never fires; the entry editor (`path`) is where to adjust
+         *     and publish it. (The rule type is made on first need.) EDITOR and above.
          */
         post: operations["make_rule_api_groups_social_inbox__item_id__rule_post"];
         delete?: never;
@@ -6554,7 +6646,8 @@ export interface paths {
         };
         /**
          * List Entries
-         * @description Every entry but those in the Trash (the Trash collection lists those).
+         * @description Every entry but those in the Trash (the Trash collection lists those) and those of an internal entry type
+         *     (`capabilities.listed: false`, e.g. the Social auto-reply rules: their pages list them; fetch one by id).
          */
         get: operations["list_entries_api_platform_entries_get"];
         put?: never;
@@ -6597,7 +6690,8 @@ export interface paths {
         };
         /**
          * Entry counts by status
-         * @description `{inbox, draft, …, total}` for this workspace — what the sidebar badge reads. Declared before `/{item_id}`.
+         * @description `{inbox, draft, …, total}` for this workspace — what the sidebar badge reads (entries of an internal type are
+         *     not counted). Declared before `/{item_id}`.
          */
         get: operations["entry_counts_api_platform_entries_counts_get"];
         put?: never;
@@ -17880,6 +17974,21 @@ export interface components {
              */
             limit: number;
         };
+        /** SocialAutoReplyResult */
+        SocialAutoReplyResult: {
+            /** Integration */
+            integration: string;
+            /** Autoreply */
+            autoReply: string;
+        };
+        /** SocialAutoReplyUpdate */
+        SocialAutoReplyUpdate: {
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "off" | "rehearsal" | "on";
+        };
         /**
          * SocialInboxActionResult
          * @description What the network answered; ``item`` is the item afterwards (None once it is deleted).
@@ -17903,26 +18012,6 @@ export interface components {
             /** Name */
             name?: string | null;
         };
-        /**
-         * SocialInboxEngine
-         * @description The scheduled task that fills the inbox.
-         */
-        SocialInboxEngine: {
-            /** State */
-            state: string;
-            /** Taskid */
-            taskId?: string | null;
-            /**
-             * Rehearsal
-             * @default true
-             */
-            rehearsal: boolean;
-            /**
-             * Announce
-             * @default true
-             */
-            announce: boolean;
-        };
         /** SocialInboxHide */
         SocialInboxHide: {
             /**
@@ -17931,14 +18020,41 @@ export interface components {
              */
             hidden: boolean;
         };
-        /** SocialInboxIntegration */
+        /**
+         * SocialInboxIntegration
+         * @description A connected network (an enabled integration offering a ``social.*`` capability).
+         */
         SocialInboxIntegration: {
             /** Slug */
             slug: string;
             /** Name */
             name: string;
+            /** Provider */
+            provider: string;
             /** Network */
             network: string;
+            /** Capabilities */
+            capabilities?: string[];
+            /**
+             * Readscomments
+             * @default false
+             */
+            readsComments: boolean;
+            /**
+             * Canreply
+             * @default false
+             */
+            canReply: boolean;
+            /**
+             * Autoreply
+             * @default off
+             */
+            autoReply: string;
+            /**
+             * New
+             * @default 0
+             */
+            new: number;
         };
         /** SocialInboxItemRead */
         SocialInboxItemRead: {
@@ -18010,13 +18126,9 @@ export interface components {
         };
         /**
          * SocialInboxReplyRead
-         * @description How an item was answered: by a rule (or a person) live, or in rehearsal (nothing was sent).
+         * @description How an item was answered: by a rule (or a person) live, or in rehearsal (nothing was sent). Recorded on the item.
          */
         SocialInboxReplyRead: {
-            /** Logslug */
-            logSlug?: string | null;
-            /** Logentryid */
-            logEntryId?: string | null;
             /** Mode */
             mode?: string | null;
             /**
@@ -18026,10 +18138,20 @@ export interface components {
             rehearsal: boolean;
             /** Replyid */
             replyId?: string | null;
+            /** Text */
+            text?: string | null;
+            /** Rule */
+            rule?: string | null;
+            /** Ruleentryid */
+            ruleEntryId?: string | null;
+            /** Note */
+            note?: string | null;
             /** At */
             at?: string | null;
             /** By */
             by?: string | null;
+            /** Byname */
+            byName?: string | null;
         };
         /** SocialInboxReplyResult */
         SocialInboxReplyResult: {
@@ -18041,8 +18163,6 @@ export interface components {
             replyId?: string | null;
             /** Url */
             url?: string | null;
-            /** Logged */
-            logged: boolean;
             item: components["schemas"]["SocialInboxItemRead"];
         };
         /** SocialInboxRuleCreate */
@@ -18086,17 +18206,73 @@ export interface components {
         };
         /** SocialInboxSummary */
         SocialInboxSummary: {
-            /** Available */
-            available: boolean;
+            /** Show */
+            show: boolean;
             /** New */
             new: number;
             /** Integrations */
             integrations: components["schemas"]["SocialInboxIntegration"][];
-            engine: components["schemas"]["SocialInboxEngine"];
             /** Can */
             can: {
                 [key: string]: boolean;
             };
+        };
+        /** SocialRuleList */
+        SocialRuleList: {
+            /** Rules */
+            rules: components["schemas"]["SocialRuleRead"][];
+        };
+        /** SocialRuleNew */
+        SocialRuleNew: {
+            /** Integration */
+            integration?: string | null;
+        };
+        /** SocialRulePublish */
+        SocialRulePublish: {
+            /**
+             * Published
+             * @default true
+             */
+            published: boolean;
+        };
+        /**
+         * SocialRuleRead
+         * @description One auto-reply rule, as a network's Rules tab lists it.
+         */
+        SocialRuleRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status: string;
+            /** Published */
+            published: boolean;
+            /** Keywords */
+            keywords: string[];
+            /** Reply */
+            reply: string;
+            /** Networks */
+            networks: string[];
+            /** Allnetworks */
+            allNetworks: boolean;
+            /** Post */
+            post: string;
+            /** Replyas */
+            replyAs: string;
+            /** Alsolike */
+            alsoLike: boolean;
+            /** Kinds */
+            kinds: string[];
+            /** Legacy */
+            legacy: boolean;
+            /** Path */
+            path: string;
         };
         /** SpendDayRead */
         SpendDayRead: {
@@ -22876,7 +23052,10 @@ export interface operations {
     };
     summary_api_groups_social_inbox_summary_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description A visit to a Social page: make sure the workspace's Social plumbing is in place first. */
+                visit?: boolean;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -22890,6 +23069,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialInboxSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -22926,6 +23114,177 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialInboxList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_replies_api_groups_social_inbox_replies_get: {
+        parameters: {
+            query?: {
+                /** @description One integration, by slug. */
+                integration?: string | null;
+                /** @description true: only rehearsals (dry runs); false: only real replies. */
+                rehearsal?: boolean | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_auto_reply_api_groups_social_inbox_integrations__slug__auto_reply_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialAutoReplyUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialAutoReplyResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_rules_api_groups_social_inbox_rules_get: {
+        parameters: {
+            query?: {
+                /** @description An integration's slug: its rules plus the rules for every network. Empty lists every rule. */
+                integration?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialRuleList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_rule_api_groups_social_inbox_rules_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SocialRuleNew"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialRuleRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    publish_rule_api_groups_social_inbox_rules__rule_id__published_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                rule_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialRulePublish"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialRuleRead"];
                 };
             };
             /** @description Validation Error */
