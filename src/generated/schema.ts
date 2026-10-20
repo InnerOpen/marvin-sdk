@@ -11392,6 +11392,11 @@ export interface components {
              * @enum {string}
              */
             status: "pending" | "confirmed" | "unsubscribed" | "problem";
+            /**
+             * Archivedinmarvin
+             * @default false
+             */
+            archivedInMarvin: boolean;
             /** Entrystatus */
             entryStatus: string;
             /** Reviewreasons */
@@ -11448,6 +11453,11 @@ export interface components {
              * @enum {string}
              */
             status: "pending" | "confirmed" | "unsubscribed" | "problem";
+            /**
+             * Archivedinmarvin
+             * @default false
+             */
+            archivedInMarvin: boolean;
             /** Entrystatus */
             entryStatus: string;
             /** Reviewreasons */
