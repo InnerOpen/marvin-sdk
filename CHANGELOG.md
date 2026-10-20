@@ -1,3 +1,10 @@
+# [7.4.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.3.1...v7.4.0) (2026-10-20)
+
+
+### Features
+
+* **types:** the Social inbox ([a69a4d3](https://github.com/InnerOpen/marvin-sdk/commit/a69a4d3736af739dadc9e212ab4b33101e6d7fa4))
+
 ## [7.3.1](https://github.com/InnerOpen/marvin-sdk/compare/v7.3.0...v7.3.1) (2026-10-19)
 
 
