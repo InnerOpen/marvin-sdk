@@ -24616,7 +24616,7 @@ export interface operations {
                 entry_id?: string | null;
                 /** @description Text to find in the target, message, run id, entry title or connection. */
                 q?: string | null;
-                /** @description False leaves out failures a person dismissed. */
+                /** @description False leaves out hand-offs a person dismissed. */
                 include_dismissed?: boolean;
                 limit?: number;
                 offset?: number;
