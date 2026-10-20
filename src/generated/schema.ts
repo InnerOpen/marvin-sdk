@@ -1675,6 +1675,115 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/audience/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What Audience needs to show: the forms with their new counts
+         * @description The Audience message forms (`submissions.forms`: name, icon, and `new` = inbox plus needs review), their total, and
+         *     whether any signup form exists (`signups.show`; Subscribers, phase 2). Each part has `show` false until something feeds it,
+         *     so the sidebar draws only what exists. EDITOR and above (a lower role gets 403 and no group).
+         */
+        get: operations["summary_api_groups_audience_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/audience/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Audience submissions, newest first
+         * @description The submissions of the message forms that send them to the Audience: every field with the form's labels, the
+         *     protection's verdict (`verdict.flagged`, `reasons`) and the source (`source.ip` whole for ADMIN and above, masked for an
+         *     EDITOR; user agent, referrer, repeats). `new` counts what is waiting for the form (or every form), whatever the other
+         *     filters. EDITOR and above.
+         */
+        get: operations["list_submissions_api_groups_audience_submissions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/audience/submissions/{submission_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get one Audience submission
+         * @description One submission, as the list returns it. 404 for an entry that isn't one of the Audience message forms'. EDITOR and above.
+         */
+        get: operations["get_submission_api_groups_audience_submissions__submission_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete a submission (to the Trash)
+         * @description Move the submission's entry to the Trash, where it can be restored or deleted forever. EDITOR and above.
+         */
+        delete: operations["delete_submission_api_groups_audience_submissions__submission_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/audience/submissions/{submission_id}/handled": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mark a submission handled
+         * @description Archive the submission's entry: it leaves New and Suspicious and shows as Handled. EDITOR and above.
+         */
+        post: operations["mark_handled_api_groups_audience_submissions__submission_id__handled_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/audience/submissions/{submission_id}/reopen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Not spam / reopen
+         * @description Put the submission back in the inbox: a suspicious one is cleared (not spam), a handled one is open again. EDITOR and above.
+         */
+        post: operations["reopen_api_groups_audience_submissions__submission_id__reopen_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/{group_id}/preferences": {
         parameters: {
             query?: never;
@@ -11022,6 +11131,159 @@ export interface components {
             oldestDraftDays?: number | null;
             /** Oldestinboxdays */
             oldestInboxDays?: number | null;
+            /**
+             * Audiencenew
+             * @default 0
+             */
+            audienceNew: number;
+        };
+        /** AudienceCan */
+        AudienceCan: {
+            /**
+             * Act
+             * @default true
+             */
+            act: boolean;
+            /**
+             * Fullip
+             * @default false
+             */
+            fullIp: boolean;
+        };
+        /** AudienceField */
+        AudienceField: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Type */
+            type?: string | null;
+            /** Value */
+            value?: unknown;
+        };
+        /**
+         * AudienceForm
+         * @description A submittable entry type whose submissions go to the Audience.
+         */
+        AudienceForm: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Icon */
+            icon?: string | null;
+            /**
+             * New
+             * @default 0
+             */
+            new: number;
+        };
+        /** AudienceSignupsSummary */
+        AudienceSignupsSummary: {
+            /** Show */
+            show: boolean;
+            /** Forms */
+            forms?: components["schemas"]["AudienceForm"][];
+        };
+        /**
+         * AudienceSource
+         * @description Where it came from, as recorded when the workspace's Submission Protection captures client info.
+         */
+        AudienceSource: {
+            /** Ip */
+            ip?: string | null;
+            /**
+             * Ipmasked
+             * @default false
+             */
+            ipMasked: boolean;
+            /** Useragent */
+            userAgent?: string | null;
+            /** Referrer */
+            referrer?: string | null;
+            /** Receivedat */
+            receivedAt?: string | null;
+            /** Lastreceivedat */
+            lastReceivedAt?: string | null;
+            /**
+             * Count
+             * @default 1
+             */
+            count: number;
+        };
+        /** AudienceSubmission */
+        AudienceSubmission: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            form: components["schemas"]["AudienceForm"];
+            /** Title */
+            title: string;
+            /** State */
+            state: string;
+            /** Status */
+            status: string;
+            /** Fields */
+            fields?: components["schemas"]["AudienceField"][];
+            verdict: components["schemas"]["AudienceVerdict"];
+            source: components["schemas"]["AudienceSource"];
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Path */
+            path: string;
+        };
+        /** AudienceSubmissionList */
+        AudienceSubmissionList: {
+            /** Items */
+            items: components["schemas"]["AudienceSubmission"][];
+            /** Total */
+            total: number;
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** New */
+            new: number;
+        };
+        /** AudienceSubmissionResult */
+        AudienceSubmissionResult: {
+            submission?: components["schemas"]["AudienceSubmission"] | null;
+        };
+        /** AudienceSubmissionsSummary */
+        AudienceSubmissionsSummary: {
+            /** Show */
+            show: boolean;
+            /**
+             * New
+             * @default 0
+             */
+            new: number;
+            /** Forms */
+            forms?: components["schemas"]["AudienceForm"][];
+        };
+        /** AudienceSummary */
+        AudienceSummary: {
+            submissions: components["schemas"]["AudienceSubmissionsSummary"];
+            signups: components["schemas"]["AudienceSignupsSummary"];
+            can: components["schemas"]["AudienceCan"];
+        };
+        /**
+         * AudienceVerdict
+         * @description What the submission protection made of it (the entry's `metadata.submission`; there is no score).
+         */
+        AudienceVerdict: {
+            /**
+             * Flagged
+             * @default false
+             */
+            flagged: boolean;
+            /** Reasons */
+            reasons?: string[];
         };
         /**
          * AuditEventSetting
@@ -12552,7 +12814,8 @@ export interface components {
              *       "aiSuggestions": 0,
              *       "failures": 0,
              *       "approvals": 0,
-             *       "parkedRuns": 0
+             *       "parkedRuns": 0,
+             *       "audienceNew": 0
              *     }
              */
             attention: components["schemas"]["AttentionCounts"];
@@ -23518,6 +23781,192 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialInboxRuleResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    summary_api_groups_audience_summary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSummary"];
+                };
+            };
+        };
+    };
+    list_submissions_api_groups_audience_submissions_get: {
+        parameters: {
+            query?: {
+                /** @description One form, by its entry type's slug. */
+                form?: string | null;
+                /** @description One or more of new (inbox), suspicious (needs review), handled (everything else but the Trash). */
+                status?: ("new" | "suspicious" | "handled")[] | null;
+                /** @description Text to find in the title or any submitted value. */
+                q?: string | null;
+                /** @description Arrived at or after this time. */
+                since?: string | null;
+                /** @description Arrived at or before this time. */
+                until?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSubmissionList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_submission_api_groups_audience_submissions__submission_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                submission_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSubmissionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_submission_api_groups_audience_submissions__submission_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                submission_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSubmissionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mark_handled_api_groups_audience_submissions__submission_id__handled_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                submission_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSubmissionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reopen_api_groups_audience_submissions__submission_id__reopen_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                submission_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSubmissionResult"];
                 };
             };
             /** @description Validation Error */
