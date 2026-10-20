@@ -1,3 +1,10 @@
+# [7.7.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.6.0...v7.7.0) (2026-10-20)
+
+
+### Features
+
+* **types:** Audience subscribers and the signup counts ([5fc56dd](https://github.com/InnerOpen/marvin-sdk/commit/5fc56dd149bdfc2f454083a20ae6152c2e20cf9d))
+
 # [7.6.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.5.1...v7.6.0) (2026-10-20)
 
 
