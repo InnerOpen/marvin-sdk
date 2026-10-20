@@ -1,3 +1,10 @@
+# [7.5.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.4.0...v7.5.0) (2026-10-20)
+
+
+### Features
+
+* **types:** Social as its own space ([d35f3cd](https://github.com/InnerOpen/marvin-sdk/commit/d35f3cd16b1c11b65b8d1d14d67d36da91efb441))
+
 # [7.4.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.3.1...v7.4.0) (2026-10-20)
 
 
