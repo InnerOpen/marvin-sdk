@@ -1,3 +1,10 @@
+# [7.9.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.8.0...v7.9.0) (2026-10-20)
+
+
+### Features
+
+* **types:** Automation results (list, summary, one, retry, dismiss) and the dashboard's results counts ([c107162](https://github.com/InnerOpen/marvin-sdk/commit/c107162a7d243bb4e99282d45fc0cf920b532f62))
+
 # [7.8.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.7.0...v7.8.0) (2026-10-20)
 
 
