@@ -1,3 +1,10 @@
+## [7.5.1](https://github.com/InnerOpen/marvin-sdk/compare/v7.5.0...v7.5.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **types:** rules no longer carry legacy ([37d5d25](https://github.com/InnerOpen/marvin-sdk/commit/37d5d25f1180cf95797588ea11432e08cf87098f))
+
 # [7.5.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.4.0...v7.5.0) (2026-10-20)
 
 
