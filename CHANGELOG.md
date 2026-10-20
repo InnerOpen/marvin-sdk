@@ -1,3 +1,10 @@
+# [7.6.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.5.1...v7.6.0) (2026-10-20)
+
+
+### Features
+
+* **types:** Audience — form submissions ([59f6936](https://github.com/InnerOpen/marvin-sdk/commit/59f6936fea592db34027f4f7564dd64aceeb58fa))
+
 ## [7.5.1](https://github.com/InnerOpen/marvin-sdk/compare/v7.5.0...v7.5.1) (2026-10-20)
 
 
