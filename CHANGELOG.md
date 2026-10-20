@@ -1,3 +1,10 @@
+# [7.8.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.7.0...v7.8.0) (2026-10-20)
+
+
+### Features
+
+* **types:** a subscriber's archivedInMarvin ([5fa36b4](https://github.com/InnerOpen/marvin-sdk/commit/5fa36b4c2fb5448ee67ce8f724ade7636cf8e31b))
+
 # [7.7.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.6.0...v7.7.0) (2026-10-20)
 
 
