@@ -1685,8 +1685,9 @@ export interface paths {
         /**
          * What Audience needs to show: the forms with their new counts
          * @description The Audience message forms (`submissions.forms`: name, icon, and `new` = inbox plus needs review), their total, and
-         *     whether any signup form exists (`signups.show`; Subscribers, phase 2). Each part has `show` false until something feeds it,
-         *     so the sidebar draws only what exists. EDITOR and above (a lower role gets 403 and no group).
+         *     the signup forms with a count per subscriber status (`signups`: pending, confirmed, unsubscribed, problem, and `waiting` =
+         *     pending + problem). Each part has `show` false until something feeds it, so the sidebar draws only what exists. EDITOR and
+         *     above (a lower role gets 403 and no group).
          */
         get: operations["summary_api_groups_audience_summary_get"];
         put?: never;
@@ -1779,6 +1780,55 @@ export interface paths {
          */
         post: operations["reopen_api_groups_audience_submissions__submission_id__reopen_post"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/audience/subscribers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List subscribers (newsletter signups), newest first
+         * @description The entries of the signup forms (`submission.kind: signup`), newest first: email, name when the form has one, when they
+         *     signed up, the status as the mailing list says it, and the review reason of a problem. `counts` is per status for the form (or
+         *     every form), whatever the other filters. `integrations` lists the enabled integrations that act on the signups (subscribing
+         *     and unsubscribing are theirs). EDITOR and above.
+         */
+        get: operations["list_subscribers_api_groups_audience_subscribers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/audience/subscribers/{subscriber_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get one subscriber
+         * @description One subscriber in full: every submitted field, where the signup came from (the IP whole for ADMIN and above, masked for an
+         *     EDITOR) and its status history. 404 for an entry that isn't a signup form's. EDITOR and above.
+         */
+        get: operations["get_subscriber_api_groups_audience_subscribers__subscriber_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete a subscriber (to the Trash)
+         * @description Move the signup's entry to the Trash, where it can be restored or deleted forever. It does not unsubscribe the reader from
+         *     the mailing list: that stays the integration's. EDITOR and above.
+         */
+        delete: operations["delete_subscriber_api_groups_audience_subscribers__subscriber_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -11136,6 +11186,11 @@ export interface components {
              * @default 0
              */
             audienceNew: number;
+            /**
+             * Audienceproblems
+             * @default 0
+             */
+            audienceProblems: number;
         };
         /** AudienceCan */
         AudienceCan: {
@@ -11178,12 +11233,61 @@ export interface components {
              */
             new: number;
         };
+        /** AudienceHistoryItem */
+        AudienceHistoryItem: {
+            /** Label */
+            label: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+        };
+        /**
+         * AudienceIntegration
+         * @description A connected integration that acts on the signup forms (subscribes a signup, syncs confirm and unsubscribe).
+         */
+        AudienceIntegration: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Provider */
+            provider: string;
+        };
         /** AudienceSignupsSummary */
         AudienceSignupsSummary: {
             /** Show */
             show: boolean;
             /** Forms */
             forms?: components["schemas"]["AudienceForm"][];
+            /**
+             * Pending
+             * @default 0
+             */
+            pending: number;
+            /**
+             * Confirmed
+             * @default 0
+             */
+            confirmed: number;
+            /**
+             * Unsubscribed
+             * @default 0
+             */
+            unsubscribed: number;
+            /**
+             * Problem
+             * @default 0
+             */
+            problem: number;
+            /**
+             * Waiting
+             * @default 0
+             */
+            waiting: number;
+            /** Integrations */
+            integrations?: components["schemas"]["AudienceIntegration"][];
         };
         /**
          * AudienceSource
@@ -11265,6 +11369,124 @@ export interface components {
             new: number;
             /** Forms */
             forms?: components["schemas"]["AudienceForm"][];
+        };
+        /**
+         * AudienceSubscriber
+         * @description One signup, as the Subscribers list shows it. The status mirrors the mailing list (the entry's own status is `entry_status`).
+         */
+        AudienceSubscriber: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            form: components["schemas"]["AudienceForm"];
+            /** Email */
+            email?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Title */
+            title: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending" | "confirmed" | "unsubscribed" | "problem";
+            /** Entrystatus */
+            entryStatus: string;
+            /** Reviewreasons */
+            reviewReasons?: string[];
+            /** Reason */
+            reason?: string | null;
+            /**
+             * Signedupat
+             * Format: date-time
+             */
+            signedUpAt: string;
+            /** Path */
+            path: string;
+        };
+        /** AudienceSubscriberCounts */
+        AudienceSubscriberCounts: {
+            /**
+             * Pending
+             * @default 0
+             */
+            pending: number;
+            /**
+             * Confirmed
+             * @default 0
+             */
+            confirmed: number;
+            /**
+             * Unsubscribed
+             * @default 0
+             */
+            unsubscribed: number;
+            /**
+             * Problem
+             * @default 0
+             */
+            problem: number;
+        };
+        /** AudienceSubscriberDetail */
+        AudienceSubscriberDetail: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            form: components["schemas"]["AudienceForm"];
+            /** Email */
+            email?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Title */
+            title: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending" | "confirmed" | "unsubscribed" | "problem";
+            /** Entrystatus */
+            entryStatus: string;
+            /** Reviewreasons */
+            reviewReasons?: string[];
+            /** Reason */
+            reason?: string | null;
+            /**
+             * Signedupat
+             * Format: date-time
+             */
+            signedUpAt: string;
+            /** Path */
+            path: string;
+            /** Fields */
+            fields?: components["schemas"]["AudienceField"][];
+            source: components["schemas"]["AudienceSource"];
+            /** History */
+            history?: components["schemas"]["AudienceHistoryItem"][];
+        };
+        /** AudienceSubscriberList */
+        AudienceSubscriberList: {
+            /** Items */
+            items: components["schemas"]["AudienceSubscriber"][];
+            /** Total */
+            total: number;
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            counts: components["schemas"]["AudienceSubscriberCounts"];
+            /** Forms */
+            forms?: components["schemas"]["AudienceForm"][];
+            /** Integrations */
+            integrations?: components["schemas"]["AudienceIntegration"][];
+            can: components["schemas"]["AudienceCan"];
+        };
+        /** AudienceSubscriberResult */
+        AudienceSubscriberResult: {
+            subscriber?: components["schemas"]["AudienceSubscriberDetail"] | null;
         };
         /** AudienceSummary */
         AudienceSummary: {
@@ -12815,7 +13037,8 @@ export interface components {
              *       "failures": 0,
              *       "approvals": 0,
              *       "parkedRuns": 0,
-             *       "audienceNew": 0
+             *       "audienceNew": 0,
+             *       "audienceProblems": 0
              *     }
              */
             attention: components["schemas"]["AttentionCounts"];
@@ -23967,6 +24190,110 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AudienceSubmissionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_subscribers_api_groups_audience_subscribers_get: {
+        parameters: {
+            query?: {
+                /** @description One signup form, by its entry type's slug (when there are several). */
+                form?: string | null;
+                /** @description One or more of pending (inbox), confirmed (published), unsubscribed (archived), problem (needs review). */
+                status?: ("pending" | "confirmed" | "unsubscribed" | "problem")[] | null;
+                /** @description Text to find in the email, the name or the title. */
+                q?: string | null;
+                /** @description Signed up at or after this time. */
+                since?: string | null;
+                /** @description Signed up at or before this time. */
+                until?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSubscriberList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_subscriber_api_groups_audience_subscribers__subscriber_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscriber_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSubscriberResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_subscriber_api_groups_audience_subscribers__subscriber_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscriber_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AudienceSubscriberResult"];
                 };
             };
             /** @description Validation Error */
