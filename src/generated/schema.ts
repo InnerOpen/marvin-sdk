@@ -1390,6 +1390,199 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/social-inbox/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What the Social inbox needs to show: new count, integrations, the task
+         * @description Whether this workspace has an inbox (an integration that reads comments, or items kept), how many items are new, the
+         *     integrations the filter offers, the Social engagement task's state (it fills the inbox), and what the caller's role may do.
+         *     EDITOR and above.
+         */
+        get: operations["summary_api_groups_social_inbox_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the Social inbox, newest first
+         * @description Items the social engagement poll kept (30 days), newest first, with what each one's network offers (`actions`,
+         *     `reply_modes`) and how it was answered (`reply`: rehearsal or sent, with its log entry). EDITOR and above.
+         */
+        get: operations["list_items_api_groups_social_inbox_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/seen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mark items seen
+         * @description New → seen for the named items (`ids`), or for every new item (`all`, optionally of one `integration`). Items already
+         *     seen, replied, liked or hidden keep their status. EDITOR and above.
+         */
+        post: operations["mark_seen_api_groups_social_inbox_seen_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/{item_id}/reply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reply to an item (a person's approval)
+         * @description Send a reply as the caller: private (to the commenter; the default) or public (in the thread), only when the item's
+         *     network offers it. The caller pressing Reply is the approval a workflow's Approval step would give. It is written to
+         *     the `social-reply-log` (live, by the caller), so the poll never answers this comment, and the item becomes `replied`.
+         *     A network that refuses the mode or the text answers 422; a failure on the network 502. ADMIN and above.
+         */
+        post: operations["reply_api_groups_social_inbox__item_id__reply_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/{item_id}/like": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Like an item
+         * @description Like the comment, reply or mention on its network (new or seen items become `liked`). 422 when the network has no
+         *     like. EDITOR and above.
+         */
+        post: operations["like_api_groups_social_inbox__item_id__like_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/{item_id}/hide": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Hide or unhide an item
+         * @description Hide the comment under your post (`hidden: true`, the default) or unhide it. 422 for a network with no hide, and for
+         *     a mention (hiding is for comments under your own posts). EDITOR and above.
+         */
+        post: operations["hide_api_groups_social_inbox__item_id__hide_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete the comment on its network
+         * @description Delete the comment on its network (it can't be undone) and drop the item from the inbox. 422 for a network with no
+         *     delete, and for a mention. ADMIN and above.
+         */
+        delete: operations["delete_api_groups_social_inbox__item_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/{item_id}/message": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Message the item's author
+         * @description Send the author a direct message (not a reply to the comment), for a network that has `social.message` and an
+         *     author to send it to. ADMIN and above.
+         */
+        post: operations["message_api_groups_social_inbox__item_id__message_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/{item_id}/rule": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Make an auto-reply rule from an item
+         * @description Create a draft `social-auto-reply` entry from the item: keywords suggested from its text, its network, private replies
+         *     and the given reply text. A draft never fires; the entry editor (`path`) is where to adjust and publish it. 409 when
+         *     the Social engagement set isn't applied. EDITOR and above.
+         */
+        post: operations["make_rule_api_groups_social_inbox__item_id__rule_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/{group_id}/preferences": {
         parameters: {
             query?: never;
@@ -17687,6 +17880,224 @@ export interface components {
              */
             limit: number;
         };
+        /**
+         * SocialInboxActionResult
+         * @description What the network answered; ``item`` is the item afterwards (None once it is deleted).
+         */
+        SocialInboxActionResult: {
+            /**
+             * Ok
+             * @default true
+             */
+            ok: boolean;
+            item?: components["schemas"]["SocialInboxItemRead"] | null;
+            /** Messageid */
+            messageId?: string | null;
+        };
+        /** SocialInboxAuthor */
+        SocialInboxAuthor: {
+            /** Id */
+            id?: string | null;
+            /** Handle */
+            handle?: string | null;
+            /** Name */
+            name?: string | null;
+        };
+        /**
+         * SocialInboxEngine
+         * @description The scheduled task that fills the inbox.
+         */
+        SocialInboxEngine: {
+            /** State */
+            state: string;
+            /** Taskid */
+            taskId?: string | null;
+            /**
+             * Rehearsal
+             * @default true
+             */
+            rehearsal: boolean;
+            /**
+             * Announce
+             * @default true
+             */
+            announce: boolean;
+        };
+        /** SocialInboxHide */
+        SocialInboxHide: {
+            /**
+             * Hidden
+             * @default true
+             */
+            hidden: boolean;
+        };
+        /** SocialInboxIntegration */
+        SocialInboxIntegration: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Network */
+            network: string;
+        };
+        /** SocialInboxItemRead */
+        SocialInboxItemRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Integration */
+            integration: string;
+            /** Network */
+            network: string;
+            /** Kind */
+            kind: string;
+            /** Postid */
+            postId?: string | null;
+            /** Posturl */
+            postUrl?: string | null;
+            author: components["schemas"]["SocialInboxAuthor"];
+            /** Text */
+            text: string;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Firstseenat
+             * Format: date-time
+             */
+            firstSeenAt: string;
+            /** Url */
+            url?: string | null;
+            /** Status */
+            status: string;
+            reply?: components["schemas"]["SocialInboxReplyRead"] | null;
+            /** Actions */
+            actions?: string[];
+            /** Replymodes */
+            replyModes?: string[];
+        };
+        /** SocialInboxList */
+        SocialInboxList: {
+            /** Items */
+            items: components["schemas"]["SocialInboxItemRead"][];
+            /** Total */
+            total: number;
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** New */
+            new: number;
+        };
+        /** SocialInboxMessageCreate */
+        SocialInboxMessageCreate: {
+            /** Text */
+            text: string;
+        };
+        /** SocialInboxReplyCreate */
+        SocialInboxReplyCreate: {
+            /** Text */
+            text: string;
+            /**
+             * Private
+             * @default true
+             */
+            private: boolean;
+        };
+        /**
+         * SocialInboxReplyRead
+         * @description How an item was answered: by a rule (or a person) live, or in rehearsal (nothing was sent).
+         */
+        SocialInboxReplyRead: {
+            /** Logslug */
+            logSlug?: string | null;
+            /** Logentryid */
+            logEntryId?: string | null;
+            /** Mode */
+            mode?: string | null;
+            /**
+             * Rehearsal
+             * @default false
+             */
+            rehearsal: boolean;
+            /** Replyid */
+            replyId?: string | null;
+            /** At */
+            at?: string | null;
+            /** By */
+            by?: string | null;
+        };
+        /** SocialInboxReplyResult */
+        SocialInboxReplyResult: {
+            /** Replied */
+            replied: boolean;
+            /** Private */
+            private: boolean;
+            /** Replyid */
+            replyId?: string | null;
+            /** Url */
+            url?: string | null;
+            /** Logged */
+            logged: boolean;
+            item: components["schemas"]["SocialInboxItemRead"];
+        };
+        /** SocialInboxRuleCreate */
+        SocialInboxRuleCreate: {
+            /**
+             * Reply
+             * @default
+             */
+            reply: string;
+        };
+        /** SocialInboxRuleResult */
+        SocialInboxRuleResult: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Keywords */
+            keywords: string[];
+            /** Path */
+            path: string;
+        };
+        /** SocialInboxSeen */
+        SocialInboxSeen: {
+            /** Ids */
+            ids?: string[] | null;
+            /**
+             * All
+             * @default false
+             */
+            all: boolean;
+            /** Integration */
+            integration?: string | null;
+        };
+        /** SocialInboxSeenResult */
+        SocialInboxSeenResult: {
+            /** Changed */
+            changed: number;
+        };
+        /** SocialInboxSummary */
+        SocialInboxSummary: {
+            /** Available */
+            available: boolean;
+            /** New */
+            new: number;
+            /** Integrations */
+            integrations: components["schemas"]["SocialInboxIntegration"][];
+            engine: components["schemas"]["SocialInboxEngine"];
+            /** Can */
+            can: {
+                [key: string]: boolean;
+            };
+        };
         /** SpendDayRead */
         SpendDayRead: {
             /**
@@ -22451,6 +22862,306 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    summary_api_groups_social_inbox_summary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxSummary"];
+                };
+            };
+        };
+    };
+    list_items_api_groups_social_inbox_get: {
+        parameters: {
+            query?: {
+                /** @description One integration, by slug. */
+                integration?: string | null;
+                /** @description One network (instagram, mastodon…). */
+                network?: string | null;
+                kind?: ("comment" | "reply" | "mention") | null;
+                /** @description One or more statuses (repeat the parameter). */
+                status?: ("new" | "seen" | "replied" | "hidden" | "liked")[] | null;
+                /** @description Text to find in the item or its author's handle or name. */
+                q?: string | null;
+                /** @description Written at or after this time. */
+                since?: string | null;
+                /** @description Written at or before this time. */
+                until?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mark_seen_api_groups_social_inbox_seen_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialInboxSeen"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxSeenResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reply_api_groups_social_inbox__item_id__reply_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialInboxReplyCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxReplyResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    like_api_groups_social_inbox__item_id__like_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxActionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    hide_api_groups_social_inbox__item_id__hide_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SocialInboxHide"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxActionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_api_groups_social_inbox__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxActionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    message_api_groups_social_inbox__item_id__message_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialInboxMessageCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxActionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    make_rule_api_groups_social_inbox__item_id__rule_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SocialInboxRuleCreate"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxRuleResult"];
+                };
             };
             /** @description Validation Error */
             422: {
