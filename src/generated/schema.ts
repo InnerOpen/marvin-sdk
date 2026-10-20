@@ -1486,7 +1486,7 @@ export interface paths {
         };
         /**
          * List auto-reply rules (a network's, plus the all-network ones)
-         * @description The rules (the internal `social-auto-reply` entries, and Instagram's older `ig-auto-reply` ones) that apply to the
+         * @description The rules (the internal `social-auto-reply` entries) that apply to the
          *     network — those naming it and those naming no network (`all_networks`) — oldest first. Edit one with the entry editor at
          *     its `path`. EDITOR and above.
          */
@@ -18269,8 +18269,6 @@ export interface components {
             alsoLike: boolean;
             /** Kinds */
             kinds: string[];
-            /** Legacy */
-            legacy: boolean;
             /** Path */
             path: string;
         };
