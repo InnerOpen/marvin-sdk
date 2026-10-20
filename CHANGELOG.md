@@ -1,3 +1,10 @@
+# [7.10.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.9.0...v7.10.0) (2026-10-20)
+
+
+### Features
+
+* **types:** include_dismissed covers in-flight hand-offs too ([10b04e4](https://github.com/InnerOpen/marvin-sdk/commit/10b04e464b085618048328d14aa8cccc0f99213e))
+
 # [7.9.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.8.0...v7.9.0) (2026-10-20)
 
 
