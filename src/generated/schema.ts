@@ -1834,6 +1834,112 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/automation-results/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What Automation results needs to show: the counts
+         * @description Whether any result has been kept (`show`: the Results page and its tab in the Automation hub are drawn only then) and the
+         *     counts: in flight (not counting those with no reply), no reply (in flight for more than 24 hours), failed (not dismissed),
+         *     succeeded, and `attention` = failed + no reply. EDITOR and above (a lower role gets 403).
+         */
+        get: operations["summary_api_groups_automation_results_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/automation-results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List automation results, newest first
+         * @description The hand-offs, newest first, each with its entry, connection, workflow, target, status, message and times. `no_reply` marks an
+         *     in-flight one with no reply after 24 hours. `counts` is the whole workspace's, whatever the filters. EDITOR and above.
+         */
+        get: operations["list_results_api_groups_automation_results_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/automation-results/{result_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get one automation result
+         * @description One result, as the list returns it. 404 for one that isn't this workspace's. EDITOR and above.
+         */
+        get: operations["get_result_api_groups_automation_results__result_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/automation-results/{result_id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retry a failed hand-off
+         * @description Run the hand-off step of the workflow that made this result again, alone, for the same entry. 409 with the reason when it
+         *     can't be done honestly. A repeat that goes out is in flight again; one that fails again is the same result with its attempt
+         *     counted up. ADMIN and above.
+         */
+        post: operations["retry_api_groups_automation_results__result_id__retry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/automation-results/{result_id}/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Dismiss a failure that has been dealt with
+         * @description Mark a failed result dealt with: it stops counting as needing attention (and goes with the settled ones when pruned). 409 for
+         *     a result that didn't fail. ADMIN and above.
+         */
+        post: operations["dismiss_api_groups_automation_results__result_id__dismiss_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/{group_id}/preferences": {
         parameters: {
             query?: never;
@@ -11191,6 +11297,16 @@ export interface components {
              * @default 0
              */
             audienceProblems: number;
+            /**
+             * Resultsfailed
+             * @default 0
+             */
+            resultsFailed: number;
+            /**
+             * Resultsnoreply
+             * @default 0
+             */
+            resultsNoReply: number;
         };
         /** AudienceCan */
         AudienceCan: {
@@ -12032,6 +12148,156 @@ export interface components {
             sourceRecipe?: string | null;
             /** Sourcerecipeversion */
             sourceRecipeVersion?: string | null;
+        };
+        /** AutomationResult */
+        AutomationResult: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "in_flight" | "succeeded" | "failed";
+            /**
+             * Noreply
+             * @default false
+             */
+            noReply: boolean;
+            entry?: components["schemas"]["AutomationResultEntry"] | null;
+            connection?: components["schemas"]["AutomationResultConnection"] | null;
+            workflow?: components["schemas"]["AutomationResultWorkflow"] | null;
+            /** Target */
+            target?: string | null;
+            /** Remoteid */
+            remoteId?: string | null;
+            /** Remoteurl */
+            remoteUrl?: string | null;
+            /** Message */
+            message?: string | null;
+            /**
+             * Sentat
+             * Format: date-time
+             */
+            sentAt: string;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /**
+             * Attempt
+             * @default 1
+             */
+            attempt: number;
+            /**
+             * Dismissed
+             * @default false
+             */
+            dismissed: boolean;
+            /**
+             * Canretry
+             * @default false
+             */
+            canRetry: boolean;
+        };
+        /**
+         * AutomationResultConnection
+         * @description The connection the work went through (a Settings › Integrations connection).
+         */
+        AutomationResultConnection: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Provider */
+            provider: string;
+        };
+        /**
+         * AutomationResultEntry
+         * @description The entry the work was about.
+         */
+        AutomationResultEntry: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /** Slug */
+            slug?: string | null;
+        };
+        /** AutomationResultOne */
+        AutomationResultOne: {
+            result: components["schemas"]["AutomationResult"];
+        };
+        /**
+         * AutomationResultWorkflow
+         * @description The Marvin workflow whose step handed it off.
+         */
+        AutomationResultWorkflow: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug?: string | null;
+        };
+        /** AutomationResultsCan */
+        AutomationResultsCan: {
+            /**
+             * Act
+             * @default false
+             */
+            act: boolean;
+        };
+        /** AutomationResultsList */
+        AutomationResultsList: {
+            /** Items */
+            items: components["schemas"]["AutomationResult"][];
+            /** Total */
+            total: number;
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            counts: components["schemas"]["AutomationResultsSummary"];
+            /** Connections */
+            connections?: components["schemas"]["AutomationResultConnection"][];
+        };
+        /** AutomationResultsSummary */
+        AutomationResultsSummary: {
+            /** Show */
+            show: boolean;
+            /**
+             * Inflight
+             * @default 0
+             */
+            inFlight: number;
+            /**
+             * Noreply
+             * @default 0
+             */
+            noReply: number;
+            /**
+             * Failed
+             * @default 0
+             */
+            failed: number;
+            /**
+             * Succeeded
+             * @default 0
+             */
+            succeeded: number;
+            /**
+             * Attention
+             * @default 0
+             */
+            attention: number;
+            can: components["schemas"]["AutomationResultsCan"];
         };
         /**
          * AutomationRunRequest
@@ -13048,7 +13314,9 @@ export interface components {
              *       "approvals": 0,
              *       "parkedRuns": 0,
              *       "audienceNew": 0,
-             *       "audienceProblems": 0
+             *       "audienceProblems": 0,
+             *       "resultsFailed": 0,
+             *       "resultsNoReply": 0
              *     }
              */
             attention: components["schemas"]["AttentionCounts"];
@@ -24304,6 +24572,161 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AudienceSubscriberResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    summary_api_groups_automation_results_summary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationResultsSummary"];
+                };
+            };
+        };
+    };
+    list_results_api_groups_automation_results_get: {
+        parameters: {
+            query?: {
+                /** @description One or more of in_flight (not counting no reply), no_reply, failed, succeeded. */
+                status?: ("in_flight" | "no_reply" | "failed" | "succeeded")[] | null;
+                /** @description One connection, by its slug. */
+                connection?: string | null;
+                /** @description One entry's results (the entry editor's line). */
+                entry_id?: string | null;
+                /** @description Text to find in the target, message, run id, entry title or connection. */
+                q?: string | null;
+                /** @description False leaves out failures a person dismissed. */
+                include_dismissed?: boolean;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationResultsList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_result_api_groups_automation_results__result_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                result_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationResultOne"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retry_api_groups_automation_results__result_id__retry_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                result_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationResultOne"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dismiss_api_groups_automation_results__result_id__dismiss_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                result_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationResultOne"];
                 };
             };
             /** @description Validation Error */
