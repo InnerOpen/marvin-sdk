@@ -1,3 +1,10 @@
+# [7.12.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.11.0...v7.12.0) (2026-10-21)
+
+
+### Features
+
+* **types:** workflow last run and attention, automation attention summary, integration footprint, removed-integration delete, outgoing webhook source, event sender kinds ([852beab](https://github.com/InnerOpen/marvin-sdk/commit/852beab3829d8cf4aedf0978baf74f34d314a317))
+
 # [7.11.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.10.0...v7.11.0) (2026-10-21)
 
 
