@@ -566,7 +566,8 @@ export interface paths {
         put?: never;
         /**
          * Update One
-         * @description Replace an applied workflow's steps with what its integration declares now.
+         * @description Replace an applied workflow's steps with what its integration declares now. A workflow changed in
+         *     this workspace is left alone (`needs_confirmation` in the result) unless `replace_edits`.
          */
         post: operations["update_one_api_groups_blueprints__slug__update_post"];
         delete?: never;
@@ -12418,6 +12419,11 @@ export interface components {
             sourceRecipe?: string | null;
             /** Sourcerecipeversion */
             sourceRecipeVersion?: string | null;
+            /**
+             * Editedsinceinstall
+             * @default false
+             */
+            editedSinceInstall: boolean;
             /** Lastrunat */
             lastRunAt?: string | null;
             /** Lastrunstatus */
@@ -12807,6 +12813,11 @@ export interface components {
              */
             updated: boolean;
             /**
+             * Needsconfirmation
+             * @default false
+             */
+            needsConfirmation: boolean;
+            /**
              * Detail
              * @default
              */
@@ -12908,6 +12919,13 @@ export interface components {
              * @default false
              */
             outdated: boolean;
+            /** State */
+            state?: ("current" | "update" | "edited" | "edited_update" | "differs") | null;
+            /**
+             * Edited
+             * @default false
+             */
+            edited: boolean;
         };
         /** Body_apply_several_api_groups_blueprints_apply_post */
         Body_apply_several_api_groups_blueprints_apply_post: {
@@ -22854,6 +22872,8 @@ export interface operations {
         parameters: {
             query?: {
                 source?: string | null;
+                /** @description Go ahead although the workflow was changed in this workspace */
+                replace_edits?: boolean;
             };
             header?: never;
             path: {
