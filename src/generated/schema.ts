@@ -8863,6 +8863,48 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/scheduled-tasks/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Overview
+         * @description The workspace Scheduled tasks page: this workspace's tasks and Marvin's own (`system`, read-only), EDITOR and above.
+         *
+         *     Acting on a task (switch, run now, edit, delete) stays with the ADMIN routes below.
+         */
+        get: operations["overview_api_platform_scheduled_tasks_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/scheduled-tasks/overview/{task_id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Overview History
+         * @description A run history for a task on the overview (this workspace's or Marvin's own), EDITOR and above; errors, no tracebacks.
+         */
+        get: operations["overview_history_api_platform_scheduled_tasks_overview__task_id__history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/scheduled-tasks/{id_or_slug}": {
         parameters: {
             query?: never;
@@ -18639,6 +18681,59 @@ export interface components {
             retryAttempt: number;
         };
         /**
+         * ScheduledTaskOverview
+         * @description One row of the workspace Scheduled tasks page: a task of the workspace, or one of Marvin's own (`system`).
+         *
+         *     Everything the list shows and filters on, and nothing of how the task is configured (`task_config` stays with admins).
+         */
+        ScheduledTaskOverview: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description?: string | null;
+            /** Enabled */
+            enabled: boolean;
+            /** Scheduletype */
+            scheduleType: string;
+            /** Scheduleconfig */
+            scheduleConfig: {
+                [key: string]: unknown;
+            };
+            /** Tasktype */
+            taskType: string;
+            /** Lastrunat */
+            lastRunAt?: string | null;
+            /** Nextrunat */
+            nextRunAt?: string | null;
+            /** Laststatus */
+            lastStatus?: string | null;
+            /** Lastdurationms */
+            lastDurationMs?: number | null;
+            /**
+             * Failurecount
+             * @default 0
+             */
+            failureCount: number;
+            /** Sourceintegrationid */
+            sourceIntegrationId?: string | null;
+            /** Sourceblueprint */
+            sourceBlueprint?: string | null;
+            /**
+             * System
+             * @default false
+             */
+            system: boolean;
+            /** Attention */
+            attention?: string | null;
+        };
+        /**
          * ScheduledTaskRead
          * @description Full schema for reading a scheduled task.
          */
@@ -18692,6 +18787,40 @@ export interface components {
             sourceIntegrationId?: string | null;
             /** Sourceblueprint */
             sourceBlueprint?: string | null;
+        };
+        /**
+         * ScheduledTaskRunRead
+         * @description One run in a task's history, as a workspace member sees it (the admin log keeps the traceback).
+         */
+        ScheduledTaskRunRead: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /**
+             * Taskid
+             * Format: uuid4
+             */
+            taskId: string;
+            /**
+             * Executedat
+             * Format: date-time
+             */
+            executedAt: string;
+            /** Status */
+            status: string;
+            /** Durationms */
+            durationMs?: number | null;
+            /** Errormessage */
+            errorMessage?: string | null;
+            /** Output */
+            output?: string | null;
+            /**
+             * Retryattempt
+             * @default 0
+             */
+            retryAttempt: number;
         };
         /**
          * ScheduledTaskUpdate
@@ -20604,6 +20733,11 @@ export interface components {
             sourceIntegrationId?: string | null;
             /** Sourceblueprint */
             sourceBlueprint?: string | null;
+            /**
+             * Attention
+             * @description Read-only: why it needs a look ("unreachable_address": enabled, but its URL is a localhost or private address), else null.
+             */
+            readonly attention: string | null;
         };
         /** WeekPublished */
         WeekPublished: {
@@ -36858,6 +36992,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ScheduledTaskExecutionLogRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    overview_api_platform_scheduled_tasks_overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskOverview"][];
+                };
+            };
+        };
+    };
+    overview_history_api_platform_scheduled_tasks_overview__task_id__history_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScheduledTaskRunRead"][];
                 };
             };
             /** @description Validation Error */
