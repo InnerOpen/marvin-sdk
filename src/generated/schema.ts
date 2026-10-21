@@ -1239,6 +1239,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/integrations/{integration_id}/footprint": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Footprint
+         * @description What this integration's blueprints installed here: workflows, webhooks, scheduled tasks, collections, and the
+         *     entry types its field blueprints changed. Names only, no configuration — so an EDITOR may read it, unlike the rest
+         *     of this controller.
+         */
+        get: operations["get_footprint_api_groups_integrations__integration_id__footprint_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/integrations/{integration_id}": {
         parameters: {
             query?: never;
@@ -3084,6 +3106,23 @@ export interface paths {
          *     afresh. 404 if there is none. ADMIN and above.
          */
         delete: operations["delete_observation_api_groups_metrics_observations__observation_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/removed-integration-items/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete a kind's items left by a removed integration */
+        delete: operations["delete_removed_items_api_groups_removed_integration_items__kind__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -6589,6 +6628,26 @@ export interface paths {
         put?: never;
         /** Create Automation */
         post: operations["create_automation_api_automations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/attention": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What in Automation needs a look
+         * @description One count per kind of automation item that needs a look, and the first page with something flagged.
+         */
+        get: operations["attention_summary_api_automations_attention_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -11449,6 +11508,13 @@ export interface components {
              * @default 0
              */
             resultsNoReply: number;
+            /**
+             * Automation
+             * @default 0
+             */
+            automation: number;
+            /** Automationpage */
+            automationPage?: string | null;
         };
         /** AudienceCan */
         AudienceCan: {
@@ -11888,6 +11954,26 @@ export interface components {
             writesBack: boolean;
         };
         /**
+         * AutomationAttention
+         * @description What in Automation needs a look: a count per kind of item, and where to go first.
+         */
+        AutomationAttention: {
+            /**
+             * Total
+             * @default 0
+             */
+            total: number;
+            /**
+             * Kinds
+             * @default {}
+             */
+            kinds: {
+                [key: string]: number;
+            };
+            /** Firstpage */
+            firstPage?: string | null;
+        };
+        /**
          * AutomationConditionField
          * @description A field a condition can reference, suggested per trigger context (guided builder).
          */
@@ -12290,6 +12376,12 @@ export interface components {
             sourceRecipe?: string | null;
             /** Sourcerecipeversion */
             sourceRecipeVersion?: string | null;
+            /** Lastrunat */
+            lastRunAt?: string | null;
+            /** Lastrunstatus */
+            lastRunStatus?: string | null;
+            /** Attention */
+            attention?: string | null;
         };
         /** AutomationResult */
         AutomationResult: {
@@ -13465,7 +13557,8 @@ export interface components {
              *       "audienceNew": 0,
              *       "audienceProblems": 0,
              *       "resultsFailed": 0,
-             *       "resultsNoReply": 0
+             *       "resultsNoReply": 0,
+             *       "automation": 0
              *     }
              */
             attention: components["schemas"]["AttentionCounts"];
@@ -14701,6 +14794,11 @@ export interface components {
             category: string;
             /** Senders */
             senders: number;
+            /**
+             * Senderkinds
+             * @default []
+             */
+            senderKinds: ("marvin" | "workflow" | "incoming_webhook" | "scheduled_task")[];
             /** Reactions */
             reactions: number;
             /** Activereactions */
@@ -14984,6 +15082,33 @@ export interface components {
             reason?: string | null;
             /** Managepath */
             managePath?: string | null;
+        };
+        /**
+         * FootprintFieldChange
+         * @description An entry type the integration's field blueprints changed.
+         */
+        FootprintFieldChange: {
+            /** Entrytypeslug */
+            entryTypeSlug: string;
+            /** Entrytypename */
+            entryTypeName: string;
+            /** Label */
+            label: string;
+        };
+        /**
+         * FootprintItem
+         * @description One thing an integration's blueprint installed.
+         */
+        FootprintItem: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Enabled */
+            enabled?: boolean | null;
         };
         /**
          * ForgotPassword
@@ -15851,6 +15976,31 @@ export interface components {
             args?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /**
+         * IntegrationFootprint
+         * @description Everything an integration's blueprints installed in this workspace ("What it installed").
+         */
+        IntegrationFootprint: {
+            /**
+             * Integrationid
+             * Format: uuid4
+             */
+            integrationId: string;
+            /** Workflows */
+            workflows: components["schemas"]["FootprintItem"][];
+            /** Incomingwebhooks */
+            incomingWebhooks: components["schemas"]["FootprintItem"][];
+            /** Outgoingwebhooks */
+            outgoingWebhooks: components["schemas"]["FootprintItem"][];
+            /** Scheduledtasks */
+            scheduledTasks: components["schemas"]["FootprintItem"][];
+            /** Collections */
+            collections: components["schemas"]["FootprintItem"][];
+            /** Fieldchanges */
+            fieldChanges: components["schemas"]["FootprintFieldChange"][];
+            /** Total */
+            total: number;
         };
         /**
          * IntegrationHealthRow
@@ -18080,6 +18230,23 @@ export interface components {
             extraRedirectUris?: string[] | null;
             /** Allowdynamicregistration */
             allowDynamicRegistration?: boolean | null;
+        };
+        /** RemovedIntegrationDeleted */
+        RemovedIntegrationDeleted: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "workflows" | "incoming-webhooks" | "scheduled-tasks" | "outgoing-webhooks";
+            /** Deleted */
+            deleted: number;
+            /** Names */
+            names: string[];
+            /**
+             * Skipped
+             * @default 0
+             */
+            skipped: number;
         };
         /**
          * ReorderCollectionsRequest
@@ -20433,6 +20600,10 @@ export interface components {
              * Format: uuid4
              */
             id: string;
+            /** Sourceintegrationid */
+            sourceIntegrationId?: string | null;
+            /** Sourceblueprint */
+            sourceBlueprint?: string | null;
         };
         /** WeekPublished */
         WeekPublished: {
@@ -23776,6 +23947,37 @@ export interface operations {
             };
         };
     };
+    get_footprint_api_groups_integrations__integration_id__footprint_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                integration_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntegrationFootprint"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     delete_integration_api_groups_integrations__integration_id__delete: {
         parameters: {
             query?: never;
@@ -26871,6 +27073,37 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_removed_items_api_groups_removed_integration_items__kind__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: "workflows" | "incoming-webhooks" | "scheduled-tasks" | "outgoing-webhooks";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RemovedIntegrationDeleted"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -32502,6 +32735,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    attention_summary_api_automations_attention_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutomationAttention"];
                 };
             };
         };
