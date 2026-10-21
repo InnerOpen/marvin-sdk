@@ -1,3 +1,10 @@
+# [7.11.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.10.0...v7.11.0) (2026-10-21)
+
+
+### Features
+
+* **types:** Playbooks (list, import, GitHub import, export, uses) and agent Playbook settings ([506c50e](https://github.com/InnerOpen/marvin-sdk/commit/506c50ed12658b1da58e04389600a1c178f32f14))
+
 # [7.10.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.9.0...v7.10.0) (2026-10-20)
 
 
