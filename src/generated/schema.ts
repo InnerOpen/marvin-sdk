@@ -1834,6 +1834,130 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/playbooks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Playbooks
+         * @description Every Playbook of this workspace outside the Trash, by name, with its status. Creates nothing.
+         */
+        get: operations["list_playbooks_api_groups_playbooks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/type": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Make the Playbook entry type
+         * @description The workspace's ``playbook`` entry type, created when missing (idempotent): call before saving the first Playbook.
+         */
+        post: operations["ensure_type_api_groups_playbooks_type_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/{entry_id}/uses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Where a Playbook was used lately
+         * @description The runs that loaded this Playbook, newest first (at most 20): the agent, when, and the Ask conversation if it has one.
+         */
+        get: operations["playbook_uses_api_groups_playbooks__entry_id__uses_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/{entry_id}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Export a Playbook as a skill folder (zip)
+         * @description A zip in the standard skill layout (``<name>/SKILL.md`` and the reference files at their paths; Marvin-only settings go under
+         *     the frontmatter's ``metadata``). Any status; importing it gives back the Playbook.
+         */
+        get: operations["export_playbook_api_groups_playbooks__entry_id__export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import a SKILL.md or a skill zip as a draft Playbook
+         * @description Make a **draft** Playbook from a ``SKILL.md`` or a zip of a skill folder. Reference files keep their paths (``scripts/``
+         *     too, flagged and never run) and the review of what it asks for is stored on the entry. Never published: an Admin does that.
+         *     409 when the name is taken: send another ``name``.
+         */
+        post: operations["import_playbook_api_groups_playbooks_import_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/import-github": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import a skill from a GitHub link as a draft Playbook
+         * @description Like the file import, from a public GitHub link to a skill folder or its ``SKILL.md``. The link is pinned to the commit
+         *     it names now, recorded on the draft (``metadata.source``) and shown in its review. Only github.com is fetched, with no token.
+         */
+        post: operations["import_playbook_from_github_api_groups_playbooks_import_github_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/automation-results/summary": {
         parameters: {
             query?: never;
@@ -10516,6 +10640,7 @@ export interface components {
             personaPrompt?: string | null;
             bubbleLines?: components["schemas"]["BubbleLines"] | null;
             mood?: components["schemas"]["MoodSettings"] | null;
+            playbooks?: components["schemas"]["AgentPlaybooks"] | null;
             /** Slug */
             slug: string;
         };
@@ -10574,6 +10699,7 @@ export interface components {
             personaPrompt?: string | null;
             bubbleLines?: components["schemas"]["BubbleLines"] | null;
             mood?: components["schemas"]["MoodSettings"] | null;
+            playbooks?: components["schemas"]["AgentPlaybooks"] | null;
             /** Slug */
             slug?: string | null;
         };
@@ -10586,6 +10712,17 @@ export interface components {
             name?: string | null;
             /** Personaprompt */
             personaPrompt?: string | null;
+        };
+        /**
+         * AgentPlaybooks
+         * @description Which Playbooks an agent may use. `names` null = every published one, a list = only those; `always` = up to three
+         *     put in full in its system frame (they must be in `names`, published and not manual-only: checked on save).
+         */
+        AgentPlaybooks: {
+            /** Names */
+            names?: string[] | null;
+            /** Always */
+            always?: string[];
         };
         /**
          * AgentPromptPreview
@@ -10624,6 +10761,8 @@ export interface components {
              * @default
              */
             roster: string;
+            /** Playbookswarning */
+            playbooksWarning?: string | null;
             /**
              * Toolcount
              * @default 0
@@ -10678,6 +10817,7 @@ export interface components {
             personaPrompt?: string | null;
             bubbleLines?: components["schemas"]["BubbleLines"] | null;
             mood?: components["schemas"]["MoodSettings"] | null;
+            playbooks?: components["schemas"]["AgentPlaybooks"] | null;
         };
         /** AgentRead */
         AgentRead: {
@@ -10730,6 +10870,7 @@ export interface components {
             personaPrompt?: string | null;
             bubbleLines?: components["schemas"]["BubbleLines"] | null;
             mood?: components["schemas"]["MoodSettings"] | null;
+            playbooks?: components["schemas"]["AgentPlaybooks"] | null;
             /** Id */
             id?: string | null;
             /** Slug */
@@ -10795,6 +10936,7 @@ export interface components {
             personaPrompt?: string | null;
             bubbleLines?: components["schemas"]["BubbleLines"] | null;
             mood?: components["schemas"]["MoodSettings"] | null;
+            playbooks?: components["schemas"]["AgentPlaybooks"] | null;
         };
         /**
          * AgentVoice
@@ -12658,6 +12800,13 @@ export interface components {
              * @default false
              */
             remember_me: boolean;
+        };
+        /** Body_import_playbook_api_groups_playbooks_import_post */
+        Body_import_playbook_api_groups_playbooks_import_post: {
+            /** File */
+            file: string;
+            /** Name */
+            name?: string | null;
         };
         /** Body_import_workspace_api_platform_workspace_import_post */
         Body_import_workspace_api_platform_workspace_import_post: {
@@ -16906,6 +17055,103 @@ export interface components {
              * @default false
              */
             clearPassword: boolean;
+        };
+        /** PlaybookGithubImport */
+        PlaybookGithubImport: {
+            /** Url */
+            url: string;
+            /** Name */
+            name?: string | null;
+        };
+        /**
+         * PlaybookImported
+         * @description What an import made: the draft's id and name, how many reference files it kept, and the review of what it asks for.
+         */
+        PlaybookImported: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Status */
+            status: string;
+            /**
+             * Filecount
+             * @default 0
+             */
+            fileCount: number;
+            /** Skipped */
+            skipped?: {
+                [key: string]: unknown;
+            }[];
+            /** Review */
+            review: {
+                [key: string]: unknown;
+            };
+        };
+        /** PlaybookItem */
+        PlaybookItem: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Status */
+            status: string;
+            /**
+             * Manualonly
+             * @default false
+             */
+            manualOnly: boolean;
+            /** Updatedat */
+            updatedAt?: string | null;
+            /** Lastusedat */
+            lastUsedAt?: string | null;
+        };
+        /** PlaybookList */
+        PlaybookList: {
+            /** Entrytypeid */
+            entryTypeId?: string | null;
+            /** Items */
+            items?: components["schemas"]["PlaybookItem"][];
+        };
+        /** PlaybookType */
+        PlaybookType: {
+            /**
+             * Entrytypeid
+             * Format: uuid4
+             */
+            entryTypeId: string;
+        };
+        /** PlaybookUse */
+        PlaybookUse: {
+            /**
+             * Executionid
+             * Format: uuid4
+             */
+            executionId: string;
+            /** Agentslug */
+            agentSlug?: string | null;
+            /** Agentname */
+            agentName?: string | null;
+            /** Usedat */
+            usedAt?: string | null;
+            /** Threadid */
+            threadId?: string | null;
+        };
+        /** PlaybookUses */
+        PlaybookUses: {
+            /** Items */
+            items?: components["schemas"]["PlaybookUse"][];
         };
         /**
          * PluginProviderRead
@@ -24572,6 +24818,174 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AudienceSubscriberResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_playbooks_api_groups_playbooks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookList"];
+                };
+            };
+        };
+    };
+    ensure_type_api_groups_playbooks_type_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookType"];
+                };
+            };
+        };
+    };
+    playbook_uses_api_groups_playbooks__entry_id__uses_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookUses"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_playbook_api_groups_playbooks__entry_id__export_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/zip": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    import_playbook_api_groups_playbooks_import_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_import_playbook_api_groups_playbooks_import_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookImported"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    import_playbook_from_github_api_groups_playbooks_import_github_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaybookGithubImport"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookImported"];
                 };
             };
             /** @description Validation Error */
