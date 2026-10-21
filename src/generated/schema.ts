@@ -12445,6 +12445,7 @@ export interface components {
             entry?: components["schemas"]["AutomationResultEntry"] | null;
             connection?: components["schemas"]["AutomationResultConnection"] | null;
             workflow?: components["schemas"]["AutomationResultWorkflow"] | null;
+            action?: components["schemas"]["AutomationResultAction"] | null;
             /** Target */
             target?: string | null;
             /** Remoteid */
@@ -12475,6 +12476,16 @@ export interface components {
              * @default false
              */
             canRetry: boolean;
+        };
+        /**
+         * AutomationResultAction
+         * @description What the provider's action is called: its declared key, and the label the provider gives it (the key when it names none).
+         */
+        AutomationResultAction: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
         };
         /**
          * AutomationResultConnection
