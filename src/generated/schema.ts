@@ -11997,6 +11997,29 @@ export interface components {
             writesBack: boolean;
         };
         /**
+         * AutomationAgentOption
+         * @description A persona agent an agent step may name. `can_draft`: its permissions let it save drafts on its own, for the person
+         *     asking (Entries: author set to Allow) — what the step needs it to do.
+         */
+        AutomationAgentOption: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /**
+             * Candraft
+             * @default false
+             */
+            canDraft: boolean;
+        };
+        /**
          * AutomationAttention
          * @description What in Automation needs a look: a count per kind of item, and where to go first.
          */
@@ -12297,12 +12320,37 @@ export interface components {
              */
             incomingWebhooks: components["schemas"]["AutomationIncomingWebhookOption"][];
             /**
+             * Agents
+             * @default []
+             */
+            agents: components["schemas"]["AutomationAgentOption"][];
+            /**
+             * Playbooks
+             * @default []
+             */
+            playbooks: components["schemas"]["AutomationPlaybookOption"][];
+            /**
              * Definitionschema
              * @default {}
              */
             definitionSchema: {
                 [key: string]: unknown;
             };
+        };
+        /**
+         * AutomationPlaybookOption
+         * @description A published Playbook an agent step may add to its run.
+         */
+        AutomationPlaybookOption: {
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            /**
+             * Manualonly
+             * @default false
+             */
+            manualOnly: boolean;
         };
         /**
          * AutomationPreviewMatch
@@ -20916,7 +20964,8 @@ export interface components {
              *       "collections": [],
              *       "outgoingWebhooks": [],
              *       "incomingWebhooks": [],
-             *       "statuses": []
+             *       "statuses": [],
+             *       "agents": []
              *     }
              */
             refs: components["schemas"]["WorkflowLibraryRefs"];
@@ -20970,6 +21019,11 @@ export interface components {
              * @default []
              */
             statuses: string[];
+            /**
+             * Agents
+             * @default []
+             */
+            agents: components["schemas"]["WorkflowLibraryRef"][];
         };
         /**
          * WorkflowRecipe
@@ -21145,6 +21199,11 @@ export interface components {
             description: string;
             /** Example */
             example?: unknown;
+            /**
+             * Optional
+             * @default false
+             */
+            optional: boolean;
         };
         /** WorkspaceAISettingsRead */
         WorkspaceAISettingsRead: {
