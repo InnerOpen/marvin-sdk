@@ -2181,6 +2181,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/{group_id}/preferences/site-links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Check the workspace's site links setup
+         * @description What keeps entry links (`entry.url`, the AI tools' `url`, "View on site") from working: no site address (Canonical
+         *     URL), or a publishable entry type without a page URL pattern. Reads settings only, no network. Members may read it.
+         */
+        get: operations["get_site_links_api_groups__group_id__preferences_site_links_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/{group_id}/preferences/site-links/probe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fetch one published entry's link per entry type
+         * @description Fetches one published entry per entry type at its public link (the guarded HTTP client, a short timeout) and
+         *     reports each that doesn't answer 200. Makes outbound requests, so it runs on request (ADMIN/OWNER) and is not part of
+         *     the plain check.
+         */
+        post: operations["probe_site_links_api_groups__group_id__preferences_site_links_probe_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/workspaces/{group_id}/email-templates": {
         parameters: {
             query?: never;
@@ -19068,6 +19111,38 @@ export interface components {
             frameSources?: string[];
         };
         /**
+         * SiteLinkFix
+         * @description Where the problem is fixed: a label and an app path.
+         */
+        SiteLinkFix: {
+            /** Label */
+            label: string;
+            /** Path */
+            path: string;
+        };
+        /** SiteLinkProblem */
+        SiteLinkProblem: {
+            /** Kind */
+            kind: string;
+            /** Message */
+            message: string;
+            fix: components["schemas"]["SiteLinkFix"];
+            /** Entrytype */
+            entryType?: string | null;
+            /** Url */
+            url?: string | null;
+        };
+        /**
+         * SiteLinksStatus
+         * @description ``ok`` when nothing is wrong. A probe answers with the problems it found; it never lists what passed.
+         */
+        SiteLinksStatus: {
+            /** Ok */
+            ok: boolean;
+            /** Problems */
+            problems: components["schemas"]["SiteLinkProblem"][];
+        };
+        /**
          * SitePrivacy
          * @description Structured privacy & cookie disclosures for a workspace's published site.
          *
@@ -25697,6 +25772,68 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_site_links_api_groups__group_id__preferences_site_links_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteLinksStatus"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    probe_site_links_api_groups__group_id__preferences_site_links_probe_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                group_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteLinksStatus"];
                 };
             };
             /** @description Validation Error */
