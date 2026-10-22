@@ -566,8 +566,9 @@ export interface paths {
         put?: never;
         /**
          * Update One
-         * @description Replace an applied workflow's steps with what its integration declares now. A workflow changed in
-         *     this workspace is left alone (`needs_confirmation` in the result) unless `replace_edits`.
+         * @description Replace an applied workflow's steps (or a Playbook's text and files) with what its integration declares now. One
+         *     changed in this workspace is left alone (`needs_confirmation` in the result) unless `replace_edits`. A Playbook keeps
+         *     its id and status: a published one is used by agents with the new text at once.
          */
         post: operations["update_one_api_groups_blueprints__slug__update_post"];
         delete?: never;
@@ -1249,7 +1250,7 @@ export interface paths {
         };
         /**
          * Get Footprint
-         * @description What this integration's blueprints installed here: workflows, webhooks, scheduled tasks, collections, and the
+         * @description What this integration's blueprints installed here: workflows, webhooks, scheduled tasks, collections, Playbooks, and the
          *     entry types its field blueprints changed. Names only, no configuration — so an EDITOR may read it, unlike the rest
          *     of this controller.
          */
@@ -12895,7 +12896,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow";
+            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook";
             /** Created */
             created: boolean;
             /**
@@ -12960,7 +12961,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow";
+            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook";
             /** Slug */
             slug: string;
             /** Name */
@@ -13017,6 +13018,12 @@ export interface components {
              * @default false
              */
             edited: boolean;
+            /** Installedid */
+            installedId?: string | null;
+            /** Installedstatus */
+            installedStatus?: string | null;
+            /** Conflict */
+            conflict?: string | null;
         };
         /** Body_apply_several_api_groups_blueprints_apply_post */
         Body_apply_several_api_groups_blueprints_apply_post: {
@@ -16159,6 +16166,8 @@ export interface components {
             scheduledTasks: components["schemas"]["FootprintItem"][];
             /** Collections */
             collections: components["schemas"]["FootprintItem"][];
+            /** Playbooks */
+            playbooks?: components["schemas"]["FootprintItem"][];
             /** Fieldchanges */
             fieldChanges: components["schemas"]["FootprintFieldChange"][];
             /** Total */
@@ -17428,6 +17437,7 @@ export interface components {
             updatedAt?: string | null;
             /** Lastusedat */
             lastUsedAt?: string | null;
+            fromIntegration?: components["schemas"]["PlaybookOrigin"] | null;
         };
         /** PlaybookList */
         PlaybookList: {
@@ -17435,6 +17445,23 @@ export interface components {
             entryTypeId?: string | null;
             /** Items */
             items?: components["schemas"]["PlaybookItem"][];
+        };
+        /**
+         * PlaybookOrigin
+         * @description An integration's Playbook: which integration shipped it (``metadata_json["installedBy"]``).
+         */
+        PlaybookOrigin: {
+            /** Source */
+            source: string;
+            /** Name */
+            name: string;
+            /** Integrationid */
+            integrationId?: string | null;
+            /**
+             * Removed
+             * @default false
+             */
+            removed: boolean;
         };
         /** PlaybookType */
         PlaybookType: {
@@ -23006,8 +23033,10 @@ export interface operations {
         parameters: {
             query?: {
                 source?: string | null;
-                /** @description Go ahead although the workflow was changed in this workspace */
+                /** @description Go ahead although the workflow or Playbook was changed in this workspace */
                 replace_edits?: boolean;
+                /** @description A Playbook: the connection to record it under */
+                integration_id?: string | null;
             };
             header?: never;
             path: {
