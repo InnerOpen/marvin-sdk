@@ -1898,6 +1898,110 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/playbooks/system": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the system Playbooks this workspace gets
+         * @description The system Playbooks (shipped by Marvin and its plugins, read-only) with whether this workspace gets each one and why not.
+         *     Includes the ones switched off. EDITOR and above.
+         */
+        get: operations["list_system_api_groups_playbooks_system_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/system/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One system Playbook, read-only */
+        get: operations["read_system_api_groups_playbooks_system__name__get"];
+        /**
+         * Switch a system Playbook on or off for this workspace
+         * @description ADMIN and above. Off means absent everywhere in this workspace: the catalog, the tools, agents' chosen sets and always-load
+         *     lists. The switch is kept by name, so it survives the plugin being uninstalled and installed again.
+         */
+        put: operations["switch_system_api_groups_playbooks_system__name__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/system/{name}/uses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Where a system Playbook was used lately
+         * @description The runs of this workspace that loaded it, newest first (at most 20), as for a workspace Playbook.
+         */
+        get: operations["system_uses_api_groups_playbooks_system__name__uses_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/system/{name}/copy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Copy a system Playbook to customise it
+         * @description ADMIN and above. Makes a **draft** Playbook of this workspace from the system one (its text and files), named ``name`` (the
+         *     suggestion when omitted; 409 when taken). Once the copy is published it replaces the original here.
+         */
+        post: operations["copy_system_api_groups_playbooks_system__name__copy_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/playbooks/{entry_id}/upstream-seen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mark the changed original of a copy as seen
+         * @description ADMIN and above. The copy remembers the original's current version, so its hint goes away until the original changes again.
+         */
+        post: operations["upstream_seen_api_groups_playbooks__entry_id__upstream_seen_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/playbooks/{entry_id}/uses": {
         parameters: {
             query?: never;
@@ -3986,6 +4090,47 @@ export interface paths {
         get: operations["get_remote_mcp_api_admin_platform_policy_remote_mcp_get"];
         /** Set the remote MCP policy */
         put: operations["put_remote_mcp_api_admin_platform_policy_remote_mcp_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/system-playbooks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Admin: List System Playbooks
+         * @description Every system Playbook of the installed packages by source, with its version, badges, the platform switch and how many
+         *     workspaces switched it off, and what couldn't be loaded.
+         */
+        get: operations["list_system_playbooks_api_admin_system_playbooks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/system-playbooks/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Admin: Switch a System Playbook On or Off For The Platform
+         * @description Off means absent in every workspace (catalog, tools, agent settings), whatever each workspace chose.
+         */
+        put: operations["switch_system_playbook_api_admin_system_playbooks__name__put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -10735,6 +10880,73 @@ export interface components {
              */
             pluginUpdates: components["schemas"]["PluginUpdateRead"][];
         };
+        /** AdminSystemPlaybook */
+        AdminSystemPlaybook: {
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Label */
+            label: string;
+            /** Source */
+            source: string;
+            /**
+             * Version
+             * @default
+             */
+            version: string;
+            /**
+             * Manualonly
+             * @default true
+             */
+            manualOnly: boolean;
+            /**
+             * Allowedtools
+             * @default
+             */
+            allowedTools: string;
+            /** Warnings */
+            warnings?: string[];
+            /**
+             * Files
+             * @default 0
+             */
+            files: number;
+            /**
+             * Serveroff
+             * @default false
+             */
+            serverOff: boolean;
+            /**
+             * Workspacesoff
+             * @default 0
+             */
+            workspacesOff: number;
+        };
+        /** AdminSystemPlaybookSkipped */
+        AdminSystemPlaybookSkipped: {
+            /** Name */
+            name: string;
+            /** Label */
+            label: string;
+            /** Reason */
+            reason: string;
+        };
+        /** AdminSystemPlaybookSwitch */
+        AdminSystemPlaybookSwitch: {
+            /** Enabled */
+            enabled: boolean;
+        };
+        /** AdminSystemPlaybooks */
+        AdminSystemPlaybooks: {
+            /** Items */
+            items?: components["schemas"]["AdminSystemPlaybook"][];
+            /** Skipped */
+            skipped?: components["schemas"]["AdminSystemPlaybookSkipped"][];
+        };
         /** AgentCreate */
         AgentCreate: {
             /** Name */
@@ -16296,6 +16508,8 @@ export interface components {
             emits?: components["schemas"]["ProviderEventInfo"][];
             /** Actions */
             actions?: components["schemas"]["ProviderActionInfo"][];
+            /** Systemplaybooks */
+            systemPlaybooks?: components["schemas"]["ProviderSystemPlaybook"][];
             /** Errorpolicy */
             errorPolicy?: {
                 [key: string]: unknown;
@@ -17377,6 +17591,31 @@ export interface components {
              */
             clearPassword: boolean;
         };
+        /**
+         * PlaybookCopiedFrom
+         * @description A Playbook made by copying a system Playbook (``metadata_json["copiedFrom"]``).
+         */
+        PlaybookCopiedFrom: {
+            /** Name */
+            name: string;
+            /**
+             * Label
+             * @default
+             */
+            label: string;
+            /**
+             * Version
+             * @default
+             */
+            version: string;
+            /** Currentversion */
+            currentVersion?: string | null;
+            /**
+             * Upstreamchanged
+             * @default false
+             */
+            upstreamChanged: boolean;
+        };
         /** PlaybookGithubImport */
         PlaybookGithubImport: {
             /** Url */
@@ -17438,6 +17677,7 @@ export interface components {
             /** Lastusedat */
             lastUsedAt?: string | null;
             fromIntegration?: components["schemas"]["PlaybookOrigin"] | null;
+            copiedFrom?: components["schemas"]["PlaybookCopiedFrom"] | null;
         };
         /** PlaybookList */
         PlaybookList: {
@@ -17521,6 +17761,11 @@ export interface components {
              * @default 0
              */
             blueprints: number;
+            /**
+             * Systemplaybooks
+             * @default 0
+             */
+            systemPlaybooks: number;
             /**
              * Workspaces
              * @default 0
@@ -17709,6 +17954,24 @@ export interface components {
              * @default
              */
             description: string;
+        };
+        /**
+         * ProviderSystemPlaybook
+         * @description A system Playbook a provider gives every workspace (SDK 0.16.0 ``system_playbooks``).
+         */
+        ProviderSystemPlaybook: {
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Label
+             * @default
+             */
+            label: string;
         };
         /**
          * PublishedAssetRead
@@ -20097,6 +20360,151 @@ export interface components {
             example: string;
             /** Type */
             type: string;
+        };
+        /** SystemPlaybookCopy */
+        SystemPlaybookCopy: {
+            /** Name */
+            name?: string | null;
+        };
+        /** SystemPlaybookFile */
+        SystemPlaybookFile: {
+            /** Path */
+            path: string;
+            /** Text */
+            text: string;
+        };
+        /**
+         * SystemPlaybookItem
+         * @description A system Playbook as this workspace sees it (the Playbooks page's System section).
+         */
+        SystemPlaybookItem: {
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Label */
+            label: string;
+            /**
+             * Version
+             * @default
+             */
+            version: string;
+            /**
+             * Manualonly
+             * @default true
+             */
+            manualOnly: boolean;
+            /**
+             * Allowedtools
+             * @default
+             */
+            allowedTools: string;
+            /** State */
+            state: string;
+            /**
+             * Detail
+             * @default
+             */
+            detail: string;
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /**
+             * Suggestedcopyname
+             * @default
+             */
+            suggestedCopyName: string;
+            /**
+             * Filecount
+             * @default 0
+             */
+            fileCount: number;
+        };
+        /** SystemPlaybookList */
+        SystemPlaybookList: {
+            /** Items */
+            items?: components["schemas"]["SystemPlaybookItem"][];
+        };
+        /**
+         * SystemPlaybookRead
+         * @description One system Playbook in full, read-only.
+         */
+        SystemPlaybookRead: {
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Label */
+            label: string;
+            /**
+             * Version
+             * @default
+             */
+            version: string;
+            /**
+             * Manualonly
+             * @default true
+             */
+            manualOnly: boolean;
+            /**
+             * Allowedtools
+             * @default
+             */
+            allowedTools: string;
+            /** State */
+            state: string;
+            /**
+             * Detail
+             * @default
+             */
+            detail: string;
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /**
+             * Suggestedcopyname
+             * @default
+             */
+            suggestedCopyName: string;
+            /**
+             * Filecount
+             * @default 0
+             */
+            fileCount: number;
+            /**
+             * Source
+             * @default core
+             */
+            source: string;
+            /**
+             * Fingerprint
+             * @default
+             */
+            fingerprint: string;
+            /**
+             * Body
+             * @default
+             */
+            body: string;
+            /** Files */
+            files?: components["schemas"]["SystemPlaybookFile"][];
+            /** Warnings */
+            warnings?: string[];
+        };
+        /** SystemPlaybookSwitch */
+        SystemPlaybookSwitch: {
+            /** Enabled */
+            enabled: boolean;
         };
         /**
          * SystemStats
@@ -25401,6 +25809,187 @@ export interface operations {
             };
         };
     };
+    list_system_api_groups_playbooks_system_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SystemPlaybookList"];
+                };
+            };
+        };
+    };
+    read_system_api_groups_playbooks_system__name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SystemPlaybookRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    switch_system_api_groups_playbooks_system__name__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SystemPlaybookSwitch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SystemPlaybookItem"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    system_uses_api_groups_playbooks_system__name__uses_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookUses"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    copy_system_api_groups_playbooks_system__name__copy_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SystemPlaybookCopy"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookImported"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upstream_seen_api_groups_playbooks__entry_id__upstream_seen_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     playbook_uses_api_groups_playbooks__entry_id__uses_get: {
         parameters: {
             query?: never;
@@ -28524,6 +29113,61 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RemoteMcpRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_system_playbooks_api_admin_system_playbooks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminSystemPlaybooks"];
+                };
+            };
+        };
+    };
+    switch_system_playbook_api_admin_system_playbooks__name__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminSystemPlaybookSwitch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminSystemPlaybook"];
                 };
             };
             /** @description Validation Error */
