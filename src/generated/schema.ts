@@ -11441,6 +11441,56 @@ export interface components {
              * @default 0
              */
             totalAiCostUsd: number;
+            /**
+             * Totalworkflows
+             * @default 0
+             */
+            totalWorkflows: number;
+            /**
+             * Enabledworkflows
+             * @default 0
+             */
+            enabledWorkflows: number;
+            /**
+             * Pendingapprovals
+             * @default 0
+             */
+            pendingApprovals: number;
+            /**
+             * Totalagents
+             * @default 0
+             */
+            totalAgents: number;
+            /**
+             * Totalplaybooks
+             * @default 0
+             */
+            totalPlaybooks: number;
+            /**
+             * Totalintegrations
+             * @default 0
+             */
+            totalIntegrations: number;
+            /**
+             * Totalscheduledtasks
+             * @default 0
+             */
+            totalScheduledTasks: number;
+            /**
+             * Totalincomingwebhooks
+             * @default 0
+             */
+            totalIncomingWebhooks: number;
+            /**
+             * Totalformsubmissions
+             * @default 0
+             */
+            totalFormSubmissions: number;
+            /**
+             * Connectedapps
+             * @default 0
+             */
+            connectedApps: number;
         };
         /**
          * AppTheme
