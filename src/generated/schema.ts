@@ -10984,6 +10984,8 @@ export interface components {
              * @default false
              */
             allowWrites: boolean;
+            /** Checkwork */
+            checkWork?: boolean | null;
             /** Toolpolicy */
             toolPolicy?: {
                 [key: string]: "allow" | "block" | "ask";
@@ -11043,6 +11045,8 @@ export interface components {
              * @default false
              */
             allowWrites: boolean;
+            /** Checkwork */
+            checkWork?: boolean | null;
             /** Toolpolicy */
             toolPolicy?: {
                 [key: string]: "allow" | "block" | "ask";
@@ -11161,6 +11165,8 @@ export interface components {
             enabled?: boolean | null;
             /** Allowwrites */
             allowWrites?: boolean | null;
+            /** Checkwork */
+            checkWork?: boolean | null;
             /** Toolpolicy */
             toolPolicy?: {
                 [key: string]: "allow" | "block" | "ask";
@@ -11214,6 +11220,8 @@ export interface components {
              * @default false
              */
             allowWrites: boolean;
+            /** Checkwork */
+            checkWork?: boolean | null;
             /** Toolpolicy */
             toolPolicy?: {
                 [key: string]: "allow" | "block" | "ask";
@@ -11280,6 +11288,8 @@ export interface components {
             enabled?: boolean | null;
             /** Allowwrites */
             allowWrites?: boolean | null;
+            /** Checkwork */
+            checkWork?: boolean | null;
             /** Toolpolicy */
             toolPolicy?: {
                 [key: string]: "allow" | "block" | "ask";
