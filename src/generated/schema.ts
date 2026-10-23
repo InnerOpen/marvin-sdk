@@ -15351,6 +15351,8 @@ export interface components {
             quietSeconds?: number | null;
             /** Maxwaitseconds */
             maxWaitSeconds?: number | null;
+            /** Level */
+            level?: string | null;
         };
         /**
          * EventLogRead
