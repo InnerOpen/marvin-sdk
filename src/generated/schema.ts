@@ -1635,6 +1635,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/social-inbox/{item_id}/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Move an item to the inbox's Trash, or restore it
+         * @description Move the item to the inbox's Trash (`trashed: true`, the default) or restore it. Marvin only: nothing on the network
+         *     changes (that is Delete), and a trashed item is never answered by a rule. EDITOR and above.
+         */
+        post: operations["trash_api_groups_social_inbox__item_id__trash_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/social-inbox/{item_id}": {
         parameters: {
             query?: never;
@@ -19942,6 +19963,8 @@ export interface components {
             attachments?: {
                 [key: string]: unknown;
             }[] | null;
+            /** Trashedat */
+            trashedAt?: string | null;
             /**
              * Createdat
              * Format: date-time
@@ -20082,6 +20105,14 @@ export interface components {
             can: {
                 [key: string]: boolean;
             };
+        };
+        /** SocialInboxTrash */
+        SocialInboxTrash: {
+            /**
+             * Trashed
+             * @default true
+             */
+            trashed: boolean;
         };
         /** SocialRuleList */
         SocialRuleList: {
@@ -25164,6 +25195,8 @@ export interface operations {
                 until?: string | null;
                 limit?: number;
                 offset?: number;
+                /** @description The Trash: items a person moved out of the inbox (restorable). */
+                trashed?: boolean;
             };
             header?: never;
             path?: never;
@@ -25473,6 +25506,41 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": components["schemas"]["SocialInboxHide"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxActionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    trash_api_groups_social_inbox__item_id__trash_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SocialInboxTrash"] | null;
             };
         };
         responses: {
