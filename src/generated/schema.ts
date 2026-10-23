@@ -7178,6 +7178,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/incoming-webhooks/verification-schemes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Verification schemes a webhook can answer with
+         * @description Schemes contributed by installed integrations, then `custom`: how a sender's verification request (a GET)
+         *     carries its challenge and verify token.
+         */
+        get: operations["verification_schemes_api_incoming_webhooks_verification_schemes_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/incoming-webhooks/{webhook_id}": {
         parameters: {
             query?: never;
@@ -7228,7 +7249,14 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Answer a sender's verification request
+         * @description A sender checking the URL before it delivers: a GET carrying a challenge and the verify token it was given, where
+         *     the webhook's verification scheme says (services/webhooks/incoming_verification.py). When the token matches the
+         *     webhook's secret, the challenge comes back and an `incoming_webhook_verified` event is recorded. Anything else is
+         *     refused. A GET never delivers — deliveries are POSTs — so no `incoming_webhook` workflow starts on one.
+         */
+        get: operations["verify_hook_api_hooks__token__get"];
         put?: never;
         /** Receive an incoming webhook */
         post: operations["receive_hook_api_hooks__token__post"];
@@ -16101,6 +16129,14 @@ export interface components {
             signatureConfig?: {
                 [key: string]: unknown;
             } | null;
+            /** Verificationscheme */
+            verificationScheme?: string | null;
+            /** Verificationconfig */
+            verificationConfig?: {
+                [key: string]: unknown;
+            } | null;
+            /** Verifytokenref */
+            verifyTokenRef?: string | null;
         };
         /** IncomingWebhookRead */
         IncomingWebhookRead: {
@@ -16136,6 +16172,14 @@ export interface components {
             signatureConfig?: {
                 [key: string]: unknown;
             } | null;
+            /** Verificationscheme */
+            verificationScheme?: string | null;
+            /** Verificationconfig */
+            verificationConfig?: {
+                [key: string]: unknown;
+            } | null;
+            /** Verifytokenref */
+            verifyTokenRef?: string | null;
             /**
              * Receivedcount
              * @default 0
@@ -16168,6 +16212,14 @@ export interface components {
             signatureConfig?: {
                 [key: string]: unknown;
             } | null;
+            /** Verificationscheme */
+            verificationScheme?: string | null;
+            /** Verificationconfig */
+            verificationConfig?: {
+                [key: string]: unknown;
+            } | null;
+            /** Verifytokenref */
+            verifyTokenRef?: string | null;
         };
         /**
          * IndexedEmbeddingModel
@@ -34395,6 +34447,28 @@ export interface operations {
             };
         };
     };
+    verification_schemes_api_incoming_webhooks_verification_schemes_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
+                };
+            };
+        };
+    };
     get_webhook_api_incoming_webhooks__webhook_id__get: {
         parameters: {
             query?: never;
@@ -34539,6 +34613,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["IncomingWebhookRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    verify_hook_api_hooks__token__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
