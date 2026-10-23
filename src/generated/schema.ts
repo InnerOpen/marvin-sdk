@@ -19938,6 +19938,10 @@ export interface components {
             author: components["schemas"]["SocialInboxAuthor"];
             /** Text */
             text: string;
+            /** Attachments */
+            attachments?: {
+                [key: string]: unknown;
+            }[] | null;
             /**
              * Createdat
              * Format: date-time
@@ -25149,7 +25153,7 @@ export interface operations {
                 integration?: string | null;
                 /** @description One network (instagram, mastodon…). */
                 network?: string | null;
-                kind?: ("comment" | "reply" | "mention") | null;
+                kind?: ("comment" | "reply" | "mention" | "message" | "story_reply" | "story_mention" | "reaction" | "live_comment") | null;
                 /** @description One or more statuses (repeat the parameter). */
                 status?: ("new" | "seen" | "replied" | "hidden" | "liked")[] | null;
                 /** @description Text to find in the item or its author's handle or name. */
