@@ -19904,6 +19904,24 @@ export interface components {
             /** Name */
             name?: string | null;
         };
+        /**
+         * SocialInboxHeldRead
+         * @description Why a rule that matched the item didn't answer it. Recorded by the engine, cleared when a reply is recorded.
+         */
+        SocialInboxHeldRead: {
+            /** Reason */
+            reason: string;
+            /** Rule */
+            rule?: string | null;
+            /** Ruleentryid */
+            ruleEntryId?: string | null;
+            /** Until */
+            until?: string | null;
+            /** Note */
+            note?: string | null;
+            /** At */
+            at?: string | null;
+        };
         /** SocialInboxHide */
         SocialInboxHide: {
             /**
@@ -19989,6 +20007,7 @@ export interface components {
             /** Status */
             status: string;
             reply?: components["schemas"]["SocialInboxReplyRead"] | null;
+            held?: components["schemas"]["SocialInboxHeldRead"] | null;
             /** Actions */
             actions?: string[];
             /** Replymodes */
