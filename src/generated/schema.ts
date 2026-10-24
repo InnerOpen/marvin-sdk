@@ -16208,6 +16208,15 @@ export interface components {
             receivedCount: number;
             /** Lastreceivedat */
             lastReceivedAt?: string | null;
+            /**
+             * Refusedcount
+             * @default 0
+             */
+            refusedCount: number;
+            /** Lastrefusedat */
+            lastRefusedAt?: string | null;
+            /** Lastrefusedreason */
+            lastRefusedReason?: string | null;
             /** Sourceintegrationid */
             sourceIntegrationId?: string | null;
             /** Sourceblueprint */
