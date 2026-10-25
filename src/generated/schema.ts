@@ -1523,6 +1523,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/social-inbox/like-support": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Turn auto-liking of support comments on or off
+         * @description On: once per engine run, on each network whose auto-reply is on, the comments and replies sorted as `support` (still
+         *     new or seen, at most 20) are liked as the account. Each is tried once. The engine never hides or deletes on a bucket.
+         *     409 when no network reads comments yet. ADMIN and above.
+         */
+        put: operations["set_like_support_api_groups_social_inbox_like_support_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/social-inbox/rules": {
         parameters: {
             query?: never;
@@ -1735,6 +1757,29 @@ export interface paths {
          *     author to send it to. ADMIN and above.
          */
         post: operations["message_api_groups_social_inbox__item_id__message_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/social-inbox/{item_id}/idea": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Save an item as a draft entry (an idea)
+         * @description A draft entry of the named listed type made from the item, for a post that answers it (a question a lot of people have):
+         *     the start of the text as its title, the text as its summary, and who wrote it, where and the link in its description.
+         *     Saving the same item again returns that entry (`existing: true`). 422 for a type that isn't there or is internal.
+         *     EDITOR and above.
+         */
+        post: operations["save_idea_api_groups_social_inbox__item_id__idea_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -19978,6 +20023,28 @@ export interface components {
              */
             hidden: boolean;
         };
+        /** SocialInboxIdeaCreate */
+        SocialInboxIdeaCreate: {
+            /** Entrytype */
+            entryType: string;
+        };
+        /** SocialInboxIdeaResult */
+        SocialInboxIdeaResult: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Path */
+            path: string;
+            /**
+             * Existing
+             * @default false
+             */
+            existing: boolean;
+        };
         /**
          * SocialInboxIntegration
          * @description A connected network (an enabled integration offering a ``social.*`` capability).
@@ -20060,6 +20127,8 @@ export interface components {
             bucket?: string | null;
             /** Bucketsource */
             bucketSource?: string | null;
+            /** Ideaentryid */
+            ideaEntryId?: string | null;
             /** Actions */
             actions?: string[];
             /** Replymodes */
@@ -20195,6 +20264,15 @@ export interface components {
              * @default false
              */
             aiSort: boolean;
+            /**
+             * Likesupport
+             * @default false
+             */
+            likeSupport: boolean;
+            /** Ideatypes */
+            ideaTypes?: {
+                [key: string]: unknown;
+            }[];
             /** Can */
             can: {
                 [key: string]: boolean;
@@ -20207,6 +20285,11 @@ export interface components {
              * @default true
              */
             trashed: boolean;
+        };
+        /** SocialLikeSupportUpdate */
+        SocialLikeSupportUpdate: {
+            /** Enabled */
+            enabled: boolean;
         };
         /** SocialRuleList */
         SocialRuleList: {
@@ -25424,6 +25507,39 @@ export interface operations {
             };
         };
     };
+    set_like_support_api_groups_social_inbox_like_support_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialLikeSupportUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialLikeSupportUpdate"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_rules_api_groups_social_inbox_rules_get: {
         parameters: {
             query?: {
@@ -25781,6 +25897,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialInboxActionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_idea_api_groups_social_inbox__item_id__idea_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialInboxIdeaCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxIdeaResult"];
                 };
             };
             /** @description Validation Error */
