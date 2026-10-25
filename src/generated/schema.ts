@@ -1523,6 +1523,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/social-inbox/caption-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check a caption for each network that posts
+         * @description What each connected network that posts (offers `social.post`) will make of this caption, by its plugin's limits: its
+         *     length against the limit (characters or graphemes), what the feed shows before "… more", and the issues — over the
+         *     limit, the first sentence cut off, an opening greeting or hashtag, a link where links aren't clickable, too many
+         *     hashtags, stock phrases. Pure: nothing is posted, no AI. EDITOR and above.
+         */
+        post: operations["caption_check_api_groups_social_inbox_caption_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/social-inbox/like-support": {
         parameters: {
             query?: never;
@@ -11718,6 +11741,17 @@ export interface components {
             /** Imageurl */
             imageUrl?: string | null;
         };
+        /**
+         * ApprovalPostPreview
+         * @description What the step after an approval will post (a ``social.post`` step), interpolated as the approved run will, and each
+         *     network's caption check (services/integrations/caption_check.py).
+         */
+        ApprovalPostPreview: {
+            /** Text */
+            text: string;
+            /** Results */
+            results?: components["schemas"]["CaptionCheckResult"][];
+        };
         /** AssetAttachment */
         AssetAttachment: {
             /**
@@ -13577,6 +13611,78 @@ export interface components {
              * @default false
              */
             bubbleLinesGenerating: boolean;
+        };
+        /** CaptionCheckList */
+        CaptionCheckList: {
+            /** Results */
+            results: components["schemas"]["CaptionCheckResult"][];
+        };
+        /** CaptionCheckRequest */
+        CaptionCheckRequest: {
+            /** Text */
+            text: string;
+            /** Link */
+            link?: string | null;
+            /** Integrations */
+            integrations?: string[] | null;
+        };
+        /** CaptionCheckResult */
+        CaptionCheckResult: {
+            /** Network */
+            network: string;
+            /**
+             * Integration
+             * @default
+             */
+            integration: string;
+            /**
+             * Name
+             * @default
+             */
+            name: string;
+            /**
+             * Unknown
+             * @default false
+             */
+            unknown: boolean;
+            /**
+             * Unit
+             * @default characters
+             */
+            unit: string;
+            /**
+             * Length
+             * @default 0
+             */
+            length: number;
+            /**
+             * Max
+             * @default 0
+             */
+            max: number;
+            /**
+             * Over
+             * @default false
+             */
+            over: boolean;
+            /** Visibletext */
+            visibleText?: string | null;
+            /**
+             * Cut
+             * @default false
+             */
+            cut: boolean;
+            /** Issues */
+            issues?: components["schemas"]["CaptionIssue"][];
+        };
+        /** CaptionIssue */
+        CaptionIssue: {
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /** Severity */
+            severity: string;
         };
         /**
          * ChangePassword
@@ -21727,6 +21833,7 @@ export interface components {
             choice?: string | null;
             /** Imageurl */
             imageUrl?: string | null;
+            postPreview?: components["schemas"]["ApprovalPostPreview"] | null;
         };
         /** WorkflowCapability */
         WorkflowCapability: {
@@ -25494,6 +25601,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialAISortUpdate"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    caption_check_api_groups_social_inbox_caption_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CaptionCheckRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CaptionCheckList"];
                 };
             };
             /** @description Validation Error */
