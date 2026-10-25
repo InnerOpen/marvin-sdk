@@ -12963,6 +12963,11 @@ export interface components {
             lastRunAt?: string | null;
             /** Lastrunstatus */
             lastRunStatus?: string | null;
+            /**
+             * Failedruns7D
+             * @default 0
+             */
+            failedRuns7d: number;
             /** Attention */
             attention?: string | null;
         };
