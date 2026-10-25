@@ -1635,6 +1635,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/social-inbox/{item_id}/bucket": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sort an item into a bucket, or clear it
+         * @description Put the item in a bucket (keyword, lead, question, feedback, support, noise) or clear it (`bucket: null`). Marvin only:
+         *     nothing on the network changes, and Marvin never overwrites a person's choice. EDITOR and above.
+         */
+        post: operations["sort_api_groups_social_inbox__item_id__bucket_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/social-inbox/{item_id}/trash": {
         parameters: {
             query?: never;
@@ -20008,6 +20029,10 @@ export interface components {
             status: string;
             reply?: components["schemas"]["SocialInboxReplyRead"] | null;
             held?: components["schemas"]["SocialInboxHeldRead"] | null;
+            /** Bucket */
+            bucket?: string | null;
+            /** Bucketsource */
+            bucketSource?: string | null;
             /** Actions */
             actions?: string[];
             /** Replymodes */
@@ -20025,6 +20050,10 @@ export interface components {
             offset: number;
             /** New */
             new: number;
+            /** Buckets */
+            buckets?: {
+                [key: string]: number;
+            };
         };
         /** SocialInboxMessageCreate */
         SocialInboxMessageCreate: {
@@ -20120,6 +20149,11 @@ export interface components {
         SocialInboxSeenResult: {
             /** Changed */
             changed: number;
+        };
+        /** SocialInboxSort */
+        SocialInboxSort: {
+            /** Bucket */
+            bucket?: ("keyword" | "lead" | "question" | "feedback" | "support" | "noise") | null;
         };
         /** SocialInboxSummary */
         SocialInboxSummary: {
@@ -25225,6 +25259,8 @@ export interface operations {
                 offset?: number;
                 /** @description The Trash: items a person moved out of the inbox (restorable). */
                 trashed?: boolean;
+                /** @description One bucket, or `unsorted`. */
+                bucket?: ("keyword" | "lead" | "question" | "feedback" | "support" | "noise" | "unsorted") | null;
             };
             header?: never;
             path?: never;
@@ -25534,6 +25570,41 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": components["schemas"]["SocialInboxHide"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialInboxActionResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    sort_api_groups_social_inbox__item_id__bucket_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialInboxSort"];
             };
         };
         responses: {
