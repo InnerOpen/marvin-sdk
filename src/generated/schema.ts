@@ -1501,6 +1501,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/social-inbox/ai-sort": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Turn AI sorting of the inbox on or off
+         * @description On: once per engine run, the inbox items no one has sorted (at most 20, newest first) are sent to the workspace's AI
+         *     provider in one call and sorted into lead, question, feedback, support or noise. Comments are other people's words:
+         *     turning it on sends them to the AI provider. 409 when no network reads comments yet. ADMIN and above.
+         */
+        put: operations["set_ai_sort_api_groups_social_inbox_ai_sort_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/social-inbox/rules": {
         parameters: {
             query?: never;
@@ -19887,6 +19909,11 @@ export interface components {
              */
             limit: number;
         };
+        /** SocialAISortUpdate */
+        SocialAISortUpdate: {
+            /** Enabled */
+            enabled: boolean;
+        };
         /** SocialAutoReplyResult */
         SocialAutoReplyResult: {
             /** Integration */
@@ -20163,6 +20190,11 @@ export interface components {
             new: number;
             /** Integrations */
             integrations: components["schemas"]["SocialInboxIntegration"][];
+            /**
+             * Aisort
+             * @default false
+             */
+            aiSort: boolean;
             /** Can */
             can: {
                 [key: string]: boolean;
@@ -25346,6 +25378,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialAutoReplyResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_ai_sort_api_groups_social_inbox_ai_sort_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialAISortUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialAISortUpdate"];
                 };
             };
             /** @description Validation Error */
