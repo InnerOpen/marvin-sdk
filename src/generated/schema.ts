@@ -6881,6 +6881,48 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ai/mood": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The Social Battery: how an agent feels about you right now
+         * @description `level` (0–100, null when the character hides its meter), `band` (low | neutral | high) and `visible`, for the
+         *     caller and the named agent; `enabled: false` while the workspace keeps the Social Battery off. It's a game: the
+         *     meter changes greetings and asides, never the help, and `POST /mood/reset` starts it over.
+         */
+        get: operations["read_mood_api_ai_mood_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/mood/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reset our relationship: the agent's meter about you starts over
+         * @description Back to the middle with no past, for the caller and the named agent — the person's own meter only.
+         */
+        post: operations["reset_mood_api_ai_mood_reset_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ai/mcp-servers": {
         parameters: {
             query?: never;
@@ -11468,12 +11510,13 @@ export interface components {
         };
         /**
          * AgentVoice
-         * @description An agent's name and bubble lines, as the bubble shows them while it talks.
+         * @description An agent's name, bubble lines and mood settings, as the bubble shows them while it talks.
          */
         AgentVoice: {
             /** Name */
             name: string;
             bubbleLines?: components["schemas"]["BubbleLines"] | null;
+            mood?: components["schemas"]["MoodSettings"] | null;
         };
         /** AlertActionInput */
         AlertActionInput: {
@@ -17374,8 +17417,36 @@ export interface components {
             taglines: string[];
         };
         /**
+         * MoodRead
+         * @description The Social Battery (services/ai/mood.py): how an agent feels about the caller right now.
+         */
+        MoodRead: {
+            /** Agent */
+            agent: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Level */
+            level?: number | null;
+            /** Band */
+            band?: string | null;
+            /**
+             * Visible
+             * @default true
+             */
+            visible: boolean;
+        };
+        /** MoodResetRequest */
+        MoodResetRequest: {
+            /**
+             * Agent
+             * @default marvin
+             */
+            agent: string;
+        };
+        /**
          * MoodSettings
-         * @description How a character's mood meter works — each choice null until it's made. Not active yet.
+         * @description How a character's mood meter works (services/ai/mood.py) — each choice null until it's made, then the default applies:
+         *     drains treatment, meter visible, memory weeks, absence neutral.
          */
         MoodSettings: {
             /** Drains */
@@ -22220,6 +22291,11 @@ export interface components {
              * @default auto
              */
             defaultRegister: string;
+            /**
+             * Moodenabled
+             * @default false
+             */
+            moodEnabled: boolean;
             mood?: components["schemas"]["MoodSettings"] | null;
             bubbleLines?: components["schemas"]["BubbleLines"] | null;
             /** Bubblelinessource */
@@ -22325,6 +22401,8 @@ export interface components {
             /** Defaultregister */
             defaultRegister?: string | null;
             mood?: components["schemas"]["MoodSettings"] | null;
+            /** Moodenabled */
+            moodEnabled?: boolean | null;
         };
         /**
          * WorkspaceAIUsage
@@ -34174,6 +34252,70 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_mood_api_ai_mood_get: {
+        parameters: {
+            query?: {
+                agent?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MoodRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_mood_api_ai_mood_reset_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MoodResetRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MoodRead"];
                 };
             };
             /** @description Validation Error */
