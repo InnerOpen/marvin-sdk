@@ -2134,6 +2134,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/playbooks/{entry_id}/files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A Playbook's reference files, with their text
+         * @description What an Admin reads before publishing: each reference file of the Playbook (any status) by path, with its text. Read-only.
+         */
+        get: operations["playbook_files_api_groups_playbooks__entry_id__files_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/playbooks/{entry_id}/uses": {
         parameters: {
             query?: never;
@@ -18030,6 +18050,30 @@ export interface components {
              */
             upstreamChanged: boolean;
         };
+        /** PlaybookFileText */
+        PlaybookFileText: {
+            /** Path */
+            path: string;
+            /**
+             * Size
+             * @default 0
+             */
+            size: number;
+            /** Text */
+            text?: string | null;
+            /**
+             * Truncated
+             * @default false
+             */
+            truncated: boolean;
+            /** Error */
+            error?: string | null;
+        };
+        /** PlaybookFiles */
+        PlaybookFiles: {
+            /** Items */
+            items?: components["schemas"]["PlaybookFileText"][];
+        };
         /** PlaybookGithubImport */
         PlaybookGithubImport: {
             /** Url */
@@ -26702,6 +26746,37 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    playbook_files_api_groups_playbooks__entry_id__files_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaybookFiles"];
+                };
             };
             /** @description Validation Error */
             422: {
