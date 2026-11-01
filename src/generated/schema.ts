@@ -19152,11 +19152,6 @@ export interface components {
             deleted: number;
             /** Names */
             names: string[];
-            /**
-             * Skipped
-             * @default 0
-             */
-            skipped: number;
         };
         /**
          * ReorderCollectionsRequest
