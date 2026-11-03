@@ -1,3 +1,10 @@
+# [7.13.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.12.0...v7.13.0) (2026-11-03)
+
+
+### Features
+
+* **schema:** personal API tokens can be pinned to a workspace (groupId); entry types report lockedReason ([34388dd](https://github.com/InnerOpen/marvin-sdk/commit/34388dd6f258bc4119e2567ca9fe8f60d6efd74d))
+
 # [7.12.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.11.0...v7.12.0) (2026-10-21)
 
 
