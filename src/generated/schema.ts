@@ -15406,6 +15406,11 @@ export interface components {
             updateAt?: string | null;
             /** Warnings */
             warnings?: string[] | null;
+            /**
+             * Lockedreason
+             * @description Why this type can't be edited or deleted (services/locked_entry_types.py), or None.
+             */
+            readonly lockedReason: string | null;
         };
         /**
          * EntryTypeRendering
@@ -17095,6 +17100,8 @@ export interface components {
              * @default generic
              */
             integrationId: string;
+            /** Groupid */
+            groupId?: string | null;
         };
         /**
          * LongLiveTokenRead
@@ -17132,6 +17139,8 @@ export interface components {
              * @default generic
              */
             integrationId: string;
+            /** Groupid */
+            groupId?: string | null;
         };
         /**
          * LongLiveTokenUpdate
@@ -17171,6 +17180,8 @@ export interface components {
             description?: string | null;
             /** Enabled */
             enabled: boolean;
+            /** Groupid */
+            groupId?: string | null;
             /** Token */
             token: string;
             /** Createdat */
