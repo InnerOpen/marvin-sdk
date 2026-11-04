@@ -1,3 +1,10 @@
+# [7.16.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.15.0...v7.16.0) (2026-11-04)
+
+
+### Features
+
+* a collection reads which package installed it (sourcePackage) ([#7](https://github.com/InnerOpen/marvin-sdk/issues/7)) ([7d2aea6](https://github.com/InnerOpen/marvin-sdk/commit/7d2aea62f3b09bfb88ebe16dfec2d1939bf94608))
+
 # [7.15.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.14.0...v7.15.0) (2026-11-04)
 
 
