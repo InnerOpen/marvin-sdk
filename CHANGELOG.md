@@ -1,3 +1,10 @@
+# [7.14.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.13.0...v7.14.0) (2026-11-04)
+
+
+### Features
+
+* **schema:** packages: /groups/packages (list, preview, install, export, download, enable, remove); workflows report sourcePackage ([bcb63d5](https://github.com/InnerOpen/marvin-sdk/commit/bcb63d561b65a22dd2268e7d60e30ea98ef0ce01))
+
 # [7.13.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.12.0...v7.13.0) (2026-11-03)
 
 
