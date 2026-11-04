@@ -13569,6 +13569,11 @@ export interface components {
              */
             detail: string;
             /**
+             * Fits
+             * @default true
+             */
+            fits: boolean;
+            /**
              * Name
              * @default
              */
