@@ -1,3 +1,10 @@
+# [7.15.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.14.0...v7.15.0) (2026-11-04)
+
+
+### Features
+
+* **types:** BlueprintApplyResult.fits ([#5](https://github.com/InnerOpen/marvin-sdk/issues/5)) ([e71c76b](https://github.com/InnerOpen/marvin-sdk/commit/e71c76b3a709dfa9a0bf57edea92df9d2208bfac))
+
 # [7.14.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.13.0...v7.14.0) (2026-11-04)
 
 
