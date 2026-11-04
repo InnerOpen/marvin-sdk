@@ -601,6 +601,147 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/packages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Packages
+         * @description The packages installed here, with how many of each kind they hold.
+         */
+        get: operations["list_packages_api_groups_packages_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/packages/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview
+         * @description What installing this package would do, item by item. Changes nothing.
+         */
+        post: operations["preview_api_groups_packages_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/packages/install": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Install
+         * @description Install it: create what is missing (disabled), group it under the package, keep the manifest. Re-installing adds what is missing.
+         */
+        post: operations["install_api_groups_packages_install_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/packages/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Export
+         * @description Bundle chosen workflows, entry types and collections of this workspace into a package file (returned as JSON). With `adopt`, also
+         *     group them into the package here, so they collapse together on the Workflows page.
+         */
+        post: operations["export_api_groups_packages_export_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/packages/{slug}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download
+         * @description The package as the file it was installed from (or built as), ready to upload into another workspace.
+         */
+        get: operations["download_api_groups_packages__slug__download_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/packages/{slug}/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Enable
+         * @description Switch on the package's workflows. The deliberate step after an install: they run with the privileges of whoever installed them.
+         */
+        post: operations["enable_api_groups_packages__slug__enable_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/packages/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove
+         * @description Ungroup the package: what it created stays exactly as it is, in no package.
+         */
+        delete: operations["remove_api_groups_packages__slug__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/webhooks/types": {
         parameters: {
             query?: never;
@@ -13013,6 +13154,8 @@ export interface components {
             sourceIntegrationId?: string | null;
             /** Sourceblueprint */
             sourceBlueprint?: string | null;
+            /** Sourcepackage */
+            sourcePackage?: string | null;
             /** Sourcerecipe */
             sourceRecipe?: string | null;
             /** Sourcerecipeversion */
@@ -17605,6 +17748,145 @@ export interface components {
          * @enum {string}
          */
         OrderDirection: "asc" | "desc";
+        /** PackageEnableResult */
+        PackageEnableResult: {
+            /** Switchedon */
+            switchedOn: number;
+            /** Alreadyon */
+            alreadyOn: number;
+        };
+        /**
+         * PackageExportRequest
+         * @description What to bundle from this workspace's own content.
+         */
+        PackageExportRequest: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Version
+             * @default 1
+             */
+            version: string;
+            /** Workflows */
+            workflows?: string[];
+            /** Entrytypes */
+            entryTypes?: string[];
+            /** Collections */
+            collections?: string[];
+            /**
+             * Adopt
+             * @default false
+             */
+            adopt: boolean;
+        };
+        /**
+         * PackageItem
+         * @description One blueprint's outcome in a preview or an install.
+         */
+        PackageItem: {
+            /** Slug */
+            slug: string;
+            /** Kind */
+            kind: string;
+            /**
+             * Name
+             * @default
+             */
+            name: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "create" | "created" | "exists" | "blocked";
+            /**
+             * Detail
+             * @default
+             */
+            detail: string;
+            /**
+             * Summary
+             * @default
+             */
+            summary: string;
+        };
+        /**
+         * PackageRead
+         * @description An installed package, with what it holds in this workspace.
+         */
+        PackageRead: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Version
+             * @default 1
+             */
+            version: string;
+            /** Entrytypes */
+            entryTypes?: string[];
+            /**
+             * Workflows
+             * @default 0
+             */
+            workflows: number;
+            /**
+             * Workflowson
+             * @default 0
+             */
+            workflowsOn: number;
+            /**
+             * Collections
+             * @default 0
+             */
+            collections: number;
+            /**
+             * Scheduledtasks
+             * @default 0
+             */
+            scheduledTasks: number;
+            /**
+             * Incomingwebhooks
+             * @default 0
+             */
+            incomingWebhooks: number;
+        };
+        /** PackageResult */
+        PackageResult: {
+            /** Package */
+            package: string;
+            /** Name */
+            name: string;
+            /** Items */
+            items: components["schemas"]["PackageItem"][];
+            /**
+             * Created
+             * @default 0
+             */
+            created: number;
+            /**
+             * Existing
+             * @default 0
+             */
+            existing: number;
+            /**
+             * Blocked
+             * @default 0
+             */
+            blocked: number;
+        };
         /**
          * PaginationMeta
          * @description Pagination metadata.
@@ -24069,6 +24351,222 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BlueprintApplyResult"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_packages_api_groups_packages_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackageRead"][];
+                };
+            };
+        };
+    };
+    preview_api_groups_packages_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackageResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    install_api_groups_packages_install_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackageResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_api_groups_packages_export_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackageExportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_api_groups_packages__slug__download_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    enable_api_groups_packages__slug__enable_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackageEnableResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_api_groups_packages__slug__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
