@@ -1,3 +1,94 @@
+# [7.13.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.12.0...v7.13.0) (2026-11-03)
+
+
+### Features
+
+* **schema:** personal API tokens can be pinned to a workspace (groupId); entry types report lockedReason ([34388dd](https://github.com/InnerOpen/marvin-sdk/commit/34388dd6f258bc4119e2567ca9fe8f60d6efd74d))
+
+# [7.12.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.11.0...v7.12.0) (2026-10-21)
+
+
+### Features
+
+* **types:** workflow last run and attention, automation attention summary, integration footprint, removed-integration delete, outgoing webhook source, event sender kinds ([852beab](https://github.com/InnerOpen/marvin-sdk/commit/852beab3829d8cf4aedf0978baf74f34d314a317))
+
+# [7.11.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.10.0...v7.11.0) (2026-10-21)
+
+
+### Features
+
+* **types:** Playbooks (list, import, GitHub import, export, uses) and agent Playbook settings ([506c50e](https://github.com/InnerOpen/marvin-sdk/commit/506c50ed12658b1da58e04389600a1c178f32f14))
+
+# [7.10.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.9.0...v7.10.0) (2026-10-20)
+
+
+### Features
+
+* **types:** include_dismissed covers in-flight hand-offs too ([10b04e4](https://github.com/InnerOpen/marvin-sdk/commit/10b04e464b085618048328d14aa8cccc0f99213e))
+
+# [7.9.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.8.0...v7.9.0) (2026-10-20)
+
+
+### Features
+
+* **types:** Automation results (list, summary, one, retry, dismiss) and the dashboard's results counts ([c107162](https://github.com/InnerOpen/marvin-sdk/commit/c107162a7d243bb4e99282d45fc0cf920b532f62))
+
+# [7.8.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.7.0...v7.8.0) (2026-10-20)
+
+
+### Features
+
+* **types:** a subscriber's archivedInMarvin ([5fa36b4](https://github.com/InnerOpen/marvin-sdk/commit/5fa36b4c2fb5448ee67ce8f724ade7636cf8e31b))
+
+# [7.7.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.6.0...v7.7.0) (2026-10-20)
+
+
+### Features
+
+* **types:** Audience subscribers and the signup counts ([5fc56dd](https://github.com/InnerOpen/marvin-sdk/commit/5fc56dd149bdfc2f454083a20ae6152c2e20cf9d))
+
+# [7.6.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.5.1...v7.6.0) (2026-10-20)
+
+
+### Features
+
+* **types:** Audience — form submissions ([59f6936](https://github.com/InnerOpen/marvin-sdk/commit/59f6936fea592db34027f4f7564dd64aceeb58fa))
+
+## [7.5.1](https://github.com/InnerOpen/marvin-sdk/compare/v7.5.0...v7.5.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **types:** rules no longer carry legacy ([37d5d25](https://github.com/InnerOpen/marvin-sdk/commit/37d5d25f1180cf95797588ea11432e08cf87098f))
+
+# [7.5.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.4.0...v7.5.0) (2026-10-20)
+
+
+### Features
+
+* **types:** Social as its own space ([d35f3cd](https://github.com/InnerOpen/marvin-sdk/commit/d35f3cd16b1c11b65b8d1d14d67d36da91efb441))
+
+# [7.4.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.3.1...v7.4.0) (2026-10-20)
+
+
+### Features
+
+* **types:** the Social inbox ([a69a4d3](https://github.com/InnerOpen/marvin-sdk/commit/a69a4d3736af739dadc9e212ab4b33101e6d7fa4))
+
+## [7.3.1](https://github.com/InnerOpen/marvin-sdk/compare/v7.3.0...v7.3.1) (2026-10-19)
+
+
+### Bug Fixes
+
+* **auth:** resetPassword sends what the API takes ([74fb479](https://github.com/InnerOpen/marvin-sdk/commit/74fb47963eb6faa338fb12d424202a9257fd1b44))
+
+# [7.3.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.2.0...v7.3.0) (2026-10-19)
+
+
+### Features
+
+* **types:** workspace email branding ([1b80756](https://github.com/InnerOpen/marvin-sdk/commit/1b807567955166b5b6a6e484cf7bc9d00734863b))
+
 # [7.2.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.1.0...v7.2.0) (2026-10-19)
 
 
