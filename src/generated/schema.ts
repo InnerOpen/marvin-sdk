@@ -14326,6 +14326,8 @@ export interface components {
              * @default false
              */
             sourceIntegrationHasLogo: boolean;
+            /** Sourcepackage */
+            sourcePackage?: string | null;
         };
         /**
          * CollectionUpdate
