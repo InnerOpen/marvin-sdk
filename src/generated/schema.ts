@@ -10894,6 +10894,22 @@ export interface components {
             /** Tokens */
             tokens: number;
         };
+        /**
+         * AIUsageIntegration
+         * @description This month's calls to one integration, in the unit it bills in (not part of `month_cost_usd`).
+         */
+        AIUsageIntegration: {
+            /** Provider */
+            provider: string;
+            /** Unit */
+            unit: string;
+            /** Calls */
+            calls: number;
+            /** Units */
+            units: number;
+            /** Billed */
+            billed: number;
+        };
         /** AIUsageLimits */
         AIUsageLimits: {
             /** Maxcostpermonthusd */
@@ -17844,6 +17860,13 @@ export interface components {
             version: string;
             /** Entrytypes */
             entryTypes?: string[];
+            /** Playbooks */
+            playbooks?: string[];
+            /**
+             * Playbookspublished
+             * @default 0
+             */
+            playbooksPublished: number;
             /**
              * Workflows
              * @default 0
@@ -22782,6 +22805,11 @@ export interface components {
              * @default []
              */
             unpricedModels: components["schemas"]["AIUnpricedModel"][];
+            /**
+             * Integrations
+             * @default []
+             */
+            integrations: components["schemas"]["AIUsageIntegration"][];
         };
         /**
          * WorkspaceActivationRequest
