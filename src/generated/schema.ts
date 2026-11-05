@@ -17844,6 +17844,13 @@ export interface components {
             version: string;
             /** Entrytypes */
             entryTypes?: string[];
+            /** Playbooks */
+            playbooks?: string[];
+            /**
+             * Playbookspublished
+             * @default 0
+             */
+            playbooksPublished: number;
             /**
              * Workflows
              * @default 0
