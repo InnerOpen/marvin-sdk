@@ -7254,9 +7254,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Workflow runs waiting for approval
-         * @description The runs in this workspace waiting at an Approval step that you may decide (your role is at least the step's
-         *     `approvers`), oldest first. EDITOR and above.
+         * Workflow runs waiting for approval, or recently decided
+         * @description `state=pending` (the default): the runs in this workspace waiting at an Approval step that you may decide (your
+         *     role is at least the step's `approvers`), oldest first. `state=decided`: the latest decisions on approvals you may
+         *     decide, newest first, each with who decided, when and the note. EDITOR and above.
          */
         get: operations["list_approvals_api_automations_approvals_get"];
         put?: never;
@@ -22261,6 +22262,8 @@ export interface components {
             expiresAt: string;
             /** Decidedby */
             decidedBy?: string | null;
+            /** Decidedbyname */
+            decidedByName?: string | null;
             /** Decidedat */
             decidedAt?: string | null;
             /** Note */
@@ -35272,7 +35275,9 @@ export interface operations {
     };
     list_approvals_api_automations_approvals_get: {
         parameters: {
-            query?: never;
+            query?: {
+                state?: "pending" | "decided";
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -35286,6 +35291,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowApprovalRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
