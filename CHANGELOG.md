@@ -1,3 +1,10 @@
+# [7.17.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.16.0...v7.17.0) (2026-11-07)
+
+
+### Features
+
+* wizards API types (guided setups a package brings) ([#14](https://github.com/InnerOpen/marvin-sdk/issues/14)) ([a267263](https://github.com/InnerOpen/marvin-sdk/commit/a2672630aff6f17554af92f1961359b0821786df))
+
 # [7.16.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.15.0...v7.16.0) (2026-11-04)
 
 
