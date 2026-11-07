@@ -742,6 +742,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/wizards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Wizards
+         * @description Every wizard installed here, by name.
+         */
+        get: operations["list_wizards_api_groups_wizards_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/wizards/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Wizard
+         * @description One wizard with its steps.
+         */
+        get: operations["get_wizard_api_groups_wizards__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/webhooks/types": {
         parameters: {
             query?: never;
@@ -13567,7 +13607,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook";
+            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook" | "wizard";
             /** Created */
             created: boolean;
             /**
@@ -13637,7 +13677,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook";
+            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook" | "wizard";
             /** Slug */
             slug: string;
             /** Name */
@@ -17868,6 +17908,8 @@ export interface components {
              * @default 0
              */
             playbooksPublished: number;
+            /** Wizards */
+            wizards?: string[];
             /**
              * Workflows
              * @default 0
@@ -22212,6 +22254,58 @@ export interface components {
                 [key: string]: number;
             };
         };
+        /**
+         * WizardRead
+         * @description A wizard with its definition (title, steps), as the wizard page draws it.
+         */
+        WizardRead: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Steps
+             * @default 0
+             */
+            steps: number;
+            /** Package */
+            package: string;
+            /** Packagename */
+            packageName: string;
+            /** Definition */
+            definition?: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * WizardSummary
+         * @description One guided setup in the list.
+         */
+        WizardSummary: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Steps
+             * @default 0
+             */
+            steps: number;
+            /** Package */
+            package: string;
+            /** Packagename */
+            packageName: string;
+        };
         /** WorkflowApprovalDecision */
         WorkflowApprovalDecision: {
             /**
@@ -24605,6 +24699,57 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_wizards_api_groups_wizards_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WizardSummary"][];
+                };
+            };
+        };
+    };
+    get_wizard_api_groups_wizards__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WizardRead"];
                 };
             };
             /** @description Validation Error */
