@@ -1,3 +1,10 @@
+# [7.18.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.17.0...v7.18.0) (2026-11-08)
+
+
+### Features
+
+* views API types (a view of an entry a package brings: GET /groups/views, /groups/views/{slug}; PackageRead.views) ([#15](https://github.com/InnerOpen/marvin-sdk/issues/15)) ([bb07cc3](https://github.com/InnerOpen/marvin-sdk/commit/bb07cc36be2c33bb1c447dcaf86c3b29ff14fa14))
+
 # [7.17.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.16.0...v7.17.0) (2026-11-07)
 
 
