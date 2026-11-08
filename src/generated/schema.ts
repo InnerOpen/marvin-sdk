@@ -782,6 +782,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/views": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Views
+         * @description Every view installed here, by name; `entry_type` keeps only the views of that type.
+         */
+        get: operations["list_views_api_groups_views_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/views/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get View
+         * @description One view with its definition.
+         */
+        get: operations["get_view_api_groups_views__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/webhooks/types": {
         parameters: {
             query?: never;
@@ -13607,7 +13647,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook" | "wizard";
+            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook" | "wizard" | "view";
             /** Created */
             created: boolean;
             /**
@@ -13677,7 +13717,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook" | "wizard";
+            kind: "collection" | "entry_type" | "entry_fields" | "scheduled_task" | "event_subscription" | "incoming_webhook" | "workflow" | "playbook" | "wizard" | "view";
             /** Slug */
             slug: string;
             /** Name */
@@ -17910,6 +17950,8 @@ export interface components {
             playbooksPublished: number;
             /** Wizards */
             wizards?: string[];
+            /** Views */
+            views?: string[];
             /**
              * Workflows
              * @default 0
@@ -22068,6 +22110,58 @@ export interface components {
             ctx?: Record<string, never>;
         };
         /**
+         * ViewRead
+         * @description A view with its definition (spine, lanes, actions), as the view page draws it.
+         */
+        ViewRead: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Kind
+             * @default
+             */
+            kind: string;
+            /**
+             * Entrytype
+             * @default
+             */
+            entryType: string;
+            /** Package */
+            package: string;
+            /** Packagename */
+            packageName: string;
+            /** Definition */
+            definition?: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * ViewSummary
+         * @description One view in the list.
+         */
+        ViewSummary: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Kind
+             * @default
+             */
+            kind: string;
+            /**
+             * Entrytype
+             * @default
+             */
+            entryType: string;
+            /** Package */
+            package: string;
+            /** Packagename */
+            packageName: string;
+        };
+        /**
          * WebhookCreate
          * @description Schema for creating a new webhook configuration.
          *     Includes fields for enabling the webhook, naming it, specifying the target URL,
@@ -24750,6 +24844,68 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WizardRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_views_api_groups_views_get: {
+        parameters: {
+            query?: {
+                entry_type?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ViewSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_view_api_groups_views__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ViewRead"];
                 };
             };
             /** @description Validation Error */
