@@ -1,3 +1,10 @@
+# [7.20.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.19.0...v7.20.0) (2026-11-09)
+
+
+### Features
+
+* asset content endpoint types (InnerOpen/marvin[#127](https://github.com/InnerOpen/marvin-sdk/issues/127)): GET /api/platform/assets/{id}/content ([#17](https://github.com/InnerOpen/marvin-sdk/issues/17)) ([74d86d1](https://github.com/InnerOpen/marvin-sdk/commit/74d86d1df746d5dadd78c5b3db9dbec16c5733e3))
+
 # [7.19.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.18.0...v7.19.0) (2026-11-09)
 
 
