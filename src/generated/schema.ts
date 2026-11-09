@@ -791,7 +791,8 @@ export interface paths {
         };
         /**
          * List Views
-         * @description Every view installed here, by name; `entry_type` keeps only the views of that type.
+         * @description Every view installed here, by name. `entry_type` keeps only the views of that type; `spine_type` only those whose spine is that
+         *     type, with their definitions; `include=definition` carries the definitions in any case (else `definition` is empty).
          */
         get: operations["list_views_api_groups_views_get"];
         put?: never;
@@ -22138,30 +22139,6 @@ export interface components {
             };
         };
         /**
-         * ViewSummary
-         * @description One view in the list.
-         */
-        ViewSummary: {
-            /** Slug */
-            slug: string;
-            /** Name */
-            name: string;
-            /**
-             * Kind
-             * @default
-             */
-            kind: string;
-            /**
-             * Entrytype
-             * @default
-             */
-            entryType: string;
-            /** Package */
-            package: string;
-            /** Packagename */
-            packageName: string;
-        };
-        /**
          * WebhookCreate
          * @description Schema for creating a new webhook configuration.
          *     Includes fields for enabling the webhook, naming it, specifying the target URL,
@@ -24861,6 +24838,8 @@ export interface operations {
         parameters: {
             query?: {
                 entry_type?: string | null;
+                spine_type?: string | null;
+                include?: string | null;
             };
             header?: never;
             path?: never;
@@ -24874,7 +24853,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ViewSummary"][];
+                    "application/json": components["schemas"]["ViewRead"][];
                 };
             };
             /** @description Validation Error */
