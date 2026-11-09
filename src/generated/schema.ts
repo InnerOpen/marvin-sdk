@@ -751,7 +751,7 @@ export interface paths {
         };
         /**
          * List Wizards
-         * @description Every wizard installed here, by name.
+         * @description Every wizard installed here, by name. `entry_type` keeps only those that put a button on that type's entries.
          */
         get: operations["list_wizards_api_groups_wizards_get"];
         put?: never;
@@ -22351,6 +22351,24 @@ export interface components {
             };
         };
         /**
+         * WizardButton
+         * @description A button an entry's page shows to open a setup on that entry.
+         */
+        WizardButton: {
+            /** Entrytype */
+            entryType: string;
+            /** Label */
+            label: string;
+            /** Key */
+            key: string;
+            /** Step */
+            step?: string | null;
+            /** Also */
+            also?: {
+                [key: string]: string;
+            };
+        };
+        /**
          * WizardRead
          * @description A wizard with its definition (title, steps), as the wizard page draws it.
          */
@@ -22373,6 +22391,7 @@ export interface components {
             package: string;
             /** Packagename */
             packageName: string;
+            button?: components["schemas"]["WizardButton"] | null;
             /** Definition */
             definition?: {
                 [key: string]: unknown;
@@ -22401,6 +22420,7 @@ export interface components {
             package: string;
             /** Packagename */
             packageName: string;
+            button?: components["schemas"]["WizardButton"] | null;
         };
         /** WorkflowApprovalDecision */
         WorkflowApprovalDecision: {
@@ -24810,7 +24830,9 @@ export interface operations {
     };
     list_wizards_api_groups_wizards_get: {
         parameters: {
-            query?: never;
+            query?: {
+                entry_type?: string | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -24824,6 +24846,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WizardSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
