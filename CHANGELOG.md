@@ -1,3 +1,10 @@
+# [7.19.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.18.0...v7.19.0) (2026-11-09)
+
+
+### Features
+
+* views list takes spine_type and include=definition (InnerOpen/marvin[#117](https://github.com/InnerOpen/marvin-sdk/issues/117)) ([#16](https://github.com/InnerOpen/marvin-sdk/issues/16)) ([f81e097](https://github.com/InnerOpen/marvin-sdk/commit/f81e0974d05009d78d90f8cf250e3bd9c9d99a2c))
+
 # [7.18.0](https://github.com/InnerOpen/marvin-sdk/compare/v7.17.0...v7.18.0) (2026-11-08)
 
 
