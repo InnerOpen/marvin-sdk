@@ -8803,6 +8803,31 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/assets/{item_id}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Serve Asset Bytes (never redirects)
+         * @description The file's bytes, from this API in every case.
+         *
+         *     ``/file`` redirects to the storage domain for remote storage, and a page that has to read the picture itself (the
+         *     cropper behind Edit picture) can't follow that: the browser blocks the cross-origin read when that domain sends
+         *     no CORS headers. So for a remote file the API fetches it from its storage URL and hands the bytes on. Up to
+         *     ``MAX_CONTENT_BYTES``: larger files answer 413 (this is for editing pictures, not for serving video).
+         */
+        get: operations["serve_asset_content_api_platform_assets__item_id__content_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/trash": {
         parameters: {
             query?: never;
@@ -38634,6 +38659,37 @@ export interface operations {
         };
     };
     serve_asset_file_api_platform_assets__item_id__file_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    serve_asset_content_api_platform_assets__item_id__content_get: {
         parameters: {
             query?: never;
             header?: never;
