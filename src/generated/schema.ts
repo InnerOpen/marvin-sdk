@@ -8671,6 +8671,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/assets/{item_id}/usage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Where an asset is used
+         * @description The entries this asset is attached to, and the role each attachment carries (the asset itself has no role). Entries in the Trash and
+         *     internal ones are left out.
+         */
+        get: operations["get_asset_usage_api_platform_assets__item_id__usage_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/assets/{item_id}": {
         parameters: {
             query?: never;
@@ -12205,6 +12226,29 @@ export interface components {
             } | null;
             /** Tag Ids */
             tag_ids?: string[] | null;
+        };
+        /**
+         * AssetUsage
+         * @description One entry an asset is attached to, and the role the attachment carries (a beat's `still`).
+         */
+        AssetUsage: {
+            /**
+             * Entryid
+             * Format: uuid4
+             */
+            entryId: string;
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status?: string | null;
+            /** Entrytype */
+            entryType: string;
+            /** Entrytypename */
+            entryTypeName: string;
+            /** Role */
+            role?: string | null;
         };
         /**
          * AssistantCharacter
@@ -38460,6 +38504,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TypeCount"][];
+                };
+            };
+        };
+    };
+    get_asset_usage_api_platform_assets__item_id__usage_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssetUsage"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
