@@ -8512,6 +8512,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/resources/{item_id}/usage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Where a resource is used
+         * @description The entries this resource is attached to, and the role each attachment carries. Entries in the Trash and internal ones are left out.
+         */
+        get: operations["get_resource_usage_api_platform_resources__item_id__usage_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/resources/{item_id}": {
         parameters: {
             query?: never;
@@ -19794,6 +19814,29 @@ export interface components {
             } | null;
             /** Tag Ids */
             tag_ids?: string[] | null;
+        };
+        /**
+         * ResourceUsage
+         * @description One entry a resource is attached to, and the role the attachment carries.
+         */
+        ResourceUsage: {
+            /**
+             * Entryid
+             * Format: uuid4
+             */
+            entryId: string;
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status?: string | null;
+            /** Entrytype */
+            entryType: string;
+            /** Entrytypename */
+            entryTypeName: string;
+            /** Role */
+            role?: string | null;
         };
         /** RunsDay */
         RunsDay: {
@@ -38206,6 +38249,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TypeCount"][];
+                };
+            };
+        };
+    };
+    get_resource_usage_api_platform_resources__item_id__usage_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourceUsage"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
