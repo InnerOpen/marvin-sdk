@@ -661,6 +661,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/packages/update/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Update Preview
+         * @description What updating this package would do, item by item: what is missing would be made, what is here would be brought up to this file.
+         *     Changes nothing.
+         */
+        post: operations["update_preview_api_groups_packages_update_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/groups/packages/update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Update
+         * @description Bring the installed package up to this file: create what is missing (disabled), replace the steps of the workflows and the text of the
+         *     Playbooks it installed (one changed here is left unless `replace_edits`), and add the fields and lookups its entry types lack.
+         *     Nothing is removed.
+         */
+        post: operations["update_api_groups_packages_update_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/packages/export": {
         parameters: {
             query?: never;
@@ -17998,7 +18041,7 @@ export interface components {
              * Status
              * @enum {string}
              */
-            status: "create" | "created" | "exists" | "blocked";
+            status: "create" | "created" | "exists" | "blocked" | "update" | "updated" | "current" | "edited";
             /**
              * Detail
              * @default
@@ -18091,6 +18134,21 @@ export interface components {
              * @default 0
              */
             blocked: number;
+            /**
+             * Updated
+             * @default 0
+             */
+            updated: number;
+            /**
+             * Current
+             * @default 0
+             */
+            current: number;
+            /**
+             * Edited
+             * @default 0
+             */
+            edited: number;
         };
         /**
          * PaginationMeta
@@ -24757,6 +24815,82 @@ export interface operations {
     install_api_groups_packages_install_post: {
         parameters: {
             query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackageResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_preview_api_groups_packages_update_preview_post: {
+        parameters: {
+            query?: {
+                /** @description Count a workflow or Playbook changed in this workspace as one to replace */
+                replace_edits?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackageResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_api_groups_packages_update_post: {
+        parameters: {
+            query?: {
+                /** @description Go ahead although a workflow or Playbook was changed in this workspace */
+                replace_edits?: boolean;
+            };
             header?: never;
             path?: never;
             cookie?: never;
