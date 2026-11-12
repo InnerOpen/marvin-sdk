@@ -22537,6 +22537,8 @@ export interface components {
             /** Packagename */
             packageName: string;
             button?: components["schemas"]["WizardButton"] | null;
+            /** Buttons */
+            buttons?: components["schemas"]["WizardButton"][];
             /** Definition */
             definition?: {
                 [key: string]: unknown;
@@ -22566,6 +22568,8 @@ export interface components {
             /** Packagename */
             packageName: string;
             button?: components["schemas"]["WizardButton"] | null;
+            /** Buttons */
+            buttons?: components["schemas"]["WizardButton"][];
         };
         /** WorkflowApprovalDecision */
         WorkflowApprovalDecision: {
