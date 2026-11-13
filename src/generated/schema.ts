@@ -7887,6 +7887,61 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/entries/bulk-delete/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview a bulk delete
+         * @description What a bulk delete of the entries `spec` selects would remove now, counted by entry type. Changes nothing. Run it
+         *     first: the delete takes its `total` back as `confirmTotal`. 403 when the caller could not do the delete (permanent:
+         *     ADMIN/OWNER; trash: whoever may delete those entries one by one). Declared before `/{item_id}`.
+         */
+        post: operations["preview_bulk_delete_api_platform_entries_bulk_delete_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/bulk-delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Where a bulk delete stands
+         * @description The workspace's bulk delete in progress (`done` of `total`), or its last one since the server started; null
+         *     when there was none. A restart forgets this, never what was deleted: the `entries_bulk_deleted` event is the
+         *     record. Declared before `/{item_id}`.
+         */
+        get: operations["bulk_delete_status_api_platform_entries_bulk_delete_get"];
+        put?: never;
+        /**
+         * Delete entries in bulk
+         * @description Move the entries `spec` selects to the Trash (`mode` trash: restorable; each slug is moved aside so new entries
+         *     can use it, and a restore gives it back while it is still free) or delete them for good (`mode` permanent,
+         *     ADMIN/OWNER). Assets and resources are never deleted. `confirmTotal` must be the preview's `total`: when the
+         *     selection no longer counts that many it is a 409 with the fresh preview in `detail`, and nothing is done.
+         *
+         *     It runs in the background, 500 entries per transaction, and answers at once with the job; `GET
+         *     /entries/bulk-delete` says how far it is. One at a time per workspace (409 while one runs). The entries send no
+         *     `entry_trashed` / `entry_deleted` each: one `entries_bulk_deleted` says what went. Declared before `/{item_id}`.
+         */
+        post: operations["bulk_delete_entries_api_platform_entries_bulk_delete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/entries/counts": {
         parameters: {
             query?: never;
@@ -15390,6 +15445,89 @@ export interface components {
             typeSlug?: string | null;
             /** Touchedat */
             touchedAt?: string | null;
+        };
+        /**
+         * EntryBulkDeleteJob
+         * @description A bulk delete running in the background, or the workspace's last one since the server started.
+         */
+        EntryBulkDeleteJob: {
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "running" | "done" | "failed";
+            /** Mode */
+            mode: string;
+            /** Description */
+            description?: string | null;
+            /** Total */
+            total: number;
+            /** Done */
+            done: number;
+            /** Startedat */
+            startedAt: string;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /** Error */
+            error?: string | null;
+            /** Result */
+            result?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * EntryBulkDeletePreview
+         * @description What a bulk delete would remove now. Nothing is changed by asking.
+         */
+        EntryBulkDeletePreview: {
+            /** Mode */
+            mode: string;
+            /** Total */
+            total: number;
+            /** Bytype */
+            byType: {
+                [key: string]: number;
+            };
+            /** Types */
+            types: components["schemas"]["EntryBulkDeleteType"][];
+            /** Text */
+            text: string;
+            /** Published */
+            published: number;
+            /** Intrash */
+            inTrash: number;
+        };
+        /**
+         * EntryBulkDeleteRequest
+         * @description A bulk delete (services/entries/bulk_delete.py): the entries `spec` selects (an entry query, the keys of
+         *     POST /entries/query; it must narrow by type, fields, entries, a collection, tags, text or where), moved to the Trash
+         *     (`mode` trash, restorable) or deleted for good (`mode` permanent, ADMIN/OWNER). `confirmTotal` is the total the
+         *     preview counted: required to delete, and nothing is done when the selection no longer has that many.
+         */
+        EntryBulkDeleteRequest: {
+            /** Spec */
+            spec: {
+                [key: string]: unknown;
+            };
+            /**
+             * Mode
+             * @default trash
+             * @enum {string}
+             */
+            mode: "trash" | "permanent";
+            /** Confirmtotal */
+            confirmTotal?: number | null;
+            /** Description */
+            description?: string | null;
+        };
+        /** EntryBulkDeleteType */
+        EntryBulkDeleteType: {
+            /** Entrytype */
+            entryType: string;
+            /** Name */
+            name: string;
+            /** Count */
+            count: number;
         };
         /**
          * EntryCollectionRead
@@ -37158,6 +37296,92 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EntryQueryResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_bulk_delete_api_platform_entries_bulk_delete_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntryBulkDeleteRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryBulkDeletePreview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    bulk_delete_status_api_platform_entries_bulk_delete_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryBulkDeleteJob"] | null;
+                };
+            };
+        };
+    };
+    bulk_delete_entries_api_platform_entries_bulk_delete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntryBulkDeleteRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryBulkDeleteJob"];
                 };
             };
             /** @description Validation Error */
