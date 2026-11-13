@@ -7850,7 +7850,10 @@ export interface paths {
         /**
          * List Entries
          * @description Every entry but those in the Trash (the Trash collection lists those) and those of an internal entry type
-         *     (`capabilities.listed: false`, e.g. the Social auto-reply rules: their pages list them; fetch one by id).
+         *     (`capabilities.listed: false`, e.g. the Social auto-reply rules: their pages list them; fetch one by id, or name
+         *     the type in `entry_type_id`), newest first. `limit`/`offset` page it and `entry_type_id` narrows it; the
+         *     `X-Total-Count` header says how many there are in all. For conditions, other orders and the total in the body,
+         *     use `POST /entries/query`.
          */
         get: operations["list_entries_api_platform_entries_get"];
         put?: never;
@@ -7897,6 +7900,27 @@ export interface paths {
          *     not counted). Declared before `/{item_id}`.
          */
         get: operations["entry_counts_api_platform_entries_counts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/counts/by-type": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Entry counts by entry type
+         * @description `{entry_type_id: n}`: how many entries each type has, counted as the list counts them (not those in the Trash,
+         *     nor those of an internal type); a type with none is left out. Declared before `/{item_id}`.
+         */
+        get: operations["entry_counts_by_type_api_platform_entries_counts_by_type_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8325,6 +8349,7 @@ export interface paths {
          * Get Collection Entries
          * @description Get all entries in a collection, ordered by sort_order. Entries in the Trash are listed only by
          *     the Trash collection (a manual collection keeps their membership, so a restore puts them back).
+         *     `limit`/`offset` page it; the `X-Total-Count` header says how many there are in all.
          */
         get: operations["get_collection_entries_api_platform_collections__item_id__entries_get"];
         put?: never;
@@ -37046,7 +37071,14 @@ export interface operations {
     };
     list_entries_api_platform_entries_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description At most this many (default: all of them) */
+                limit?: number | null;
+                /** @description Skip this many first (with `limit`, one page) */
+                offset?: number;
+                /** @description Only entries of this type */
+                entry_type_id?: string | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -37060,6 +37092,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EntryRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -37131,6 +37172,28 @@ export interface operations {
         };
     };
     entry_counts_api_platform_entries_counts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
+                };
+            };
+        };
+    };
+    entry_counts_by_type_api_platform_entries_counts_by_type_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -37974,7 +38037,12 @@ export interface operations {
     };
     get_collection_entries_api_platform_collections__item_id__entries_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description At most this many (default: all of them) */
+                limit?: number | null;
+                /** @description Skip this many first (with `limit`, one page) */
+                offset?: number;
+            };
             header?: never;
             path: {
                 item_id: string;
