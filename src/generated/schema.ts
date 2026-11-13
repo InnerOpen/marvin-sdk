@@ -7441,6 +7441,31 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/automations/selection": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * What a workflow would act on if it ran now
+         * @description The entries a manual workflow's first step, a `collect`, would gather with these `inputs` (as `POST /{id}/run`
+         *     takes them), without running anything: their `ids` in its order, `count`, `total` (all that match, before its
+         *     `limit`) and, for each `left_out` reason (a `where` put in place of the collect's own), how many match it
+         *     instead. `found` false: no such workflow, or it does not start by gathering entries. A page that offers to run
+         *     it (a guided setup's run step) lists them first. 400 for inputs it does not take. Any member, as for reading
+         *     entries (it says no more than an entry query would): someone who may not run it still sees what it would do.
+         */
+        post: operations["get_selection_api_automations_selection_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/automations/approvals/{approval_id}/decide": {
         parameters: {
             query?: never;
@@ -20370,6 +20395,21 @@ export interface components {
                 [key: string]: number | null;
             };
         };
+        /**
+         * SelectionCondition
+         * @description One condition of a reason something is left out, as a `collect` query's `where` item.
+         */
+        SelectionCondition: {
+            /** Field */
+            field: string;
+            /**
+             * Op
+             * @enum {string}
+             */
+            op: "eq" | "neq" | "in" | "contains" | "exists" | "missing" | "gt" | "gte" | "lt" | "lte";
+            /** Value */
+            value?: unknown;
+        };
         /** SignInRead */
         SignInRead: {
             /** Userid */
@@ -23084,6 +23124,44 @@ export interface components {
             message?: string | null;
             /** Approvers */
             approvers: string;
+        };
+        /**
+         * WorkflowSelection
+         * @description What a manual workflow would act on if it ran now: the entries its first step, a `collect`, gathers
+         *     (services/automation/selection.py). `found` false: the workflow does not start by gathering entries (or is not here).
+         */
+        WorkflowSelection: {
+            /** Found */
+            found: boolean;
+            /** Step */
+            step?: string | null;
+            /** Ids */
+            ids?: string[];
+            /**
+             * Count
+             * @default 0
+             */
+            count: number;
+            /**
+             * Total
+             * @default 0
+             */
+            total: number;
+            /** Limit */
+            limit?: number | null;
+            /** Leftout */
+            leftOut?: number[];
+        };
+        /** WorkflowSelectionRequest */
+        WorkflowSelectionRequest: {
+            /** Slug */
+            slug: string;
+            /** Inputs */
+            inputs?: {
+                [key: string]: unknown;
+            };
+            /** Leftout */
+            leftOut?: components["schemas"]["SelectionCondition"][][];
         };
         /**
          * WorkflowState
@@ -36076,6 +36154,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_selection_api_automations_selection_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkflowSelectionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowSelection"];
                 };
             };
             /** @description Validation Error */
