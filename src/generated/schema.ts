@@ -7380,10 +7380,59 @@ export interface paths {
         /**
          * Workflow runs waiting for approval, or recently decided
          * @description `state=pending` (the default): the runs in this workspace waiting at an Approval step that you may decide (your
-         *     role is at least the step's `approvers`), oldest first. `state=decided`: the latest decisions on approvals you may
-         *     decide, newest first, each with who decided, when and the note. EDITOR and above.
+         *     role is at least the step's `approvers`), oldest first, at most 100. `state=decided`: the latest decisions on
+         *     approvals you may decide, newest first, each with who decided, when and the note. EDITOR and above.
+         *
+         *     Narrow either list to what a page is about, before the cap: `automation` (a workflow's slug), `entry_id` (repeat
+         *     it, up to 50: approvals about those entries) and `execution_id` (the run that asked). Together they all apply.
          */
         get: operations["list_approvals_api_automations_approvals_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/runs/{execution_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Where a workflow run stands
+         * @description What a run is doing now, for whoever started it (`POST /{id}/run` answers with its `execution_id`): `state` is
+         *     starting, running, waiting (on a person: `waitingOn` names the approvals), working (the run ended, the worker job
+         *     it started has not: `job`), done, failed (`error`) or cancelled. A run that went on after an approval or a wait
+         *     is followed (`continuedBy`), so one id answers until the end. Step counts only: no outputs, no log. EDITOR and
+         *     above; 404 for a run this workspace doesn't have.
+         */
+        get: operations["get_run_state_api_automations_runs__execution_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/automations/state": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One workflow by slug: is it there, on, and yours to run
+         * @description For a page that offers to run a workflow it knows by slug (a guided setup's run step): `found`, its `id`, `enabled`,
+         *     `name`, and `canRun`, whether the caller may run it now (a workspace admin, and it is on). EDITOR and above, who
+         *     may not list the workflows themselves.
+         */
+        get: operations["get_workflow_state_api_automations_state_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -7560,6 +7609,9 @@ export interface paths {
          *     ``background=true`` starts the run after answering (``{"status": "started"}``) instead of waiting for it — for a
          *     run over many entries (re-listing a shop) that would outlast the request. Its progress is the usual
          *     automation_started / automation_ran events (the activity toasts) and the workflow's Runs.
+         *
+         *     Either answer of a real run carries ``execution_id``, the run as it is recorded: ``GET /runs/{execution_id}``
+         *     says where it stands (running, waiting for an approval, working on a job, done, failed).
          *
          *     ``dry_run=true`` resolves the target + each action's inputs but executes nothing (no AI call,
          *     no mutation, no webhook POST) and records nothing — it returns ``plan``, the resolved per-step
@@ -22602,8 +22654,12 @@ export interface components {
             automationName?: string | null;
             /** Automationslug */
             automationSlug?: string | null;
+            /** Executionid */
+            executionId?: string | null;
             /** Message */
             message: string;
+            /** Detail */
+            detail?: string | null;
             /** Approvers */
             approvers: string;
             /** Status */
@@ -22947,6 +23003,109 @@ export interface components {
              * @default false
              */
             optional: boolean;
+        };
+        /**
+         * WorkflowRunJob
+         * @description The worker job a run's last step started (an entry with a `kind` and a worker `status`), as it stands now.
+         */
+        WorkflowRunJob: {
+            /**
+             * Entryid
+             * Format: uuid4
+             */
+            entryId: string;
+            /** Slug */
+            slug: string;
+            /** Kind */
+            kind: string;
+            /** Status */
+            status: string;
+            /** Finished */
+            finished: boolean;
+        };
+        /**
+         * WorkflowRunState
+         * @description Where a run stands, followed past its approvals and waits to the runs that went on from it
+         *     (services/automation/run_state.py). No step outputs and no log: the run's detail is the admin's Runs page.
+         */
+        WorkflowRunState: {
+            /**
+             * Executionid
+             * Format: uuid4
+             */
+            executionId: string;
+            /** Automationslug */
+            automationSlug: string;
+            /** Automationname */
+            automationName?: string | null;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "starting" | "running" | "waiting" | "working" | "done" | "failed" | "cancelled";
+            /** Startedat */
+            startedAt?: string | null;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /** Error */
+            error?: string | null;
+            /**
+             * Stepstotal
+             * @default 0
+             */
+            stepsTotal: number;
+            /**
+             * Stepsok
+             * @default 0
+             */
+            stepsOk: number;
+            /**
+             * Stepsfailed
+             * @default 0
+             */
+            stepsFailed: number;
+            /** Waitingon */
+            waitingOn?: components["schemas"]["WorkflowRunWaitingOn"][];
+            /** Continuedby */
+            continuedBy?: string | null;
+            job?: components["schemas"]["WorkflowRunJob"] | null;
+        };
+        /**
+         * WorkflowRunWaitingOn
+         * @description An approval a run waits on. `message` is null for a reader below the step's `approvers` (it is not theirs to read).
+         */
+        WorkflowRunWaitingOn: {
+            /**
+             * Approvalid
+             * Format: uuid4
+             */
+            approvalId: string;
+            /** Message */
+            message?: string | null;
+            /** Approvers */
+            approvers: string;
+        };
+        /**
+         * WorkflowState
+         * @description One workflow by slug, for a page that offers to run it: is it there, is it on, and may the caller run it.
+         */
+        WorkflowState: {
+            /** Found */
+            found: boolean;
+            /** Id */
+            id?: string | null;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
+            /** Name */
+            name?: string | null;
+            /**
+             * Canrun
+             * @default false
+             */
+            canRun: boolean;
         };
         /** WorkspaceAISettingsRead */
         WorkspaceAISettingsRead: {
@@ -35838,6 +35997,9 @@ export interface operations {
         parameters: {
             query?: {
                 state?: "pending" | "decided";
+                automation?: string | null;
+                entry_id?: string[] | null;
+                execution_id?: string | null;
             };
             header?: never;
             path?: never;
@@ -35852,6 +36014,68 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowApprovalRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_run_state_api_automations_runs__execution_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                execution_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunState"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_workflow_state_api_automations_state_get: {
+        parameters: {
+            query: {
+                slug: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowState"];
                 };
             };
             /** @description Validation Error */
