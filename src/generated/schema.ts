@@ -8680,7 +8680,9 @@ export interface paths {
         };
         /**
          * List Resources
-         * @description Every resource but those in the Trash.
+         * @description Every resource but those in the Trash (`trashed` lists those instead), in `sort`'s order. The filters narrow it (a tag
+         *     the workspace doesn't have matches nothing); `limit`/`offset` page it, and the `X-Total-Count` header says how
+         *     many match in all.
          */
         get: operations["list_resources_api_platform_resources_get"];
         put?: never;
@@ -8825,7 +8827,8 @@ export interface paths {
         /**
          * List Assets
          * @description The library's assets (filtered as the workflow and agent asset queries are), each with how many versions
-         *     were made from it; with `scope=ask`, the Ask files, newest first. Never those in the Trash.
+         *     were made from it; with `scope=ask`, the Ask files, newest first. Never those in the Trash, unless `trashed`
+         *     asks for them. `limit`/`offset` page it; the `X-Total-Count` header says how many match in all.
          */
         get: operations["list_assets_api_platform_assets_get"];
         put?: never;
@@ -9097,7 +9100,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Trashed Assets */
+        /**
+         * List Trashed Assets
+         * @description The assets in the Trash (Ask files too), by name (Z first, as always). `limit`/`offset` page it; `X-Total-Count` says how many in
+         *     all. The library's `GET /assets?trashed=true` lists them with its filters and orders.
+         */
         get: operations["trashed_assets_api_platform_trash_assets_get"];
         put?: never;
         post?: never;
@@ -9114,7 +9121,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Trashed Resources */
+        /**
+         * List Trashed Resources
+         * @description The resources in the Trash, by name (Z first, as always). `limit`/`offset` page it; `X-Total-Count` says how many in all.
+         */
         get: operations["trashed_resources_api_platform_trash_resources_get"];
         put?: never;
         post?: never;
@@ -38947,7 +38957,26 @@ export interface operations {
     };
     list_resources_api_platform_resources_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Name, slug or description contains */
+                q?: string | null;
+                /** @description Of any of these types */
+                resource_type?: string[];
+                /** @description Carrying any of these tags (slug or name) */
+                tag?: string[];
+                /** @description true: has a link; false: has none */
+                has_url?: boolean | null;
+                /** @description true: has an external ID; false: has none */
+                has_external_id?: boolean | null;
+                /** @description true: the Trash's resources instead, with the same filters */
+                trashed?: boolean;
+                /** @description name (A first), or type (then name); left out: by name, Z first, as always */
+                sort?: ("name" | "type") | null;
+                /** @description At most this many (default: all of them) */
+                limit?: number | null;
+                /** @description Skip this many first (with `limit`, one page) */
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -38961,6 +38990,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ResourceRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -39266,7 +39304,15 @@ export interface operations {
                 versions?: boolean | null;
                 /** @description The versions made from this asset (id or slug) */
                 source?: string | null;
+                /** @description false: only pictures search can't find (no alt text or description); true: the rest */
+                searchable?: boolean | null;
+                /** @description true: the Trash's assets instead (Ask files too), with the same filters */
+                trashed?: boolean;
                 sort?: "name" | "newest" | "oldest" | "largest";
+                /** @description At most this many (default: all of them) */
+                limit?: number | null;
+                /** @description Skip this many first (with `limit`, one page) */
+                offset?: number;
             };
             header?: never;
             path?: never;
@@ -39689,7 +39735,12 @@ export interface operations {
     };
     trashed_assets_api_platform_trash_assets_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description At most this many (default: all of them) */
+                limit?: number | null;
+                /** @description Skip this many first (with `limit`, one page) */
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -39705,11 +39756,25 @@ export interface operations {
                     "application/json": components["schemas"]["AssetRead"][];
                 };
             };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
     trashed_resources_api_platform_trash_resources_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description At most this many (default: all of them) */
+                limit?: number | null;
+                /** @description Skip this many first (with `limit`, one page) */
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -39723,6 +39788,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ResourceRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
