@@ -39300,6 +39300,10 @@ export interface operations {
                 collection?: string | null;
                 /** @description true: on no entry; false: on at least one */
                 unattached?: boolean | null;
+                /** @description true: on no entry yet (attached to none, named by no entry's asset field); false: the rest */
+                unused?: boolean | null;
+                /** @description Exactly these (ids or slugs; also comma-separated) */
+                ids?: string[];
                 /** @description false: fold versions under their original; true: only versions */
                 versions?: boolean | null;
                 /** @description The versions made from this asset (id or slug) */
