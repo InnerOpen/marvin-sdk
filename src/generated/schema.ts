@@ -7942,6 +7942,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/platform/entries/from-template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Make entries from pictures with a template
+         * @description One entry per picture, from one of the entry type's templates (its settings list them). `preview` (the default)
+         *     answers one row per picture and changes nothing: the title, the values that would be set and the picture. With
+         *     `preview: false` the entries are made, in the template's status (Inbox by default), each with the picture in the
+         *     template's asset field and attached with its role at position 0. A picture an entry of this type already has fills
+         *     that entry instead (only empty values, unless `replace`). Nothing is made while any row has an `error`. At most
+         *     200 pictures; no `entry_created` each: one `entry_template_applied`. Declared before `/{item_id}`.
+         */
+        post: operations["entries_from_template_api_platform_entries_from_template_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/entries/apply-template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fill entries with a template
+         * @description Fill existing entries of the template's type with it: only what is empty unless `replace` (tags and collections
+         *     are added; the status is never changed). `preview` (the default) answers one row per entry and changes nothing.
+         *     Approved, published and archived entries and those in the Trash are left alone. An AUTHOR fills only their own
+         *     drafts. At most 200 entries; no `entry_updated` each: one `entry_template_applied`. Declared before `/{item_id}`.
+         */
+        post: operations["apply_template_api_platform_entries_apply_template_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/platform/entries/counts": {
         parameters: {
             query?: never;
@@ -15342,6 +15390,52 @@ export interface components {
             indexedModels: components["schemas"]["IndexedEmbeddingModel"][];
         };
         /**
+         * EntriesApplyTemplateRequest
+         * @description Fill existing entries of the template's type with it. `preview` (the default) answers what would change and changes
+         *     nothing; only empty values are filled unless `replace`.
+         */
+        EntriesApplyTemplateRequest: {
+            /** Entrytype */
+            entryType: string;
+            /** Template */
+            template: string;
+            /** Entries */
+            entries: string[];
+            /**
+             * Preview
+             * @default true
+             */
+            preview: boolean;
+            /**
+             * Replace
+             * @default false
+             */
+            replace: boolean;
+        };
+        /**
+         * EntriesFromTemplateRequest
+         * @description Make one entry per picture with a template. `preview` (the default) answers what would be made and changes nothing.
+         *     A picture that already has an entry of this type fills that entry instead of making a second one.
+         */
+        EntriesFromTemplateRequest: {
+            /** Entrytype */
+            entryType: string;
+            /** Template */
+            template: string;
+            /** Assets */
+            assets: string[];
+            /**
+             * Preview
+             * @default true
+             */
+            preview: boolean;
+            /**
+             * Replace
+             * @default false
+             */
+            replace: boolean;
+        };
+        /**
          * EntryAssetRead
          * @description Asset metadata plus entry-specific placement details.
          */
@@ -15888,6 +15982,139 @@ export interface components {
             parts?: ("content" | "collections" | "assets" | "status")[] | null;
         };
         /**
+         * EntryTemplate
+         * @description A named preset for entries of one type, kept on the type (`templates`) and edited in its settings; a package can
+         *     bring them with the type. Text may use the variables {asset.name}, {asset.filename}, {n} (the entry's number in the
+         *     batch, from 1) and {date} (today, YYYY-MM-DD); any other {…} is refused when the template is saved.
+         */
+        EntryTemplate: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            /**
+             * Title
+             * @default {asset.name}
+             */
+            title: string;
+            /** Summary */
+            summary?: string | null;
+            /** Entrydescription */
+            entryDescription?: string | null;
+            /** Fields */
+            fields?: {
+                [key: string]: unknown;
+            };
+            /** Tags */
+            tags?: string[];
+            /** Collections */
+            collections?: string[];
+            /**
+             * Status
+             * @default inbox
+             * @enum {string}
+             */
+            status: "inbox" | "draft" | "needs_review";
+            /**
+             * Assetrole
+             * @default featured
+             */
+            assetRole: string | null;
+            /** Assetfield */
+            assetField?: string | null;
+        };
+        /** EntryTemplatePicture */
+        EntryTemplatePicture: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Filename */
+            filename: string;
+            /** Url */
+            url?: string | null;
+        };
+        /**
+         * EntryTemplateResult
+         * @description What a template would do (preview) or did.
+         */
+        EntryTemplateResult: {
+            /** Preview */
+            preview: boolean;
+            /** Entrytype */
+            entryType: string;
+            /** Template */
+            template: string;
+            /** Total */
+            total: number;
+            /** Create */
+            create: number;
+            /** Fill */
+            fill: number;
+            /** Skip */
+            skip: number;
+            /** Todo */
+            todo: number;
+            /** Errors */
+            errors: number;
+            /** Rows */
+            rows: components["schemas"]["EntryTemplateRow"][];
+            /**
+             * Created
+             * @default 0
+             */
+            created: number;
+            /**
+             * Updated
+             * @default 0
+             */
+            updated: number;
+            /** Entryids */
+            entryIds?: string[];
+            /** Seconds */
+            seconds?: number | null;
+            /**
+             * Text
+             * @default
+             */
+            text: string;
+        };
+        /**
+         * EntryTemplateRow
+         * @description One entry the template would make (`create`) or fill (`fill`), or leaves alone (`skip`, with the reason).
+         */
+        EntryTemplateRow: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "create" | "fill" | "skip";
+            /** Entryid */
+            entryId?: string | null;
+            /** Title */
+            title: string;
+            asset?: components["schemas"]["EntryTemplatePicture"] | null;
+            /** Changes */
+            changes?: {
+                [key: string]: unknown;
+            };
+            /** Tags */
+            tags?: string[];
+            /** Collections */
+            collections?: string[];
+            /**
+             * Attach
+             * @default false
+             */
+            attach: boolean;
+            /** Note */
+            note?: string | null;
+            /** Error */
+            error?: string | null;
+        };
+        /**
          * EntryTypeCapabilities
          * @description Capabilities for a published entry type.
          */
@@ -15962,6 +16189,11 @@ export interface components {
              * @description Where the site renders an entry of this type, e.g. /works/{slug}. Placeholders: {slug}, {id}, {entry_type}.
              */
             pageUrlPattern?: string | null;
+            /**
+             * Templatesjson
+             * @description Entry templates: named presets for making entries of this type from pictures (checked against the schema when saved)
+             */
+            templatesJson?: components["schemas"]["EntryTemplate"][] | null;
         };
         /**
          * EntryTypeRead
@@ -16030,6 +16262,11 @@ export interface components {
              * @description Where the site renders an entry of this type, e.g. /works/{slug}. Placeholders: {slug}, {id}, {entry_type}.
              */
             pageUrlPattern?: string | null;
+            /**
+             * Templatesjson
+             * @description Entry templates: named presets for making entries of this type from pictures (checked against the schema when saved)
+             */
+            templatesJson?: components["schemas"]["EntryTemplate"][] | null;
             /** Createdat */
             createdAt?: string | null;
             /** Updateat */
@@ -16112,6 +16349,11 @@ export interface components {
              * @description Where the site renders an entry of this type, e.g. /works/{slug}. Placeholders: {slug}, {id}, {entry_type}.
              */
             pageUrlPattern?: string | null;
+            /**
+             * Templatesjson
+             * @description Entry templates: named presets for making entries of this type from pictures (checked against the schema when saved)
+             */
+            templatesJson?: components["schemas"]["EntryTemplate"][] | null;
         };
         /**
          * EntryUpdate
@@ -37392,6 +37634,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EntryBulkDeleteJob"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    entries_from_template_api_platform_entries_from_template_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntriesFromTemplateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryTemplateResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    apply_template_api_platform_entries_apply_template_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntriesApplyTemplateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryTemplateResult"];
                 };
             };
             /** @description Validation Error */
