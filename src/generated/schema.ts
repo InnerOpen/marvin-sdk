@@ -8433,7 +8433,7 @@ export interface paths {
          *
          *     Returns ``[{id, label, slug, type}]`` — entries (title), assets (name), or resources (name)
          *     depending on the collection's target_type. Used by the admin UI to show membership of
-         *     asset/resource smart collections uniformly.
+         *     asset/resource smart collections uniformly. `limit`/`offset` page it; `X-Total-Count` says how many there are.
          */
         get: operations["get_collection_members_api_platform_collections__item_id__members_get"];
         put?: never;
@@ -38845,7 +38845,12 @@ export interface operations {
     };
     get_collection_members_api_platform_collections__item_id__members_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description At most this many (default: all of them) */
+                limit?: number | null;
+                /** @description Skip this many first (with `limit`, one page) */
+                offset?: number;
+            };
             header?: never;
             path: {
                 item_id: string;
