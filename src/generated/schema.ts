@@ -7958,7 +7958,10 @@ export interface paths {
          *     `preview: false` the entries are made, in the template's status (Inbox by default), each with the picture in the
          *     template's asset field and attached with its role at position 0. A picture an entry of this type already has fills
          *     that entry instead (only empty values, unless `replace`). Nothing is made while any row has an `error`. At most
-         *     200 pictures; no `entry_created` each: one `entry_template_applied`. Declared before `/{item_id}`.
+         *     200 pictures; no `entry_created` each: one `entry_template_applied`. A template with a picture preset gives each
+         *     entry the treated picture (in its treated role and asset field; the original is kept as its source): the one made
+         *     before, or the original until the treated one is made in the background (`treatment_job`). `mark_unnamed` tags
+         *     an entry titled only by its file name (IMG_4491) "Needs a name". Declared before `/{item_id}`.
          */
         post: operations["entries_from_template_api_platform_entries_from_template_post"];
         delete?: never;
@@ -8916,6 +8919,56 @@ export interface paths {
          *     Refused when bigger than ASSET_MAX_FILE_SIZE (413) or of a type ASSET_ALLOWED_MIME_TYPES leaves out (415).
          */
         post: operations["upload_asset_api_platform_assets_upload_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/assets/apply-preset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Treat pictures with a picture preset
+         * @description Treat pictures with one of an entry type's picture presets (crop, size, grade, format in one pass), or with the
+         *     preset a template names. Each original makes ONE new picture, kept as its version (`<original>--preset-<hash8>`,
+         *     the same steps on the same picture reused); the original is never changed and no `asset_uploaded` is sent. With
+         *     `entries`, each entry's picture is treated and the treated one takes its place (the role, featured by default, and
+         *     the template's asset field) where they still hold the original. `preview` (the default) answers one row per
+         *     picture and changes nothing; with `preview: false` the work starts in the background and `job` says how it goes
+         *     (GET /assets/apply-preset/jobs/{id}). At most 200. Making a treated picture is making an asset (AUTHOR, as
+         *     uploading one): an AUTHOR treats the pictures they uploaded and their own draft entries, an EDITOR any.
+         *     Declared before `/{item_id}`.
+         */
+        post: operations["apply_preset_api_platform_assets_apply_preset_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/platform/assets/apply-preset/jobs/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A picture treatment's progress
+         * @description A treatment started by POST /assets/apply-preset (or by making entries with a template that has a picture
+         *     preset): queued, running, done or failed, how many are done, and each original's treated picture as it is made.
+         *     Kept in memory: 404 after a server restart (run it again; what was made is reused).
+         */
+        get: operations["preset_job_api_platform_assets_apply_preset_jobs__job_id__get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -12348,6 +12401,92 @@ export interface components {
             /** Darkerror */
             darkError: string;
         };
+        /**
+         * ApplyPresetRequest
+         * @description Treat pictures with one of an entry type's picture presets (or the preset a template names). ``assets`` treats those
+         *     pictures; ``entries`` treats each entry's picture and puts the treated one in the template's place for it (the role,
+         *     featured by default, and the asset field). ``preview`` (the default) answers what would be made and changes nothing;
+         *     with ``preview: false`` the work starts in the background and the answer is the job (GET /assets/apply-preset/jobs/{id}).
+         */
+        ApplyPresetRequest: {
+            /** Entrytype */
+            entryType: string;
+            /** Preset */
+            preset?: string | null;
+            /** Template */
+            template?: string | null;
+            /** Assets */
+            assets?: string[];
+            /** Entries */
+            entries?: string[];
+            /** Role */
+            role?: string | null;
+            /**
+             * Preview
+             * @default true
+             */
+            preview: boolean;
+        };
+        /**
+         * ApplyPresetResult
+         * @description What a preset would do (preview), or the job doing it.
+         */
+        ApplyPresetResult: {
+            /** Preview */
+            preview: boolean;
+            /** Entrytype */
+            entryType: string;
+            /** Preset */
+            preset: string;
+            /** Presetname */
+            presetName: string;
+            /** Steps */
+            steps: string;
+            /** Total */
+            total: number;
+            /** Create */
+            create: number;
+            /** Reuse */
+            reuse: number;
+            /** Skip */
+            skip: number;
+            /** Todo */
+            todo: number;
+            /** Rows */
+            rows: components["schemas"]["ApplyPresetRow"][];
+            /**
+             * Text
+             * @default
+             */
+            text: string;
+            job?: components["schemas"]["PresetJob"] | null;
+        };
+        /**
+         * ApplyPresetRow
+         * @description One picture: ``create`` its treated version, ``reuse`` the one made before (same picture, same steps), or ``skip``.
+         */
+        ApplyPresetRow: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "create" | "reuse" | "skip";
+            source?: components["schemas"]["PresetPicture"] | null;
+            /** Slug */
+            slug?: string | null;
+            treated?: components["schemas"]["PresetPicture"] | null;
+            /** Entryid */
+            entryId?: string | null;
+            /** Entrytitle */
+            entryTitle?: string | null;
+            /**
+             * Place
+             * @default false
+             */
+            place: boolean;
+            /** Note */
+            note?: string | null;
+        };
         /** ApprovalBrief */
         ApprovalBrief: {
             /** Id */
@@ -15434,6 +15573,15 @@ export interface components {
              * @default false
              */
             replace: boolean;
+            /**
+             * Markunnamed
+             * @default false
+             */
+            markUnnamed: boolean;
+            /** Titles */
+            titles?: {
+                [key: string]: string;
+            };
         };
         /**
          * EntryAssetRead
@@ -16024,6 +16172,13 @@ export interface components {
             assetRole: string | null;
             /** Assetfield */
             assetField?: string | null;
+            /** Picturepreset */
+            picturePreset?: string | null;
+            /**
+             * Treatedrole
+             * @default featured
+             */
+            treatedRole: string | null;
         };
         /** EntryTemplatePicture */
         EntryTemplatePicture: {
@@ -16080,6 +16235,10 @@ export interface components {
              * @default
              */
             text: string;
+            /** Picturepreset */
+            picturePreset?: string | null;
+            /** Treatmentjob */
+            treatmentJob?: string | null;
         };
         /**
          * EntryTemplateRow
@@ -16113,6 +16272,7 @@ export interface components {
             note?: string | null;
             /** Error */
             error?: string | null;
+            treated?: components["schemas"]["EntryTemplatePicture"] | null;
         };
         /**
          * EntryTypeCapabilities
@@ -16194,6 +16354,11 @@ export interface components {
              * @description Entry templates: named presets for making entries of this type from pictures (checked against the schema when saved)
              */
             templatesJson?: components["schemas"]["EntryTemplate"][] | null;
+            /**
+             * Picturepresetsjson
+             * @description Picture presets: named recipes of treatments (crop, resize, grade, convert) the type's templates can name
+             */
+            picturePresetsJson?: components["schemas"]["PicturePreset"][] | null;
         };
         /**
          * EntryTypeRead
@@ -16267,6 +16432,11 @@ export interface components {
              * @description Entry templates: named presets for making entries of this type from pictures (checked against the schema when saved)
              */
             templatesJson?: components["schemas"]["EntryTemplate"][] | null;
+            /**
+             * Picturepresetsjson
+             * @description Picture presets: named recipes of treatments (crop, resize, grade, convert) the type's templates can name
+             */
+            picturePresetsJson?: components["schemas"]["PicturePreset"][] | null;
             /** Createdat */
             createdAt?: string | null;
             /** Updateat */
@@ -16354,6 +16524,11 @@ export interface components {
              * @description Entry templates: named presets for making entries of this type from pictures (checked against the schema when saved)
              */
             templatesJson?: components["schemas"]["EntryTemplate"][] | null;
+            /**
+             * Picturepresetsjson
+             * @description Picture presets: named recipes of treatments (crop, resize, grade, convert) the type's templates can name
+             */
+            picturePresetsJson?: components["schemas"]["PicturePreset"][] | null;
         };
         /**
          * EntryUpdate
@@ -18669,6 +18844,61 @@ export interface components {
             token: string;
         };
         /**
+         * PicturePreset
+         * @description A named, ordered recipe of treatments, kept on an entry type (``picturePresets``) so its templates can name it
+         *     (``picture_preset``) and a package can bring it with the type. Applied, it makes ONE new picture from each original
+         *     (all the steps in one pass, encoded once), kept as a version of it; the original is never changed.
+         */
+        PicturePreset: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            /** Steps */
+            steps: components["schemas"]["PicturePresetStep"][];
+        };
+        /**
+         * PicturePresetStep
+         * @description One treatment, with the arguments a workflow's media step takes for that op: crop (aspect, focus center | subject |
+         *     "x,y"), resize (width, height, fit), grade (a named grade preset and/or brightness, contrast, saturation, warmth,
+         *     vignette), convert (format, quality).
+         */
+        PicturePresetStep: {
+            /**
+             * Op
+             * @enum {string}
+             */
+            op: "crop" | "resize" | "grade" | "convert";
+            /** Aspect */
+            aspect?: string | null;
+            /** Focus */
+            focus?: string | null;
+            /** Width */
+            width?: number | null;
+            /** Height */
+            height?: number | null;
+            /** Fit */
+            fit?: ("inside" | "cover") | null;
+            /** Preset */
+            preset?: string | null;
+            /** Brightness */
+            brightness?: number | null;
+            /** Contrast */
+            contrast?: number | null;
+            /** Saturation */
+            saturation?: number | null;
+            /** Warmth */
+            warmth?: number | null;
+            /** Vignette */
+            vignette?: number | null;
+            /** Format */
+            format?: ("jpeg" | "png" | "webp") | null;
+            /** Quality */
+            quality?: number | null;
+        };
+        /**
          * PlatformAlertActionInput
          * @description One of an action's own inputs the admin fills (the message itself is Marvin's).
          */
@@ -19317,6 +19547,75 @@ export interface components {
             latest: string;
             /** Repo */
             repo: string;
+        };
+        /**
+         * PresetJob
+         * @description A treatment running in the background (one at a time per workspace, the others wait their turn). Lost if the server
+         *     restarts: run it again and what was made is reused.
+         */
+        PresetJob: {
+            /** Id */
+            id: string;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "queued" | "running" | "done" | "failed";
+            /** Preset */
+            preset: string;
+            /** Total */
+            total: number;
+            /**
+             * Done
+             * @default 0
+             */
+            done: number;
+            /**
+             * Made
+             * @default 0
+             */
+            made: number;
+            /**
+             * Reused
+             * @default 0
+             */
+            reused: number;
+            /**
+             * Placed
+             * @default 0
+             */
+            placed: number;
+            /**
+             * Failed
+             * @default 0
+             */
+            failed: number;
+            /** Errors */
+            errors?: string[];
+            /** Treated */
+            treated?: {
+                [key: string]: string;
+            };
+            /** Startedat */
+            startedAt?: string | null;
+            /** Finishedat */
+            finishedAt?: string | null;
+            /** Seconds */
+            seconds?: number | null;
+            /**
+             * Text
+             * @default
+             */
+            text: string;
+        };
+        /** PresetPicture */
+        PresetPicture: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Url */
+            url?: string | null;
         };
         /**
          * PrivacyConsent
@@ -39672,6 +39971,70 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AssetRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    apply_preset_api_platform_assets_apply_preset_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplyPresetRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApplyPresetResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preset_job_api_platform_assets_apply_preset_jobs__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PresetJob"];
                 };
             };
             /** @description Validation Error */
