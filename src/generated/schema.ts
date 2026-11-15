@@ -7458,6 +7458,11 @@ export interface paths {
          *     instead. `found` false: no such workflow, or it does not start by gathering entries. A page that offers to run
          *     it (a guided setup's run step) lists them first. 400 for inputs it does not take. Any member, as for reading
          *     entries (it says no more than an entry query would): someone who may not run it still sees what it would do.
+         *
+         *     A workflow that starts by previewing a template (`create_entries_from_template` or `apply_template`, `mode:
+         *     preview`) answers that step's `preview` instead: one row per picture or entry, with the title, the values it
+         *     would set and the picture; `count` is its `todo`. Any member too: it names pictures, a template's values and the
+         *     entries those pictures already have, which the assets, the entry type and an entry query say to any member.
          */
         post: operations["get_selection_api_automations_selection_post"];
         delete?: never;
@@ -23842,7 +23847,8 @@ export interface components {
         /**
          * WorkflowSelection
          * @description What a manual workflow would act on if it ran now: the entries its first step, a `collect`, gathers
-         *     (services/automation/selection.py). `found` false: the workflow does not start by gathering entries (or is not here).
+         *     (services/automation/selection.py), or, when it starts by previewing a template, that preview. `found` false: the
+         *     workflow starts with neither (or is not here).
          */
         WorkflowSelection: {
             /** Found */
@@ -23865,6 +23871,7 @@ export interface components {
             limit?: number | null;
             /** Leftout */
             leftOut?: number[];
+            preview?: components["schemas"]["EntryTemplateResult"] | null;
         };
         /** WorkflowSelectionRequest */
         WorkflowSelectionRequest: {
