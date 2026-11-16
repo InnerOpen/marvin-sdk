@@ -7495,6 +7495,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/automations/approvals/decide-many": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Approve or deny several waiting runs
+         * @description Answer up to 50 waiting approvals at once, each `{id, choice?, fields?}` as `decide` takes them; the runs go on one after
+         *     another behind the answer. Each item says how it went: its `status`, or the `error` (and HTTP `code`) that kept it back
+         *     (already decided, not yours to decide, a box refused) while the others still went. EDITOR and above.
+         */
+        post: operations["decide_many_approvals_api_automations_approvals_decide_many_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/automations/approvals/{approval_id}/decide": {
         parameters: {
             query?: never;
@@ -23447,6 +23469,21 @@ export interface components {
             /** Buttons */
             buttons?: components["schemas"]["WizardButton"][];
         };
+        /**
+         * WorkflowApprovalDecideMany
+         * @description Several waiting approvals answered at once ("Approve all 20"), each with its own choice and boxes.
+         */
+        WorkflowApprovalDecideMany: {
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "approve" | "deny";
+            /** Note */
+            note?: string | null;
+            /** Items */
+            items: components["schemas"]["WorkflowApprovalManyItem"][];
+        };
         /** WorkflowApprovalDecision */
         WorkflowApprovalDecision: {
             /**
@@ -23494,6 +23531,31 @@ export interface components {
              * @default false
              */
             carried: boolean;
+        };
+        /** WorkflowApprovalManyItem */
+        WorkflowApprovalManyItem: {
+            /**
+             * Id
+             * Format: uuid4
+             */
+            id: string;
+            /** Choice */
+            choice?: string | number | null;
+            /** Fields */
+            fields?: {
+                [key: string]: string;
+            } | null;
+        };
+        /** WorkflowApprovalManyResult */
+        WorkflowApprovalManyResult: {
+            /** Id */
+            id: string;
+            /** Status */
+            status?: string | null;
+            /** Error */
+            error?: string | null;
+            /** Code */
+            code?: number | null;
         };
         /**
          * WorkflowApprovalRead
@@ -37053,6 +37115,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowSelection"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    decide_many_approvals_api_automations_approvals_decide_many_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkflowApprovalDecideMany"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowApprovalManyResult"][];
                 };
             };
             /** @description Validation Error */
