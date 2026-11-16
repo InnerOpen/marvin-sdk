@@ -12538,6 +12538,45 @@ export interface components {
             imageUrl?: string | null;
         };
         /**
+         * ApprovalEstimate
+         * @description What the paid steps an approval guards are likely to cost: one line (`text`), each step's, and a `total` when they add up.
+         */
+        ApprovalEstimate: {
+            /** Text */
+            text: string;
+            /** Items */
+            items?: components["schemas"]["ApprovalEstimateItem"][];
+            total?: components["schemas"]["ApprovalEstimateTotal"] | null;
+        };
+        /**
+         * ApprovalEstimateItem
+         * @description One paid step's likely cost, from this workspace's own earlier calls like it (services/integrations/estimate.py).
+         */
+        ApprovalEstimateItem: {
+            /** Step */
+            step?: string | null;
+            /** Text */
+            text: string;
+            /** Amount */
+            amount?: number | null;
+            /** Unit */
+            unit?: string | null;
+            /** Calls */
+            calls?: number | null;
+            /**
+             * Unknown
+             * @default false
+             */
+            unknown: boolean;
+        };
+        /** ApprovalEstimateTotal */
+        ApprovalEstimateTotal: {
+            /** Amount */
+            amount: number;
+            /** Unit */
+            unit: string;
+        };
+        /**
          * ApprovalPostPreview
          * @description What the step after an approval will post (a ``social.post`` step), interpolated as the approved run will, and each
          *     network's caption check (services/integrations/caption_check.py).
@@ -23521,6 +23560,7 @@ export interface components {
             editedFields?: string[];
             /** Redo */
             redo?: string | null;
+            estimate?: components["schemas"]["ApprovalEstimate"] | null;
         };
         /** WorkflowCapability */
         WorkflowCapability: {
