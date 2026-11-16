@@ -7395,6 +7395,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/automations/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The latest runs of a workflow about an entry
+         * @description The latest runs of the workflow `automation` (its slug) that acted on the entry `entry_id`, newest first, each
+         *     as `GET /runs/{execution_id}` says it: a page that did not start a run (a reload, another tab) finds out whether
+         *     one is still going (starting, running, waiting or working) before it offers to start another. Only first runs (one
+         *     that went on after an approval is followed from it); a run with no step recorded yet is not listed. EDITOR and
+         *     above.
+         */
+        get: operations["list_runs_about_api_automations_runs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/automations/runs/{execution_id}": {
         parameters: {
             query?: never;
@@ -36813,6 +36837,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkflowApprovalRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_runs_about_api_automations_runs_get: {
+        parameters: {
+            query: {
+                automation: string;
+                entry_id: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowRunState"][];
                 };
             };
             /** @description Validation Error */
