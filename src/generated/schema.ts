@@ -12609,6 +12609,18 @@ export interface components {
             /** Results */
             results?: components["schemas"]["CaptionCheckResult"][];
         };
+        /**
+         * ApprovalSpendLimit
+         * @description The workspace's daily limit on paid approvals (Settings → General → Workflows) and how much of it is used today (UTC).
+         */
+        ApprovalSpendLimit: {
+            /** Limit */
+            limit: number;
+            /** Usedtoday */
+            usedToday: number;
+            /** Resetsat */
+            resetsAt: string;
+        };
         /** AssetAttachment */
         AssetAttachment: {
             /**
@@ -17306,6 +17318,8 @@ export interface components {
             workflowMaxSteps?: number | null;
             /** Approvalexpireshours */
             approvalExpiresHours?: number | null;
+            /** Paidapprovalsperday */
+            paidApprovalsPerDay?: number | null;
             /** Trashautoemptydays */
             trashAutoEmptyDays?: number | null;
         };
@@ -17361,6 +17375,8 @@ export interface components {
             workflowMaxSteps?: number | null;
             /** Approvalexpireshours */
             approvalExpiresHours?: number | null;
+            /** Paidapprovalsperday */
+            paidApprovalsPerDay?: number | null;
             /** Trashautoemptydays */
             trashAutoEmptyDays?: number | null;
         };
@@ -23622,6 +23638,12 @@ export interface components {
             editedFields?: string[];
             /** Redo */
             redo?: string | null;
+            /**
+             * Paid
+             * @default false
+             */
+            paid: boolean;
+            spendLimit?: components["schemas"]["ApprovalSpendLimit"] | null;
             estimate?: components["schemas"]["ApprovalEstimate"] | null;
         };
         /** WorkflowCapability */
