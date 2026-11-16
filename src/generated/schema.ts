@@ -7508,7 +7508,9 @@ export interface paths {
          * Approve or deny a waiting run
          * @description Approve or deny; the run goes on from the next step with `${steps.<id>.output.decision}` (approved, denied — or
          *     stale when the entry changed after it was asked). One with `choices` is approved with one of them (`choice`:
-         *     the label or its index; 422 without). 403 below the step's role; 404 unknown; 409 already decided or expired.
+         *     the label or its index; 422 without). One with `fields` may be approved with them changed (`fields`: {name:
+         *     text}; 422 an unknown box, too long, blank, or bringing in a {{NAME}} or ${…}). 403 below the step's role; 404
+         *     unknown; 409 already decided or expired.
          */
         post: operations["decide_approval_api_automations_approvals__approval_id__decide_post"];
         delete?: never;
@@ -23417,6 +23419,42 @@ export interface components {
             note?: string | null;
             /** Choice */
             choice?: string | number | null;
+            /** Fields */
+            fields?: {
+                [key: string]: string;
+            } | null;
+        };
+        /**
+         * WorkflowApprovalField
+         * @description A box the approver may change before approving (an approval step's `fields`), with the text it was asked with.
+         */
+        WorkflowApprovalField: {
+            /** Name */
+            name: string;
+            /** Label */
+            label: string;
+            /**
+             * Type
+             * @default textarea
+             */
+            type: string;
+            /**
+             * Value
+             * @default
+             */
+            value: string;
+            /** Maxlength */
+            maxLength: number;
+            /**
+             * Required
+             * @default true
+             */
+            required: boolean;
+            /**
+             * Carried
+             * @default false
+             */
+            carried: boolean;
         };
         /**
          * WorkflowApprovalRead
@@ -23473,6 +23511,16 @@ export interface components {
             /** Imageurl */
             imageUrl?: string | null;
             postPreview?: components["schemas"]["ApprovalPostPreview"] | null;
+            /** Fields */
+            fields?: components["schemas"]["WorkflowApprovalField"][] | null;
+            /** Fieldvalues */
+            fieldValues?: {
+                [key: string]: string;
+            } | null;
+            /** Editedfields */
+            editedFields?: string[];
+            /** Redo */
+            redo?: string | null;
         };
         /** WorkflowCapability */
         WorkflowCapability: {
