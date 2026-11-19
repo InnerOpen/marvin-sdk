@@ -12590,6 +12590,11 @@ export interface components {
              * @default false
              */
             unknown: boolean;
+            /**
+             * Guess
+             * @default false
+             */
+            guess: boolean;
         };
         /** ApprovalEstimateTotal */
         ApprovalEstimateTotal: {
@@ -12597,6 +12602,11 @@ export interface components {
             amount: number;
             /** Unit */
             unit: string;
+            /**
+             * Guess
+             * @default false
+             */
+            guess: boolean;
         };
         /**
          * ApprovalPostPreview
