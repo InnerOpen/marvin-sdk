@@ -621,6 +621,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/groups/packages/sidebar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Sidebar Places
+         * @description Where the sidebar shows each installed package: `collections`, `section` or `hidden`. Open to anyone in the workspace, since
+         *     everyone's sidebar follows it; it names the packages and nothing they hold.
+         */
+        get: operations["sidebar_places_api_groups_packages_sidebar_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/packages/preview": {
         parameters: {
             query?: never;
@@ -782,7 +803,12 @@ export interface paths {
         delete: operations["remove_api_groups_packages__slug__delete"];
         options?: never;
         head?: never;
-        patch?: never;
+        /**
+         * Change Package
+         * @description Choose where the sidebar shows the package (`sidebar`): `collections` (a group under Collections, the default), `section` (a
+         *     section of its own) or `hidden`. An update or a re-install keeps the choice; removing the package forgets it.
+         */
+        patch: operations["change_package_api_groups_packages__slug__patch"];
         trace?: never;
     };
     "/api/groups/wizards": {
@@ -18839,6 +18865,22 @@ export interface components {
             summary: string;
         };
         /**
+         * PackagePlace
+         * @description Where the sidebar puts one installed package: what every page's sidebar reads, so anyone in the workspace may.
+         */
+        PackagePlace: {
+            /** Slug */
+            slug: string;
+            /** Name */
+            name: string;
+            /**
+             * Sidebar
+             * @default collections
+             * @enum {string}
+             */
+            sidebar: "collections" | "section" | "hidden";
+        };
+        /**
          * PackageRead
          * @description An installed package, with what it holds in this workspace.
          */
@@ -18895,6 +18937,12 @@ export interface components {
              * @default 0
              */
             incomingWebhooks: number;
+            /**
+             * Sidebar
+             * @default collections
+             * @enum {string}
+             */
+            sidebar: "collections" | "section" | "hidden";
         };
         /** PackageResult */
         PackageResult: {
@@ -18934,6 +18982,17 @@ export interface components {
              * @default 0
              */
             edited: number;
+        };
+        /**
+         * PackageSettings
+         * @description What a workspace may change on an installed package.
+         */
+        PackageSettings: {
+            /**
+             * Sidebar
+             * @enum {string}
+             */
+            sidebar: "collections" | "section" | "hidden";
         };
         /**
          * PaginationMeta
@@ -25945,6 +26004,26 @@ export interface operations {
             };
         };
     };
+    sidebar_places_api_groups_packages_sidebar_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackagePlace"][];
+                };
+            };
+        };
+    };
     preview_api_groups_packages_preview_post: {
         parameters: {
             query?: never;
@@ -26204,6 +26283,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_package_api_groups_packages__slug__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PackageSettings"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackageRead"];
                 };
             };
             /** @description Validation Error */
