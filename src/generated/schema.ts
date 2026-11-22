@@ -22353,6 +22353,8 @@ export interface components {
             blockPersonalDomains?: boolean | null;
             /** Captureclientinfo */
             captureClientInfo?: boolean | null;
+            /** Blockedips */
+            blockedIps?: string[] | null;
             /** Exemptips */
             exemptIps?: string[] | null;
             /** Surgethreshold */
@@ -22390,6 +22392,8 @@ export interface components {
              * @default true
              */
             captureClientInfo: boolean;
+            /** Blockedips */
+            blockedIps?: string[];
             /** Exemptips */
             exemptIps?: string[];
             /** Surgethreshold */
